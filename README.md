@@ -9,7 +9,7 @@ TL;DR: Imagine early 2000s free C++ Unity engine for japanese indie devs.
 The "TEST" project file is for Code::Blocks. You will also need:
 * Microsoft Visual C++ Toolkit 2003 (the SDKv3 has also support for VC++6/.NET/.NET2003 and BCC5.5/BCB5/6!, look in yaneSDK\ProjectFiles folder)
 * Microsoft Platform SDK (older one that plays nice with Visual C++ Toolkit 2003)
-* Microsoft® DirectX® 8.0 SDK 
+* Microsoft DirectX SDK (yaneSDK has support for DX3 up to DX8)
 
 The sdk can also be compiled in lib mode.
 
