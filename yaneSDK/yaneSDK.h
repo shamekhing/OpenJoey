@@ -20,7 +20,7 @@
 //					http://bm98.yaneu.com/infoseek/yaneSDK3rd/
 //
 //					derplayer homepage
-//					http://www.derplayer.neocities.org
+//					https://derplayer.neocities.org
 //
 //						reprogrammed since	Feb.20 on 2002
 //						tweaked by derplayer in july 2023

@@ -3,18 +3,18 @@
 
 class CApp : public CAppFrame {
 
-	virtual void MainThread();
+    virtual void MainThread();
 
-	///	描画
-	CFastDraw* GetDraw() { return GetDrawFactory()->GetDraw(); }
-	CFastPlaneFactory* GetDrawFactory() { return &planeFactory_; }
+    /// Drawing
+    CFastDraw* GetDraw() { return GetDrawFactory()->GetDraw(); }
+    CFastPlaneFactory* GetDrawFactory() { return &planeFactory_; }
 
 protected:
-	CFastPlaneFactory	planeFactory_;
-	//	↑こいつがCFastDrawを内包しているので、こいつ経由で描画すれば良い
+    CFastPlaneFactory    planeFactory_;
+    // This contains CFastDraw, so you should draw through this
 
-	CSoundFactory		soundFactory_;
-	//	↑Soundについても同様
+    CSoundFactory        soundFactory_;
+    // Same applies for Sound
 };
 
 #endif // __CApp_h__

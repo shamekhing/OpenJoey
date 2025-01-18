@@ -2,157 +2,157 @@
 #include "capp.h"
 
 void CApp::MainThread() {
-	GetDraw()->SetDisplay();
+    GetDraw()->SetDisplay();
 
-	CKey1 key;
-	CFPSTimer timer;
-	timer.SetFPS(15);
+    CKey1 key;
+    CFPSTimer timer;
+    timer.SetFPS(15);
 
-	//	これをメインプリにする（終了するときに、他のウィンドゥをすべて閉じる）
-	SetMainApp(true);
+    // Make this the main application (close all other windows when exiting)
+    SetMainApp(true);
 
-	CPlane bgplane;
-	bgplane->Load("AA076_640480.jpg");
+    CPlane bgplane;
+    bgplane->Load("AA076_640480.jpg");
 
-	CPlane charaplane;
-	charaplane->Load("理緒菜640_480.yga");
+    CPlane charaplane;
+    charaplane->Load("理緒菜640_480.yga");
 
-	CRootCounter nFade(0, 255, 8);
-	CRootCounter nPhase(0, 6, 1);
+    CRootCounter nFade(0, 255, 8);
+    CRootCounter nPhase(0, 6, 1);
 
-	CTextFastPlane* pText = new CTextFastPlane;
-	pText->GetFont()->SetText("Press Space to move to next scene!");
-	pText->GetFont()->SetSize(30);
-	pText->UpdateTextAA();
-	CPlane text(pText);
+    CTextFastPlane* pText = new CTextFastPlane;
+    pText->GetFont()->SetText("Press Space to move to next scene!");
+    pText->GetFont()->SetSize(30);
+    pText->UpdateTextAA();
+    CPlane text(pText);
 
-	while (IsThreadValid()){
-		ISurface* pSecondary = GetDraw()->GetSecondary();
+    while (IsThreadValid()){
+        ISurface* pSecondary = GetDraw()->GetSecondary();
 
-		pSecondary->Clear();
-		//	必ずBGを画面全体に対して転送するならばクリアはしなくとも良い
+        pSecondary->Clear();
+        // If you're always transferring the background to the entire screen, you don't need to clear it
 
-		//	フェーズごとに異なる描画
-		switch (nPhase){
-		case 0: {
-			pSecondary->BltFast(bgplane,0,0);
-			//	抜き色無効転送はBltFastを用いる
-			pSecondary->BltNatural(charaplane,0,0);
-			//	抜き色有効転送とyga画像(α情報つきの画像)の転送は
-			//	BltNaturalを用いるのがわかりやすい
-			break;
-				}
-		case 1: {
-			pSecondary->BltNatural(charaplane,0,0);
-			// キャラを先に表示させて、
-			pSecondary->BlendBltFast(bgplane,0,0,255-nFade);
-			//	そのあとにBGを減衰させて描画！
-			nFade++;
-			break;
-				}
-		case 2: {
-			pSecondary->BltFast(bgplane,0,0);
-			//	抜き色無効転送はBltFastを用いる
-			int sx,sy;
-			charaplane->GetSize(sx,sy);	//	サーフェースサイズの取得
-			//	画面中心をベースポイントとして、転送してみる
-			SIZE dstsize = { sx*nFade>>8 , sy * nFade>>8 };
-			pSecondary->BltNatural(charaplane,sx/2,sy/2,nFade/2+128,&dstsize,NULL,NULL,4);
-			//	この場合、最後のパラメータで指定している4というのは、画像中心を起点として
-			//	座標を指定するもの
-			nFade++;
-			break;
-				}
-		case 3: {
-			pSecondary->BltFast(bgplane,0,0);
-			int sx,sy;
-			charaplane->GetSize(sx,sy);	//	サーフェースサイズの取得
-			SIZE dstsize = { sx*nFade>>8 , sy * nFade>>8 };
-			pSecondary->AddColorBltFast(charaplane,sx/2,sy/2,&dstsize,NULL,NULL,4);
-			//	↑αサーフェースからのAddColor(加色合成)
-			nFade++;
-			break;
-				}
-		case 4: {
-			pSecondary->BltFast(bgplane,0,0);
-			int sx,sy;
-			charaplane->GetSize(sx,sy);	//	サーフェースサイズの取得
-			SIZE dstsize = { sx*nFade>>8 , sy * nFade>>8 };
-			pSecondary->SubColorBltFast(charaplane,sx/2,sy/2,&dstsize,NULL,NULL,4);
-			//	↑αサーフェースからのSubColor(加色合成)
-			nFade++;
-			break;
-				}
-		case 5: {
-			pSecondary->BltFast(bgplane,0,0);
-			int sx,sy;
-			charaplane->GetSize(sx,sy);	//	サーフェースサイズの取得
-			SIZE dstsize = { sx*nFade>>8 , sy * nFade>>8 };
-			pSecondary->AddColorBltFastFade(charaplane,sx/2,sy/2,nFade,&dstsize,NULL,NULL,4);
-			//	↑αサーフェースからのAddColor(加色合成)+Fade(減衰指定)
-			nFade++;
-			break;
-				}
-		case 6: {
-			pSecondary->BltFast(bgplane,0,0);
-			int sx,sy;
-			charaplane->GetSize(sx,sy);	//	サーフェースサイズの取得
-			SIZE dstsize = { sx*nFade>>8 , sy * nFade>>8 };
-			pSecondary->SubColorBltFastFade(charaplane,sx/2,sy/2,nFade,&dstsize,NULL,NULL,4);
-			//	↑αサーフェースからのSubColor(加色合成)+Fade(減衰指定)
-			nFade++;
-			break;
-				}
-		}
+        // Different drawing for each phase
+        switch (nPhase){
+        case 0: {
+            pSecondary->BltFast(bgplane,0,0);
+            // Use BltFast for transfers with transparency disabled
+            pSecondary->BltNatural(charaplane,0,0);
+            // For transfers with transparency enabled and YGA images (images with alpha information),
+            // it's clearer to use BltNatural
+            break;
+                }
+        case 1: {
+            pSecondary->BltNatural(charaplane,0,0);
+            // Display the character first,
+            pSecondary->BlendBltFast(bgplane,0,0,255-nFade);
+            // then draw the background with fade effect!
+            nFade++;
+            break;
+                }
+        case 2: {
+            pSecondary->BltFast(bgplane,0,0);
+            // Use BltFast for transfers with transparency disabled
+            int sx,sy;
+            charaplane->GetSize(sx,sy);    // Get the surface size
+            // Transfer using the screen center as the base point
+            SIZE dstsize = { sx*nFade>>8 , sy * nFade>>8 };
+            pSecondary->BltNatural(charaplane,sx/2,sy/2,nFade/2+128,&dstsize,NULL,NULL,4);
+            // In this case, the last parameter 4 specifies that coordinates
+            // are relative to the center of the image
+            nFade++;
+            break;
+                }
+        case 3: {
+            pSecondary->BltFast(bgplane,0,0);
+            int sx,sy;
+            charaplane->GetSize(sx,sy);    // Get the surface size
+            SIZE dstsize = { sx*nFade>>8 , sy * nFade>>8 };
+            pSecondary->AddColorBltFast(charaplane,sx/2,sy/2,&dstsize,NULL,NULL,4);
+            // AddColor (additive blending) from alpha surface
+            nFade++;
+            break;
+                }
+        case 4: {
+            pSecondary->BltFast(bgplane,0,0);
+            int sx,sy;
+            charaplane->GetSize(sx,sy);    // Get the surface size
+            SIZE dstsize = { sx*nFade>>8 , sy * nFade>>8 };
+            pSecondary->SubColorBltFast(charaplane,sx/2,sy/2,&dstsize,NULL,NULL,4);
+            // SubColor (subtractive blending) from alpha surface
+            nFade++;
+            break;
+                }
+        case 5: {
+            pSecondary->BltFast(bgplane,0,0);
+            int sx,sy;
+            charaplane->GetSize(sx,sy);    // Get the surface size
+            SIZE dstsize = { sx*nFade>>8 , sy * nFade>>8 };
+            pSecondary->AddColorBltFastFade(charaplane,sx/2,sy/2,nFade,&dstsize,NULL,NULL,4);
+            // AddColor (additive blending) + Fade (decay specification) from alpha surface
+            nFade++;
+            break;
+                }
+        case 6: {
+            pSecondary->BltFast(bgplane,0,0);
+            int sx,sy;
+            charaplane->GetSize(sx,sy);    // Get the surface size
+            SIZE dstsize = { sx*nFade>>8 , sy * nFade>>8 };
+            pSecondary->SubColorBltFastFade(charaplane,sx/2,sy/2,nFade,&dstsize,NULL,NULL,4);
+            // SubColor (subtractive blending) + Fade (decay specification) from alpha surface
+            nFade++;
+            break;
+                }
+        }
 
-		pSecondary->BltNatural(text,20,400);
+        pSecondary->BltNatural(text,20,400);
 
-		GetDraw()->OnDraw();
+        GetDraw()->OnDraw();
 
-		key.Input();
-		if (key.IsKeyPush(0))	//	ESCキーで終了
-			break;
-		if (key.IsKeyPush(5)) {	//	SPACEキーを押すとフェーズがインクリメント
-			nPhase++;
-			nFade.Reset();
-		}
+        key.Input();
+        if (key.IsKeyPush(0))    // Exit with ESC key
+            break;
+        if (key.IsKeyPush(5)) {  // Press SPACE key to increment phase
+            nPhase++;
+            nFade.Reset();
+        }
 
-		timer.WaitFrame();
-	}
+        timer.WaitFrame();
+    }
 }
 
-//	これがmain windowのためのクラス。
-class CAppMainWindow : public CAppBase {	//	アプリケーションクラスから派生
-	virtual void MainThread(){			   //  これがワーカースレッド
-		CApp().Start();
-	}
+// This is the class for the main window
+class CAppMainWindow : public CAppBase {    // Derived from application class
+    virtual void MainThread(){              // This is the worker thread
+        CApp().Start();
+    }
 };
 
-//	言わずと知れたWinMain
+// The well-known WinMain
 int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,int nCmdShow)
 {
-	{
-		//*
-		{	//	エラーログをファイルに出力するのら！
-			CTextOutputStreamFile* p = new CTextOutputStreamFile;
-			p->SetFileName("Error.txt");
-			Err.SelectDevice(smart_ptr<ITextOutputStream>(p));
-		}
-		//*/
+    {
+        //*
+        {   // Output error log to file
+            CTextOutputStreamFile* p = new CTextOutputStreamFile;
+            p->SetFileName("Error.txt");
+            Err.SelectDevice(smart_ptr<ITextOutputStream>(p));
+        }
+        //*/
 
-		CAppInitializer init(hInstance,hPrevInstance,lpCmdLine,nCmdShow);
-		//	↑必ず書いてね
+        CAppInitializer init(hInstance,hPrevInstance,lpCmdLine,nCmdShow);
+        // ↑ Must always write this
 
-		CSingleApp sapp;
-		if (sapp.IsValid()) {
-			CThreadManager::CreateThread(new CAppMainWindow);
-			//	上で定義したメインのウィンドゥを作成
-//			CThreadManager::CreateThread(new CAppMainWindow);
-//			↑複数書くと、複数ウィンドゥが生成されるのだ
+        CSingleApp sapp;
+        if (sapp.IsValid()) {
+            CThreadManager::CreateThread(new CAppMainWindow);
+            // Create the main window defined above
+//          CThreadManager::CreateThread(new CAppMainWindow);
+//          ↑ Writing multiple lines will create multiple windows
 
-		}
-		//	ここでCAppInitializerがスコープアウトするのだが、このときに
-		//	すべてのスレッドの終了を待つことになる
-	}
-	return 0;
+        }
+        // Here CAppInitializer goes out of scope, at which point
+        // it waits for all threads to finish
+    }
+    return 0;
 }
