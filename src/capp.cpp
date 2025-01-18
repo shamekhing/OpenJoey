@@ -6,16 +6,16 @@ void CApp::MainThread() {
 
     CKey1 key;
     CFPSTimer timer;
-    timer.SetFPS(15);
+    timer.SetFPS(30);
 
     // Make this the main application (close all other windows when exiting)
     SetMainApp(true);
 
     CPlane bgplane;
-    bgplane->Load("AA076_640480.jpg");
+    bgplane->Load("data/y/try/end_e.bmp");
 
     CPlane charaplane;
-    charaplane->Load("óùèèçÿ640_480.yga");
+    charaplane->Load("data/y/tutorial/fuki/tutorial_win0.yga");
 
     CRootCounter nFade(0, 255, 8);
     CRootCounter nPhase(0, 6, 1);
@@ -141,14 +141,14 @@ int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine
         //*/
 
         CAppInitializer init(hInstance,hPrevInstance,lpCmdLine,nCmdShow);
-        // Å™ Must always write this
+        // ÅMust always write this
 
         CSingleApp sapp;
         if (sapp.IsValid()) {
             CThreadManager::CreateThread(new CAppMainWindow);
             // Create the main window defined above
-//          CThreadManager::CreateThread(new CAppMainWindow);
-//          Å™ Writing multiple lines will create multiple windows
+			// CThreadManager::CreateThread(new CAppMainWindow);
+			// Writing multiple lines will create multiple windows
 
         }
         // Here CAppInitializer goes out of scope, at which point

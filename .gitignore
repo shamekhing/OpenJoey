@@ -406,3 +406,7 @@ data/
 # generated directories
 bin/
 obj/
+
+# MSVC yaneSDK lib
+yaneSDK/ProjectFiles/MSVC7.1/lib/
+yaneSDK/ProjectFiles/MSVC7.1/lib/
