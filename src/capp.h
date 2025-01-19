@@ -1,6 +1,8 @@
 #ifndef __CApp_h__
 #define __CApp_h__
 
+#include "system/effects/yanePlaneEffectBlt.h"
+
 class CApp : public CAppFrame {
 
     virtual void MainThread();

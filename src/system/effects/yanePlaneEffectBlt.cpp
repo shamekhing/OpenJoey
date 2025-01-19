@@ -1,8 +1,5 @@
 #include "..\..\stdafx.h"
 #include "yanePlaneEffectBlt.h"
-//#include "yanePlaneBase.h"
-//#include "yaneSinTable.h"
-//#include <math.h>		//	sqrt
 
 ///////////////////////////////////////////////////////////////////////////////
 //	class ISurfaceFadeBlt

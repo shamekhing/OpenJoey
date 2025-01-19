@@ -26,21 +26,35 @@ void CApp::MainThread() {
     pText->UpdateTextAA();
     CPlane text(pText);
 	//float test = sqrt(32.0);
-
+	int nPat = 0;
+	int testInt = 0;
     while (IsThreadValid()){
         ISurface* pSecondary = GetDraw()->GetSecondary();
-
+		testInt += 16;
+		if(testInt >= 256) testInt = 0;
         pSecondary->Clear();
         // If you're always transferring the background to the entire screen, you don't need to clear it
 
         // Different drawing for each phase
         switch (nPhase){
         case 0: {
-            pSecondary->BltFast(bgplane,0,0);
+            //pSecondary->BltFast(bgplane,0,0);
             // Use BltFast for transfers with transparency disabled
-            pSecondary->BltNatural(charaplane,0,0);
+            //pSecondary->BltNatural(charaplane,0,0);
             // For transfers with transparency enabled and YGA images (images with alpha information),
             // it's clearer to use BltNatural
+			LRESULT res = ISurfaceTransBlt::CircleBlt1(
+                pSecondary,    // destination surface
+                bgplane.get(),    // source surface
+                0,                   // x position
+                0,                   // y position
+                testInt,   // transition phase (0-256)
+                0,                   // transition mode
+                255,                 // fade rate
+                NULL                 // clip rectangle
+            );
+			//GetDraw()->OnDraw();
+			//timer.WaitFrame();
             break;
                 }
         case 1: {

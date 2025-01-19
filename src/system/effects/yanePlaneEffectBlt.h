@@ -5,7 +5,6 @@
 #ifndef __yanePlaneEffectBlt_h__
 #define __yanePlaneEffectBlt_h__
 
-//#include "yaneSinTable.h"
 //class ISurface;
 #define VC6_SQRT(x) (sqrt((double)(x)))
 
