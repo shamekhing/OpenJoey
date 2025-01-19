@@ -2,7 +2,7 @@
 #include "capp.h"
 
 void CApp::MainThread() {
-    GetDraw()->SetDisplay();
+    GetDraw()->SetDisplay(false, 800, 600, 16);
 
     CKey1 key;
     CFPSTimer timer;
@@ -25,6 +25,7 @@ void CApp::MainThread() {
     pText->GetFont()->SetSize(30);
     pText->UpdateTextAA();
     CPlane text(pText);
+	//float test = sqrt(32.0);
 
     while (IsThreadValid()){
         ISurface* pSecondary = GetDraw()->GetSecondary();
@@ -43,10 +44,11 @@ void CApp::MainThread() {
             break;
                 }
         case 1: {
-            pSecondary->BltNatural(charaplane,0,0);
+            //pSecondary->BltNatural(charaplane,0,0);
             // Display the character first,
             pSecondary->BlendBltFast(bgplane,0,0,255-nFade);
             // then draw the background with fade effect!
+			//pSecondary->GeneralBlt(CSurfaceInfo::EBltType::)
             nFade++;
             break;
                 }
@@ -123,9 +125,17 @@ void CApp::MainThread() {
 
 // This is the class for the main window
 class CAppMainWindow : public CAppBase {    // Derived from application class
-    virtual void MainThread(){              // This is the worker thread
-        CApp().Start();
-    }
+	virtual void MainThread(){              // This is the worker thread
+		IWindow* pWin = CAppManager::GetMyWindow();
+		CWindowOption* opt = pWin->GetWindowOption();
+		CApp().Start();
+	};
+	virtual LRESULT OnPreCreate(CWindowOption &opt){
+		opt.caption = "OpenJoey v0.01";
+		// you can also load whole dialog from .rc (for fancy win32 GUI stuff, see sample8 (v3))
+		// opt.dialog = MAKEINTRESOURCE(IDD_DIALOG1);
+		return 0;
+	};
 };
 
 // The well-known WinMain

@@ -27,7 +27,7 @@
 #define DIRECTINPUT_VERSION 0x0300
 #define DIRECTDRAW_VERSION	0x0300
 #define DIRECTSOUND_VERSION 0x0300
-//	Å™Countermeasure for the increased size of the DSBUFFERDESC structure since DirectX7.
+// Countermeasure for the increased size of the DSBUFFERDESC structure since DirectX7.
 #include <dinput.h>			// DirectInput header
 #include <ddraw.h>			// DirectDraw header
 #include <dsound.h>			// DirectSound header
@@ -91,6 +91,7 @@ using namespace yaneuraoGameSDK3rd::Dll;
 	#include <map>
 	#include <algorithm>
     #include <memory>
+	#include <math.h>
 
 	using std::set;
 	//	I'm sorry (;ÅLÑD`)

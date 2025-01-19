@@ -185,6 +185,20 @@
 						PrecompiledHeaderThrough="stdafx.h"/>
 				</FileConfiguration>
 			</File>
+			<Filter
+				Name="examples"
+				Filter="">
+			</Filter>
+			<Filter
+				Name="system"
+				Filter="">
+				<File
+					RelativePath=".\system\effects\yanePlaneEffectBlt.cpp">
+				</File>
+				<File
+					RelativePath=".\system\effects\yanePlaneEffectBlt.h">
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
