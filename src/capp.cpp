@@ -20,16 +20,25 @@ void CApp::MainThread() {
     CRootCounter nFade(0, 255, 8);
     CRootCounter nPhase(0, 6, 1);
 
+	/*
     CTextFastPlane* pText = new CTextFastPlane;
     pText->GetFont()->SetText("Press Space to move to next scene!");
     pText->GetFont()->SetSize(30);
     pText->UpdateTextAA();
     CPlane text(pText);
+	*/
 	//float test = sqrt(32.0);
+
+	// Create scene controller with factory
+    smart_ptr<ISceneFactory> factory(new CJoeySceneFactory(this));
+    smart_ptr<ISceneControl> sceneControl(new CSceneControl(factory));
+	sceneControl->JumpScene(SCENE1);
+
 	int nPat = 0;
 	int testInt = 0;
     while (IsThreadValid()){
         ISurface* pSecondary = GetDraw()->GetSecondary();
+		smart_ptr<ISurface> surface(pSecondary, false); // false means don't take ownership (don't delete)
 		testInt += 16;
 		if(testInt >= 256) testInt = 0;
         pSecondary->Clear();
@@ -38,12 +47,18 @@ void CApp::MainThread() {
         // Different drawing for each phase
         switch (nPhase){
         case 0: {
+			// Update and draw current scene
+			sceneControl->OnMove(surface);
+			sceneControl->OnDraw(surface);
+            break;
+                }
+        case 99: {
             //pSecondary->BltFast(bgplane,0,0);
             // Use BltFast for transfers with transparency disabled
-            //pSecondary->BltNatural(charaplane,0,0);
+            pSecondary->BltNatural(charaplane,0,0);
             // For transfers with transparency enabled and YGA images (images with alpha information),
             // it's clearer to use BltNatural
-			LRESULT res = ISurfaceTransBlt::CircleBlt1(
+			LRESULT res = ISurfaceTransBlt::BlindBlt1(
                 pSecondary,    // destination surface
                 bgplane.get(),    // source surface
                 0,                   // x position
@@ -53,8 +68,6 @@ void CApp::MainThread() {
                 255,                 // fade rate
                 NULL                 // clip rectangle
             );
-			//GetDraw()->OnDraw();
-			//timer.WaitFrame();
             break;
                 }
         case 1: {
@@ -121,7 +134,7 @@ void CApp::MainThread() {
                 }
         }
 
-        pSecondary->BltNatural(text,20,400);
+        //pSecondary->BltNatural(text,20,400);
 
         GetDraw()->OnDraw();
 
@@ -129,8 +142,8 @@ void CApp::MainThread() {
         if (key.IsKeyPush(0))    // Exit with ESC key
             break;
         if (key.IsKeyPush(5)) {  // Press SPACE key to increment phase
-            nPhase++;
-            nFade.Reset();
+            //nPhase++;
+            //nFade.Reset();
         }
 
         timer.WaitFrame();

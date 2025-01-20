@@ -1,10 +1,9 @@
 //
-//		ゲーム用、汎用カウンタ
+// Game-purpose Generic Counter
 //
 
 #ifndef __yaneCounter_h__
 #define __yaneCounter_h__
-
 
 #include "../Auxiliary/yaneSerialize.h"
 
@@ -14,324 +13,321 @@ namespace Math {
 class ICounter;
 
 class ICounterFactory {
-/**
-	ユーザーで独自にカウンタ(ICounter派生クラス)を用意する場合、
-	GetTypeで、1000以上のuniqueな数字を返すようにして、
-	このFactory派生クラスで、CreateInstanceをオーバーライドして、
-	その数字を受け取ったときに、そのクラスをnewして返すようにして、
-	そのFactoryを、ICounter::SetFactoryすれば良い。
+/*
+    When users prepare their own counter (ICounter-derived class),
+    GetType should return a unique number greater than 1000,
+    Override CreateInstance in this Factory-derived class,
+    When receiving that number, return a new instance of that class,
+    Then set that Factory using ICounter::SetFactory.
 
-	そうすれば、CProxyCounterによる、その新しく作ったカウンタの
-	シリアライズが可能となる。
+    This will enable serialization of that newly created counter
+    using CProxyCounter.
 */
 public:
-	virtual ICounter* CreateInstance(int n)=0;
-
-	virtual ~ICounterFactory(){}
+    virtual ICounter* CreateInstance(int n)=0;
+    virtual ~ICounterFactory(){}
 };
 
 class ICounter : public IArchive {
-/**
-		カウンタ用の基底クラス
+/*
+    Base class for counters
 */
 public:
-	///		intとの親和性
-	virtual operator int () const=0;
-	virtual const int operator = (int n)=0;
+    /// Compatibility with int type
+    virtual operator int () const=0;
+    virtual const int operator = (int n)=0;
 
-	///		加減算
-	virtual void	Inc()=0;
-	virtual void	Dec()=0;
+    /// Increment/Decrement operations
+    virtual void    Inc()=0;
+    virtual void    Dec()=0;
 
-	///		初期位置か？
-	virtual bool IsBegin() const = 0;
-	///		終端に達したのか？
-	virtual bool IsEnd() const = 0;
+    /// Is it at initial position?
+    virtual bool IsBegin() const = 0;
+    /// Has it reached the end?
+    virtual bool IsEnd() const = 0;
 
-	virtual int GetType() const = 0;
-	static	ICounter* CreateInstance(int nType);
-	/**
-		手動RTTI
-			CNullCounter		:	0
-			CRootCounter		:	1
-			CSaturationCounter	:	2
-			CInteriorCounter	:	3
-		GetTypeは、動的な型を番号で取得する
-		CreateInstanceは、番号から、そのオブジェクトを生成するためのfactory
-		上記の番号以外であれば、SetFactoryで設定されたfactoryを用いて生成する
-	*/
-	static	void	SetFactory(const smart_ptr<ICounterFactory>& v)
-		{	m_vFactory = v; }
-	static	smart_ptr<ICounterFactory>	GetFactory()
-		{ return m_vFactory; }
+    virtual int GetType() const = 0;
+    static    ICounter* CreateInstance(int nType);
+    /*
+        Manual RTTI
+            CNullCounter        : 0
+            CRootCounter       : 1
+            CSaturationCounter : 2
+            CInteriorCounter   : 3
+        GetType returns the dynamic type number
+        CreateInstance is a factory to create that object from the number
+        If the number is other than above, it uses the factory set by SetFactory to create
+    */
+    static    void    SetFactory(const smart_ptr<ICounterFactory>& v)
+        {    m_vFactory = v; }
+    static    smart_ptr<ICounterFactory>    GetFactory()
+        { return m_vFactory; }
 
-	virtual ~ICounter(){}
+    virtual ~ICounter(){}
 
 protected:
-	static	smart_ptr<ICounterFactory> m_vFactory;
+    static    smart_ptr<ICounterFactory> m_vFactory;
 };
 
 class CNullCounter : public ICounter {
-/**
-		class ICounter のNull Device
+/*
+    Null Device for class ICounter
 */
 public:
-	virtual operator int () const { return 0; }
-	virtual const int operator = (int n) { return n; }
-	virtual void	Inc() {}
-	virtual void	Dec() {}
-	virtual bool IsBegin() const { return false;}
-	virtual bool IsEnd() const { return false; }
-	virtual int GetType() const { return 0; }
-	virtual void Serialize(ISerialize&) {}
+    virtual operator int () const { return 0; }
+    virtual const int operator = (int n) { return n; }
+    virtual void    Inc() {}
+    virtual void    Dec() {}
+    virtual bool IsBegin() const { return false;}
+    virtual bool IsEnd() const { return false; }
+    virtual int GetType() const { return 0; }
+    virtual void Serialize(ISerialize&) {}
 };
 
 /////////////////////////////////////////////////////////////////////////
 
 class CProxyCounter : public ICounter {
-/**
-	ICounterのための代理母。こいつは、デシリアライズのときに
-	ICounterのfactoryを用いて、そのオブジェクトを再現する
+/*
+    Proxy class for ICounter. This class uses ICounter's factory
+    to recreate the object during deserialization.
 */
 public:
-	CProxyCounter() : m_vCounter(new CNullCounter) {}
-	CProxyCounter(const smart_ptr<ICounter>& p) : m_vCounter(p){}
+    CProxyCounter() : m_vCounter(new CNullCounter) {}
+    CProxyCounter(const smart_ptr<ICounter>& p) : m_vCounter(p){}
 
-	///		intとの親和性
-	virtual operator int () const { return *m_vCounter.get(); }
-	virtual const int operator = (int n) { return ((*m_vCounter.get()) = n);}
+    /// Compatibility with int type
+    virtual operator int () const { return *m_vCounter.get(); }
+    virtual const int operator = (int n) { return ((*m_vCounter.get()) = n);}
 
-	///		加減算
-	virtual void	Inc() { m_vCounter->Inc(); }
-	virtual void	Dec() { m_vCounter->Dec(); }
+    /// Increment/Decrement operations
+    virtual void    Inc() { m_vCounter->Inc(); }
+    virtual void    Dec() { m_vCounter->Dec(); }
 
-	///		初期位置か？
-	virtual bool IsBegin() const { return m_vCounter->IsBegin(); }
-	///		終端に達したのか？
-	virtual bool IsEnd() const { return m_vCounter->IsEnd(); }
+    /// Is it at initial position?
+    virtual bool IsBegin() const { return m_vCounter->IsBegin(); }
+    /// Has it reached the end?
+    virtual bool IsEnd() const { return m_vCounter->IsEnd(); }
 
 protected:
-	smart_ptr<ICounter>	m_vCounter;
-	ICounter* GetCounter() { return m_vCounter.get(); }
+    smart_ptr<ICounter>    m_vCounter;
+    ICounter* GetCounter() { return m_vCounter.get(); }
 
-	//	overriden from IArchive
-	virtual void Serialize(ISerialize&);
+    // overridden from IArchive
+    virtual void Serialize(ISerialize&);
 };
 
 /////////////////////////////////////////////////////////////////////////
 
 class CRootCounter : public ICounter {
-/**
-	初期値(nStart)・終了値(nEnd)、そして必要ならば増加値(nStep)を設定します。
-	そのあと、Inc関数を実行すると、1ずつ増えます。(nStepが設定されていれば、
-	その数だけ増えます)　そして、加算した結果、nEnd以上になると自動的に
-	nStartに戻ります。(nEndにはなりません)
+/*
+    Sets initial value (nStart), end value (nEnd), and if needed, increment value (nStep).
+    After that, executing Inc function will increment by 1 (or by nStep if set).
+    When the result of addition becomes >= nEnd, it automatically returns to nStart.
+    (It doesn't become nEnd)
 
-	Reset関数は、カウンタ値を初期値nStartに戻します。
-	あるいは、SetInit関数でReset後の初期値が設定されていれば、その値にします。
+    Reset function returns counter value to initial value nStart.
+    Or if an initial value is set by SetInit function after Reset, it will be set to that value.
 
-	また、int型との相互変換が可能ですので、あたかもint型の変数であるかのように
-	使えます。
+    Also, since it's mutually convertible with int type, it can be used as if it were an int variable.
 
-	例）
-	CRootCounter r;
-	r.Set ( 0, 256 , -5 );
-	// nStart == 0 , nEnd == 256というようにカウンタを設定する
-	r = 128;
+    Example:
+    CRootCounter r;
+    r.Set(0, 256, -5);
+    // Sets counter with nStart == 0, nEnd == 256
+    r = 128;
 
-	この状態で、r++; を５回実行すると５回目で r == 129になる。r--;
-	を５回実行すると５回目で r == 127になる。
+    In this state, executing r++; 5 times will make r == 129 on the 5th time.
+    Executing r--; 5 times will make r == 127 on the 5th time.
 
-	また、nStart≦nEndでなくて良いのです。
-	つまり、加算( Inc / ++ )では、nEnd方向へインクリメントします。
-	減算( Dec / -- )では、nStart方向へインクリメントします。
+    Also, it doesn't have to be nStart...nEnd.
+    That is, addition (Inc / ++) increments toward nEnd direction.
+    Subtraction (Dec / --) increments toward nStart direction.
 
-	また、Stepがマイナスである場合は、
-	その絶対値回数のIncメンバ関数の呼び出しによって、1だけnEnd方向に進みます。
+    Also, when Step is negative,
+    it advances 1 step toward nEnd direction for absolute value times of Inc member function calls.
 */
 public:
-	///	nStepは一回の増分の絶対値。マイナスは1/nStepの意味
-	///	nStart≦nEndでなくて良い
-	void	Set(int nStart,int nEnd,int nStep=1)
-		{ m_nStart=nStart; m_nEnd=nEnd; m_nStep=nStep; Reset(); }
-	void	SetStep(int nStep) { m_nStep = nStep; }
-	void	SetStart(int nStart) { m_nStart = nStart; }
-	void	SetEnd(int nEnd) { m_nEnd = nEnd; }
+    /// nStep is the absolute value of increment per step. Negative means 1/nStep
+    /// Can be nStart...nEnd or not
+    void    Set(int nStart,int nEnd,int nStep=1)
+        { m_nStart=nStart; m_nEnd=nEnd; m_nStep=nStep; Reset(); }
+    void    SetStep(int nStep) { m_nStep = nStep; }
+    void    SetStart(int nStart) { m_nStart = nStart; }
+    void    SetEnd(int nEnd) { m_nEnd = nEnd; }
 
-	///	取得
-	int		GetStep() const { return m_nStep; }
-	int		GetStart() const { return m_nStart; }
-	int		GetEnd() const { return m_nEnd; }
+    /// Getters
+    int        GetStep() const { return m_nStep; }
+    int        GetStart() const { return m_nStart; }
+    int        GetEnd() const { return m_nEnd; }
 
-	///	カウンタのリセット
-	void	Reset() { m_nRootCount= m_nStart; m_nRate=0; }
+    /// Reset counter
+    void    Reset() { m_nRootCount= m_nStart; m_nRate=0; }
 
-	///	property..
-	virtual bool	IsBegin() const { return m_nRootCount == m_nStart; }
-	virtual bool	IsEnd() const { return m_nRootCount == m_nEnd; }
+    /// property..
+    virtual bool    IsBegin() const { return m_nRootCount == m_nStart; }
+    virtual bool    IsEnd() const { return m_nRootCount == m_nEnd; }
 
-	CRootCounter();
-	CRootCounter(int nEnd);
-	CRootCounter(int nStart,int nEnd,int nStep=1);
+    CRootCounter();
+    CRootCounter(int nEnd);
+    CRootCounter(int nStart,int nEnd,int nStep=1);
 
-	//	intとの相互変換
-	operator int () const { return m_nRootCount; }
-	const int operator = (int n) { m_nRootCount = n; return n; }
-	int		Get () const { return m_nRootCount; }
+    // Mutual conversion with int type
+    operator int () const { return m_nRootCount; }
+    const int operator = (int n) { m_nRootCount = n; return n; }
+    int        Get () const { return m_nRootCount; }
 
-	//	カウンタのインクリメント(終端まで達すると、そこで停止する)
-	void	Inc() { inc(true); }
-	void	Dec() { inc(false); }
-	//	加算（＝End方向へインクリメント）／減算（＝Start方向へのインクリメント）
-	CRootCounter& operator++()
-		{ Inc(); return (*this); }
-	CRootCounter operator++(int)
-		{ CRootCounter _Tmp = *this; Inc(); return (_Tmp); }
-	CRootCounter& operator--()
-		{ Dec(); return (*this); }
-	CRootCounter operator--(int)
-		{ CRootCounter _Tmp = *this; Dec(); return (_Tmp); }
+    // Counter increment (stops when reaching the end)
+    void    Inc() { inc(true); }
+    void    Dec() { inc(false); }
+    // Addition (increment toward End direction) / Subtraction (increment toward Start direction)
+    CRootCounter& operator++()
+        { Inc(); return (*this); }
+    CRootCounter operator++(int)
+        { CRootCounter _Tmp = *this; Inc(); return (_Tmp); }
+    CRootCounter& operator--()
+        { Dec(); return (*this); }
+    CRootCounter operator--(int)
+        { CRootCounter _Tmp = *this; Dec(); return (_Tmp); }
 
-	virtual int GetType() const { return 1; }
+    virtual int GetType() const { return 1; }
 
 protected:
-	void	inc(bool bAdd=true);
+    void    inc(bool bAdd=true);
 
-	int		m_nRootCount;
-	int		m_nStart;
-	int		m_nEnd;
-	int		m_nStep;
-	int		m_nRate;	//	nStep<0のときは、ｎ回のInc()で+1される
+    int        m_nRootCount;
+    int        m_nStart;
+    int        m_nEnd;
+    int        m_nStep;
+    int        m_nRate;    // When nStep<0, incremented by +1 on first Inc() call
 
-	virtual void Serialize(ISerialize&s) {
-		s << m_nRootCount << m_nStart << m_nEnd << m_nStep << m_nRate;
-	}
+    virtual void Serialize(ISerialize&s) {
+        s << m_nRootCount << m_nStart << m_nEnd << m_nStep << m_nRate;
+    }
 };
 
 class CSaturationCounter : public ICounter {
-/**
-	飽和カウンタ。class CRootCounter のバリエーション。
-	「カウンタを++していき、終了値になったときに、そこでカウンタは
-	停止する」という部分だけが異なる。
+/*
+    Saturation Counter. A variation of class CRootCounter.
+    The only difference is "when the counter is incremented and reaches the end value,
+    it stops at that point"
 */
 public:
-	///	nStepは一回の増分の絶対値。マイナスは1/nStepの意味
-	///	nStart≦nEndでなくて良い
-	void	Set(int nStart,int nEnd,int nStep=1)
-		{ m_nStart=nStart; m_nEnd=nEnd; m_nStep=nStep; Reset(); }
-	void	SetStep(int nStep) { m_nStep = nStep; }
-	void	SetStart(int nStart) { m_nStart = nStart; }
-	void	SetEnd(int nEnd) { m_nEnd = nEnd; }
+    /// nStep is the absolute value of increment per step. Negative means 1/nStep
+    /// Can be nStart...nEnd or not
+    void    Set(int nStart,int nEnd,int nStep=1)
+        { m_nStart=nStart; m_nEnd=nEnd; m_nStep=nStep; Reset(); }
+    void    SetStep(int nStep) { m_nStep = nStep; }
+    void    SetStart(int nStart) { m_nStart = nStart; }
+    void    SetEnd(int nEnd) { m_nEnd = nEnd; }
 
-	///	取得
-	int		GetStep() const { return m_nStep; }
-	int		GetStart() const { return m_nStart; }
-	int		GetEnd() const { return m_nEnd; }
+    /// Getters
+    int        GetStep() const { return m_nStep; }
+    int        GetStart() const { return m_nStart; }
+    int        GetEnd() const { return m_nEnd; }
 
-	///	カウンタのリセット
-	void	Reset() { m_nRootCount= m_nStart; m_nRate=0; }
+    /// Reset counter
+    void    Reset() { m_nRootCount= m_nStart; m_nRate=0; }
 
-	///	property..
-	virtual bool	IsBegin() const { return m_nRootCount == m_nStart; }
-	virtual bool	IsEnd() const { return m_nRootCount == m_nEnd; }
+    /// property..
+    virtual bool    IsBegin() const { return m_nRootCount == m_nStart; }
+    virtual bool    IsEnd() const { return m_nRootCount == m_nEnd; }
 
-	CSaturationCounter();
-	CSaturationCounter(int nEnd);
-	CSaturationCounter(int nStart,int nEnd,int nStep=1);
+    CSaturationCounter();
+    CSaturationCounter(int nEnd);
+    CSaturationCounter(int nStart,int nEnd,int nStep=1);
 
-	//	intとの相互変換
-	operator int () const { return m_nRootCount; }
-	const int operator = (int n) { m_nRootCount = n; return n; }
-	int		Get () const { return m_nRootCount; }
+    // Mutual conversion with int type
+    operator int () const { return m_nRootCount; }
+    const int operator = (int n) { m_nRootCount = n; return n; }
+    int        Get () const { return m_nRootCount; }
 
-	//	カウンタのインクリメント(終端まで達すると、そこで停止する)
-	void	Inc() { inc(true); }
-	void	Dec() { inc(false); }
-	//	加算（＝End方向へインクリメント）／減算（＝Start方向へのインクリメント）
-	CSaturationCounter& operator++()
-		{ Inc(); return (*this); }
-	CSaturationCounter operator++(int)
-		{ CSaturationCounter _Tmp = *this; Inc(); return (_Tmp); }
-	CSaturationCounter& operator--()
-		{ Dec(); return (*this); }
-	CSaturationCounter operator--(int)
-		{ CSaturationCounter _Tmp = *this; Dec(); return (_Tmp); }
+    // Counter increment (stops when reaching the end)
+    void    Inc() { inc(true); }
+    void    Dec() { inc(false); }
+    // Addition (increment toward End direction) / Subtraction (increment toward Start direction)
+    CSaturationCounter& operator++()
+        { Inc(); return (*this); }
+    CSaturationCounter operator++(int)
+        { CSaturationCounter _Tmp = *this; Inc(); return (_Tmp); }
+    CSaturationCounter& operator--()
+        { Dec(); return (*this); }
+    CSaturationCounter operator--(int)
+        { CSaturationCounter _Tmp = *this; Dec(); return (_Tmp); }
 
-	virtual int GetType() const { return 2; }
+    virtual int GetType() const { return 2; }
 
 protected:
-	void	inc(bool bAdd=true);
+    void    inc(bool bAdd=true);
 
-	int		m_nRootCount;
-	int		m_nStart;
-	int		m_nEnd;
-	int		m_nStep;
-	int		m_nRate;	//	nStep<0のときは、ｎ回のInc()で+1される
+    int        m_nRootCount;
+    int        m_nStart;
+    int        m_nEnd;
+    int        m_nStep;
+    int        m_nRate;    // When nStep<0, incremented by +1 on first Inc() call
 
-	virtual void Serialize(ISerialize&s) {
-		s << m_nRootCount << m_nStart << m_nEnd << m_nStep << m_nRate;
-	}
+    virtual void Serialize(ISerialize&s) {
+        s << m_nRootCount << m_nStart << m_nEnd << m_nStep << m_nRate;
+    }
 };
 
 class CInteriorCounter : public ICounter {
-/**
-	内分カウンタを提供します。
+/*
+    Provides an interpolation counter.
 
-	Setメンバ関数で、初期値(nStart)・終了値(nEnd)、
-	そして分割数(nFrames)を設定します。
+    Set the initial value (nStart), end value (nEnd),
+    and division count (nFrames) using the Set member function.
 
-	そうすれば、このカウンタはnStartから始まり、
-	nFrame回のIncメンバ関数の呼び出しによってnEndに到達するような
-	内分カウンタとなります。
+    This counter will then start from nStart and reach nEnd
+    after calling Inc member function nFrames times.
 
-	また、Incは、operator++としても定義してあります。
-	Incの逆操作であるDecもあり、それはoperator--としても定義してあります。
+    Inc is also defined as operator++.
+    Dec, which is the reverse operation of Inc, also exists and is defined as operator--.
 */
 public:
-	CInteriorCounter();
+    CInteriorCounter();
 
-	///	intとの相互変換
-	virtual operator int () const { return m_nNow; }
-	virtual const int operator = (int n) { m_nNow = m_nStart = n; m_nFramesNow = 0; return n; }
+    /// Mutual conversion with int type
+    virtual operator int () const { return m_nNow; }
+    virtual const int operator = (int n) { m_nNow = m_nStart = n; m_nFramesNow = 0; return n; }
 
-	virtual void	Inc();		///	加算
-	CInteriorCounter& operator++() { Inc(); return (*this); }
-	CInteriorCounter operator++(int) { CInteriorCounter _Tmp = *this; Inc(); return (_Tmp); }
+    virtual void    Inc();        /// Addition
+    CInteriorCounter& operator++() { Inc(); return (*this); }
+    CInteriorCounter operator++(int) { CInteriorCounter _Tmp = *this; Inc(); return (_Tmp); }
 
-	virtual void	Dec();		///	減算
-	CInteriorCounter& operator--() { Dec(); return (*this); }
-	CInteriorCounter operator--(int) { CInteriorCounter _Tmp = *this; Dec(); return (_Tmp); }
+    virtual void    Dec();        /// Subtraction
+    CInteriorCounter& operator--() { Dec(); return (*this); }
+    CInteriorCounter operator--(int) { CInteriorCounter _Tmp = *this; Dec(); return (_Tmp); }
 
-	void	Set(int nStart,int nEnd,int nFrames);
-	/**
-		初期値(nStart)・終了値(nEnd)、そして分割数(nFrames)を設定します。
-	*/
+    void    Set(int nStart,int nEnd,int nFrames);
+    /*
+        Sets initial value (nStart), end value (nEnd), and division count (nFrames)
+    */
 
-	///	現在の値を（一時的に）変更する。次のInc/Decで、正常な値に戻る
-	void	Set(int nNow) { *this = nNow; }
+    /// Temporarily changes current value. Returns to normal value on next Inc/Dec
+    void    Set(int nNow) { *this = nNow; }
 
-	virtual bool	IsBegin() const { return (m_nNow == m_nStart);}
-	virtual bool	IsEnd() const { return (m_nNow == m_nEnd);}
+    virtual bool    IsBegin() const { return (m_nNow == m_nStart);}
+    virtual bool    IsEnd() const { return (m_nNow == m_nEnd);}
 
-	///	property
-	int		GetFrame() const { return m_nFrames; }
-	int		GetStart() const { return m_nStart;}
-	int		GetEnd() const { return m_nEnd;}
-	///		現在のフレーム数(incをした回数)の取得。
-	int		GetFrameNow() const { return m_nFramesNow; }
+    /// property
+    int        GetFrame() const { return m_nFrames; }
+    int        GetStart() const { return m_nStart;}
+    int        GetEnd() const { return m_nEnd;}
+    /// Get current frame count (number of times inc was called)
+    int        GetFrameNow() const { return m_nFramesNow; }
 
-	virtual int GetType() const { return 3; }
+    virtual int GetType() const { return 3; }
 
 protected:
-	int		m_nNow;			//	現在の値
-	int		m_nStart;		//	初期値
-	int		m_nEnd;			//	終了値
-	int		m_nFrames;		//	フレーム分割数（終了値になるまで何回Incをすればいいのか）
-	int		m_nFramesNow;	//	現在、何フレーム目か？
+    int        m_nNow;            // Current value
+    int        m_nStart;        // Initial value
+    int        m_nEnd;            // End value
+    int        m_nFrames;        // Frame division count (how many Inc calls until end value)
+    int        m_nFramesNow;    // Current frame number
 
-	virtual void Serialize(ISerialize&s) {
-		s << m_nNow << m_nStart << m_nEnd << m_nFrames << m_nFramesNow;
-	}
+    virtual void Serialize(ISerialize&s) {
+        s << m_nNow << m_nStart << m_nEnd << m_nFrames << m_nFramesNow;
+    }
 };
 
 /////////////////////////////////////////////////////////////////////////

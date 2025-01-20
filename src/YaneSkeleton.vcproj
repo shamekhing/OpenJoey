@@ -193,10 +193,26 @@
 				Name="system"
 				Filter="">
 				<File
+					RelativePath=".\CJoeySceneFactory.cpp">
+				</File>
+				<File
+					RelativePath=".\CJoeySceneFactory.h">
+				</File>
+				<File
 					RelativePath=".\system\effects\yanePlaneEffectBlt.cpp">
 				</File>
 				<File
 					RelativePath=".\system\effects\yanePlaneEffectBlt.h">
+				</File>
+			</Filter>
+			<Filter
+				Name="test"
+				Filter="">
+				<File
+					RelativePath=".\CScene1.cpp">
+				</File>
+				<File
+					RelativePath=".\CScene1.h">
 				</File>
 			</Filter>
 		</Filter>
