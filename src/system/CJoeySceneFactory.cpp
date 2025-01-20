@@ -1,8 +1,10 @@
 // CJoeySceneFactory.cpp
-#include "stdafx.h"
-#include "CJoeySceneFactory.h"
-#include "CApp.h"
-#include "CScene1.h"
+#include "../stdafx.h"
+#include "../CApp.h"
+#include "../system/CJoeySceneFactory.h"
+
+// Scene headers
+#include "../test/CScene1.h"
 
 // Created by derplayer
 // Created on 2025-01-19 15:46:24

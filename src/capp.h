@@ -2,7 +2,7 @@
 #define __CApp_h__
 
 #include "system/effects/yanePlaneEffectBlt.h"
-#include "CJoeySceneFactory.h"
+#include "system/CJoeySceneFactory.h"
 
 class CApp : public CAppFrame {
 

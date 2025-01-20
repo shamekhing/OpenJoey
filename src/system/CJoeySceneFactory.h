@@ -1,7 +1,8 @@
 // CJoeySceneFactory.h
 #ifndef JOEY_SCENE_FACTORY_H
 #define JOEY_SCENE_FACTORY_H
-#include "stdafx.h"
+#include "../stdafx.h"
+
 // Forward declare
 class CApp;
 

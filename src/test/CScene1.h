@@ -2,9 +2,9 @@
 #ifndef CSCENE1_H
 #define CSCENE1_H
 
-#include "stdafx.h"
-#include "CJoeySceneFactory.h"
-#include "system/effects/yanePlaneEffectBlt.h"
+#include "../stdafx.h"
+#include "../system/CJoeySceneFactory.h"
+#include "../system/effects/yanePlaneEffectBlt.h"
 
 // Created by derplayer
 // Created on 2025-01-19 15:46:24
@@ -17,9 +17,9 @@ public:
 
 private:
     CPlane bgPlane;
-    CTextFastPlane textPlane;
+    CTextFastPlane* pTextPtr;
+	CPlane pText;
     CKey1 key;
-
 	CRootCounter nFade;
 };
 

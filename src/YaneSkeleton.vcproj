@@ -193,10 +193,10 @@
 				Name="system"
 				Filter="">
 				<File
-					RelativePath=".\CJoeySceneFactory.cpp">
+					RelativePath=".\system\CJoeySceneFactory.cpp">
 				</File>
 				<File
-					RelativePath=".\CJoeySceneFactory.h">
+					RelativePath=".\system\CJoeySceneFactory.h">
 				</File>
 				<File
 					RelativePath=".\system\effects\yanePlaneEffectBlt.cpp">
@@ -209,10 +209,10 @@
 				Name="test"
 				Filter="">
 				<File
-					RelativePath=".\CScene1.cpp">
+					RelativePath=".\test\CScene1.cpp">
 				</File>
 				<File
-					RelativePath=".\CScene1.h">
+					RelativePath=".\test\CScene1.h">
 				</File>
 			</Filter>
 		</Filter>
