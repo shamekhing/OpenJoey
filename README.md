@@ -1,9 +1,16 @@
-# OpenJoey - Open Source implementation of Yu-Gi-Oh! - Power of Chaos games
-Nothing to see here (yet?). I only got around to patch up and run a yaneSDKv3 skeleton example.
+# OpenJoey - Open Source reimplementation of Yu-Gi-Oh! - Power of Chaos
+**OpenJoey**: a free, open source black-box re-implementation (NOT a decompile) of [Power of Chaos](https://yugioh.fandom.com/wiki/Yu-Gi-Oh!_Power_of_Chaos) games.
+Powered by the yaneSDK engine for accurace reimplementation.
+
+## Work in progress
+This project is in the *very* early stages. There is still a long way to go before there's anything playable. 
 Pull requests are always welcome.
 
+## Discord/Contact
+[Yu-Gi-Oh! Power of Chaos/Online modding discord](https://discord.com/invite/GAKKaJYwF7)
+
 ## What is yaneSDK?
-TL;DR: Imagine early 2000s free C++ Unity engine for japanese indie devs.
+TL;DR: Early 2000s free C++ engine for japanese indie devs. Was also used for Power of Chaos games.
 
 ## What do i need to compile this project?
 The "TEST" project file is for Code::Blocks. You will also need:
@@ -11,27 +18,35 @@ The "TEST" project file is for Code::Blocks. You will also need:
 * Microsoft Platform SDK (older one that plays nice with Visual C++ Toolkit 2003)
 * Microsoft DirectX SDK (yaneSDK has support for DX3 up to DX8)
 
-The sdk can also be compiled in lib mode.
+or...
+* Just use Visual Studio .NET 2003 (VC7.1) with everything preinstalled.
 
 ## Untouched yaneSDK source code
-The raw untouched source code is in misc folder. (v1-v5)
-The engine is used by way more games (mostly older visual novels).
+Raw untouched source code is in misc folder. (v1-v5)
+The engine is used in way more games (mostly older visual novels).
+YaneSDK can also be compiled in lib mode.
 
-# Where was the yaneSDK used?
-YaneSDKv2 is used in: Yu-Gi-Oh! Power of Chaos games.
-YaneSDKv3 is used in: Yu-Gi-Oh! Online Duel Evolution.
+# Where was yaneSDK used?
 It was also used by other japanese games in early 00's (way too many to count, most confirmed ones are visual novels) and is used even to this day for some VNs.
 
 ## Documentation
-On the official website.
-There is also a very cool [gamedev programming book series](https://www.amazon.co.jp/Windowsプロフェッショナルゲームプログラミング-やね-うらお/dp/479800314X) on it how to use the engine (but in japanese only).
+[Official YaneSDK Homepage](https://bm98.yaneu.com/yaneSDK.html).
+There is also a [gamedev programming book series](https://www.amazon.co.jp/Windowsプロフェッショナルゲームプログラミング-やね-うらお/dp/479800314X) on it how to use the engine (but in japanese only).
+
+## Legal disclaimers
+
+* This project is not affiliated with or endorsed by KONAMI or KABUSHIKI KAISHA SHUEISHA in any way. Yu-Gi-Oh! is a trademark of KABUSHIKI KAISHA SHUEISHA.
+* This project is non-commercial. The source code is available for free and always will be.
+* OpenJoey is nowhere near playable yet, but when it is and you want to play with it,
+  you will need to have a legally acquired installation of one of those games. OpenJoey uses data files from the original games. 
+* This is a blackbox re-implementation project. The code in this project was written based on reading data files, 
+  and observing the game running. For engine functionality, the public domain yaneSDK was used.
+  I believe this puts the project in the clear, legally speaking. If someone at KONAMI or KABUSHIKI KAISHA SHUEISHA disagrees, please talk to me.
+* If you want to contribute to this repository, your contribution must be either your own original code, or open source code with a
+  clear acknowledgement of its origin. No code that was acquired through reverse engineering executable binaries will be accepted.
+* No assets from the original games are included in this repo.
 
 ## License
 The original yaneSDK was released as public domain by Motohiro Isozaki aka [yaneurao](https://github.com/yaneurao).
-This repo is more like an mirror with tweaks. You can also download the original source code on his website if you want.
+You can also download the original source code on his website if you want.
 [Official YaneSDK Homepage](https://bm98.yaneu.com/yaneSDK.html)
-
-## Discord/Contact
-[Yu-Gi-Oh! Power of Chaos/Online modding discord](https://discord.com/invite/GAKKaJYwF7)
-
-![Alt text](/misc/scr.jpg?raw=true "Skeleton screenshot")
