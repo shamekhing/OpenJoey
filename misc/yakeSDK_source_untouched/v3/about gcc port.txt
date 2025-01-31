@@ -1,0 +1,3 @@
+https://web.archive.org/web/20040913212955/http://someiyoshino.cool.ne.jp/insideyanesdk/wiki/wiki.cgi?page=LINK
+someone ported the engine to gcc in the past but its not archived and lost media
+maybe write a mail to the port author if he still has the files?

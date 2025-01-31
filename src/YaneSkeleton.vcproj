@@ -205,6 +205,9 @@
 					RelativePath=".\system\backport\yaneGUIButton.h">
 				</File>
 				<File
+					RelativePath=".\system\backport\yaneGUIParts.h">
+				</File>
+				<File
 					RelativePath=".\system\effects\yanePlaneEffectBlt.cpp">
 				</File>
 				<File

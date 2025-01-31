@@ -13,9 +13,16 @@ void CSceneYesNo::OnInit() {
     m_vPlaneLoader.SetReadDir("test/yesno/");
     m_vPlaneLoader.Set("list.txt", true);
 
-    // Load background and message
-    m_vBackground = CPlane(app->GetDraw()->GetSecondary());  // Capture current screen
-    //m_vBackground->SubColorBltFastFade(m_vBackground.get(), 0, 0, 172);  // Darken
+    // Load background using PlaneEffect
+    CFastPlaneFactory* factory = app->GetDrawFactory();
+    if (factory && factory->GetDraw()) {
+        // Create a new plane from the current screen
+        m_vBackground = CPlane(factory->GetDraw()->GetSecondary());
+        
+        // If you want to darken it, do it in OnDraw instead of here
+        // This way we avoid surface locking issues during initialization
+    }
+
     m_pMessageSurface = m_vPlaneLoader.GetPlane(0);  // Load message
 
     // Setup buttons
@@ -23,14 +30,18 @@ void CSceneYesNo::OnInit() {
     static const int BUTTON_SPACING = 120;
     
     for(int i = 0; i < 2; i++) {
-        m_vButtons[i].SetMouse((CMouse*)&m_mouse);
+        m_vButtons[i].SetMouse(smart_ptr<IMouse>(&m_mouse, false));
 
-		CGUINormalButtonListener *p = new CGUINormalButtonListener;
-        p->SetPlaneLoader(&m_vPlaneLoader, 1 + i*2); // Image offsets: Yes=1,2 No=3,4
-        p->SetType(1);  // Normal button type
+        // Create the button listener as CGUIButtonEventListener type directly
+        smart_ptr<CGUIButtonEventListener> buttonListener(new CGUINormalButtonListener());
+        
+        // Cast to derived type to access CGUINormalButtonListener methods
+        CGUINormalButtonListener* p = static_cast<CGUINormalButtonListener*>(buttonListener.get());
+        p->SetPlaneLoader(smart_ptr<CPlaneLoader>(&m_vPlaneLoader, false), 1 + i*2);
+        p->SetType(1);
 
-		m_vButtons[i].SetEvent(p);
-        m_vButtons[i].SetXY(216 + i*BUTTON_SPACING, BUTTON_Y);  // Yes at 216, No at 336
+        m_vButtons[i].SetEvent(buttonListener);
+        m_vButtons[i].SetXY(216 + i*BUTTON_SPACING, BUTTON_Y);
     }
 
     m_nButton = 0;
@@ -64,9 +75,10 @@ void CSceneYesNo::OnMove(const smart_ptr<ISurface>& lp) {
 }
 
 void CSceneYesNo::OnDraw(const smart_ptr<ISurface>& lp) {
-	return;
+
     // Draw darkened background
-    lp->BltFast(m_vBackground.get(), 0, 0);
+    //lp->BltFast(m_vBackground, 0, 0);
+	//return;
 
     // Draw message centered
     int sx, sy;
