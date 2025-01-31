@@ -4,125 +4,128 @@
 namespace yaneuraoGameSDK3rd {
 namespace Draw {
 
-void	CSceneControl::CreateScene(int nScene){
+void CSceneControl::CreateScene(int nScene) {
+    if (nScene == -1) return; // Invalid scene number
 
-	if (nScene==-1) return ; // これ失敗なり
-	//	新しいシーンを構築
-	CSceneInfo* pInfo = new CSceneInfo;
-	pInfo->m_lpScene = GetSceneFactory()->CreateScene(nScene);
-	pInfo->m_nScene = nScene;
-	if (!pInfo->m_lpScene.isNull()){
-		pInfo->m_lpScene->SetSceneControl(smart_ptr<ISceneControl>(this,false));
-		pInfo->m_lpScene->OnInit();	//	これで初期化。
-	}
-	//	スタックに追加
-	GetSceneStack()->push_back(smart_ptr<CSceneInfo>(pInfo));
+    // Create a new scene info container
+    CSceneInfo* pInfo = new CSceneInfo;
+    pInfo->m_lpScene = GetSceneFactory()->CreateScene(nScene);
+    pInfo->m_nScene = nScene;
+
+    if (!pInfo->m_lpScene.isNull()) {
+        // Set the scene control and initialize
+        pInfo->m_lpScene->SetSceneControl(smart_ptr<ISceneControl>(this, false));
+        pInfo->m_lpScene->OnInit();
+    }
+
+    // Add to scene stack
+    GetSceneStack()->push_back(smart_ptr<CSceneInfo>(pInfo));
 }
 
-void	CSceneControl::OnMove(const smart_ptr<ISurface>& lpDrawContext) {// 追加
-	//	OnInitのなかで次々とシーンジャンプしうるので先にメッセージをクリア
-	do {
-	//	インデントするの面倒なのでここで＾＾；
+void CSceneControl::OnMove(const smart_ptr<ISurface>& lpDrawContext) {
+    // Process all pending scene changes since OnInit might trigger multiple scene jumps
+    do {
+        int nMessage = m_nMessage;
+        m_nMessage = 0;
 
-	int nMessage = m_nMessage;
-	m_nMessage = 0;
+        // Handle scene transition messages
+        switch (nMessage) {
+            // 0: No Message
+            // 1: JumpScene - Destroy current, create new
+            // 2: CallScene - Destroy current, create new (different cleanup)
+            // 3: CallSceneFast - Keep current, create new
+            // 4: ReturnScene - Return to previous scene
+            // 5: ExitScene - Exit immediately
+            case 0: break;
 
-	//	メッセージのdispatch
-	switch (nMessage) {
-		//	0:No Message 1:JumpScene 2:CallScene
-		//	3:CallSceneFast 4:ReturnScene 5:ExitScene
-	case 0: break;
-	case 1:
-		//	現在のシーンがあるならば、それを破棄
-		if (!IsEnd()){
-			GetSceneStack()->pop_back();
-		}
-		//	新しいシーンを構築
-		CreateScene(m_nNextScene);
-		break;
-	case 2: {
-		//	現在のシーンを破棄
-		if (!IsEnd()){
-			(*GetSceneStack()->rbegin())->m_lpScene.Delete();
-		}
-		//	新しいシーンを構築
-		CreateScene(m_nNextScene);
-		break;
-			}
-	case 3:
-		//	現在のシーンをスタック上に積んで、Deleteしない。
-		//	⇒スマートポインタになっているのでpushしておけばDeleteされない。
-		//	新しいシーンを構築
-		CreateScene(m_nNextScene);
-		break;
-	case 4:	{		//	元のシーンに戻る。
-		//	現在のシーンを破棄
-		if (IsEnd()){
-#ifdef USE_EXCEPTION
-			throw CSyntaxException("これ以上ReturnScene出来ない");
-#endif
-		} else {
-			GetSceneStack()->pop_back();
-		}
-		if (IsEnd()) break; //	もう戻るシーン無いねん
+            case 1: // JumpScene
+                if (!IsEnd()) {
+                    GetSceneStack()->pop_back();
+                }
+                CreateScene(m_nNextScene);
+                break;
 
-		CSceneInfo& pInfo = **GetSceneStack()->rbegin();
-		int nScene = pInfo.m_nScene;
-		if (pInfo.m_lpScene.isNull()) {
-			//	シーン解放してあるから、factoryで、また作ったらにゃ！
-			GetSceneStack()->pop_back();
-			CreateScene(nScene);
-			//	一応、呼び出そか＾＾；
-			if (!(*GetSceneStack()->rbegin())->m_lpScene.isNull()) {
-				(*GetSceneStack()->rbegin())->m_lpScene->OnComeBack(nScene);
-			}
-		} else {
-			//	帰ってきたで～　ジェーンカンバークッ＾＾；
-			(*GetSceneStack()->rbegin())->m_lpScene->OnComeBack(nScene);
-		}
-		break;
-			}
-	case 5:	return ;	//	描画せずに抜ける
-	}
+            case 2: { // CallScene
+                if (!IsEnd()) {
+                    (*GetSceneStack()->rbegin())->m_lpScene.Delete();
+                }
+                CreateScene(m_nNextScene);
+                break;
+            }
 
-	if (!IsEnd() && !(*GetSceneStack()->rbegin())->m_lpScene.isNull()) {
-		(*GetSceneStack()->rbegin())->m_lpScene->OnMove(lpDrawContext);
-	}
+            case 3: // CallSceneFast
+                // Keep current scene in stack (smart pointer handles cleanup)
+                CreateScene(m_nNextScene);
+                break;
 
-	//	インデントするの面倒なのでここで＾＾；
-	} while (m_nMessage!=0);
-	//	上記のOnDrawのなかでさらに次のシーンに飛ぶことがある。
-	//	メッセージは無くなるまで処理し続けるのが原則
+            case 4: { // ReturnScene
+                if (IsEnd()) {
+                    #ifdef USE_EXCEPTION
+                    throw CSyntaxException("Can't return any further - no more scenes");
+                    #endif
+                } else {
+                    GetSceneStack()->pop_back();
+                }
+                
+                if (IsEnd()) break; // No more scenes to return to
 
-	return ;
+                CSceneInfo& pInfo = **GetSceneStack()->rbegin();
+                int nScene = pInfo.m_nScene;
+                
+                if (pInfo.m_lpScene.isNull()) {
+                    // Scene was destroyed, recreate it
+                    GetSceneStack()->pop_back();
+                    CreateScene(nScene);
+                    
+                    // Notify scene it's being returned to
+                    if (!(*GetSceneStack()->rbegin())->m_lpScene.isNull()) {
+                        (*GetSceneStack()->rbegin())->m_lpScene->OnComeBack(nScene);
+                    }
+                } else {
+                    // Scene exists, just notify it's being returned to
+                    (*GetSceneStack()->rbegin())->m_lpScene->OnComeBack(nScene);
+                }
+                break;
+            }
+
+            case 5: // ExitScene
+                return; // Exit without drawing
+        }
+
+        // Update current scene if it exists
+        if (!IsEnd() && !(*GetSceneStack()->rbegin())->m_lpScene.isNull()) {
+            (*GetSceneStack()->rbegin())->m_lpScene->OnMove(lpDrawContext);
+        }
+
+    } while (m_nMessage != 0); // Continue processing until no more messages
 }
 
-void CSceneControl::OnDraw(const smart_ptr<ISurface>&lpDrawContext) {// 追加
-	if (!IsEnd() && !(*GetSceneStack()->rbegin())->m_lpScene.isNull()) {
-		(*GetSceneStack()->rbegin())->m_lpScene->OnDraw(lpDrawContext);
-	}
-	return ;
+void CSceneControl::OnDraw(const smart_ptr<ISurface>& lpDrawContext) {
+    // Draw current scene if it exists
+    if (!IsEnd() && !(*GetSceneStack()->rbegin())->m_lpScene.isNull()) {
+        (*GetSceneStack()->rbegin())->m_lpScene->OnDraw(lpDrawContext);
+    }
 }
 
-void	CSceneControl::PushScene(int nScene){
-	//	指定されたシーン名をスタック上に積む。
-	CSceneInfo* pInfo = new CSceneInfo;
-	pInfo->m_nScene = nScene;
-	GetSceneStack()->push_back(smart_ptr<CSceneInfo>(pInfo));
+void CSceneControl::PushScene(int nScene) {
+    // Save scene number to stack (without creating the scene yet)
+    CSceneInfo* pInfo = new CSceneInfo;
+    pInfo->m_nScene = nScene;
+    GetSceneStack()->push_back(smart_ptr<CSceneInfo>(pInfo));
 }
 
-bool	CSceneControl::IsEnd() const{
-	return const_cast<CSceneControl*>(this)->GetSceneStack()->size()==0;
+bool CSceneControl::IsEnd() const {
+    return const_cast<CSceneControl*>(this)->GetSceneStack()->size() == 0;
 }
 
-int CSceneControl::GetSceneNo() const{
-	if (IsEnd()) return -1;
-	return (*(const_cast<CSceneControl*>(this))->GetSceneStack()->rbegin())->m_nScene;
+int CSceneControl::GetSceneNo() const {
+    if (IsEnd()) return -1;
+    return (*const_cast<CSceneControl*>(this)->GetSceneStack()->rbegin())->m_nScene;
 }
 
-smart_ptr<IScene> CSceneControl::GetScene() const{
-	if (IsEnd()) return smart_ptr<IScene>();
-	return (*(const_cast<CSceneControl*>(this))->GetSceneStack()->rbegin())->m_lpScene;
+smart_ptr<IScene> CSceneControl::GetScene() const {
+    if (IsEnd()) return smart_ptr<IScene>();
+    return (*const_cast<CSceneControl*>(this)->GetSceneStack()->rbegin())->m_lpScene;
 }
 
 } // end of namespace Draw

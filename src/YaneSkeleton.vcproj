@@ -199,6 +199,12 @@
 					RelativePath=".\system\CJoeySceneFactory.h">
 				</File>
 				<File
+					RelativePath=".\system\backport\yaneGUIButton.cpp">
+				</File>
+				<File
+					RelativePath=".\system\backport\yaneGUIButton.h">
+				</File>
+				<File
 					RelativePath=".\system\effects\yanePlaneEffectBlt.cpp">
 				</File>
 				<File
@@ -213,6 +219,12 @@
 				</File>
 				<File
 					RelativePath=".\test\CScene1.h">
+				</File>
+				<File
+					RelativePath=".\test\CSceneYesNo.cpp">
+				</File>
+				<File
+					RelativePath=".\test\CSceneYesNo.h">
 				</File>
 			</Filter>
 		</Filter>

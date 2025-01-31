@@ -1,15 +1,14 @@
-// MouseInput.h :
-//	マウス入力用
-//		programmed by yaneurao(M.Isozaki) '99/7/31
+// MouseInput.h:
+// For Mouse Input
+//    programmed by yaneurao(M.Isozaki) '99/7/31
 //
-//	たいしたクラスではない。:p
+// This is not a sophisticated class :p
 //
-//		※　ダブルクリックの感知はしない。
+// Note: Double-click detection is not implemented.
 //
 
 #ifndef __yaneMouseInput_h__
 #define __yaneMouseInput_h__
-
 
 #include "../Window/yaneWinHook.h"
 
@@ -18,138 +17,139 @@ namespace Input {
 
 class IMouse {
 public:
-	virtual LRESULT GetXY(int &x,int &y)const=0;
-	virtual bool	RButton()const=0;
-	virtual bool	LButton()const=0;
-	virtual LRESULT GetInfo(int &x,int &y,int &b)const=0;
-	virtual void	GetButton(bool&bL,bool&bR)=0;
-	virtual void	ResetButton()=0;
-	virtual LRESULT SetXY(int x,int y)=0;
-	virtual void	SetOutScreenInput(bool bEnable)=0;
+    virtual LRESULT GetXY(int &x,int &y)const=0;
+    virtual bool RButton()const=0;
+    virtual bool LButton()const=0;
+    virtual LRESULT GetInfo(int &x,int &y,int &b)const=0;
+    virtual void GetButton(bool&bL,bool&bR)=0;
+    virtual void ResetButton()=0;
+    virtual LRESULT SetXY(int x,int y)=0;
+    virtual void SetOutScreenInput(bool bEnable)=0;
 
-	virtual ~IMouse(){}
+    virtual ~IMouse(){}
 };
 
 class CMouse : public IWinHook,public IMouse {
 /**
-	マウスのリアルタイム状態取得用のクラスです。
+    This class is for getting real-time mouse state.
 
-	先行してウィンドゥが完成している必要があるので
-	class CAppFrame 派生クラス内で使用するようにしてください。
+    Since it needs a completed window, 
+    please use it within a class derived from CAppFrame.
 */
 public:
-	virtual LRESULT GetXY(int &x,int &y)const;
-	///		マウスポジションを得る（クライアント座標系にて）
+    virtual LRESULT GetXY(int &x,int &y)const;
+    /// Get mouse position (in client coordinates)
 
-	virtual bool	RButton()const;
-	///		右ボタン状態を得る（現在のリアルタイムの情報）
+    virtual bool RButton()const;
+    /// Get right button state (current real-time info)
 
-	virtual bool	LButton()const;
-	///		左ボタン状態を得る（現在のリアルタイムの情報）
+    virtual bool LButton()const;
+    /// Get left button state (current real-time info)
 
-	virtual LRESULT GetInfo(int &x,int &y,int &b)const;
-	///	マウスポジションとボタン状態を返す
-	///	(b:右ボタン押下ならば+1,左ボタン押下ならば+2 両方ならば+1+2==+3)
+    virtual LRESULT GetInfo(int &x,int &y,int &b)const;
+    /// Returns mouse position and button state
+    /// (b: +1 if right button pressed, +2 if left button pressed, +3 if both pressed)
 
-	virtual void	GetButton(bool&bL,bool&bR);
-	///	前回のGetButtonから押されたか？
-	virtual void	ResetButton();
-	///	GetButton↑で取得できるボタン状態のリセット
+    virtual void GetButton(bool&bL,bool&bR);
+    /// Was button pressed since last GetButton?
+    virtual void ResetButton();
+    /// Reset button state that can be retrieved with GetButton
 
-	virtual LRESULT SetXY(int x,int y);
-	///	マウスを指定のポジションに移動（クライアント座標系にて）
+    virtual LRESULT SetXY(int x,int y);
+    /// Move mouse to specified position (in client coordinates)
 
-	virtual void	SetOutScreenInput(bool bEnable);
-	/**
-		押したまま、マウスを画面外にやったとき、どうなるのか？
-			true  == ボタンは押したままだと見なされる
-			false == ボタンは離されたものと見なされる
-			defaultではfalse
-	*/
+    virtual void SetOutScreenInput(bool bEnable);
+    /**
+        What happens when mouse moves outside the window while button is pressed?
+            true  == Button is considered still pressed
+            false == Button is considered released
+            default is false
+    */
 
-	CMouse();
-	virtual ~CMouse();
+    CMouse();
+    virtual ~CMouse();
 
 protected:
-	LRESULT WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam); // メッセージのコールバック
+    LRESULT WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam); // Message callback
 
-	bool	m_bRB;					//　マウスボタン状態
-	bool	m_bLB;
-	bool	m_bHistRB;				//	履歴
-	bool	m_bHistLB;
-	bool	m_bOutScreenInput;		//	画面外での入力
+    bool m_bRB;              // Mouse button state
+    bool m_bLB;
+    bool m_bHistRB;          // History
+    bool m_bHistLB;
+    bool m_bOutScreenInput;  // Input outside screen
 };
 
 class CFixMouse : public IMouse {
 /**
-	マウスのリアルタイム情報の取得のためのクラスです
+    This class is for getting real-time mouse information
 
-	ゲームでCMouseを使う場合、１フレームの間は、
-	固定値が返ってきたほうが望ましい。
+    When using CMouse in a game, it's better to have
+    fixed values during a frame.
 
-	class CTimer に対する CFixTimer の関係と同じである。
+    This relationship is similar to CTimer and CFixTimer.
 */
 public:
-	///	フラッシュさせる
-	virtual LRESULT	Flush();
-	/**
-		マウスの座標、ボタン状態を更新する。
-		これをした瞬間の状態に基づいて各メンバ関数で値が返るようになる。
-		あとはほとんど、class CMouse と同じ。ただし、
-	*/
+    /// Flush (update) state
+    virtual LRESULT Flush();
+    /**
+        Updates mouse coordinates and button states.
+        After this is called, member functions will return values
+        based on the state at this moment.
+        After that, mostly same as CMouse, however,
+    */
 
-	virtual LRESULT GetXY(int &x,int &y)const;
-	virtual bool	RButton()const;
-	virtual bool	LButton()const;
-	virtual LRESULT GetInfo(int &x,int &y,int &b)const;
+    virtual LRESULT GetXY(int &x,int &y)const;
+    virtual bool RButton()const;
+    virtual bool LButton()const;
+    virtual LRESULT GetInfo(int &x,int &y,int &b)const;
 
-	///	前回のFlushから押されたか？
-	virtual void	GetButton(bool&bL,bool&bR);
-	virtual bool	IsPushRButton()const;
-	virtual bool	IsPushLButton()const;
+    /// Was button pressed since last Flush?
+    virtual void GetButton(bool&bL,bool&bR);
+    virtual bool IsPushRButton()const;
+    virtual bool IsPushLButton()const;
 
-	///	前回のFlushから押し上げられたか？
-	virtual void	GetUpButton(bool&bL,bool&bR);
-	virtual bool	IsPushUpRButton()const;
-	virtual bool	IsPushUpLButton()const;
+    /// Was button released since last Flush?
+    virtual void GetUpButton(bool&bL,bool&bR);
+    virtual bool IsPushUpRButton()const;
+    virtual bool IsPushUpLButton()const;
 
-	virtual void	ResetButton();
-	///	↑ボタン状態リセット
+    virtual void ResetButton();
+    /// Reset button state
 
-	virtual LRESULT SetXY(int x,int y);
-	///	マウスを指定のポジションに移動（クライアント座標系にて）
-	///	これで座標を移動させた場合、FlushしなくともGetXYすればその座標が返る。
+    virtual LRESULT SetXY(int x,int y);
+    /// Move mouse to specified position (in client coordinates)
+    /// If coordinates are moved this way, GetXY will return these coordinates even without Flush
 
-	/**
-		ガードタイムとは、シーン管理をしていたりするとき、ボタンが押されて、
-		次のシーンに移動して、次のシーンでいきなりボタンが押されたと判定されて
-		しまうことを防止するために、一定時間「入力が無い」と嘘を返すための
-		機構です。SetGuardTimeで設定した数だけFlushメンバ関数を呼び出すまでは、
-		GetButton/IsPushRButton/IsPushLButtonではすべてボタンは
-		押されていないと返ります。
-	*/
-	///	ガードタイム中かどうかを返す
-	virtual bool	IsGuardTime()const;
-	///	ガードタイムを設定する
-	void	SetGuardTime(int nTime);
+    /**
+        Guard time is a feature to prevent unwanted button press detection
+        when switching scenes. When a button is pressed and the scene changes,
+        the next scene might immediately detect that button press.
+        To prevent this, for the duration set by SetGuardTime,
+        GetButton/IsPushRButton/IsPushLButton will return that
+        no buttons are pressed until that many Flush calls have been made.
+    */
+    /// Returns whether in guard time
+    virtual bool IsGuardTime()const;
+    /// Set guard time
+    void SetGuardTime(int nTime);
 
-	virtual void	SetOutScreenInput(bool bEnable)
-		{ GetMouse()->SetOutScreenInput(bEnable);}
+    virtual void SetOutScreenInput(bool bEnable)
+        { GetMouse()->SetOutScreenInput(bEnable);}
 
-	CFixMouse();
-	virtual ~CFixMouse();
+    CFixMouse();
+    virtual ~CFixMouse();
 
 protected:
-	bool	m_bRBN;					//　Flushしたときのマウスボタン状態
-	bool	m_bLBN;
-	int		m_nRLBN;				//	Flushしたときのマウスボタン状態
-	int		m_nX,m_nY;				//	Flushしたときのマウスのポジション
-	int		m_nGuardTime;			//	ガードタイム
-	bool	m_bHistRB;				//	履歴
-	bool	m_bHistLB;
+    bool m_bRBN;           // Mouse button state at time of Flush
+    bool m_bLBN;
+    int m_nRLBN;          // Mouse button state at time of Flush
+    int m_nX,m_nY;        // Mouse position at time of Flush
+    int m_nGuardTime;     // Guard time
+    bool m_bHistRB;       // History
+    bool m_bHistLB;
 
-	CMouse	m_vMouse;				//	こいつに委譲
-	CMouse* GetMouse() { return &m_vMouse; }
+    CMouse m_vMouse;      // Delegate to this
+    CMouse* GetMouse() { return &m_vMouse; }
 };
 
 } // end of namespace Input

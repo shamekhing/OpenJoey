@@ -5,19 +5,29 @@
 #include "system/CJoeySceneFactory.h"
 
 class CApp : public CAppFrame {
-
+public:
     virtual void MainThread();
 
     /// Drawing
     CFastDraw* GetDraw() { return GetDrawFactory()->GetDraw(); }
     CFastPlaneFactory* GetDrawFactory() { return &planeFactory_; }
 
-protected:
-    CFastPlaneFactory    planeFactory_;
-    // This contains CFastDraw, so you should draw through this
+    // Helper to trigger exit confirmation
+    void RequestExit() { m_bWindowClosing = true; }
 
-    CSoundFactory        soundFactory_;
-    // Same applies for Sound
+    // Getters for scenes to use
+    CMouse* GetMouse() { return &mouse_; }
+
+	// WM_CLOSE
+	LRESULT	OnPreClose(void);
+
+protected:
+    CFastPlaneFactory    planeFactory_;    // This contains CFastDraw, so you should draw through this
+    CSoundFactory        soundFactory_;    // Same applies for Sound
+    CMouse               mouse_;           // Mouse input handling
+    
+    bool m_bWindowClosing;
+    smart_ptr<ISceneControl> m_sceneControl; // Store it as member now
 };
 
 #endif // __CApp_h__

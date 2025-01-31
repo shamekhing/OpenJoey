@@ -7,6 +7,7 @@ void CApp::MainThread() {
     CKey1 key;
     CFPSTimer timer;
     timer.SetFPS(30);
+	m_bWindowClosing = false;
 
     // Make this the main application (close all other windows when exiting)
     SetMainApp(true);
@@ -31,8 +32,8 @@ void CApp::MainThread() {
 
 	// Create scene controller with factory
     smart_ptr<ISceneFactory> factory(new CJoeySceneFactory(this));
-    smart_ptr<ISceneControl> sceneControl(new CSceneControl(factory));
-	sceneControl->JumpScene(SCENE1);
+    m_sceneControl = smart_ptr<ISceneControl>(new CSceneControl(factory));
+	m_sceneControl->JumpScene(SCENE1);
 
 	int nPat = 0;
 	int testInt = 0;
@@ -41,15 +42,25 @@ void CApp::MainThread() {
 		smart_ptr<ISurface> surface(pSecondary, false); // false means don't take ownership (don't delete)
 		testInt += 16;
 		if(testInt >= 256) testInt = 0;
+
         pSecondary->Clear();
         // If you're always transferring the background to the entire screen, you don't need to clear it
 
         // Different drawing for each phase
         switch (nPhase){
         case 0: {
+
+			// Check for exit request
+			if (m_bWindowClosing) {
+				if (m_sceneControl->GetSceneNo() != SCENE_ISEND) {
+					m_sceneControl->CallSceneFast(SCENE_ISEND);
+				}
+				m_bWindowClosing = false;
+			}
+
 			// Update and draw current scene
-			sceneControl->OnMove(surface);
-			sceneControl->OnDraw(surface);
+			m_sceneControl->OnMove(surface);
+			m_sceneControl->OnDraw(surface);
             break;
                 }
         case 99: {
@@ -150,6 +161,12 @@ void CApp::MainThread() {
     }
 }
 
+LRESULT CApp::OnPreClose() {
+    m_bWindowClosing = true;
+    // Return 1 to prevent immediate close
+    return 1;
+}
+
 // This is the class for the main window
 class CAppMainWindow : public CAppBase {    // Derived from application class
 	virtual void MainThread(){              // This is the worker thread
@@ -163,6 +180,9 @@ class CAppMainWindow : public CAppBase {    // Derived from application class
 		// opt.dialog = MAKEINTRESOURCE(IDD_DIALOG1);
 		return 0;
 	};
+	virtual LRESULT OnPreClose() {
+        return 0;
+    }
 };
 
 // The well-known WinMain

@@ -31,6 +31,7 @@ void CScene1::OnDraw(const smart_ptr<ISurface>& lp) {
 		string exampleText = pTextPtr->GetFont()->GetText() + ".";
         pTextPtr->GetFont()->SetText(exampleText);
 		pTextPtr->UpdateTextAA();
+		app->OnPreClose();
     }
 
     if (key.IsKeyPush(6)) {  // Enter

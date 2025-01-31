@@ -3,6 +3,7 @@
 #define CSCENE1_H
 
 #include "../stdafx.h"
+#include "../CApp.h"
 #include "../system/CJoeySceneFactory.h"
 #include "../system/effects/yanePlaneEffectBlt.h"
 
