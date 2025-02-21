@@ -236,4 +236,7 @@
 //	use delegates
 #define yaneSDK_USE_delegate
 
+// activate OpenJoey fixes
+#define OPENJOEY_ENGINE_FIXES
+
 #endif

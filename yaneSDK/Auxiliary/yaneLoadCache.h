@@ -192,8 +192,13 @@ public:
 			if (buf[0]=='/' && buf[1]=='/') continue;	//	ƒRƒƒ“ƒgs‚Ì“Ç‚Ý”ò‚Î‚µ
 			LPCSTR lp = buf;
 			T* pInfo = new T;
-			pInfo->strFileName = m_strReadDir + CStringScanner::GetStrFromCsv(lp);
 
+			// DERPLAYER: This is probably a bug in the v3 version of the engine. In v2 its fine.
+#ifdef OPENJOEY_ENGINE_FIXES
+			pInfo->strFileName = m_strReadDir + CStringScanner::GetStrFileName(lp);
+#else
+			pInfo->strFileName = m_strReadDir + CStringScanner::GetStrFromCsv(lp); // original yaneSDK v3 call (breaks txt paths)
+#endif
 			smart_obj obj(pInfo);
 
 			int nID;

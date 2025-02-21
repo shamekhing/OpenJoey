@@ -10,8 +10,84 @@ void CSceneYesNo::OnInit() {
     m_mouse.SetGuardTime(1);
 
     // Load resources
-    m_vPlaneLoader.SetReadDir("test/yesno/");
-    m_vPlaneLoader.Set("list.txt", true);
+    m_vPlaneLoader.SetReadDir("test/yesno/");  // Base directory
+    if (m_vPlaneLoader.Set("test/yesno/list.txt", false) != 0) {  // Relative to SetReadDir
+        OutputDebugStringA("Error: Failed to load test/yesno/list.txt\n");
+    }
+
+    m_pMessageSurface = m_vPlaneLoader.GetPlane(0);  // Plane 0 = first line
+	std::string testo = m_vPlaneLoader.GetFileName(0);
+	CSurfaceInfo* testS = m_pMessageSurface->GetSurfaceInfo();
+    if (m_pMessageSurface.get() == NULL) {
+        OutputDebugStringA("Error: m_pMessageSurface is NULL\n");
+    }
+
+    // Log working directory
+    CHAR cwd[MAX_PATH];
+    GetCurrentDirectoryA(MAX_PATH, cwd);
+    OutputDebugStringA("Working directory: ");
+    OutputDebugStringA(cwd);
+    OutputDebugStringA("\n");
+
+    // Check factory (for background)
+    CFastPlaneFactory* factoryX = app->GetDrawFactory();
+    if (factoryX) {
+        smart_ptr<ISurface> secondary = smart_ptr<ISurface>(factoryX->GetDraw()->GetSecondary(), false);
+        if (secondary.get()) {
+            m_vBackground = CPlane(secondary);
+            OutputDebugStringA("Background loaded with app factory\n");
+        }
+    } else {
+        OutputDebugStringA("Warning: No draw factory available\n");
+    }
+
+    // Use default factory for m_vPlaneLoader (CPlane::GetFactory())
+    m_vPlaneLoader.SetReadDir("");
+    if (m_vPlaneLoader.Set("test/yesno/list.txt", false) != 0) {
+        OutputDebugStringA("Error: Failed to load data/yesno/list.txt\n");
+        return;
+    }
+
+    FILE* testFile = fopen("test/yesno/01.yga", "rb");
+    if (testFile) {
+        fclose(testFile);
+        OutputDebugStringA("File test/yesno/01.yga exists\n");
+    } else {
+        OutputDebugStringA("Error: Cannot open data/yesno/01.yga\n");
+    }
+
+	/*
+    LRESULT lr = m_vPlaneLoader.Load(0);
+    if (lr != 0) {
+        char buf[64];
+        sprintf(buf, "Error: Load(0) failed, code=%ld\n", lr);
+        OutputDebugStringA(buf);
+    } else {
+        OutputDebugStringA("Load(0) succeeded\n");
+    }
+	*/
+    //CPlane bgPlane = m_vPlaneLoader.GetPlane(0);
+
+	/*
+    if (bgPlane.get() == NULL) {
+        OutputDebugStringA("Error: bgPlane.get() is NULL\n");
+    } else {
+        int type = bgPlane->GetType();
+        char typeBuf[32];
+        sprintf(typeBuf, "bgPlane type=%d\n", type);
+        OutputDebugStringA(typeBuf);
+
+        CSurfaceInfo* test = bgPlane->GetSurfaceInfo();
+        if (test) {
+            int sx, sy;
+            bgPlane->GetSize(sx, sy);
+            char buf[128];
+            sprintf(buf, "bgPlane: IsInit=%d, GetPtr=%p, type=%d, size=%dx%d\n",
+                    test->IsInit(), test->GetPtr(), test->GetSurfaceType(), sx, sy);
+            OutputDebugStringA(buf);
+        }
+    }
+	*/
 
     // Load background using PlaneEffect
     CFastPlaneFactory* factory = app->GetDrawFactory();
@@ -23,7 +99,7 @@ void CSceneYesNo::OnInit() {
         // This way we avoid surface locking issues during initialization
     }
 
-    m_pMessageSurface = m_vPlaneLoader.GetPlane(0);  // Load message
+    //m_pMessageSurface = m_vPlaneLoader.GetPlane(0);  // Load message
 
     // Setup buttons
     static const int BUTTON_Y = 240;
@@ -57,9 +133,10 @@ void CSceneYesNo::OnMove(const smart_ptr<ISurface>& lp) {
         return;
     }
 
+	return;
     // Update buttons
     for(int i = 0; i < 2; i++) {
-        m_vButtons[i].OnMove(lp.get());
+        m_vButtons[i].OnDraw(lp);
         
         // Check for button clicks
         if (m_nButton == 0 && m_vButtons[i].IsLClick()) {
@@ -78,7 +155,13 @@ void CSceneYesNo::OnDraw(const smart_ptr<ISurface>& lp) {
 
     // Draw darkened background
     //lp->BltFast(m_vBackground, 0, 0);
-	//return;
+	//lp->Blt(m_pMessageSurface,0,0);
+	CPlane bgPlane;
+	//bgPlane->Load("test/yesno/01.yga");
+	//bgPlane = m_vPlaneLoader.GetPlane(0);
+	CSurfaceInfo* test = bgPlane->GetSurfaceInfo();
+	ISurfaceTransBlt::CircleBlt1(lp.get(), m_pMessageSurface.get(), 0, 0, 255, 0, 255);
+	return;
 
     // Draw message centered
     int sx, sy;
@@ -87,7 +170,7 @@ void CSceneYesNo::OnDraw(const smart_ptr<ISurface>& lp) {
 
     // Draw buttons
     for(int i = 0; i < 2; i++) {
-        m_vButtons[i].OnDraw(lp.get());
+        m_vButtons[i].OnDraw(lp);
     }
 
     // Handle fade out effect when button is selected
