@@ -139,8 +139,7 @@ LRESULT CGUIButton::OnSimpleMove(ISurface* lp) {
 
     GetXY(m_nX, m_nY);
     bool bIn = m_pvButtonEvent->IsButton(x - m_nX, y - m_nY);
-
-    bool bNGuard = true; // YaneSdk3 doesn't use guard time
+    bool bNGuard = !m_pvMouse->IsGuardTime();
 
     if (bIn && bNGuard) {
         if (bRDown) m_pvButtonEvent->OnRBDown();
@@ -183,8 +182,9 @@ LRESULT CGUIButton::OnSimpleDraw(ISurface* lp) {
 
 ISurface* CGUIButton::GetPlane() {
     if (m_pvButtonEvent.get() == NULL) return NULL;
-    CGUINormalButtonListener* pListener = static_cast<CGUINormalButtonListener*>(m_pvButtonEvent.get());
-    return pListener->GetPlane();
+    //CGUINormalButtonListener* pListener = static_cast<CGUINormalButtonListener*>(m_pvButtonEvent.get());
+    //return pListener->GetPlane();
+	return ((CGUINormalButtonListener*)(CGUIButtonEventListener*)m_pvButtonEvent.get())->GetPlane();
 }
 
 bool CGUIButton::IsLClick() {

@@ -29,8 +29,10 @@ public:
     virtual bool IsButton(int px, int py){ return true; }
     virtual LRESULT OnDraw(ISurface* lp, int x, int y, bool bPush, bool bIn){ return 0; }
 
-    virtual bool IsLClick(){ return false; }
-    virtual bool IsRClick(){ return false; }
+    virtual bool IsLClick(){ 
+		return false; }
+    virtual bool IsRClick(){ 
+		return false; }
 
     virtual ~CGUIButtonEventListener(){}
 };
@@ -39,7 +41,13 @@ class CGUINormalButtonListener : public CGUIButtonEventListener {
 public:
     virtual void SetPlaneLoader(smart_ptr<CPlaneLoader> pv, int nNo);
     virtual void SetPlane(smart_ptr<ISurface> pv);
-    virtual ISurface* GetPlane(void){ return m_vPlane.get(); }
+    virtual ISurface* GetPlane(void){ 
+		// TODO: no idea, is this right? - could be that it breaks anim
+		if(m_vPlane.isNull())
+			return NULL;
+			//m_vPlane = smart_ptr<ISurface>(m_vPlaneLoader->GetPlane(m_nPlaneStart).get(), false);
+		return m_vPlane.get(); 
+	}
     
     virtual bool IsButton(int px, int py);
     virtual LRESULT OnDraw(ISurface* lp, int x, int y, bool bPush, bool bIn);
@@ -57,8 +65,10 @@ public:
 
     virtual void OnLButtonClick(void) {}
     virtual void OnRButtonClick(void) {}
-    virtual bool IsLClick(){ return m_bLClick; }
-    virtual bool IsRClick(){ return m_bRClick; }
+    virtual bool IsLClick(){ 
+		return m_bLClick; }
+    virtual bool IsRClick(){ 
+		return m_bRClick; }
 
     CGUINormalButtonListener();
 

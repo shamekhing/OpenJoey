@@ -99,7 +99,7 @@ void CSceneYesNo::OnInit() {
     static const int BUTTON_SPACING = 120;
     
     for(int i = 0; i < 2; i++) {
-        m_vButtons[i].SetMouse(smart_ptr<IMouse>(&m_mouse, false));
+        m_vButtons[i].SetMouse(smart_ptr<CFixMouse>(&m_mouse, false));
 
         // Create the button listener as CGUIButtonEventListener type directly
         smart_ptr<CGUIButtonEventListener> buttonListener(new CGUINormalButtonListener());
@@ -119,27 +119,25 @@ void CSceneYesNo::OnInit() {
 
 void CSceneYesNo::OnMove(const smart_ptr<ISurface>& lp) {
     key.Input();
+	m_mouse.Flush(); // or buttons will stuck
 
     // Handle ESC key
     if (key.IsKeyPush(VK_ESCAPE)) {
         m_nButton = 2;  // No
         return;
     }
-	return;
 
     // Update buttons
     for(int i = 0; i < 2; i++) {
-        m_vButtons[i].OnSimpleMove(lp.get());
+		m_vButtons[i].OnDraw(lp.get());
         
         // Check for button clicks
         if (m_nButton == 0 && m_vButtons[i].IsLClick()) {
             m_nButton = i + 1;
-			/*
-			CGUIButtonEventListener* e	= m_vButtons[i].GetEvent();
+			CGUIButtonEventListener* e	= m_vButtons[i].GetEvent().get();
 			CGUINormalButtonListener* p	= (CGUINormalButtonListener*)e;
-			p->SetType(32);
-			p->SetImageOffset(2);
-			*/
+			//p->SetType(32);
+			//p->SetImageOffset(2);
         }
     }
 }
@@ -162,9 +160,15 @@ void CSceneYesNo::OnDraw(const smart_ptr<ISurface>& lp) {
     //m_pMessageSurface->GetSize(sx, sy);
     //lp->BltNatural(m_pMessageSurface.get(), 320 - sx/2, 200 - sy/2);
 
+	int x, y, b;
+    m_mouse.GetInfo(x, y, b);
+	char buf[128];
+	sprintf(buf, "MouseLoop: %d %d %d\n", x,y,b);
+	OutputDebugStringA(buf);
+
     // Draw buttons
     for(int i = 0; i < 2; i++) {
-        m_vButtons[i].OnSimpleDraw(lp.get());
+        m_vButtons[i].OnDraw(lp.get());
     }
 
     // Handle fade out effect when button is selected

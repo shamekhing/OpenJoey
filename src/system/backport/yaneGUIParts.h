@@ -25,22 +25,22 @@ public:
     // IMouse is assumed to be flushed externally
     virtual LRESULT OnDraw(ISurface* lp) {
         LRESULT l = 0;
-        l |= OnMove(lp);
-        l |= Draw(lp);
+        l |= OnSimpleMove(lp);
+        l |= OnSimpleDraw(lp);
         return l;
     }
 
     // Split into movement and drawing phases like the scene system
-    virtual LRESULT OnMove(ISurface* lp) { return 0; }  // Movement/logic phase
-    virtual LRESULT Draw(ISurface* lp) { return 0; }    // Drawing phase only
+    virtual LRESULT OnSimpleMove(ISurface* lp) { return 0; }  // Movement/logic phase
+    virtual LRESULT OnSimpleDraw(ISurface* lp) { return 0; }    // Drawing phase only
 
     // Mouse settings
-    virtual void SetMouse(smart_ptr<IMouse> pv) { Reset(); m_pvMouse = pv; }
-    virtual smart_ptr<IMouse> GetMouse() { return m_pvMouse; }
+    virtual void SetMouse(smart_ptr<CFixMouse> pv) { Reset(); m_pvMouse = pv; }
+    virtual smart_ptr<CFixMouse> GetMouse() { return m_pvMouse; }
 
 protected:
     virtual void Reset() {}  // State reset
-    smart_ptr<IMouse> m_pvMouse;
+    smart_ptr<CFixMouse> m_pvMouse;
 
     // Drawing coordinates
     int m_nX;        // X position
