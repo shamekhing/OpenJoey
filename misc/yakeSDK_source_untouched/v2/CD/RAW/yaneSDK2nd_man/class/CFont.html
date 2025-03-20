@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CFont</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CFont</FONT><A name="CTimeBase"></A> <FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>文字をフォント指定してHDCに対して描画するクラスでする。<BR>
+<A href="CTextPlane.html">CTextPlane</A>,<A href="CTextLayer.html">CTextLayer</A>,<A href="CFPSLayer.html">CFPSLayer</A>で使用しているので、そちらもご覧になってください。</P>
+<P>また、テキスト中の「\n」を'\n'(１バイトコード)に変換する関数は<A href="CLineParser.html">CLineParser</A>にあります。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P><FONT color="#009900">void SetText(const string s); // 表示文字列の指定（\nで改行が使用できる）<BR>
+void __cdecl SetText(LPSTR fmt, ... ); //
+↑と同じ。printf出力書式が使える。ただしbufは512文字まで<BR>
+void SetText(int i); // 数字を表示文字列として指定</FONT></P>
+<P><FONT color="#009900">LRESULT GetSize(int&amp; sx,int&amp; sy);
+// 描画サイズを得る<BR>
+void OnDraw(HDC hdc,int x=0,int y=0);// HDCを渡して、そこに描画してもらう</FONT></P>
+<P>GetSizeは、以下の各種設定と、文字列をSetTextで設定したものに対するサイズが取得できます。<BR>
+プレーン内でサーフェースを確保する必要がある場合など、このGetSizeでサイズを確認できます。(例：<A href="CTextPlane.html">CTextPlane</A>)</P>
+<P>その後、HDCをOnDrawの第１パラメータ、描画位置をx,yに与えれば、その選択されたフォントプロパティで文字列が描画できます。</P>
+<P><FONT color="#009900">// property<BR>
+void SetQuality(int nQuality); // フォントクオリティ
+(0）<BR>
+void SetSize(int nSize); // Fontサイズをpt数で指定
+(16)<BR>
+void SetColor(COLORREF rgb); // テキストカラー指定
+(255,255,255)<BR>
+void SetBackColor(COLORREF rgb); // 文字の影つけ
+(64,64,64)<BR>
+void SetBGColor(COLORREF rgb); // 背景色
+(CLR_INVALID)</FONT><BR>
+<FONT color="#009900">void SetHeight(int nHeight); // 次行までの行間
+(20)<BR>
+void SetFont(int nFontNo); // フォントセレクト（番号で）
+(0) : MSゴシック<BR>
+void SetFont(string fontname); // フォントセレクト（フォント名で）</FONT><BR>
+<FONT color="#009900">void SetWeight(int nWeight); // 文字の太さ
+(300:FW_LIGHT) , FW_BOLDは700</FONT><BR>
+<FONT color="#009900">void SetItalic(bool b); // 斜体 (false)<BR>
+void SetUnderLine(bool b); // 下線の有無
+(false)<BR>
+void SetStrikeOut(bool b); // 打ち消し線の有無
+(false)<BR>
+void SetShadowOffset(int nOx,int nOy); //
+影のオフセット (2,2)</FONT></P>
+<P>各種設定を行ないます。コメントの最後にある括弧の数字は、ディフォルトで選択されているものです。</P>
+<P>フォントクオリティは、0,1,2の３段階で、0は粗い、1は普通、2は良いです。良いフォントほど描画に時間がかかります。小さな文字ではその効果は薄いので0で十分でしょう。あと隠し指定で4と5があります。4,5は、それぞれANTIALIASED_QUALITY
+と NONANTIALIASED_QUALITYと呼ばれるもので、前者はアンチエイリアス付きの文字描画、後者はアンチエイリアスなしの文字描画です。Plus!が入っている環境で正しく表示されます。Plus!が入っていなくても、文字は描画されます。詳しいことは、<A href="http://www.sun-inet.or.jp/~yaneurao/">やねうらおホームページ</A>、スーパープログラマーへの道「<FONT color="#008000"><STRONG>第CF回　 これからはANTIALIASED_QUALITY(アンチェリ物語完結編＾＾；)
+00/10/30</STRONG></FONT>」に書いています。確実にアンチエイリアスをかける必要がある場合は、<A href="CTextDIB32.html">CTextDIB32</A>::UpdateTextAかUpdateTextAAを使ってください。</P>
+<P>SetFontはフォントセレクトです。フォント番号で行なうか、フォント名で行なうか二通りあります。フォントは存在しない場合、GetSizeしたときに非0が返ります。フォント名で指定する場合はフォントが存在することを事前に確認してください。</P>
+<P>また、フォント番号は、０がＭＳゴシック、1がＭＳ
+Ｐゴシック、2がＭＳ 明朝、３がＭＳ Ｐ明朝です。<BR>
+テキスト・文字の影は、COLORREFとしてCLR_INVALIDを指定すれば、描画されません。<BR>
+背景色もCOLORREFとしてCLR_INVALIDを指定すれば背景は透過になります。</P>
+<P><FONT color="#cc0000">また、背景色ですが、文字に影つけを指定している場合、影を描画するときに背景色つきで描画し、文字本体のほうは透過で描画します。そのため、背景色が塗りつぶされる範囲は、文字の影を基準とした位置になり、文字本体は左上に２ドット，２ドット背景色からはみ出します。これは仕様です。</FONT></P>
+<P>取得系の関数は、これです。</P>
+<P><FONT color="#009900">LPCSTR GetText( );<BR>
+COLORREF GetColor( );<BR>
+COLORREF GetBackColor( ); // 文字の影</FONT><BR>
+<FONT color="#009900">COLORREF GetBGColor( ); // 背景色<BR>
+</FONT><FONT color="#009900">int GetQuality( );<BR>
+int GetSize( );</FONT><BR>
+<FONT color="#009900">int GetHeight( );</FONT></P>
+<HR>
+</BODY></HTML>

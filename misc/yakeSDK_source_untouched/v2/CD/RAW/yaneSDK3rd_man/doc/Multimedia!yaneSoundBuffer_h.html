@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Multimedia/yaneSoundBuffer.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="ISoundBuffer"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">ISoundBuffer</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">SoundBufferを抽象化したインターフェースクラス<BR>	class CDirectSoundBuffer, class CNullSoundBuffer はこいつから派生<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> ISoundBuffer()</DIV>
+<DIV class="public_member"> virtual ~ISoundBuffer()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">int</SPAN> GetType()</DIV>
+<DIV class="comment_block">RTTIもどき。派生クラスのタイプを返す<BR>		0 : class CNullSoundBuffer<BR>		1 : class CDirectSoundBuffer<BR>		2 : かんがえちゅう<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Create(<SPAN class="reserved_word">const</SPAN> LPWAVEFORMATEX lpWFormat, DWORD dwSize, <SPAN class="reserved_word">bool</SPAN> bZeroClear=false, <SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Multimedia!yaneSoundParameter_h.html#CSoundParameter" target=_self>CSoundParameter</A>* pParam=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block">バッファを作成する<BR>[in] lpWFormat 　- WAVEFORMATEXへのポインタを指定する<BR>[in] dwLockBytes - バッファのサイズを指定する<BR>[in] bZeroClear　- バッファの中身をゼロクリアするかどうか<BR>[in] pParam　　　- CSoundParameterへのポインタを指定する<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSoundBuffer_h.html#ISoundBuffer" target=_self>ISoundBuffer</A>&gt; Clone()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block">自分の複製を返す<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetStatus()</DIV>
+<DIV class="comment_block">バッファの現在の状態を得る<BR>　0 - バッファが無い<BR>　1 - バッファがロストしている<BR>　2 - 停止中<BR>　3 - 再生中<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetFormat(<SPAN class="reserved_word">const</SPAN> LPWAVEFORMATEX lpFormat)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetFormat(LPWAVEFORMATEX lpFormat)</DIV>
+<DIV class="comment_block">バッファのフォーマットをWAVEFORMATEXとして、設定・取得する<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetCurrentPosition(DWORD dwPlayCursor)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetCurrentPosition(DWORD&amp; dwPlayCursor, DWORD&amp; dwWriteCursor)</DIV>
+<DIV class="comment_block">バッファの再生ポジションを設定・取得する<BR>[in/out] dwPlayCursor　- 再生位置を指定する/再生位置が返る<BR>[out]　　dwWriteCursor - 書き込み位置が返る<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetVolume(LONG lVolume)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetVolume(LONG&amp; lVolume)</DIV>
+<DIV class="comment_block">バッファのボリュームを設定・取得する<BR>[in/out] lVolume - ボリューム値(0～-10000)<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetPan(LONG lPan)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetPan(LONG&amp; lPan)</DIV>
+<DIV class="comment_block">バッファのパンを設定・取得する<BR>[in/out] lPan - パン値(-100000～+10000)<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetFrequency(DWORD dwFrequency)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetFrequency(DWORD&amp; dwFrequency)</DIV>
+<DIV class="comment_block">バッファの再生周波数を設定・取得する<BR>[in/out] dwFrequency - 周波数値(100～100000)<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Lock(DWORD dwWriteCursor, DWORD dwLockBytes, BYTE** lplpLockedBuffer1, DWORD* lpdwLockedBytes1, BYTE** lplpLockedBuffer2=NULL, DWORD* lpdwLockedBytes2=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Unlock(BYTE* lpLockedBuffer1, DWORD dwLockedBytes1, BYTE* lpLockedBuffer=NULL, DWORD dwLockedBytes2=0)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block">バッファをLock・Unlockする<BR>[in]　dwWriteCursor 　- Lockする位置を指定する<BR>[in]　dwLockBytes 　　- Lockするサイズを指定する<BR>[out] lpLockedBuffer1 - Lockされたバッファへのポインタが返る<BR>[out] dwLockedBytes1　- Lockされたサイズが返る<BR>[out] lpLockedBuffer2 - Lock領域がバッファ領域をはみでた場合、バッファ先頭へのポインタが返る<BR>[out] dwLockedBytes2　- はみ出た分の領域のサイズが返る<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Play(<SPAN class="reserved_word">bool</SPAN> bLoop=false)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block">バッファを再生する<BR>[in] bLoop - ループ再生する場合はtrueを指定する<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Stop()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block">バッファを停止する<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Restore()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block">バッファがロストしていたらリストアする<BR></DIV>
+</DIV>
+<HR><BR>
+<A name="CDirectSoundBuffer"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CDirectSoundBuffer</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">DirectSoundに特化した class ISoundBuffer 派生クラス<BR>	class CDirectSoundPrimaryBuffer 　と<BR>	class CDirectSoundSeconderyBuffer は、こいつから派生<BR><BR>	[注意点]　DirectSoundは、ボリューム値に-1000を指定したとすると、<BR>	　　　　　-10dBのボリューム値になる。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Multimedia!yaneSoundBuffer_h.html#ISoundBuffer" target=_self>ISoundBuffer</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CDirectSoundBuffer(<A class="class_link" href="Multimedia!yaneDirectSound_h.html#CDirectSound" target=_self>CDirectSound</A>* lpDirectSound)</DIV>
+<DIV class="public_member"> virtual ~CDirectSoundBuffer()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">int</SPAN> GetType()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Create(<SPAN class="reserved_word">const</SPAN> LPWAVEFORMATEX lpWFormat, DWORD dwSize, <SPAN class="reserved_word">bool</SPAN> bZeroClear=false, <SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Multimedia!yaneSoundParameter_h.html#CSoundParameter" target=_self>CSoundParameter</A>* pParam=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSoundBuffer_h.html#ISoundBuffer" target=_self>ISoundBuffer</A>&gt; Clone()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetStatus()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetFormat(<SPAN class="reserved_word">const</SPAN> LPWAVEFORMATEX lpFormat)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetFormat(LPWAVEFORMATEX lpFormat)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetCurrentPosition(DWORD dwPlayCursor)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetCurrentPosition(DWORD&amp; dwPlayCursor, DWORD&amp; dwWriteCursor)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetVolume(LONG lVolume)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetVolume(LONG&amp; lVolume)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetPan(LONG lPan)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetPan(LONG&amp; lPan)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetFrequency(DWORD dwFrequency)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetFrequency(DWORD&amp; dwFrequency)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Lock(DWORD dwWriteCursor, DWORD dwLockBytes, BYTE** lplpLockedBuffer1, DWORD* lpdwLockedBytes1, BYTE** lplpLockedBuffer2=NULL, DWORD* lpdwLockedBytes2=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Unlock(BYTE* lpLockedBuffer, DWORD dwLockedBytes, BYTE* lpLockedBuffer2=NULL, DWORD dwLockedBytes2=0)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Play(<SPAN class="reserved_word">bool</SPAN> bLoop=false)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Stop()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Restore()</DIV>
+<DIV class="comment_block">override from class ISoundBuffer<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">LPDIRECTSOUNDBUFFER GetBuffer()</DIV>
+<DIV class="protected_member">LPDIRECTSOUNDBUFFER m_lpBuffer</DIV>
+<DIV class="comment_block">LPDIRECTSOUNDBUFFERを返す<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="Multimedia!yaneDirectSound_h.html#CDirectSound" target=_self>CDirectSound</A>* GetDirectSound()</DIV>
+<DIV class="protected_member"><A class="class_link" href="Multimedia!yaneDirectSound_h.html#CDirectSound" target=_self>CDirectSound</A>* m_lpDirectSound</DIV>
+<DIV class="comment_block">CDirectSoundを返す<BR></DIV>
+</DIV>
+<HR><BR>
+<A name="CDirectSoundPrimaryBuffer"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CDirectSoundPrimaryBuffer</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">DirectSoundBufferのPrimaryBufferのためのクラス<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Multimedia!yaneSoundBuffer_h.html#CDirectSoundBuffer" target=_self>CDirectSoundBuffer</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CDirectSoundPrimaryBuffer(<A class="class_link" href="Multimedia!yaneDirectSound_h.html#CDirectSound" target=_self>CDirectSound</A>* lpDirectSound)</DIV>
+<DIV class="public_member"> virtual ~CDirectSoundPrimaryBuffer()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Create(<SPAN class="reserved_word">const</SPAN> LPWAVEFORMATEX lpWFormat, DWORD dwSize, <SPAN class="reserved_word">bool</SPAN> bZeroClear=false, <SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Multimedia!yaneSoundParameter_h.html#CSoundParameter" target=_self>CSoundParameter</A>* pParam=NULL)</DIV>
+<DIV class="comment_block">override from class ISoundBuffer<BR>引数は全て無視される<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSoundBuffer_h.html#ISoundBuffer" target=_self>ISoundBuffer</A>&gt; Clone()</DIV>
+<DIV class="comment_block">override from class ISoundBuffer<BR></DIV>
+</DIV>
+<HR><BR>
+<A name="CDirectSoundSeconderyBuffer"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CDirectSoundSeconderyBuffer</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">DirectSoundBufferのSeconderyBufferのためのクラス<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Multimedia!yaneSoundBuffer_h.html#CDirectSoundBuffer" target=_self>CDirectSoundBuffer</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CDirectSoundSeconderyBuffer(<A class="class_link" href="Multimedia!yaneDirectSound_h.html#CDirectSound" target=_self>CDirectSound</A>* lpDirectSound)</DIV>
+<DIV class="public_member"> virtual ~CDirectSoundSeconderyBuffer()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Create(<SPAN class="reserved_word">const</SPAN> LPWAVEFORMATEX lpWFormat, DWORD dwSize, <SPAN class="reserved_word">bool</SPAN> bZeroClear=false, <SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Multimedia!yaneSoundParameter_h.html#CSoundParameter" target=_self>CSoundParameter</A>* pParam=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSoundBuffer_h.html#ISoundBuffer" target=_self>ISoundBuffer</A>&gt; Clone()</DIV>
+<DIV class="comment_block">override from class ISoundBuffer<BR></DIV>
+</DIV>
+<HR><BR>
+<A name="CNullSoundBuffer"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CNullSoundBuffer</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">class ISoundBuffer のNullDeviceクラス<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Multimedia!yaneSoundBuffer_h.html#ISoundBuffer" target=_self>ISoundBuffer</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CNullSoundBuffer()</DIV>
+<DIV class="public_member"> virtual ~CNullSoundBuffer()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">int</SPAN> GetType()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Create(<SPAN class="reserved_word">const</SPAN> LPWAVEFORMATEX lpWFormat, DWORD dwSize, <SPAN class="reserved_word">bool</SPAN> bZeroClear=false, <SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Multimedia!yaneSoundParameter_h.html#CSoundParameter" target=_self>CSoundParameter</A>* pParam=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSoundBuffer_h.html#ISoundBuffer" target=_self>ISoundBuffer</A>&gt; Clone()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetStatus()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetFormat(<SPAN class="reserved_word">const</SPAN> LPWAVEFORMATEX lpFormat)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetFormat(LPWAVEFORMATEX lpFormat)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetCurrentPosition(DWORD dwPlayCursor)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetCurrentPosition(DWORD&amp; dwPlayCursor, DWORD&amp; dwWriteCursor)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetVolume(LONG lVolume)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetVolume(LONG&amp; lVolume)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetPan(LONG lPan)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetPan(LONG&amp; lPan)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetFrequency(DWORD dwFrequency)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetFrequency(DWORD&amp; dwFrequency)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Lock(DWORD dwWriteCursor, DWORD dwLockBytes, BYTE** lplpLockedBuffer1, DWORD* lpdwLockedBytes1, BYTE** lplpLockedBuffer2=NULL, DWORD* lpdwLockedBytes2=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Unlock(BYTE* lpLockedBuffer1, DWORD dwLockedBytes1, BYTE* lpLockedBuffer2=NULL, DWORD dwLockedBytes2=0)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Play(<SPAN class="reserved_word">bool</SPAN> bLoop=false)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Stop()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Restore()</DIV>
+<DIV class="comment_block">override from class ISoundBuffer<BR></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

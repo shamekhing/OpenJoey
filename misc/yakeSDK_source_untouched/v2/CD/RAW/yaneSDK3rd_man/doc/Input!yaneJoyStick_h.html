@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Input/yaneJoyStick.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="IJoyStick"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">IJoyStick</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">IJoyStick はIKeyBaseのJoyStick版</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Input!yaneKeyBase_h.html#IKeyBase" target=_self>IKeyBase</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SelectDevice(<SPAN class="reserved_word">int</SPAN> n)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block">from CKeyBase<BR>virtual LRESULT Input()=0; // 256バイト状態を読み込む<BR>virtual bool	IsKeyPress(int key) const;<BR>virtual bool	IsKeyPush(int key) const;<BR>virtual BYTE*	GetKeyData() const;<BR>デバイスのナンバーを指定(0-15)<BR>そのデバイスの初期化に失敗したら、LRESULTは非０を返す<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetButtonMax(<SPAN class="reserved_word">int</SPAN> max)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">int</SPAN> GetButtonMax()</DIV>
+<DIV class="comment_block">for JoyStick setting<BR>joy stickのボタン数の設定取得。<BR>ここで設定したボタン数まで認識する。default:最大6ボタン。<BR>このボタン数の設定は、SelectDeviceして成功したときのみ有効<BR>		default : 6ボタン<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsInit()</DIV>
+<DIV class="comment_block">デバイスの初期化に成功したか？<BR>	<BR></DIV>
+</DIV>
+<HR><BR>
+<A name="CJoyStickNullDevice"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CJoyStickNullDevice</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">JoyStick用のNull Device<BR>	class CJoyStick で使用される<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Input!yaneJoyStick_h.html#IJoyStick" target=_self>IJoyStick</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Input()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsKeyPress(<SPAN class="reserved_word">int</SPAN> key)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsKeyPush(<SPAN class="reserved_word">int</SPAN> key)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SelectDevice(<SPAN class="reserved_word">int</SPAN> n)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetButtonMax(<SPAN class="reserved_word">int</SPAN> max)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">int</SPAN> GetButtonMax()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsInit()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CWIN32JoyStick"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CWIN32JoyStick</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">Win32のjoy stick入力を行なうwrapper</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Input!yaneJoyStick_h.html#IJoyStick" target=_self>IJoyStick</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Input()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SelectDevice(<SPAN class="reserved_word">int</SPAN> n)</DIV>
+<DIV class="comment_block">デバイスのナンバーを指定(0-1)	default : 0<BR>そのデバイスの初期化に失敗したら、LRESULTは非０を返す<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetButtonMax(<SPAN class="reserved_word">int</SPAN> max)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">int</SPAN> GetButtonMax()</DIV>
+<DIV class="comment_block">for JoyStick setting<BR>このボタン数の設定は、SelectDeviceして成功したときのみ有効<BR>		default : 6ボタン<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsInit()</DIV>
+<DIV class="comment_block">デバイスの初期化に成功したか？<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CWIN32JoyStick()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bSuccessInit</DIV>
+<DIV class="protected_member">UINT m_uID</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nButtonMax</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">UINT m_uX1,m_uX2</DIV>
+<DIV class="protected_member">UINT m_uY1,m_uY2</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nSelect</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CJoyStick"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CJoyStick</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Input!yaneJoyStick_h.html#IJoyStick" target=_self>IJoyStick</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Input()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsKeyPress(<SPAN class="reserved_word">int</SPAN> key)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsKeyPush(<SPAN class="reserved_word">int</SPAN> key)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> BYTE* GetKeyData()</DIV>
+<DIV class="comment_block">from IKeyBase<BR>256バイト状態を読み込む<BR>方向入力は、IsPushKey/IsPressKeyの引数に0,1,2,3が上下左右。<BR>		そのあと4～35が、ボタン1～32（最大）に対応する。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SelectDevice(<SPAN class="reserved_word">int</SPAN> n)</DIV>
+<DIV class="comment_block">デバイスのナンバーを指定(0-15)<BR>そのデバイスの初期化に失敗したら、LRESULTはfalseを返す<BR>実は、DirectInputを用いなくともDirectX5のインストールされている<BR>		環境ならばWin32APIで16本までJoyStickを認識できる。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetButtonMax(<SPAN class="reserved_word">int</SPAN> max)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">int</SPAN> GetButtonMax()</DIV>
+<DIV class="comment_block">検知する最大ボタン数を設定。0～32。default : 6 ボタン<BR>		このボタン数の設定は、SelectDeviceして成功したときのみ有効<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsInit()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CJoyStick()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Input!yaneJoyStick_h.html#IJoyStick" target=_self>IJoyStick</A>&gt; m_pJoyStick</DIV>
+<DIV class="protected_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Input!yaneJoyStick_h.html#IJoyStick" target=_self>IJoyStick</A>&gt; GetJoyStick()</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> SetNullDevice()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

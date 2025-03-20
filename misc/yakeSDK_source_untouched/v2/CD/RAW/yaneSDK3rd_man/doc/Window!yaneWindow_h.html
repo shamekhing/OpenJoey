@@ -1,0 +1,171 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Window/yaneWindow.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="CWindowOption"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CWindowOption</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">class CWindow で指定するためのウィンドゥオプション<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">string caption</DIV>
+<DIV class="public_member">string classname</DIV>
+<DIV class="comment_block">キャプション<BR>クラス名(captionと同じでも良い)<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">int</SPAN> size_x</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">int</SPAN> size_y</DIV>
+<DIV class="public_member">LONG style</DIV>
+<DIV class="comment_block">横方向のサイズ<BR>縦方向のサイズ<BR>ウィンドゥスタイルの追加指定	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> bCentering</DIV>
+<DIV class="comment_block">ウィンドゥは画面全体に対してセンタリングして表示か<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CWindowOption()</DIV>
+<DIV class="comment_block">ディフォルトでこれ。必要があれば書き換えるべし<BR>			caption = "あぷりちゃん";<BR>			classname = "YANEAPPLICATION";<BR>			style = WS_VISIBLE | WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU;<BR>			size_x = 640; size_y = 480;<BR>			bCentering = true;<BR>		<BR></DIV>
+</DIV>
+<HR><BR>
+<A name="IWindow"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">IWindow</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Create(<A class="class_link" href="Window!yaneWindow_h.html#CWindowOption" target=_self>CWindowOption</A>&amp; opt, HWND lpParent=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> HWND GetHWnd()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetWindowPos(<SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> ChangeWindowStyle()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Resize(<SPAN class="reserved_word">int</SPAN> sx, <SPAN class="reserved_word">int</SPAN> sy)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetSize(<SPAN class="reserved_word">int</SPAN> sx, <SPAN class="reserved_word">int</SPAN> sy)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> UseMouseLayer(<SPAN class="reserved_word">bool</SPAN> bUse)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> ShowCursor(<SPAN class="reserved_word">bool</SPAN> bShow)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsShowCursor()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Window!yaneWindow_h.html#CWindowOption" target=_self>CWindowOption</A>* GetWindowOption()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">volatile</SPAN> <SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsMinimized()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Window!yaneWinHook_h.html#CWinHookList" target=_self>CWinHookList</A>* GetHookList()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> ClearAllHook()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> virtual ~IWindow()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CWindow"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CWindow</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">窓を生成するクラスです。このクラスのインスタンス一つが、<BR>	窓一つに対応します。マルチウィンドゥのサポートはやや甘いです。<BR>	（どうせフルスクリーンになるとDirectDrawを用いて描画している以上、<BR>	どうしようも無いという話もある…）<BR><BR>	☆　描画のために<BR><BR>	class CFastDrawを使った描画を行なう場合、<BR>	そちらも参照してください。CFastDrawを使っているときに<BR>	画面サイズを変更する場合、CFastDraw::ChangeDisplayModeを<BR>	呼び出してください。<BR><BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Window!yaneWinHook_h.html#IWinHook" target=_self>IWinHook</A><BR>
+<SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Window!yaneWindow_h.html#IWindow" target=_self>IWindow</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT Create(<A class="class_link" href="Window!yaneWindow_h.html#CWindowOption" target=_self>CWindowOption</A>&amp; opt, HWND lpParent=NULL)</DIV>
+<DIV class="comment_block">窓を作る。親ウィンドウが存在するのならば最後のパラメータで指定すること<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">HWND GetHWnd()</DIV>
+<DIV class="comment_block">HWNDを返す<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT SetWindowPos(<SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y)</DIV>
+<DIV class="comment_block">ウィンドゥを移動<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> ChangeWindowStyle()</DIV>
+<DIV class="comment_block">現在のスクリーンモード（フルスクリーン or ウィンドゥモード）用に<BR>WindowStyleを変更する<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT Resize(<SPAN class="reserved_word">int</SPAN> sx, <SPAN class="reserved_word">int</SPAN> sy)</DIV>
+<DIV class="comment_block">窓のリサイズ<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">void</SPAN> ChangeScreen(<SPAN class="reserved_word">bool</SPAN> bFullScr)</DIV>
+<DIV class="comment_block">フルスクリーン⇔ウィンドゥモードの切り替えが発生した場合、<BR>		この関数を呼び出したあとそれぞれのウィンドゥに関して<BR>		ChangeWindowStyleを呼び出すこと<BR>		ただし、フルスクリーン時のマルチウィンドゥはDirectDrawを使う関係上、<BR>		非サポート<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetSize(<SPAN class="reserved_word">int</SPAN> sx, <SPAN class="reserved_word">int</SPAN> sy)</DIV>
+<DIV class="comment_block">窓のリサイズ（設定のみで実際に変更はしない）<BR>		なぜこんなものが必要になるかというと、Resize⇒ChangeWindowStyleと<BR>		実行すると２回ウィンドゥサイズの変更を行なうことになって、<BR>		そのモーションが見えて困るから。<BR>		SetSize　⇒　ChangeWindowStyleならば安全。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> UseMouseLayer(<SPAN class="reserved_word">bool</SPAN> bUse)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> ShowCursor(<SPAN class="reserved_word">bool</SPAN> bShow)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> IsShowCursor()</DIV>
+<DIV class="comment_block">MouseLayer<BR>ソフトウェアカーソルのためにカーソルを消す<BR>ハードウェアマウスカーソルの表示／非表示<BR>ハードウェアマウスカーソルの表示／非表示を取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">DWORD m_dwFillColor</DIV>
+<DIV class="comment_block">Property<BR>背景色<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="Window!yaneWindow_h.html#CWindowOption" target=_self>CWindowOption</A>* GetWindowOption()</DIV>
+<DIV class="comment_block">Windowオプションの取得。ウィンドゥ生成前ならば書き換えても良い。<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">volatile</SPAN> <SPAN class="reserved_word">bool</SPAN> IsMinimized()</DIV>
+<DIV class="comment_block">最小化されているか？<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="Window!yaneWinHook_h.html#CWinHookList" target=_self>CWinHookList</A>* GetHookList()</DIV>
+<DIV class="comment_block">メッセージをフックするためのポインタリスト<BR>（class IWinHook のベクタ）<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> ClearAllHook()</DIV>
+<DIV class="comment_block">メッセージをフックするためのポインタリストをクリアする<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CWindow()</DIV>
+<DIV class="public_member"> virtual ~CWindow()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> CheckMenu()</DIV>
+<DIV class="comment_block">メニューの存在をチェックし、メニューがあるのならば<BR>		内部フラグ(m_bUseMenu)を更新する。<BR>		動的にメニューを取り外ししたときに、このクラスに<BR>		それを反映させるのに使う<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">void</SPAN> GetScreenSize(<SPAN class="reserved_word">int</SPAN> &amp; x, <SPAN class="reserved_word">int</SPAN> &amp; y)</DIV>
+<DIV class="comment_block">その他<BR>現在の画面全体のサイズの取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">bool</SPAN> IsFullScreen()</DIV>
+<DIV class="comment_block">フルスクリーンか？<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">HWND m_hWnd</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bFullScreen</DIV>
+<DIV class="protected_member"><A class="class_link" href="Window!yaneWindow_h.html#CWindowOption" target=_self>CWindowOption</A> m_opt</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bCentering</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">static</SPAN> LRESULT CALLBACKgWndProc()</DIV>
+<DIV class="protected_member">LRESULT Dispatch()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">LRESULT Initializer()</DIV>
+<DIV class="protected_member"><A class="class_link" href="Window!yaneWinHook_h.html#CWinHookList" target=_self>CWinHookList</A> m_HookPtrList</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bShowCursor</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bUseMouseLayer</DIV>
+<DIV class="comment_block">/////////////////////////////////////////////////////////////////////////<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> InnerAdjustWindow()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bUseMenu</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bResized</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">WNDPROC m_pWndProc</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">volatile</SPAN> <SPAN class="reserved_word">bool</SPAN> m_bMinimized</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">bool</SPAN> m_bFirstUserClass</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> IsWindowsClassName(<SPAN class="reserved_word">const</SPAN> string&amp; szClassName)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">bool</SPAN> g_bFullScreen</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

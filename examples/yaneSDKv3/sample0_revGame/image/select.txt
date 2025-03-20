@@ -1,0 +1,2 @@
+select.bmp
+allow.bmp

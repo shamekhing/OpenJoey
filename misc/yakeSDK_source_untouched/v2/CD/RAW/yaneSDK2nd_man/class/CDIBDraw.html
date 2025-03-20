@@ -1,0 +1,29 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CDIBDraw</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CDIBDraw</FONT><A name="CTimeBase"></A> <FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>DirectDrawを使わない描画の制御用。セカンダリ（バックサーフェース）は、プレーン(<A href="CDIB32.html">CDIB32</A>)である。セカンダリとは、ユーザーに見えない裏画面。セカンダリはプライマリ（ユーザーに見えている画面）と同じサイズで、かつそれは窓のクライアントエリアと同じサイズである。</P>
+<P>このクラスは、主に解像度切り替え、そしてセカンダリへの描画を担う。</P>
+<P>CDIBDrawを使った描画を行なう場合、ひとつのアプリケーションクラスは、一つの窓(＝１つのCWindowのインスタンス)と、１つのスレッド、そして、一つのCDIBDrawのインスタンスを持つ。DirectDrawによる描画を行ないたいときは、このクラスは使わずに<A href="CDirectDraw.html">CDirectDraw</A>を使ってください。</P>
+<P>またこのクラスは<A href="CPlaneBase.html">CPlaneBase</A>派生クラスであり、セカンダリを表すCPlaneBaseとして使うことが出来ます。</P>
+<P><FONT size="+1" color="#009900">☆　特長</FONT></P>
+<P>１．DirectDrawを介さずDIB描画を行なうので、ソフトウェアマウスカーソルを使わなくとも、マウスカーソルのちらつきが発生しない。<BR>
+２．フルスクリーンでもFlipを使わないので、GDIのファイルダイアログや、メッセージボックスと共存できる。<BR>
+３．画面切り替えに応じてサーフェースがロストすることがないので、復帰ルーチンを書く必要がない。</P>
+<P>CDirectDrawでも、CreateSecondaryDIBを行なえばDIB描画は出来ますが、こちらは、DirectDrawSurfaceに対して転送を行なうので、DirectDrawSurfaceを作成する分のメモリを必要とし、また、サーフェースのロストが起こり得るため、毎フレームごとに描画しなければならないという作りになっていますが、このCDIBDrawならば、必要なければあるフレームは描画関数を呼ばなくても構いません。また、サーフェースがロストしないということは、前回の画像に対して書き込んだりするような画像エフェクトが可能だということです。これは、非常に便利です。</P>
+<P><FONT size="+1" color="#009900"><FONT size="+1" color="#009900">☆　使用方法</FONT></FONT></P>
+
+<P>まず、画面解像度の設定を行ないます。これはSetDisplayで変更するか、BeginChangeDisplay～TestDisplayMode～EndChangeDisplayで変更するか二通りあります。後者のほうが少し手間はかかりますが融通は利きます。</P>
+<P>画面解像度の変更が終わった段階で、セカンダリに対して転送が行なえるようになります。</P>
+<P>そのあとは、<A href="CDIB32.html">CDIB32</A>をBlt系の関数でセカンダリに転送。このクラスのOnDrawを呼び出してセカンダリからプライマリへ転送（これが実描画）を行ないます。</P>
+<P>詳しくはサンプルもご覧ください。また、ほとんどの関数は<A href="CDirectDraw.html">CDirectDraw</A>と同じ関数仕様になっていますので、そちらもご覧ください。</P>
+<P><A href="CSprite.html">CSpriteEx</A>によるスプライト描画、CMapLayerによるマップ描画、<A href="CMouseLayer.html">CMouseLayer</A>,<A href="CTextLayer.html">CTextLayer</A>等の<A href="CLayer.html">CLayer</A>コールバックもサポートしていますので、<A href="CDirectDraw.html">CDirectDraw</A>をこのクラスと差し替えるだけで使うことが出来ます。</P>
+<P><FONT size="+1" color="#009900"><FONT size="+1" color="#009900">☆　おまけ</FONT></FONT></P>
+<P>int GetMenuHeight(void);</P>
+<P>Window Menuがついているときは、その高さを返します。フルスクリーン時はMenuがついていると、そこにマウスカーソルを持っていけば、自動的にメニュー表示が行なわれますが、その高さがこれです。（<A href="CMouseLayer.html">CMouseLayer</A>等でこの関数を呼び出しています）　ユーザーが使うことは、まずありえないでしょう＾＾；</P>
+<HR>
+</BODY></HTML>

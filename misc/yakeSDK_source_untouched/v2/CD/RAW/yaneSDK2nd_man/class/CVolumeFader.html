@@ -1,0 +1,23 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CVolumeFader</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CVolumeFader</FONT><A name="CTimeBase"></A>　<FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>オーディオのミキシング用クラスCAudioMixerを利用して、MIDI、CD、WAVEに対して擬似的なフェードイン／フェードアウトを実現する。CDに対するフェードイン等は、技術的にも稀である。</P>
+<P><FONT color="#ff0000">CAudioMixerも参照すること。</FONT></P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>LRESULT ResetVolume(eAudioMix e); // 初期ボリューム値に戻す<BR>
+LRESULT FadeOut(eAudioMix e,int dwTime);
+// フェードアウトを開始させる<BR>
+LRESULT FadeIn(eAudioMix e,int dwTime); //
+フェードインを開始させる<BR>
+bool IsFade(eAudioMix e)const; // フェード中なのか？</P>
+<P>dwTime[ms]後にボリュームのフェードは完了する。<BR>
+eAudioMixについては<A href="CAudioMixer.html">CAudioMixerクラス</A>を参照のこと。</P>
+<P><FONT size="+1" color="#009900">☆　注意点</FONT></P>
+<P>フェードは、<A href="CAppIntervalTimer.html">CAppIntervalTimer</A>によるが、これはCAppBase::IsThreadValidでWindowMessageを処理しない限りは、コールバックされない。よって、CVolumeFaderのFadeOut/FadeInを呼び出したあとは、Sleepしては意味がない。<A href="CAppFrame.html">CAppFrame</A>::MesSleepを使うか、CAppFrame::IsThreadValidを呼び出す描画ループのなかで使うかである。</P>
+<HR>
+</BODY></HTML>

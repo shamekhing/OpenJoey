@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Input/yaneMIDIInput.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="CMIDIInput"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CMIDIInput</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Input!yaneKeyBase_h.html#IKeyBase" target=_self>IKeyBase</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT GetKeyState()</DIV>
+<DIV class="public_member">BYTE GetVelocity(<SPAN class="reserved_word">int</SPAN> key)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CMIDIInput()</DIV>
+<DIV class="public_member"> virtual ~CMIDIInput()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">void</SPAN> CALLBACKMidiInProc(HMIDIIN hMidiIn, WORD wMsg, DWORD dwInstance, DWORD dwParam1, DWORD dwParam2)</DIV>
+<DIV class="comment_block">///////////////////////////////////////////////////////////////<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">HMIDIIN hMidiIn[MAX_MIDI_CH]</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nNumDevices</DIV>
+<DIV class="protected_member">BYTE m_byKeyBuffer2[256]</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bSuccessInit</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member">LRESULT Initialize()</DIV>
+<DIV class="private_member">LRESULT Terminate()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

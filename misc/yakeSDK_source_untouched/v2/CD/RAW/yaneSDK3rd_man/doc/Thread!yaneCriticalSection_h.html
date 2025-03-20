@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Thread/yaneCriticalSection.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="ICriticalSection"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">ICriticalSection</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Enter()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Leave()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"> virtual ~ICriticalSection()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CCriticalSection"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CCriticalSection</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">　スレッド間の排他を制御します。<BR>　あるスレッドでEnter関数を呼び出したあと、Leave関数を呼び出すまでの間は、<BR>　クリティカルセクションとなります。<BR>　クリティカルセクションを、同時に２つ以上のスレッドが実行することは出来ません。<BR>　同一スレッドからならば、多重にEnterすることが出来ます。<BR>　（詳しくは、マルチスレッド関係の文献を参照すること）<BR><BR>  class CMutex に比較して、非常に高速なのが特徴です。<BR><BR>  注意：<BR>  　CCriticalSectionの実体は、グローバルスコープに置くか、<BR>  　staticなメンバ変数にするかしてください。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Thread!yaneCriticalSection_h.html#ICriticalSection" target=_self>ICriticalSection</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Enter()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Leave()</DIV>
+<DIV class="comment_block">CriticalSectionに入る<BR>CriticalSectionから出る<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CCriticalSection()</DIV>
+<DIV class="public_member"> virtual ~CCriticalSection()</DIV>
+<DIV class="protected_member">CRITICAL_SECTION m_csCriticalSection</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CCriticalLock"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CCriticalLock</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">クリティカルセクションの使用補助クラス<BR>		CCriticalSectionでEnterに入ったときに例外が発生すると<BR>		その関数から抜けてしまうので、Leaveされなくて困ることがある。<BR>	そこで、<BR>		{<BR>			CCriticalLock guard(GetCriticalSection());<BR>			//	ここにその処理を書く<BR>		}<BR>	というように使えば、例外が発生したとしても、このクラスの<BR>	デストラクタで、CCriticalSection::Leaveが呼び出されることが<BR>	保証されます。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CCriticalLock(<A class="class_link" href="Thread!yaneCriticalSection_h.html#CCriticalSection" target=_self>CCriticalSection</A>* cs)</DIV>
+<DIV class="public_member"> ~CCriticalLock()</DIV>
+<DIV class="protected_member"><A class="class_link" href="Thread!yaneCriticalSection_h.html#CCriticalSection" target=_self>CCriticalSection</A>* m_cs</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

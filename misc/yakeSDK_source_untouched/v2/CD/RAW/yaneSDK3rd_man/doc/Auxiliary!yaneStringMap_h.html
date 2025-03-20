@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Auxiliary/yaneStringMap.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="IStringMap"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">IStringMap</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Write(<SPAN class="reserved_word">const</SPAN> string&amp; szKey, <SPAN class="reserved_word">const</SPAN> string&amp; szData)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Write(<SPAN class="reserved_word">const</SPAN> string&amp; szKey, LONGLONG nData)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Append(<SPAN class="reserved_word">const</SPAN> string&amp; szKey, <SPAN class="reserved_word">const</SPAN> string&amp; szData)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Append(<SPAN class="reserved_word">const</SPAN> string&amp; szKey, LONGLONG nData)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Read(<SPAN class="reserved_word">const</SPAN> string&amp; szKey, string&amp; szData)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Read(<SPAN class="reserved_word">const</SPAN> string&amp; szKey, LONGLONG&amp; nData)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> string GetStr(<SPAN class="reserved_word">const</SPAN> string&amp; szKey, <SPAN class="reserved_word">const</SPAN> string&amp; szDefault="")&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">int</SPAN> GetNum(<SPAN class="reserved_word">const</SPAN> string&amp; szKey, <SPAN class="reserved_word">int</SPAN> nDefault=0)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LONGLONG GetLongNum(<SPAN class="reserved_word">const</SPAN> string&amp; szKey, LONGLONG nDefault=0)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> Delete(<SPAN class="reserved_word">const</SPAN> string&amp; szKey)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Clear()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT ReadFromConfigFile(<SPAN class="reserved_word">const</SPAN> string&amp; szFileName)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT WriteToConfigFile(<SPAN class="reserved_word">const</SPAN> string&amp; szFileName)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Replace(string&amp; s, <SPAN class="reserved_word">bool</SPAN> bCaseSensitive=false)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> map&lt;string,string&gt;* GetMap()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> virtual ~IStringMap()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CStringMap"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CStringMap</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">キー（文字列）とデータとの連想記憶を提供します。<BR>Perlで使うような、なんでも入る変数が欲しかったので作りました。<BR>CGIを作るときとかに便利です。<BR><BR>内部的には、map&lt;string , string &gt;として実装してあります。<BR><BR>class IArchive 派生クラスなので、そのままシリアライズすることも出来ます。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Auxiliary!yaneStringMap_h.html#IStringMap" target=_self>IStringMap</A><BR>
+<SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Auxiliary!yaneSerialize_h.html#IArchive" target=_self>IArchive</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Write(<SPAN class="reserved_word">const</SPAN> string&amp; szKey, <SPAN class="reserved_word">const</SPAN> string&amp; szData)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Write(<SPAN class="reserved_word">const</SPAN> string&amp; szKey, LONGLONG nData)</DIV>
+<DIV class="comment_block">キーに対するデータの書き込み<BR>⇒　そのキーが既に存在する場合は、上書き。<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Append(<SPAN class="reserved_word">const</SPAN> string&amp; szKey, <SPAN class="reserved_word">const</SPAN> string&amp; szData)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Append(<SPAN class="reserved_word">const</SPAN> string&amp; szKey, LONGLONG nData)</DIV>
+<DIV class="comment_block">キーに対するデータの追加書き込み<BR>⇒　stringバージョン（前者）のほうは、文字列が加算される。LONGLONGバージョン（後者）の場合は、Writeと同じ動作。<BR><BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Read(<SPAN class="reserved_word">const</SPAN> string&amp; szKey, string&amp; szData)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Read(<SPAN class="reserved_word">const</SPAN> string&amp; szKey, LONGLONG&amp; nData)</DIV>
+<DIV class="comment_block">キーに対するデータの読み出し<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> string GetStr(<SPAN class="reserved_word">const</SPAN> string&amp; szKey, <SPAN class="reserved_word">const</SPAN> string&amp; szDefault="")</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">int</SPAN> GetNum(<SPAN class="reserved_word">const</SPAN> string&amp; szKey, <SPAN class="reserved_word">int</SPAN> nDefault=0)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LONGLONG GetLongNum(<SPAN class="reserved_word">const</SPAN> string&amp; szKey, LONGLONG nDefault=0)</DIV>
+<DIV class="comment_block">キーに対するデータの直接取得<BR>(そのキーが存在しないときは、szDefault or lDefaultが返る)<BR>↑これのLONGLONGのやつ作ったのだが（以下の）、それは、ときどき<BR>			VC++のreleaseバージョンだと内部コンパイルエラーに<BR>			なるときがある。おそらく、LONGLONGの最適化のバグ。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> Delete(<SPAN class="reserved_word">const</SPAN> string&amp; szKey)</DIV>
+<DIV class="comment_block">キーに対するデータの削除<BR>削除したときにはtrue<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Clear()</DIV>
+<DIV class="comment_block">まるごと削除<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT ReadFromConfigFile(<SPAN class="reserved_word">const</SPAN> string&amp; szFileName)</DIV>
+<DIV class="comment_block">定義ファイルからデータを読み出して、格納する機能<BR>(シリアライズとは違い、次のようなフォーマットのファイルから読み出す)<BR>// ダブルスラッシュ行はコメント<BR>		#string1 string2 // このように#で開始して、文字列１，２をならべる<BR>		//	このとき、スペースがセパレータ。<BR>		そうすると、string1が、szKey,string2がszDataとして、保存(Write)される。<BR>		よって、定義ファイルから読み込み後、GetStr("string1");のようにすれば<BR>		string2が取得できると言うわけ！○(≧∇≦)o<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT WriteToConfigFile(<SPAN class="reserved_word">const</SPAN> string&amp; szFileName)</DIV>
+<DIV class="comment_block">↑の形式のファイルとして書き出すバージョン<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> Out()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Replace(string&amp; s, <SPAN class="reserved_word">bool</SPAN> bCaseSensitive=false)</DIV>
+<DIV class="comment_block">文字列をこの連想記憶で置換する<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> map&lt;string,string&gt;* GetMap()</DIV>
+<DIV class="comment_block">連想記憶自体を取得する。<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Serialize()</DIV>
+<DIV class="comment_block">override from IArchive<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">map&lt;string,string&gt; m_vStringMap</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

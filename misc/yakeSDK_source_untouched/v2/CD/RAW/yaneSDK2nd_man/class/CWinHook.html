@@ -1,0 +1,31 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>クラスリファレンス</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><A name="CWinHook"><FONT size="+2">class CWinHook</FONT></A></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>ウィンドゥメッセージをフックするのに利用します。<BR>
+メッセージをフックしたいクラスは、このクラスから派生して、この関数</P>
+<P> virtual LRESULT WndProc(HWND,UINT,WPARAM,LPARAM)
+= 0; </P>
+<P>をオーバーライドします。この関数はメッセージを処理した場合、非0を返すようにコーディングします。</P>
+<P>以下の、CWinHookListも参照してください。</P>
+<HR>
+<P><A name="CWinHookList"><FONT size="+2">class CWinHookList</FONT></A></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>ウィンドゥメッセージをフックするのに利用します。<BR>
+CWinHookから派生されたクラスのポインタを保持し、管理しています。</P>
+<P>１つのウィンドゥクラスに対して１つのCWinHookListが対応します。</P>
+<P>マルチスレッド対応です。</P>
+<P>void Add(CWinHook*); // フックに加える<BR>
+void Del(CWinHook*); // フックから外す<BR>
+void Clear(void); // すべてをクリアする</P>
+<P>LRESULT Dispatch(HWND hWnd,UINT uMsg,WPARAM
+wParam,LPARAM lParam);</P>
+<P>　メッセージの配信には、Windowクラスから、これを呼び出します。そうすると、自分の保持しているCWinHookのWndProcに委譲していきます。委譲順序は、必ずAddした順番であり、WndProcが非0を返すものに出会うまでWndProcを呼び出しつづけます。管理しているすべてのCWinHookのWndProcを呼び出した場合は、ディフォルトの処理関数として::DefWindowProcを呼び出します。</P>
+<P><A href="CAppBase.html">CAppBase</A>はメッセージポンプは別スレッドなので、Hookを開始した次の瞬間から、WMメッセージが飛んでくるので、初期化が終了していないタイミングでWMメッセージを処理しないように十分注意してください。</P>
+<HR>
+</BODY></HTML>

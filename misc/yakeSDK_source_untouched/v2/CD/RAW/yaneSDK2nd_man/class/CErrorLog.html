@@ -1,0 +1,29 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CErrorLog</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CErrorLog</FONT>　<FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>エラーログの出力のための基底クラス。<BR>
+使用に際しては、<A href="../etc/Config.html">yaneConfig.h</A>でUSE_ErrorLogがdefineされている必要があります。（ディフォルトでdefineされています）</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>virtual LRESULT Out(string); // 文字列出力<BR>
+virtual LRESULT Out(int); 　　// 数値の出力<BR>
+virtual LRESULT __cdecl Out(LPSTR fmt, ...
+); // printfの書式出力<BR>
+virtual LRESULT SelectDevice(int); // エラーログ出力先。(0:なし
+1:File　ファイル名は&quot;ErrorLog.txt&quot;)<BR>
+virtual string GetError(void) const; // 前回エラー出力したものを文字列として取得する。</P>
+<P>エラーを出力すると、そこにはそのときの日付と時刻も同時に出力される。</P>
+<P><FONT size="+1" color="#009900">☆　注意</FONT></P>
+<P>出力先は、DEBUGビルドの時は、ディフォルトでファイル(SelectDeviceで1を指定した状態)。<BR>
+非デバッグモードのときは、ディフォルトで、なし(SelectDeviceで0を指定した状態)。</P>
+<P><FONT size="+1" color="#009900">☆　グローバル変数</FONT></P>
+<P>このクラスのグローバル変数としてErrというのを用意している。(yaneError.cpp内)<BR>
+通常は、この変数に対してエラーを出力すれば良い。</P>
+<P>例）<BR>
+　Err.Out(&quot;This may be a bug...&quot;);</P>
+<HR>
+</BODY></HTML>

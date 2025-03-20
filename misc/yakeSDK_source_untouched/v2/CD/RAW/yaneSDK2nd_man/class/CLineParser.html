@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CLineParser</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CLineParser</FONT><A name="CTimeBase"></A>　<FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>1行の文字列に対する構文解析ができます。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>
+void SetLine( LPSTR lpszStr );　　　// 1ラインの文字列をセットする<BR>
+bool IsMatch( LPSTR lpszCmpStr ); // 指定した文字列と等しいか否かを返す<BR>
+　<FONT color="#ff0000">注意：</FONT>指定した文字列と等しい場合のみ、SetLineでセットしたバッファはlpszCmpStr分進みます。<BR>
+LRESULT	GetNum( int& nNo );　　　 // 数値を得る<BR>
+LRESULT	GetStr( string& str );　　 // "..."で囲まれた文字列を得る</P>
+<P><FONT size="+1" color="#009900">☆　備考</FONT></P>
+<P>パージングする際、スペース・タブ・カンマは無視されます。（ポインタは自動的に進みます）<BR>
+IsMatchは、文字列が等しかった場合のみ、SetLineでセットしたポインタはマッチした文字列分だけ進みます。<BR>
+GetNum、GetStrではそれぞれ取得した数値分、または文字列分だけバッファが先へ進みます。</P>
+<P><FONT color="#ff0000">注意：</FONT>　SetLineでは、文字列ポインタを渡しているだけなので、IsMatch等を行なうときにバッファが正当であることを保証してください。</P>
+<P><FONT size="+1" color="#009900">☆　使用例</FONT></P>
+CHAR		str[] = "SUPER Muratti, 22,	127";	// 構文解析したい文字列<BR>
+CLineParser	olp;<BR>
+olp.SetLine( str );<BR>
+if(olp.IsMatch( &quot;SUPER&quot; )) return
+1; 　// マッチする<BR>
+if(olp.GetStr( szName )!=0 ) return 2; //
+szName == &quot;Muratti&quot;になる<BR>
+if(olp.GetNum( power )!=0) return 3; 　//
+power == 22になる<BR>
+if(olp.GetNum( s_power )!=0) return 4; //
+s_power == 127になる
+<P>使用例としては、<A href="CSpriteChara.html">CSpriteChara</A>が参考になるでしょう。</P>
+<P><FONT size="+1" color="#009900">☆　おまけ</FONT></P>
+<P> static void ConvertCR(LPSTR); // 文字列中の「\n」を'\n'(１バイトコード)に変換
+</P>
+<P>テキストファイルからファイルを読み込んで、CFont関係で描画するときに便利？</P>
+<HR>
+</BODY></HTML>

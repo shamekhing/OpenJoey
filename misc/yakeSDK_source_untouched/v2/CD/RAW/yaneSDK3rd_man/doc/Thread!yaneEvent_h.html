@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Thread/yaneEvent.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="IEvent"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">IEvent</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetEvent()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> ResetEvent()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Wait(<SPAN class="reserved_word">int</SPAN> nTime=0)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"> virtual ~IEvent()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CEvent"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CEvent</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">WIN32のイベントのwrapper<BR><BR>	何かのイベントが発生したことをあるスレッドから<BR>	別のスレッドに通知できるようにする同期オブジェクトです。<BR><BR>	イベントは、スレッドがいつその作業を行うかを<BR>	知る必要があるときに有用です。<BR><BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Thread!yaneEvent_h.html#IEvent" target=_self>IEvent</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetEvent()</DIV>
+<DIV class="comment_block">オブジェクトをシグナル状態（利用できる状態）にする<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> ResetEvent()</DIV>
+<DIV class="comment_block">オブジェクトをノンシグナル状態（利用できない状態）にする<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Wait(<SPAN class="reserved_word">int</SPAN> nTime=0)</DIV>
+<DIV class="comment_block">オブジェクトがシグナル状態（利用できる状態）になるまで待つ<BR>		nTime時間だけ待つ　　nTime==0 ならば無限に待つ<BR><BR>		返し値	0 : オブジェクトがシグナル状態になった<BR>				1 : 待ち時間タイムアウトになった<BR>				2 : それ以外（ありえないはず）<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CEvent()</DIV>
+<DIV class="public_member"> virtual ~CEvent()</DIV>
+<DIV class="protected_member">HANDLE m_hHandle</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

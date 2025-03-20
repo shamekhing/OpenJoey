@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Thread/yaneThread.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="IThread"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">IThread</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT CreateThread()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT CreateThread(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="YTL!function_callback_h.html#function_callback" target=_self>function_callback</A>&gt;&amp; fn)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT StopThread()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT JumpToThread()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsThreadExecute()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsThreadValid()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> InvalidateThread()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT ThreadSleep(<SPAN class="reserved_word">int</SPAN> nTime)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> virtual ~IThread()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CThread"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CThread</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">スレッドを生成するときの補助として使います。<BR>	同期オブジェクトを用いているので、<BR>	結構レスポンスが良い．．かも知れません（笑）<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Thread!yaneThread_h.html#IThread" target=_self>IThread</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> ThreadProc()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT CreateThread()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT CreateThread(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="YTL!function_callback_h.html#function_callback" target=_self>function_callback</A>&gt;&amp; fn)</DIV>
+<DIV class="comment_block">ワーカースレッドの処理を記述するために、<BR>		この関数をオーバーライドします。<BR>		（このクラスを派生させて使うとき）<BR>	<BR>ワーカースレッドが発生し、ThreadProcを実行しはじめます。<BR><BR>		引数として、コールバックする関数を指定しない場合は、<BR>		ThreadProcが呼び出されるのでThreadProcをオーバーライドしておくこと。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT StopThread()</DIV>
+<DIV class="comment_block">スレッドのストップ。停止するまで待ちます<BR>		返し値：<BR>			０：正常終了<BR>			１：すでにスレッドが存在していなかった（正常終了）<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT JumpToThread()</DIV>
+<DIV class="comment_block">スレッドを作らずにジャンプ<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsThreadExecute()</DIV>
+<DIV class="comment_block">スレッドは実行中か？<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsThreadValid()</DIV>
+<DIV class="comment_block">スレッドのStopはかかっていないか<BR>		この関数がfalseになったときに、ThreadProcから脱出するように<BR>		コーディングします。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> InvalidateThread()</DIV>
+<DIV class="comment_block">スレッドに停止信号を送る<BR>		（その停止を待つわけではない）<BR>		ワーカースレッドは次にIsThreadValidをチェックしたときに<BR>		falseが返ってきますので、そのときにThreadProcから抜け出るでしょう。<BR>		あるいはThreadSleepしたときに非０が返るので、そこでスレッドを<BR>		抜けるコードを書いても良いです。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT ThreadSleep(<SPAN class="reserved_word">int</SPAN> nTime)</DIV>
+<DIV class="comment_block">nTime [ms]待つ。<BR>	返し値：<BR>		0：正常終了　<BR>		1 : 待っている最中に、別スレッドからStopThreadが呼び出されれば<BR>		同期オブジェクトがシグナル状態（スレッドを終了させなさい、<BR>		という状態）になり、ただちに関数を抜ける。その場合、非0が返る。<BR><BR>	通例、ワーカースレッドは、<BR>　　while ( IsThread( ) ) {<BR>　　　	処理 ;<BR>　　　	Sleep( 20 );<BR>　　} <BR>	というようなコーディングによって、何かの処理を行なう処理を書きますが、<BR>	このときにSleep(20)があるため、スレッドがInvalidateされて（終了の合図）<BR>	から、この分だけレスポンスが低下します。そこで、ここをSleepではなく、<BR>	if (ThreadSleep( 20 )) break; などとすれば、この分のレスポンスを<BR>	向上させることが出来ます。ThreadSleepの実装は、同期オブジェクトを待つ<BR>	(::WaitForSingleObject)ようになっているので、この部分においてCPUパワーを、<BR>	あまり使用せず、効率的にSleepすることが出来ます。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CThread()</DIV>
+<DIV class="public_member"> virtual ~CThread()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">volatile</SPAN> <SPAN class="reserved_word">bool</SPAN> m_bThreadExecute</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">volatile</SPAN> <SPAN class="reserved_word">bool</SPAN> m_bThreadValid</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">volatile</SPAN> DWORD m_dwThreadID</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">void</SPAN> ThreadCallBack(LPVOID lpVoid)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="Thread!yaneEvent_h.html#CEvent" target=_self>CEvent</A> m_vEvent</DIV>
+<DIV class="protected_member"><A class="class_link" href="Thread!yaneEvent_h.html#CEvent" target=_self>CEvent</A>* GetEvent()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="YTL!function_callback_h.html#function_callback" target=_self>function_callback</A>&gt; m_fn</DIV>
+<DIV class="protected_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="YTL!function_callback_h.html#function_callback" target=_self>function_callback</A>&gt; GetCallBack()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

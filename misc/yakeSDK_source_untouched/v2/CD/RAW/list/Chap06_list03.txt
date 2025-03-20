@@ -1,0 +1,7 @@
+		BITMAPINFO bmi;
+		bmi.bmiHeader.biSize		= sizeof(BITMAPINFOHEADER);
+		bmi.bmiHeader.biWidth		=  nSizeX;
+		bmi.bmiHeader.biHeight		= -nSizeY;
+		bmi.bmiHeader.biPlanes		= 1;
+		bmi.bmiHeader.biBitCount	= 32;
+		bmi.bmiHeader.biCompression	= BI_RGB;

@@ -1,0 +1,280 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=SHIFT_JIS">
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CDIB32</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CDIB32</FONT>　<FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>DIB(Device Independent Bitmap：デバイスに依存しないビットマップ)を管理します。<BR>
+このクラスは、仮想的なプレーンと考えてください。</P>
+<P>このDIB32間で、矩形の拡大縮小転送や高速αブレンド等が行なえます。（転送ルーチンは高速化のためPentium,MMX,PentiumIIに特化しています）</P>
+<P><A href="CPlaneBase.html">CPlaneBase</A>派生クラスです。</P>
+<P>エフェクトについては、<A href="../etc/Effect.html">こちらの解説</A>をどうぞ。</P>
+<P><FONT size="+1" color="#009900">☆　注意点</FONT></P>
+<P>ピクセルは下位からBGRα(αは常に０)となっています。DWORDで指定します。<BR>
+RGB→DWORDへの変換には、以下のマクロを使用してください。(yaneDIB32.hで定義されています)</P>
+<P>// DIB32はGDIとは異なり、下位からB,G,R,α<BR>
+#define DIB32RGB(r,g,b) ( ((DWORD)r)&lt;&lt;16
+| ((DWORD)g)&lt;&lt;8 | b )</P>
+<P>矩形は、Win32で定義されているRECT構造体へのポインタ(LPRECT)で指定します。矩形は(right,bottom)の点（右下の点）は<FONT color="#ff0000">含みません。</FONT>これは、サイズ算出のときに(right-left,bottom-top)と１加算せずに行なえること、逆にサイズから矩形を算出するときに１減算せずに済むからです。</P>
+<P>また、UseDIBSectionを使うと、HDCを取得できるDIBサーフェースを作ることが出来ます。CDIB32間は、これを指定しなくても良いのですが（というか指定すると、リソースを食うのでWin95/98系ではリソース不足につながる）、CDIB32とCPlane間での転送を行なうためには、Load/CreateSurfaceに先駆けて、このフラグをセットしておく必要があります。また、このときサーフェースの正体はCreateDIBSectionで作られたサーフェースなので、32bppなもんで、CPlaneに対して転送するならばおそらく32bpp（TrueColorモード）のときが一番速く転送できるはずです。</P>
+
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>LRESULT Load(string BitmapFileName);</P>
+<P>　ビットマップファイルからこのクラスに画像を読み込みます。ビットマップ側のbpp(Bit
+Par Pixel)に関係なく、32bppとなります。<BR>
+　画像読み込みに成功した場合、左上の点をColorKeyとするので、もしColorKeyの設定が必要な場合は、この後に設定するようにしてください。</P>
+<P>LRESULT Save(string BitmapFileName,LPRECT
+lpRect=NULL);</P>
+<P>　ビットマップファイルに、このクラスから画像を書き出します。24bppとなります。</P>
+<P>LRESULT CreateSurface(int nSizeX,int nSizeY);
+</P>
+<P>　指定サイズのDIBを作成します。現在保持しているDIBは破棄されます。</P>
+<P>LRESULT Release(void);</P>
+<P>　LoadかCreateSurfaceで読み込んでいたDIBを解放します。</P>
+<P>bool IsLoad(void) const;</P>
+<P>　ビットマップをLoadで読み込んでいるかどうかを判定します。画像はCPlaneとは違ってLostしないので、画像ファイル名は保持していません。</P>
+<P>// 透過キー設定関連<BR>
+LRESULT SetColorKey(DWORD dwDIB32RGB); //
+特定の色を転送のときの透過キーに設定する<BR>
+LRESULT SetColorKey(int x,int y); // (x,y)の点を透過キーに設定する</P>
+<P>　透過キーにした色は、透過キー付き転送のとき、転送されません。俗に言うヌキ色です。</P>
+<P>DWORD GetColorKey(void);</P>
+<P>　透過キーを取得します。</P>
+<P>////////////////////////////////////////////////////////<BR>
+// CreateDIBSectionを使うのか？</P>
+<P>void UseDIBSection(bool bUseDIB);<BR>
+<FONT color="#ff0000">// ----- UseDIBSectionを使うときに限り、以下の関数が使用可能
+-----<BR>
+</FONT>// HDC取得(解放は不要。LoadかCreateSurfaceしたあとは解放するまで取得可能)<BR>
+HDC GetDC(void);</P>
+<P>// GetDCとの辻褄合わせ。(CDIBDrawとCDirectDrawの両方で動くクラス設計をするときのために)<BR>
+LRESULT ReleaseDC(void); // 実際は呼び出しても何もしない</P>
+<P>HBITMAP GetHBITMAP(void);<BR>
+LRESULT BltToPlane(CPlane*lpDstPlane,int
+x,int y,LPRECT lpSrcRect=NULL,LPRECT lpClipRect=NULL);<BR>
+LRESULT BltFromPlane(CPlane*lpSrcPlane,int
+x,int y,LPRECT lpSrcRect=NULL,LPRECT lpClipRect=NULL);</P>
+<P>BltToPlaneとBltFromPlaneは、CPlaneへの転送と、CPlaneからの転送。lpSrcRectは転送元矩形。NULLのときはソースプレーン全域。lpClipRectは転送先のクリップ矩形。NULLのときは、転送先プレーン全域。</P>
+<P></P>
+<P><FONT color="#009999"><B><FONT size="+1">// 矩形転送系</FONT></B></FONT></P>
+<P><FONT color="#00cc00">LRESULT Blt(CDIB32* lpDIB32,int x,int y,LPRECT
+lpSrcRect=NULL,LPSIZE lpDstSize=NULL,LPRECT
+lpClipRect=NULL);<BR>
+LRESULT BltFast(CDIB32* lpDIB32,int x,int
+y,LPRECT lpSrcRect=NULL,LPSIZE lpDstSize=NULL,LPRECT
+lpClipRect=NULL);</FONT></P>
+<P><FONT color="#00cc00">LRESULT BlendBltHalf(CDIB32* lpDIB32,int
+x,int y,LPRECT lpSrcRect=NULL,LPSIZE lpDstSize=NULL,LPRECT
+lpClipRect=NULL);<BR>
+LRESULT BlendBltFastHalf(CDIB32* lpDIB32,int
+x,int y,LPRECT lpSrcRect=NULL,LPSIZE lpDstSize=NULL,LPRECT
+lpClipRect=NULL);</FONT></P>
+<P><FONT color="#00cc00">LRESULT BlendBlt(CDIB32* lpDIB32,int x,int
+y,DWORD dwDstRGBRate,DWORD dwSrcRGBRate<BR>
+,LPRECT lpSrcRect=NULL,LPSIZE lpDstSize=NULL,LPRECT
+lpClipRect=NULL);<BR>
+LRESULT BlendBltFast(CDIB32* lpDIB32,int
+x,int y,DWORD dwDstRGBRate,DWORD dwSrcRGBRate<BR>
+,LPRECT lpSrcRect=NULL,LPSIZE lpDstSize=NULL,LPRECT
+lpClipRect=NULL);</FONT></P>
+<P><FONT color="#00cc00">LRESULT AddColorBlt(CDIB32* lpDIB32,int x,int
+y,LPRECT lpSrcRect=NULL,LPSIZE lpDstSize=NULL,LPRECT
+lpClipRect=NULL);<BR>
+LRESULT AddColorBltFast(CDIB32* lpDIB32,int
+x,int y,LPRECT lpSrcRect=NULL,LPSIZE lpDstSize=NULL,LPRECT
+lpClipRect=NULL);<BR>
+LRESULT SubColorBlt(CDIB32* lpDIB32,int x,int
+y,LPRECT lpSrcRect=NULL,LPSIZE lpDstSize=NULL,LPRECT
+lpClipRect=NULL);<BR>
+LRESULT SubColorBltFast(CDIB32* lpDIB32,int
+x,int y,LPRECT lpSrcRect=NULL,LPSIZE lpDstSize=NULL,LPRECT
+lpClipRect=NULL);</FONT></P>
+<P>転送は、上記のものです。lpDIB32は、<FONT color="#ff0000">転送元</FONT>のCDIB32のポインタを指定します。x,yは転送先の矩形左上の座標、lpSrcRectは転送元矩形のポインタでNULLならば、全体、lpDstSizeは転送先SIZEで、NULLならば等倍での転送。非NULLならば、そのサイズになるように転送（拡大縮小付き転送）になります。lpSrcRect-&gt;left
+&gt;&nbsp;lpSrcRect-&gt;right ならば、ミラーによる転送となります。lpClipRectは、転送先のクリップ矩形を指定するためのもので、NULLならば転送先のクリップ矩形は無しです。</P>
+<P>関数名にFastがついているものは、透過キー無効型の転送。ついていないものは透過キー有効型の転送。透過キー無効型の転送のほうが、30%程度速度向上が望めます。</P>
+<P>BlendBltHalfは、転送元と転送先を１：１でブレンドしながらの転送。BlendBltは、転送元をdwSrcRGB倍して(R,G,Bそれぞれ0～255段階の掛け率をかけて)、転送先をdwDstRGB倍して(R,G,Bそれぞれ0～255段階の掛け率をかけて)の転送。R,G,Bの掛け率をDWORDに変換するには、前述のDIB32RGBマクロを用いてください。</P>
+<P>Blt系の関数で、末尾にMのついているものは、ミラー転送です。(どれがミラーに対応しているかは、CDIB32のクラス宣言を見てください)</P>
+<P>AddColor/SubColorは、転送先から、転送元の色を加算／減算しながらの転送。R,G,Bそれぞれの桁溢れは防止していますので、溢れた場合(255を超えた場合と0を切った場合)はサチュレート（飽和）します。</P>
+<P><FONT color="#009999"><B><FONT size="+1">// モーフィング系</FONT></B></FONT></P>
+<P><FONT color="#009900">LRESULT MorphBlt(CDIB32* lpDIB32<FONT color="#009900">Src</FONT>, LPPOINT lpSrcPoint, LPRECT lpDstRect, LPRECT
+lpClip = NULL);<BR>
+LRESULT MorphBlt(CDIB32* lpDIB32Src, LPRECT
+lpSrcRect, LPPOINT lpDstPoint, LPRECT lpClip
+= NULL);<BR>
+LRESULT MorphBlt(CDIB32* lpDIB32Src, LPPOINT
+lpSrcPoint, LPPOINT lpDstPoint, LPRECT lpClip
+= NULL, bool bContinual = false);<BR>
+LRESULT MorphBltFast(CDIB32* lpDIB32Src,
+LPPOINT lpSrcPoint, LPRECT lpDstRect, LPRECT
+lpClip = NULL);<BR>
+LRESULT MorphBltFast(CDIB32* lpDIB32Src,
+LPRECT lpSrcRect, LPPOINT lpDstPoint, LPRECT
+lpClip = NULL);<BR>
+LRESULT MorphBltFast(CDIB32* lpDIB32Src,
+LPPOINT lpSrcPoint, LPPOINT lpDstPoint, LPRECT
+lpClip = NULL, bool bContinual = false);</FONT></P>
+<P>Morphは、転送元から転送先へ、４角形の自由変形を行ないながら転送するルーチンです。<BR>
+領域指定としてLPPOINTなっているものは任意四角形（４点の座標を指定。各点を含む）。LPRECTになっているものは、矩形(右下の点は含まず)　転送元はサーフェース全域・転送先についてはlpClipで示される領域でクリッピングを行なっています。</P>
+<P>LPPOINTを指定するときは、四角形の４点（左上・右上・左下・右下）の構造体POINT
+point[4];のアドレスを渡します。<BR>
+転送元・転送先が３角形であるときは、４点指定するうちの、２点を同じ点を指定してやればＯＫです。<BR>
+モーフィングのソースDIBは、スキャンする制限上、縦横2047ドット以内に収まっている必要があります。</P>
+<P>LPRECTで指定すべきところがNULLならば、そのプレーン全域が対象になります。</P>
+<P><FONT color="#cc0000">また、最後のbContinualフラグですが、これをtrueにしておけば、隣り合わせにモーフィング転送したときの、つなぎ目を調整します。具体的には、転送先の横ドット数がｎだとすれば、転送元は本来ｎ－１で内分した点をピックアップしなければなりませんが（bContinual==falseのときの動作）、これをｎで内分することによって、転送元の最後の点まで到達せずに終わるようにするのです。そうすることによって、つなぎ目の問題を解消できます。（bContinual==trueのときの動作）</FONT></P>
+<P>実際に、このMorph系の関数を使ってモーフィングを行なうクラス<A href="CDIB32Morph.html">CDIB32Morph</A>がありますので、そちらも参考にしてください。</P>
+<P><FONT color="#009900">virtual LRESULT RotateBlt(CDIB32* lpDIB32Src,LPRECT
+lpSrcRect,int x,int y,int nAngle,int nRate,int
+nType=0,LPRECT lpClip=NULL);</FONT><BR>
+<FONT color="#009900">virtual LRESULT RotateBltFast(CDIB32* lpDIB32Src,LPRECT
+lpSrcRect,int x,int y,int nAngle,int nRate,int
+nType=0,LPRECT lpClip=NULL); </FONT></P>
+<P>回転させて転送します。nAngleは、0～512が、０゜～３６０゜に相当します。範囲に制限はありません。nRateは倍率で、65536(1&lt;&lt;16)の時に等倍、その２倍ならば、転送倍率も２倍というようになっています。nTypeは、画像の回転中心で、０が左上、１が右上、２が左下、３が右下、４が画像中心になります。４が一番使いやすいと思います。lpClipは、転送先クリップ領域の指定です。<FONT color="#cc0000">ただし拡大範囲の限界として、転送先の４隅のx,y座標が-2048～2048におさまっている必要があります。（大きな画像を拡大する場合は、ソースRECTを小さく限定してやらなくてはなりません）</FONT></P>
+<P>virtual LRESULT BumpMapBlt(CDIB32* lpSrc,CBumpMap*
+lpBumpMap,int x,int y,LPRECT lpSrcRect=NULL,LPRECT
+lpClip = NULL) = 0;<BR>
+virtual LRESULT BumpMapFastBlt(CDIB32* lpSrc,CBumpMap*
+lpBumpMap,int x,int y,LPRECT lpSrcRect=NULL,LPRECT
+lpClip = NULL) = 0; </P>
+<P>BumpMap転送を実現します。<A href="CBumpMap.html">CBumpMap</A>も参考にしてください。歪んだ転送を行なえます。BumpMapFastBltは、BumpMapBltの端のクリップ等を行なっていないバージョンです。よって、画面外を参照するようなコードは書かないでください＾＾；　使い方は、BltFastとほとんど同じなのでわかると思います。ただ違うのは、CBumpMapを指定するところだけです。</P>
+<P><FONT color="#009999"><B><FONT size="+1">//　このプレーンに対するエフェクト</FONT></B></FONT></P>
+<P><FONT color="#009900">LRESULT AddColorFast(DWORD dwAddRGB,LPRECT
+lpSrcRect=NULL);<BR>
+LRESULT SubColorFast(DWORD dwSubRGB,LPRECT
+lpSrcRect=NULL);</FONT></P>
+<P>指定された矩形に色を加算／減算します。AddColorBltFast,SubColorBltFastのこのプレーンに対するバージョンだと考えてください。</P>
+<P><FONT color="#009900">LRESULT ShadeOff(LPRECT lpSrcRect=NULL);</FONT></P>
+<P>指定矩形(NULLならば全域)をぼかす関数。ただし、一番上と一番下のラインの処理は手抜きしてるので、処理してません＾＾；</P>
+<P><FONT color="#009900">LRESULT FadeEffect(int nFade,LPRECT lpRect=NULL);</FONT></P>
+<P>指定矩形(NULLならば全域)に対して、明るさを落とす関数。nFadeは、0～256の間で指定。フェードに使えます。</P>
+<P>//　ピクセル単位の操作</P>
+<P><FONT color="#009900">DWORD GetPixel(int x,int y);</FONT></P>
+<P>　座標(x,y)のピクセル値を取得。（エラーチェックはしていないので、確保したサーフェース以上か、あるいは確保せずに取得しようとするとメモリエラーになります）</P>
+<P><FONT color="#009900">void SetPixel(int x,int y,DWORD dwDIB32RGB);</FONT></P>
+<P>　座標(x,y)のピクセル値を設定。dwDIB32RGBには、DIB32RGBマクロを使って設定してください。（エラーチェックはしていないので、確保したサーフェース以上か、あるいは確保せずに設定しようとするとメモリエラーになります）</P>
+<P><FONT color="#009900">void GetSize(int&amp; sx,int&amp; sy);</FONT></P>
+<P>　サーフェースのサイズが取得できます。サーフェースが作成されていないときは、(0,0)が返ります。</P>
+<P><FONT color="#009900">LPRECT&nbsp;GetRect(void);</FONT></P>
+<P>　サーフェースのサイズを示すRECTポインタが取得できます。(top,left)
+== (0,0)</P>
+<P><FONT color="#009900">DWORD* GetPtr(void); // サーフェースへのポインタを取得</FONT></P>
+<P>　サーフェースの左上を指すポインタを取得します。一度取得したポインタは、次にCreateSurfaceかLoadBitmapFileするまで有効です。<BR>
+　また、あるピクセルは *(GetPtr( ) + x +
+y*sx) として表せます。連続的なピクセル操作の場合は、SetPixelを使わず、一度GetPtrでポインタを取得してから操作したほうが、関数呼び出し等のオーバーヘッドを防げます。</P>
+<P><FONT color="#009900">LRESULT&nbsp;Clear(DWORD dwDIB32RGB=CLR_INVALID,LPRECT
+lpRect=NULL); </FONT><BR>
+<FONT color="#009900">void SetFillColor(DIB32RGB dwFillColor);</FONT></P>
+<P>　Clearは矩形領域を、指定の色でクリアします。lpRect==NULLの場合は、このサーフェース全体に対してということになります。<BR>
+　矩形のクリップは行なっていません。矩形外に対しては、<A href="../etc/Macro.html">WARNING</A>マクロを仕掛けています。</P>
+<P>　Clearの第一引数を省略したときには、CLR_INVALIDになっていますが、このときはSetFillColorで設定されている色でクリアされます。ディフォルトでは黒です。この値は、コンストラクタで0が設定され、SetFillColorが呼び出されない限り変更はされません。</P>
+<P><FONT color="#009999"><B><FONT size="+1">// α値付き転送系</FONT></B></FONT></P>
+<P><A href="../etc/YGA.html">YGA</A>フォーマットを使えば、α値付きの画像が扱えます。PhotoShopの不透明度を表すものです。詳しくは、やねうらおホームページの<A href="http://www.sun-inet.or.jp/~yaneurao/rsp/">スーパープログラマーへの道</A>、第CB回をご覧ください。構造体については、<A href="../etc/YGA.html">こちら</A>です。PhotoShopデータからの作成については、YGA_MAKERをご利用ください。</P>
+<P><FONT color="#009900">bool IsYGA(void)</FONT>; // YGA画像かどうかを返す。<BR>
+<FONT color="#009900">bool* GetYGA(void)</FONT>; // YGA画像かどうかへのbool*を返す</P>
+<P>Loadメンバ関数でYGA画像を読み込むと、自動的にIsYGA関数でtrueが返るようになります。自前でα値付きの画像を読み込ませた場合、*GetYGA(
+) = true;とフラグを倒しておけば、BltNatural(
+CPlaneBase::BltNatural )でα値を考慮した転送がされるので便利です。</P>
+<P>α値は、各ピクセルデータ(DWORD)の最上位バイトが、割り当てられます。0～255の間の値を取り、ブレンド転送等においては、このα値に基づいて転送がなされます。α値が0の部分は、転送されません。α値が255の部分は、普通に転送されます。その間の値は、ブレンド転送になります。</P>
+<P><FONT color="#009900">BltClearAlpha,BltFastClearAlphaは、α値をクリアしながらBlt,BltFastを行なうもので、それ以外の機能はBlt,BltFastと変わりません。<BR>
+BlendBltFastAlphaは、α値の有効なブレンド転送で、それ以外の機能はBlendBltFastと変わりません。</FONT></P>
+<P>あと、それらの関数名の末尾にMをつけたミラー付き転送があります。<BR>
+<U>BlendBltFastAlphaは、さらに転送先と転送元のブレンド比率を指定することも出来ます。</U>（dwDstRgbRate,dwSrcRGBRateがそれです。意味は、BlendBltFastと同じです）　このときの転送のされ方は、<A href="CDIB32.html#blend">このように</A>なります。</P>
+<P><FONT color="#cc0000">この６つの転送命令で転送を行なえば、転送後の画像にはα値は載ってきません。</FONT>（α値は０になります）　最終的に、セカンダリには、α値を載せてはいけません。（ビデオカードによっては、特殊な用途に使われるため）　そのため、α値付きのDIBは、最終的には、この６つのいずれかの関数によってセカンダリに転送しなければいけません。</P>
+<P><FONT color="#cc0000">※　通常のBlt,BltFastは、単純なDWORDのコピーで行なうため、α値までコピーされます。<BR>
+※　通常のBlendBlt,BlendBltFastでα値付きの画像を転送した場合の動作は保証しません。行なわないでください。</FONT></P>
+<P><FONT color="#009900">LRESULT&nbsp;BltToAlpha(CDIB32* lpSrc,int
+nSrcMin<FONT color="#009900">,int nSrcMax</FONT>,int nDstMin=0,int nDstMax=255,LPRECT lpRECT=NULL);</FONT></P>
+<P>lpSrcで表されるCDIB32のRGBのBの値(最下位バイト)を、このCDIB32のα値として転送する。<FONT color="#cc0000">lpSrcと、このCDIB32は等サイズであることが前提となる。</FONT>また、その転送に際して、ある種の変換をほどこすことが出来る。まず、Bの値がnSrcMin以下であれば、転送先のα値はnDstMinになる。また、Bの値がnSrcMax以上であれば、転送先のα値はnDstMaxになる。そして、Bの値が、nSrcMixからnSrcMaxの間の値であれば、nDstMinからnDstMaxの間の値となる。（線形補間される。nDstMinとnDstMaxの大小関係は自由である。また、nSrcMin,nSrcMaxは0～255を指定するが、この範囲外でも問題無い）　たとえば、nSrcMaxをnSrcMin+10ぐらいにとって、nDstMin=0,nDstMax
+= 255とやり、nSrcMinを255からゆっくりと0にもっていけば、徐々に見えてくる表現などが可能になる。（この原理を応用してUniversal
+Transitionが可能となる）</P>
+<P><FONT color="#009900">LRESULT&nbsp;FadeBltAlpha(CDIB32* lpSrc,int
+nFadeRate,LPRECT lpRect=NULL);</FONT></P>
+<P>lpSrcで表されるCDIB32のα値をnFadeRateだけ減衰させながら、このCDIB32に転送します。<FONT color="#cc0000">lpSrcと、このCDIB32は等サイズであることが前提となる。</FONT>nFadeRateは、減衰率で0から256の値を指定し、256のときは減衰なし。lpRectは転送矩形。NULLならばプレーン全域。</P>
+<P><FONT color="#009900">LRESULT&nbsp;FadeAlpha(int nFadeRate,LPRECT
+lpRect=NULL);</FONT></P>
+<P>そのプレーンに対して、α値を減衰させる。<FONT color="#cc0000">α値付きのCDIB32を事前に半透明にするときに使う。</FONT>事前にα値を減衰させてBlendBltFastAlphaを使えば、擬似的に半透明転送が出来る。nFadeRateは、減衰率で0から256の値を指定し、256のときは減衰なし。lpRectは転送矩形。NULLならば、プレーン全域。</P>
+<P><FONT color="#009900">LRESULT FlushAlpha(LPRECT lpRect=NULL);</FONT> </P>
+<P>α値を反転させます。つまりは、抜き部分が反転します。</P>
+<P><FONT color="#009900">LRESULT BltWithoutAlpha(CDIB32* lpDIBSrc32,int
+x,int y,LPRECT lpSrcRect=NULL,LPSIZE lpDstSize=NULL,LPRECT
+lpClipRect=NULL);</FONT><BR>
+<FONT color="#009900">LRESULT BltFastWithoutAlpha(CDIB32* lpDIBSrc32,int
+x,int y,LPRECT lpSrcRect=NULL,LPSIZE lpDstSize=NULL,LPRECT
+lpClipRect=NULL);</FONT></P>
+<P><U>転送先のα値を破壊せず</U>にBlt／BltFastを行ないます。stencil alphaというような画像効果が得られる。</P>
+<P><FONT color="#009999"><B><FONT size="+1">// YGA形式での保存</FONT></B></FONT></P>
+<P><FONT color="#009900">LRESULT SaveYGA(string YGAFileName,LPRECT
+lpRect=NULL,bool bCompress = true);</FONT> </P>
+<P>このCDIB32の保持している画像をYGA形式で保存します。αチャンネルを含めて保存したいときには、YGA形式を使います。bCompressをfalseにすれば、強制で非圧縮になります。出力されたデータを直接加工したいような場合にこれを使います。通常はbCompress
+== trueで構いません。</P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　関数を追加する人のためにヒント</FONT></P>
+<P>protectedメンバに、クリップのアシストをする関数があります。これは、以下のような仕様になっています。</P>
+<P>// 汎用クリッピングルーチン<BR>
+<FONT color="#009900">LRESULT Clipping(CDIB32* lpDIB,int x,int
+y,LPRECT lpSrcRect,LPSIZE lpDstSize,LPRECT
+lpClipRect);</FONT></P>
+<P>返し値は、<BR>
+　&nbsp;非0:転送範囲なしなので、このまま帰るべし<BR>
+　&nbsp; 0:m_bActualSize==trueの場合、等倍の転送
+です。転送先矩形 m_rcDstRect 転送元矩形:m_rcSrcRect，m_bMirrorが真ならば左右ミラー<BR>
+　&nbsp; 0:m_bActualSize==falseの場合、拡大縮小込みの転送です。転送先矩形
+m_rcDstRect， 転送元矩形の左上:(m_rcSrcRect.left,m_rcSrcRect.top)，&nbsp;m_bMirrorが真ならば左右ミラーこのときは転送元座標　矩形の右上:(m_rcSrcRect.right,m_rcSrcRect.top)</P>
+<P>　　&nbsp;※　このときのブレゼンハムの初期値,増量,符号反転時に引く量,整数部がそれぞれm_nInitialX,m_nStepX,m_nCmpX,m_nStepsY，Ｙ方向がm_nInitialY,m_nStepY,m_nCmpY,m_nStepsYに入る。</P>
+<P>また、CDIB32は、各CPU専用ルーチンCDIB32P5,CDIB32PMMX,CDIB32P6の、代理母となっており、CDIB32のコンストラクタでnewして、あとはそれらに委譲しています。</P>
+<P>//　簡易クリップルーチン<BR>
+<FONT color="#009900">RECT GetClipRect(LPRECT lpRect);</FONT></P>
+<P>そのプレーンからはみ出しているならば、そのプレーンに収まるようにクリップし、lpRect==NULLならば、そのプレーン全域をRECTとして返す。</P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　関数を追加する人のためにヒント２</FONT></P>
+<P>お手軽に関数を追加する方法として、functorを使用する方法があります。</P>
+<P><A href="CDIB32Effect.html">CDIB32Effect</A>::Bltを使ってもいいのですが、個人的には、今後、強力にサポートするであろう、<A href="../etc/GTL.html">GTL(yaneGTL.h)</A>の使用をお勧めします。これは、CDIB32::GetPlaneInfo(
+)で、<A href="CFastPlaneInfo.html">CFastPlaneInfo</A>のポインタを取得して、そいつを渡してやれば、転送のめんどうな部分をはしょれてしまうという優れものです。</P>
+<HR>
+<P><FONT size="+1" color="#009900"><A name="Blend">☆　BlendBltFastAlphaでブレンド比率を指定したときの転送のされかたについて</A></FONT></P>
+<P>これは、RGBの比率を自由に指定できますが、主にYGA画像をフェードさせたいだけです。</P>
+<P>つまりは、本来ならばα値を弱めればいいので、フェードratioをfとすれば、α←α×f　になります。ということは、</P>
+<P>通常のブレンドの式</P>
+<P>　　dst = src * a&nbsp;+ dst * ( 1 - a&nbsp;)
+<BR>
+は、<BR>
+　　dst = src * a * f + dst * ( 1 - a * f
+)<BR>
+と変形されます。</P>
+<P>また、αブレンドにおいてはRGBRateはベクトルとして<BR>
+　　SrcRGBRate + DstRGBRate = (1,1,1) = E(単位ベクトル)<BR>
+が成り立っているものと考えられます。</P>
+<P>そこで、</P>
+<P>　　dst = src * a * f + dst * ( 1 - a * f
+)<BR>
+　この式のfをSrcRGBRateと書き換えて<BR>
+　　dst = src * a * SrcRGBRate + dst * (
+1 - a * SrcRGBRate )<BR>
+になります。しかし、これではDstRGBRateが出てきません。</P>
+<P>もちろん、<BR>
+　　SrcRGBRate + DstRGBRate = E<BR>
+を前提とすれば、これでもいいのですが、あえて、これを仮定しないのはこれを守らないほうが色相変換できて都合がいいからです。</P>
+<P>そこで、<BR>
+　　SrcRGBRate + DstRGBRate = E<BR>
+の条件下において、うまくαブレンドが出来るように<BR>
+　　SrcRGBRate = (E - DstRGBRate)<BR>
+と変形して、<BR>
+　　dst = src * a * SrcRGBRate　+ dst * (
+1 - a * (E - DstRGBRate) )</P>
+<P>とします。これならば、<BR>
+　　SrcRGBRate + DstRGBRate = E<BR>
+の条件下で正しくαブレンドが行なえて、かつ、DstRGBRateによって、色相チェンジが出来ます。</P>
+<P>あと、余談ですが実際にはα=0～255で、0～256ではないので、255のときに元画像より減衰してしまいます。これを防ぐために、255のときは256として扱っています。RGBRateも実際には、各バイトが0～0xff(255)の間なので、</P>
+<P>　　SrcRGBRate + DstRGBRate = ( 255, 255
+, 255)</P>
+<P>となります。</P>
+<P>よって、フェードさせたいときは、</P>
+<P>　　dwSrcRGBRate ←&nbsp;PlaneRGB( nFade,nFade,nFade)<BR>
+として、<BR>
+　　dwDstRGBRate ←&nbsp;0xffffff - dwSrcRGBRate<BR>
+を設定すれば、良いことになります。</P>
+<P>CPlaneBase::BltNaturalには、フェード率が指定できますが、それはこのような実装になっています。</P>
+</BODY></HTML>

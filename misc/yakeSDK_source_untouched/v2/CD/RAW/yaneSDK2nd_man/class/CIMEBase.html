@@ -1,0 +1,19 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CIMEBase</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CIMEBase</FONT></P>
+
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>IMEの表示・非表示を制御します。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>static void Show(void); 　// IMEの表示<BR>
+static void Hide(void); 　　// IMEの非表示</P>
+<P>CIMEBase::Showを連続で呼び出しても、一度CIMEBase::Hideを呼び出せばIMEは消えます。（参照カウントは取っていません）</P>
+<P><FONT size="+1" color="#009900">☆　注意</FONT></P>
+<P>ウィンドゥクラス側で、フルスクリーンモードになったときには、自動的にオフになるようにしています。これは、DirectDrawが、IME(やGDI)を無視して転送してしまうためです。</P>
+<P>一応、Clipperを仕掛けておけばそこは回避できるのですが、フルスクリーン時にFlipを行なう設定だと、IMEはちらつきますし、ゲーム中にIMEを使うことは無いだろうということで、こういう仕様にします。もし気に入らない場合は、その２点に気をつけながら変更するようにしてください。</P>
+<HR>
+</BODY></HTML>

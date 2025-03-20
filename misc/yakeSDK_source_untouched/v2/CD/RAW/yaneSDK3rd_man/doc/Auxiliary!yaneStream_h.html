@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Auxiliary/yaneStream.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="IOutputStream"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">IOutputStream</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">出力ストリーム<BR>	//	つくりかけ．．<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> virtual ~IOutputStream()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="ITextOutputStream"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">ITextOutputStream</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">テキスト出力用のストリーム<BR><BR>	制限：Outは、一度に512文字(終了文字列\0を含む)までしか<BR>			出力をサポートしない。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Clear()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> __cdeclOut(LPSTR fmt, ... const string&amp;)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Out()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Out()</DIV>
+<DIV class="comment_block">出力先をクリアする<BR>文字列を表示する<BR>数字を表示する<BR>文字列を出力する<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> virtual ~ITextOutputStream()</DIV>
+<DIV class="comment_block">interfaceなので仮想デストラクタが必要<BR></DIV>
+</DIV>
+<HR><BR>
+<A name="CTextOutputStreamNullDevice"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CTextOutputStreamNullDevice</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">class ITextOutputStream のNull Device(何もしないデバイス)<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Auxiliary!yaneStream_h.html#ITextOutputStream" target=_self>ITextOutputStream</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Clear()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> __cdeclOut(LPSTR fmt, ... const string&amp;)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Out()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Out()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CTextOutputStreamFile"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CTextOutputStreamFile</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">class ITextOutputStream の具象クラス<BR>	（ファイルに逐一出力するタイプ）<BR><BR>	Outのごとに、ファイルに出力を行なう<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Auxiliary!yaneStream_h.html#ITextOutputStream" target=_self>ITextOutputStream</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Clear()</DIV>
+<DIV class="comment_block">ファイルを削除<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> __cdeclOut(LPSTR fmt, ... `)</DIV>
+<DIV class="comment_block">文字列を表示する<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetFileName(<SPAN class="reserved_word">const</SPAN> string&amp; sz)</DIV>
+<DIV class="comment_block">ファイル名を設定する<BR>(このとき、そのファイル名のファイルが存在するのならばクリアする)<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> string GetFileName()</DIV>
+<DIV class="comment_block">ファイル名を取得する<BR>以降、こいつで設定したファイル名のファイルに対して出力するようになる<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">string m_szFileName</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CTextOutputStreamVSDebug"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CTextOutputStreamVSDebug</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">class ITextOutputStream の具象クラス<BR>	（Visual Studioのデバッグウィンドゥに出力するタイプ）<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Auxiliary!yaneStream_h.html#ITextOutputStream" target=_self>ITextOutputStream</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> __cdeclOut(LPSTR fmt, ... `)</DIV>
+<DIV class="comment_block">文字列を表示する<BR></DIV>
+</DIV>
+<HR><BR>
+<A name="CTextOutputStreamVersatile"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CTextOutputStreamVersatile</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">すべてのデバイスの出力できるデバイス<BR><BR>		エラー出力用デバイスErrは、<BR>		このclass CTextOutputStreamVersatile のインスタンス<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Auxiliary!yaneStream_h.html#ITextOutputStream" target=_self>ITextOutputStream</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SelectDevice(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Auxiliary!yaneStream_h.html#ITextOutputStream" target=_self>ITextOutputStream</A>&gt;&amp; device)</DIV>
+<DIV class="comment_block">出力するデバイスのスマートポインタを渡す<BR>		以降、そいつに出力するようになる<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> Debug()</DIV>
+<DIV class="comment_block">デバッグ用に、Error.txtというファイルに出力する<BR>		<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Clear()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> __cdeclOut(LPSTR fmt, ... n)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Out(<SPAN class="reserved_word">int</SPAN> n)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Out()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CTextOutputStreamVersatile()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Auxiliary!yaneStream_h.html#ITextOutputStream" target=_self>ITextOutputStream</A>&gt; m_vDevice</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="IInputStream"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">IInputStream</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">入力用ストリーム基底クラス<BR>	class IOutputStream等も参考のこと。<BR>	//	つくりかけ<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> virtual ~IInputStream()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

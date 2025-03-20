@@ -1,0 +1,286 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Draw/yaneSurface.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="ISurfaceLocker"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">ISurfaceLocker</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">SurfaceをLockする機構をポリモーフィックに提供する<BR><BR>	class CSurfaceLockerGuard も参照のこと。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Lock()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Unlock()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"> virtual ~ISurfaceLocker()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="INullSurfaceLocker"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">INullSurfaceLocker</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">class ISurfaceLocker の Null Device</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Draw!yaneSurface_h.html#ISurfaceLocker" target=_self>ISurfaceLocker</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Lock()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Unlock()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CSurfaceLockerGuard"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CSurfaceLockerGuard</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">デストラクタでUnlockを呼び出すだけのオブジェクト<BR>	CSurfaceInfo::GetPixel で実際に使っているので、そちらも<BR>	参照のこと。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CSurfaceLockerGuard()</DIV>
+<DIV class="public_member"> CSurfaceLockerGuard(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Draw!yaneSurface_h.html#ISurfaceLocker" target=_self>ISurfaceLocker</A>&gt;&amp; vLocker)</DIV>
+<DIV class="public_member"> ~CSurfaceLockerGuard()</DIV>
+<DIV class="private_member"><A class="class_link" href="Draw!yaneSurface_h.html#ISurfaceLocker" target=_self>ISurfaceLocker</A>* m_pSurfaceLocker</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CSurfaceInfo"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CSurfaceInfo</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">Lockしたときのサーフェース情報を保持するための構造体<BR>	一応、class CSurfaceLockerGuard が使えるように、<BR>	このクラスは、ISurfaceLockerから派生させておく。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Draw!yaneSurface_h.html#ISurfaceLocker" target=_self>ISurfaceLocker</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> Init(<SPAN class="reserved_word">void</SPAN>* lpSurfacePtr, LONG lPitch, <SPAN class="reserved_word">const</SPAN> SIZE &amp; size, <SPAN class="reserved_word">int</SPAN> nSurfaceType=0)</DIV>
+<DIV class="comment_block">/////////////////////////////////////////////////<BR>/////////////////////////////////////////////////<BR>ここで与えるものは、以下のもの。（あとでも個別に設定できる）<BR>		さらに、lock～unlockに際して、さらに処理が必要ならば<BR>		SetLockerで、それを設定すること。<BR>	<BR>		lpSurfacePtr	:	サーフェースのイメージへのポインタ<BR>			サーフェースのイメージの左上の座標のメモリアドレス<BR>		lPitch			:	１ラインのバイト数<BR>		size			:	Surfaceのサイズ<BR>		nSurfaceType	:	サーフェースの種類<BR><BR>		0:	未調査（OnChangeSurfaceがまだ呼び出されていない)<BR>		1:	不明（以下の以外）<BR><BR>		//	通常のサーフェース<BR>		2:	8bpp<BR>		3:	16(RGB565)<BR>		4:	16(RGB555)<BR>		5:	24(RGB888)<BR>		6:	24(BGR888)<BR>		7:	32(XRGB8888)<BR>		8:	32(XBGR8888)<BR><BR>		//	αサーフェース<BR>		10:	16+a4(ARGB4565)<BR>		11:	16+a4(ARGB4555)<BR>		12:	32(ARGB8888)<BR>		13:	32(ABGR8888)<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> IsInit()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetInit(<SPAN class="reserved_word">bool</SPAN> b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN>* GetPtr()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetPtr()</DIV>
+<DIV class="comment_block">/////////////////////////////////////////////////<BR>/////////////////////////////////////////////////<BR>サーフェースの左上のポインタの設定／取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LONG GetPitch()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetPitch(LONG lPitch)</DIV>
+<DIV class="comment_block">サーフェースのラスタピッチ<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">SIZE GetSize()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetSize(<SPAN class="reserved_word">const</SPAN> SIZE&amp; size)</DIV>
+<DIV class="comment_block">サーフェースの広さを示す矩形設定／取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> IsLocked()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetLock(<SPAN class="reserved_word">bool</SPAN> bLock)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Lock()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Unlock()</DIV>
+<DIV class="comment_block">ビデオメモリ上のDirectDrawSurfaceをLockしとるんか？<BR>（システムメモリ上のDirectDrawSurfaceならば、<BR>これを無視して、直接読み書きしてまう！）<BR>lockされているか？<BR>lockされているかの情報を設定する<BR>Lock～Unlockする<BR>(２重ロックすると、CRuntimeExceptionが発生)<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">RECT GetClipRect(<SPAN class="reserved_word">const</SPAN> LPRECT lpRect)</DIV>
+<DIV class="comment_block">与えられた矩形を、このサーフェースでクリップして、残る矩形を返す<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">int</SPAN> GetSurfaceType()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetSurfaceType(<SPAN class="reserved_word">int</SPAN> n)</DIV>
+<DIV class="comment_block">SurfaceTypeを取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Draw!yaneSurface_h.html#ISurfaceLocker" target=_self>ISurfaceLocker</A>&gt; GetLocker()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetLocker(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Draw!yaneSurface_h.html#ISurfaceLocker" target=_self>ISurfaceLocker</A>&gt;&amp; locker)</DIV>
+<DIV class="comment_block">SurfaceのLockerのSet/Reset<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetColorKey(DWORD dw)</DIV>
+<DIV class="public_member">DWORD GetColorKey()</DIV>
+<DIV class="comment_block">カラーキーの設定／取得(このサーフェース用にピクセルフォーマットを変換したもの)<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetFillColor(DWORD dw)</DIV>
+<DIV class="public_member">DWORD GetFillColor()</DIV>
+<DIV class="comment_block">FillColorの設定／取得(このサーフェース用にピクセルフォーマットを変換したもの)<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CSurfaceInfo()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT GetPixel(<SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y)</DIV>
+<DIV class="comment_block">一般的なBltter &amp; Effector<BR>--- 汎用ピクセル操作(遅い)<BR>rgbaで返る。非αサーフェースの場合、rgbaのaは0が返る。<BR>		サーフェース範囲外のときは、非0が返る<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT GetMatchColor(ISurfaceRGB rgb, DWORD&amp; dw)</DIV>
+<DIV class="comment_block">ある色が、そのサーフェースでどう表現されるかを返す<BR>		非αサーフェースの場合、rgbのα値は無視される<BR><BR>		//	抜き色等は、こいつでISurfaceRGBから変換すると良い<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">enum</SPAN>  EBltType<BR>{<BR>　　eSurfaceBltFast,<BR>　　eSurfaceBlt<BR>}</DIV>
+<DIV class="comment_block">転送先座標(pDstPoint==NULLならば左上)<BR>転送先サイズ(pSize==NULLならば等倍)<BR>転送元座標(pSrcPoint==NULLならばサーフェース全域)<BR>転送先のクリップ<BR>(この範囲からはみ出る範囲には描画されない)<BR>（pSrcPointで指定しているのは、転送元の、どの点なのか？）<BR>		0:左上 1:真上 2:右上<BR>		3:真左 4:中央 5:真右<BR>		6:左下 7:真下 8:右下<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">enum</SPAN>  EEffectType<BR>{<BR>　　eSurfaceEffectFill,<BR>　　eSurfaceEffectFade,<BR>　　eSurfaceEffectAddColor,<BR>　　eSurfaceEffectSubColor<BR>}</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT GeneralBlt(EBltType type, <A class="class_link" href="Draw!yaneSurface_h.html#CSurfaceInfo" target=_self>CSurfaceInfo</A>*pSrc,CBltInfo* pInfo)</DIV>
+<DIV class="public_member">LRESULT GeneralEffect(EEffectType type, LPRECT prc=NULL)</DIV>
+<DIV class="comment_block">ISurfaceの同名の関数の下請け関数<BR><BR>		これで、BltとEffectを定義してあるので、派生クラスで<BR>		ハードウェアアクセラレータによって転送するのでなければ、<BR>		こいつに委譲するだけで転送が完了する。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member"><SPAN class="reserved_word">bool</SPAN> m_bInit</DIV>
+<DIV class="private_member"><SPAN class="reserved_word">void</SPAN>* m_lpSurface</DIV>
+<DIV class="private_member">LONG m_lPitch</DIV>
+<DIV class="private_member">SIZE m_size</DIV>
+<DIV class="private_member"><SPAN class="reserved_word">bool</SPAN> m_bLock</DIV>
+<DIV class="private_member"><SPAN class="reserved_word">int</SPAN> m_nSurfaceType</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member">DWORD m_dwColorKey</DIV>
+<DIV class="private_member">DWORD m_dwFillColor</DIV>
+<DIV class="comment_block">(以下は、このサーフェース用にピクセルフォーマットを変換したもの)<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Draw!yaneSurface_h.html#ISurfaceLocker" target=_self>ISurfaceLocker</A>&gt; m_vLocker</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CBltInfo"></A>
+<SPAN class="reserved_word">struct</SPAN>&nbsp;<SPAN class="class_name">CSurfaceInfo::CBltInfo</SPAN>
+<HR>
+<DIV class="block_title">構造体の説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">POINT* pDstPoint</DIV>
+<DIV class="public_member">SIZE* pDstSize</DIV>
+<DIV class="public_member">RECT* pSrcRect</DIV>
+<DIV class="public_member">RECT* pDstClip</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">int</SPAN> nBasePoint</DIV>
+<DIV class="public_member"> CBltInfo(POINT* _pDstPoint=NULL, SIZE* _pDstSize=NULL, RECT* _pSrcRect=NULL, RECT* _pDstClip=NULL, <SPAN class="reserved_word">int</SPAN> _nBasePoint=0)</DIV>
+<DIV class="comment_block">転送先座標(pDstPoint==NULLならば左上)<BR>転送先サイズ(pSize==NULLならば等倍)<BR>転送元座標(pSrcPoint==NULLならばサーフェース全域)<BR>転送先のクリップ<BR>(この範囲からはみ出る範囲には描画されない)<BR>（pSrcPointで指定しているのは、転送元の、どの点なのか？）<BR>		0:左上 1:真上 2:右上<BR>		3:真左 4:中央 5:真右<BR>		6:左下 7:真下 8:右下<BR>	<BR></DIV>
+</DIV>
+<HR><BR>
+<A name="ISurface"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">ISurface</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> inline ISurfaceRGB makeRGB(DWORD r, DWORD g, DWORD b, DWORD a=0)</DIV>
+<DIV class="comment_block">typedef DWORD ISurfaceRGB;<BR>このサーフェースでは、共通して、このRGB値で指定する<BR>IPlaneで使うためのRGBピクセル値の生成<BR>		：	↑これは、XRGB8888(DIB32と仕様は同じ)の生成<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> inline <SPAN class="reserved_word">void</SPAN> getRGB(ISurfaceRGB rgb, BYTE&amp; a, BYTE&amp; r, BYTE&amp; g, BYTE&amp; b)</DIV>
+<DIV class="comment_block">IPlaneで使うためのRGBピクセル値の分解<BR>		：	ARGB8888(DIB32と仕様は同じ)と同じ<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">int</SPAN> GetType()</DIV>
+<DIV class="comment_block">サーフェースのタイプを返す(RTTIもどき)<BR>		0:	Null Device<BR>		1:	CFastPlane<BR>		2:	CDIB32<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GeneralBlt(CSurfaceInfo::EBltType type, <A class="class_link" href="Draw!yaneSurface_h.html#CSurfaceInfo" target=_self>CSurfaceInfo</A>*pSrc,<A class="class_link" href="Draw!yaneSurface_h.html#CBltInfo" target=_self>CSurfaceInfo::CBltInfo</A>* pInfo)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block">///////////////////////////////////////////////////////////////////<BR>汎用Bltter<BR>///////////////////////////////////////////////////////////////////<BR>汎化されたBltter<BR>type : 転送モード(抜き色転送であるだとか、加色合成であるだとか)<BR>		pSrc : 転送元のCSurfaceInfo<BR>		pInfo: 転送パラメータ<BR>		pAdditionalParameter : 追加で必要となるパラメータへのポインタ<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT Blt(<A class="class_link" href="Draw!yaneSurface_h.html#ISurface" target=_self>ISurface</A>*pSrc,<SPAN class="reserved_word">int</SPAN> x=0, <SPAN class="reserved_word">int</SPAN> y=0, SIZE*pDstSize=NULL,
+ RECT* pSrcRect=NULL, RECT* pDstClip=NULL, <SPAN class="reserved_word">int</SPAN> nBasePoint=0)</DIV>
+<DIV class="comment_block">---- 基本的なBltterは事前に用意しておく<BR>抜き色有り転送<BR>		x,y		 : 転送先座標<BR>		pDstSize : 転送先サイズ(NULLならば等倍)<BR>		pSrcRect : 転送元矩形<BR>		pDstClip : 転送先クリッピング矩形(この範囲には描画されない)<BR>		nBasePoint:転送先基準位置<BR><BR>		//  class CSurfaceInfo::CBltInfo も参照のこと。<BR>  <BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT BltFast(<A class="class_link" href="Draw!yaneSurface_h.html#ISurface" target=_self>ISurface</A>*pSrc,<SPAN class="reserved_word">int</SPAN> x=0, <SPAN class="reserved_word">int</SPAN> y=0, SIZE*pDstSize=NULL,
+ RECT* pSrcRect=NULL, RECT* pDstClip=NULL, <SPAN class="reserved_word">int</SPAN> nBasePoint=0)</DIV>
+<DIV class="comment_block">抜き色無し転送<BR>パラメータの意味は、Bltと同じ<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GeneralEffect(CSurfaceInfo::EEffectType type, LPRECT prc=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block">///////////////////////////////////////////////////////////////////////<BR>--- Surfaceのエフェクタ<BR>汎化されたEffector<BR>type : 転送モード(通常Fade転送であるだとか、加色合成であるだとか)<BR>		prc	 : エフェクトをかける矩形範囲(NULLならば全域)<BR>		pAdditionalParameter : 追加で必要となるパラメータへのポインタ<BR>			type : eEffectFade ならば、[0]は Fade率(BYTE:0-255)<BR>			type : eAddColor,eSubColor ならば[0]はその定数(ISurfaceRGB)<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetColorKey(ISurfaceRGB rgb)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> ISurfaceRGB GetColorKey()</DIV>
+<DIV class="comment_block">///////////////////////////////////////////////////////////////////////<BR>--- Surfaceとして、常識的に必要なもの<BR>--- 抜き色の設定／取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetColorKeyPos(<SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block">　(x,y)の点を透過キーに設定する<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetColorKeyRGB(<SPAN class="reserved_word">int</SPAN> r, <SPAN class="reserved_word">int</SPAN> g, <SPAN class="reserved_word">int</SPAN> b)</DIV>
+<DIV class="comment_block">RGBで抜き色を指定する。rgbはそれぞれ0～255<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetSize(<SPAN class="reserved_word">int</SPAN>&amp; x, <SPAN class="reserved_word">int</SPAN>&amp; y)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetSize(<SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block">--- サーフェースのサイズ設定／取得<BR>未生成のサーフェースならばGetSizeは、-1を返す（そのときx==y==0）<BR>SetSizeは、もし現在サイズと違うのであれば、あらたにCreateされる<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">int</SPAN> GetSurfaceType()</DIV>
+<DIV class="comment_block">サーフェースの種類を返す<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Clear(LPRECT lpRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetFillColor(ISurfaceRGB c)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> ISurfaceRGB GetFillColor()</DIV>
+<DIV class="comment_block">////////////////////////////////////////////////////<BR>矩形クリア<BR>Clearする色を指定する(Default==RGB(0,0,0))<BR>Clearする色の取得<BR>⇒ただし、α付きサーフェースに対するClearは、<BR>α == 0になることが保証されるものとする<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Load(<SPAN class="reserved_word">const</SPAN> string&amp; szBitmapFileName)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Save(<SPAN class="reserved_word">const</SPAN> string&amp; szBitmapFileName, LPRECT lpRect=NULL)</DIV>
+<DIV class="comment_block">////////////////////////////////////////////////////<BR>　--- ビットマップ関連<BR>画像の読み込み<BR>画像のファイルへの書き出し(lpRectは書き出し領域。NULLならば全域)<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Release()</DIV>
+<DIV class="comment_block">読み込んだ画像の解放<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Draw!yaneSurface_h.html#CSurfaceInfo" target=_self>CSurfaceInfo</A>* GetSurfaceInfo()</DIV>
+<DIV class="comment_block">///////////////////////////////////////////////////////////////////////<BR>サーフェース情報<BR>(これさえあれば、情報を取得して転送することが出来る)<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Draw!yaneSurface_h.html#ISurface" target=_self>ISurface</A>&gt; clone()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block">///////////////////////////////////////////////////////////////////////<BR>同じ型のオブジェクトを生成して返す。<BR>		ただし、サーフェースの内容はコピーされるわけではない。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> ISurface()</DIV>
+<DIV class="public_member"> virtual ~ISurface()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Draw!yaneSurface_h.html#CSurfaceInfo" target=_self>CSurfaceInfo</A>&gt; m_vSurfaceInfo</DIV>
+<DIV class="protected_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Draw!yaneSurface_h.html#ISurfaceLocker" target=_self>ISurfaceLocker</A>&gt; m_vSurfacelocker</DIV>
+<DIV class="comment_block">サーフェース情報を持った構造体<BR></DIV>
+</DIV>
+<HR><BR>
+<A name="ISurfaceDefault"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">ISurfaceDefault</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">GenaralBlt,GeneralEffectだけを実装したサーフェース<BR>	普通のサーフェースは、こいつから派生させて実装すると良い。<BR>	使う側はISurfaceを用いる。<BR>	こうしておけば、ISurfaceまわりをDLL側から呼び出すときに、<BR>	CSurfaceInfoの実装が実行コードのなかに混入してこない。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Draw!yaneSurface_h.html#ISurface" target=_self>ISurface</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GeneralBlt(CSurfaceInfo::EBltType type, <A class="class_link" href="Draw!yaneSurface_h.html#CSurfaceInfo" target=_self>CSurfaceInfo</A>*pSrc,<A class="class_link" href="Draw!yaneSurface_h.html#CBltInfo" target=_self>CSurfaceInfo::CBltInfo</A>* pInfo)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GeneralEffect(CSurfaceInfo::EEffectType type, LPRECT prc=NULL)</DIV>
+<DIV class="comment_block">委譲するだけで良いと思われ<BR></DIV>
+</DIV>
+<HR><BR>
+<A name="ISurfaceFactory"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">ISurfaceFactory</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Draw!yaneSurface_h.html#ISurface" target=_self>ISurface</A>&gt; CreateInstance()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"> virtual ~ISurfaceFactory()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="ISurfaceNullDevice"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">ISurfaceNullDevice</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">class IPlane のNullDevice<BR>	要するに、何もしない。virtual proxy(smart_ptr&lt;ISurface&gt;)から使うときのため。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Draw!yaneSurface_h.html#ISurface" target=_self>ISurface</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GeneralBlt(CSurfaceInfo::EBltType type, <A class="class_link" href="Draw!yaneSurface_h.html#CSurfaceInfo" target=_self>CSurfaceInfo</A>* pSrc, <A class="class_link" href="Draw!yaneSurface_h.html#CBltInfo" target=_self>CSurfaceInfo::CBltInfo</A>* lpDst)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GeneralEffect(CSurfaceInfo::EEffectType type, LPRECT prc=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">int</SPAN> GetType()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetSize(<SPAN class="reserved_word">int</SPAN>&amp; x, <SPAN class="reserved_word">int</SPAN>&amp; y)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetSize(<SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetColorKey(ISurfaceRGB rgb)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> ISurfaceRGB GetColorKey()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetColorKeyPos(<SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Draw!yaneSurface_h.html#ISurface" target=_self>ISurface</A>&gt; clone()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Clear(LPRECT lpRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetFillColor(ISurfaceRGB c)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> ISurfaceRGB GetFillColor()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

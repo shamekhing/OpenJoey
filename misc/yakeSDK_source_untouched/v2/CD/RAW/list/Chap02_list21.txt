@@ -1,0 +1,11 @@
+template <class T>
+class factory {
+public:
+	virtual T* CreateInstance() { return new T; }
+};
+
+template <class T,class S>
+class factory2 : public factory<T> {
+//	Tは基底クラス。Sはその派生クラス。
+	virtual T* CreateInstance() { return new S; }
+};

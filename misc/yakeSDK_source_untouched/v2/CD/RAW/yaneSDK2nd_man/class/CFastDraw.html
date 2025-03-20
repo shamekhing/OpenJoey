@@ -1,0 +1,14 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CFastDraw</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CFastDraw</FONT><A name="CTimeBase"></A> <FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>このクラスは、<A href="CDirectDraw.html">CDirectDraw</A>とほぼコンパチ。CDirectDrawに比較すると半透明等が高速であり、加色合成、減色合成、定数倍加色、定数倍減色等をサポートする。全体的に<A href="CDIBDraw.html">CDIBDraw</A>よりも高速。今後は、描画はこのクラスをメインに使うと良いと思われる。</P>
+<P><A href="CDirectDraw.html">CDirectDraw</A>をCFastDrawに差し替えて、<A href="CPlane.html">CPlane</A>を<A href="CFastPlane.html">CFastPlane</A>とすれば、コンパイルは通るはず。</P>
+<P>CDirectDrawと異なり、CFastDraw自体は、<A href="CPlaneBase.html">CPlaneBase</A>の派生クラスでは無いので、セカンダリに対して描画を行なう場合は、</P>
+<P>GetSecondary( )でセカンダリを取得して、そこに描画すると良い。</P>
+<HR>
+</BODY></HTML>

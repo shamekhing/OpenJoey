@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CPlaneTransBlt</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CSceneTransiter</FONT><A name="CTimeBase"></A></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P><A href="CPlaneBase.html">CScene</A>でシーン管理をやっているときに、シーンとシーンの間で画面効果(<A href="CPlaneTransBlt.html">CPlaneTransBlt</A>)を入れたいときに使います。</P>
+<P>このクラスが保持するプレーンは４つあります。０番は、シーン間でキャッチボールするためのもの（笑）　要するに、テンポラリです。</P>
+<P>１番は、トランジション元のシーンをスナップしたもの。２番は、トランジション先のシーンをスナップしたものです。</P>
+<P>３番は、０番と同じ意味のものですが、ウィンドゥの右上の×ホダンを押したときに終了を確認するためのシーンなど、特権的なシーンとのキャッチボール（笑）に使います。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>// そのプレーンをPlaneにバックアップする<BR>
+void Backup(CPlaneBase*lp,int nPlaneNo=1);</P>
+<P>// シーンコントローラーを設定<BR>
+void SetSceneControl(smart_ptr&lt;CSceneControl&gt;
+v);</P>
+<P>// プレーンの設定／取得<BR>
+void SetPlane(smart_ptr&lt;CPlaneBase&gt;
+v,int nPlaneNo);<BR>
+smart_ptr&lt;CPlaneBase&gt; GetPlane(int
+nPlaneNo);</P>
+<P>// バックアップしといたやつは↑で取り出せる。<BR>
+// 前のシーンでBackupでバックアップしたプレーンは、<BR>
+// これでsmart_ptrに移して使うと良い。</P>
+<P>// こいつの所有権だけ破棄<BR>
+void ReleasePlane(int nPlaneNo);</P>
+<P>// トランジションの設定<BR>
+void BeginTransit(int nTransType,int nSpeed=16,int
+nStartPhase=0,int nEndPhase=256);<BR>
+// トランジション中か？<BR>
+bool IsEndTransit(void) const;</P>
+<P><FONT color="#009900">トランジションの方法<BR>
+１．現在のシーンで描画しているものをBackup(GetDraw(
+));でプレーン１にコピーして、<BR>
+２．BeginTransitでコピー開始。<BR>
+３．その後、次のシーンにJumpSceneすれば、最初のOnDrawの結果がプレーン２にコピーされて自動的にトランジションが開始される。</FONT></P>
+<P>// CSceneControl::OnDrawの代わりにこれで描画すれば良い。<BR>
+LRESULT OnDraw(CPlaneBase* lp);</P>
+<P><FONT color="#009900">// トランジションを抑止する<BR>
+</FONT>void StopTransit( );<BR>
+void RestartTransit( );</P>
+<P>たとえば、トランジション中は、次のシーンのCScene::OnDrawは呼び出されません。そこで、トランジション中に、「終了しますか？」等の確認ダイアログを出すために、そのシーンへCScene::CallSceneFastで移行しても、トランジション終了までそのシーンは呼び出されません。そこで、そのシーンにCScene::CallSceneFastした直後に、StopTransitを呼び出し、そのシーンから抜けるときにでもRestartTransitを呼び出せば、これを解決できます。</P>
+<HR>
+</BODY></HTML>

@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CGraphicLoader</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CGraphicLoader</FONT><A name="CTimeBase"></A></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>汎用グラフィックローダー（BMP,JPEG,GIF画像読み込み及び、SPI(SusiePlugIn)での画像読み込み等）</P>
+<P>CPlaneやCDIB32等から使う汎用的なグラフィックローダーです。</P>
+<P>またSPI(susie-plug in)にも対応しました。実行ファイルの存在するフォルダのなかに、<BR>
+<FONT color="#ff0000">spi</FONT><BR>
+という名前のフォルダを作成し、そこにsusie-plug
+inを入れます。</P>
+<P>そうすればビットマップ画像を読み込む関数を呼び出したとき、拡張子に応じて、自動的にSPIファイルが読み込まれます。たとえば</P>
+<P>&quot;digico.pic&quot;</P>
+<P>ならば、拡張子はpicですので、このファイルを読み込もうとしたとき</P>
+<P>spi/ifpic.spi</P>
+<P>というDLLが自動的に読み込まれ、普通のbmp画像と同じように読み込まれます。（ただし、SPIを使う場合、ファイルサイズが２Ｋ以下のものは読み込めません）</P>
+<P><FONT color="#ff0000">注意点：</FONT></P>
+<P>ただし、上記の２つの方法で読まれたbmp以外の画像形式については、パレットの読み込みは行ないません。（２５６色モードでなければ関係ないです）</P>
+<P>パレットが必要な場合、パレット定義ファイルをＢＭＰ画像で作成し、これらの画像のLoadBitmapに先駆けてそちらのパレットを読み込み、リアライズしておいてください。</P>
+<P><FONT color="#cc0000">JPG画像は、Win95の場合IEか何かを入れないと、読めこめないようです。Win98/SE/ME/NT4.0/Win2000はOkです。</FONT></P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P><FONT color="#009900">LRESULT LoadPicture(CFile&amp; file);　　　</FONT><FONT color="#009900">// これで読み込む返し値が0ならば成功</FONT></P>
+<P>　まず画像を読み込みます。読み込んだCFileの参照を渡してください。また、CFileで読み込まれたメモリ内のファイルは、このクラスのRenderを呼び出すときに、<FONT color="#ff0000">有効である</FONT>ようにしてください。(Bitmapファイルのとき。JPEG,GIF,SPIでの読み込みのときはこの限りではありません）</P>
+<P><FONT color="#009900">LRESULT GetSize(LONG&amp; x,LONG&amp; y);
+// これで読み込んだ画像のサイズを取得</FONT></P>
+<P>　読み込んだ画像サイズを返します。</P>
+<P><FONT color="#009900">LRESULT Render(HDC hdc); // hdcを渡して、そこに描画してもらう</FONT></P>
+<P>　読み込んだ画像のhdcを渡して、そこに描画してもらいます。</P>
+<P><FONT color="#009900">LRESULT ReleasePicture(void); // これで解放する</FONT></P>
+<P>　これで画像を解放します。（あえて呼び出さなくとも、このクラスのデスクトラクタから呼び出されます）</P>
+<P><FONT size="+1" color="#009900">☆　注意点</FONT></P>
+<P>GIF画像の読み込みに関しては、特許が絡むので特許期限が来るまで<FONT color="#ff0000">公式サポートとはしません</FONT><FONT color="#ff0000">。</FONT>OleLoadPictureでJPEG画像を読み込もうとしたら意図せず読み込めてしまうだけのことです。</P>
+<P><BR>
+また、<FONT color="#cc0000">このクラスの生成には、以下のPrototypeFactoryを使うように</FONT>してください。<BR>
+<FONT color="#009900">static PrototypeFactory&lt;CGraphicLoader&gt;*
+GetPrototypeFactory(void);</FONT><BR>
+詳しくは、<A href="../YTL/PrototypeFactory.html">PrototypeFactory</A>テンプレートを見てください。</P>
+<HR>
+</BODY></HTML>

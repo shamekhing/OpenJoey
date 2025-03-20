@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CFastPlaneInfo</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CFastPlaneInfo</FONT><A name="CTimeBase"></A></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P><A href="CFastPlane.html">CFastPlane</A>が内部的に保持している、サーフェース情報です。サーフェースのサイズ、１ラインのバイト数等が格納されています。<A href="CDIB32.html">CDIB32</A>でも、GetPlaneInfoメンバ関数によって、この情報を取得できます。</P>
+<P>この情報は、<A href="../etc/GTL.html">yaneGTL.h</A>のなかにある、転送用のクラスCFastPlaneEffect::Blt等で使用します。この関数は、この構造体さえ渡せば、転送を定義出来るので非常に汎用性があります。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>// 初期化関数<BR>
+void Init(void* lpSurfacePtr,LONG lPitch,const
+RECT&amp;rcRect,int nSurfaceType = 0);</P>
+<P>　↑これで初期化。サーフェースの左上のメモリを示すlpSurfacePtr,次のラインまでのバイト数を表すlPitch、サーフェースのサイズを示すrcRect,サーフェースのタイプを示すnSurfaceTypeを設定すること。nSurfaceTypeは、<A href="CFastPlane.html">CFastPlane</A>::GetSurfaceTypeの返し値と同じですので、そちらを参照してください。また、このnSurfaceTypeは、転送用の関数では実際には参照されませんので、特に設定しなくとも大丈夫です。</P>
+<P>bool IsInit(); // 初期化されたか？<BR>
+void SetInit(bool b); // 初期化されたかどうかのフラグを強制変更する</P>
+<P>// property...</P>
+<P>　以下は、Initのあと、設定した情報を変更／取得するための関数<BR>
+</P>
+<P>// サーフェースの左上のポインタの設定／取得<BR>
+void* GetPtr();<BR>
+void SetPtr(void*lpSurface);</P>
+<P>// サーフェースのラスタピッチ<BR>
+LONG GetPitch();<BR>
+void SetPitch(LONG lPitch);</P>
+<P>// サーフェースの広さを示す矩形設定／取得<BR>
+LPRECT GetRect();<BR>
+void SetRect(const RECT&amp;rc);</P>
+<P>// ビデオメモリ上のDirectDrawSurfaceをLockしとるんか？<BR>
+// （システムメモリ上のDirectDrawSurfaceならば、これを無視して、直接読み書きしてまう！）<BR>
+bool IsLocked();<BR>
+void SetLock(bool bLock) { m_bLock = bLock;
+}// lockされているかの情報を設定する<BR>
+　⇒ CFastPlane等が、DirectDrawSurfaceをLock中であるかどうかを示すための、内部フラグとして使用する。</P>
+<P>// CDIB32のGetClipRectと同じ意味<BR>
+RECT GetClipRect(LPRECT lpRect);</P>
+<P>// SurfaceType(CFastPlane::GetSurfaceTypeと同じ意味)<BR>
+int GetSurfaceType( );<BR>
+void SetSurfaceType(int n);</P>
+<HR>
+</BODY></HTML>

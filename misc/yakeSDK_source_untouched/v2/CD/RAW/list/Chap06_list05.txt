@@ -1,0 +1,5 @@
+	DDSURFACEDESC ddsd = { sizeof(DDSURFACEDESC) };
+	ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH;
+	ddsd.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN | DDSCAPS_SYSTEMMEMORY;
+	if (lpDraw->CreateSurface(&ddsd,&pSurface,NULL)!=DD_OK){
+		//	ˆÈ‰º—ª

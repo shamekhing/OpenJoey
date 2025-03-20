@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Multimedia/yaneMIDIOutputMCI.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="CMIDIOutputMCI"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CMIDIOutputMCI</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">MCI(Media Control Interface)によるMIDI再生。<BR><BR>	class CMIDIOutputDM  も参照のこと。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Multimedia!yaneSound_h.html#ISound" target=_self>ISound</A><BR>
+<SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Window!yaneWinHook_h.html#IWinHook" target=_self>IWinHook</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CMIDIOutputMCI()</DIV>
+<DIV class="public_member"> virtual ~CMIDIOutputMCI()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Open(<SPAN class="reserved_word">const</SPAN> string &amp; pFileName)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Close()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Play()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Replay()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Stop()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Pause()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsPlay()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsLoopPlay()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetLoopPlay(<SPAN class="reserved_word">bool</SPAN> bLoop)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LONG GetCurrentPos()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LONG SetCurrentPos(LONG lPos)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LONG GetLength()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetVolume(LONG volume)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LONG GetVolume()</DIV>
+<DIV class="public_member">string GetFileName()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">int</SPAN> GetType()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">bool</SPAN> CanUseMCIMIDI()</DIV>
+<DIV class="comment_block">MCIによるMIDIは使える状況なのか？<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">LRESULT InnerOpen()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="Auxiliary!yaneFile_h.html#CFile" target=_self>CFile</A> m_File</DIV>
+<DIV class="protected_member">DWORD m_dwPosition</DIV>
+<DIV class="protected_member">DWORD m_wDeviceID</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_bPaused</DIV>
+<DIV class="protected_member">LONG m_lLength</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">LRESULT LoopPlay()</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bLoopPlay</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bNowPlay</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">LRESULT WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

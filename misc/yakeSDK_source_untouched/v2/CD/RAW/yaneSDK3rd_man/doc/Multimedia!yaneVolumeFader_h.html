@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Multimedia/yaneVolumeFader.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="CVolumeFader"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CVolumeFader</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">オーディオのミキシング用クラスCAudioMixerを利用して、<BR>	MIDI、CD、WAVEに対して擬似的なフェードイン／フェードアウトを実現する。<BR>	CDに対するフェードイン等は、技術的にも稀である。<BR><BR>	class CAudioMixerも参照すること。<BR><BR>	フェードは、CIntervalTimerによるが、これはCAppBase::IsThreadValidを<BR>	呼び出さないとCallBackされない。<BR>	よって、CVolumeFaderのFadeOut/FadeInを呼び出したあとは、Sleepしては<BR>	意味がない。CAppBase::IsThreadValidを呼び出す描画ループのなかで<BR>	使うかである。<BR><BR>	フェードアウトは、その後、指定した秒数で、フェードアウトが完了するので<BR>	そのあと、曲再生を停止させ、ResetVolumeを呼び出して、もとのヴォリューム<BR>	に戻してやる必要がある。<BR><BR>	また、このクラスがヴォリュームをフェードさせていないときに、<BR>	ヴォリューム変更が行なわれたときのことを考慮して、<BR>	フェードを開始するときに、ヴォリュームをチェックして、その<BR>	ヴォリュームをclass CAudioMixer の初期ヴォリュームとして設定する<BR>	処理を行なっている。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT ResetVolume(eAudioMix e)</DIV>
+<DIV class="comment_block">初期ボリューム値に戻す<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT FadeOut(eAudioMix e, <SPAN class="reserved_word">int</SPAN> dwTime)</DIV>
+<DIV class="public_member">LRESULT FadeIn(eAudioMix e, <SPAN class="reserved_word">int</SPAN> dwTime)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> IsFade(eAudioMix e)</DIV>
+<DIV class="comment_block">/////////////////////////////////////////////////////////////////////<BR>dwTime[ms]後にボリュームのフェードは完了する<BR>フェードアウトを開始させる<BR>フェードインを開始させる<BR>フェード中なのか？<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT FadeOut(eAudioMix e, <SPAN class="reserved_word">int</SPAN> dwTime, <SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="YTL!function_callback_h.html#function_callback" target=_self>function_callback</A>&gt;&amp; fn)</DIV>
+<DIV class="comment_block">fadeout 終了時に、それを通知するためのコールバックを指定できる<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT FadeIn(eAudioMix e, <SPAN class="reserved_word">int</SPAN> dwTime, <SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="YTL!function_callback_h.html#function_callback" target=_self>function_callback</A>&gt;&amp; fn)</DIV>
+<DIV class="comment_block">fadein 終了時に、それを通知するためのコールバックを指定できる<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> StopFade()</DIV>
+<DIV class="comment_block">フェードを停止<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CVolumeFader()</DIV>
+<DIV class="public_member"> virtual ~CVolumeFader()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="Multimedia!yaneAudioMixer_h.html#CAudioMixer" target=_self>CAudioMixer</A> m_AudioMixer</DIV>
+<DIV class="protected_member">CVolumeFadeInfo m_FadeInfo[4]</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> TimerProc()</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> Start()</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> Stop()</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bTimer</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> IsTimer()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> CheckCallBack(eAudioMix e)</DIV>
+<DIV class="protected_member">LRESULT _FadeOut(eAudioMix e, <SPAN class="reserved_word">int</SPAN> dwTime, <SPAN class="reserved_word">bool</SPAN> bCheckCallBack)</DIV>
+<DIV class="protected_member">LRESULT _FadeIn(eAudioMix e, <SPAN class="reserved_word">int</SPAN> dwTime, <SPAN class="reserved_word">bool</SPAN> bCheckCallBack)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CVolumeFadeInfo"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CVolumeFader::CVolumeFadeInfo</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="Timer!yaneTimer_h.html#CTimer" target=_self>CTimer</A> m_Timer</DIV>
+<DIV class="public_member">DWORD m_dwWholeTime</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> m_bFadeIn</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> m_bFadeOut</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> m_bChanged</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="YTL!function_callback_h.html#function_callback" target=_self>function_callback</A>&gt; m_fn</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CVolumeFadeInfo()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

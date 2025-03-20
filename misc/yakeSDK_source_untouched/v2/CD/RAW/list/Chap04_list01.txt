@@ -1,0 +1,15 @@
+class CCOMBase {
+/**
+	COMは、スレッドベースで初期化しなければならない。
+	よって、COMを使う前には、inc_ref関数を呼び出し、
+	COMを使い終わったときには、dec_refを呼び出せば良いクラス
+*/
+public:
+	static LRESULT inc_ref();			// COMの参照カウントの加算
+	static LRESULT dec_ref();			// COMの参照カウントの減算
+
+protected:
+	static ThreadLocal<int> m_nCount;	//	参照カウントを保持している
+	static CCriticalSection m_cr;
+	static CCriticalSection* GetCriticalSection() { return& m_cr; }
+};

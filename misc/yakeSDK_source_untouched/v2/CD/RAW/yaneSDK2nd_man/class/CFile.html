@@ -1,0 +1,183 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CFile</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CFile</FONT><A name="CTimeBase"></A><FONT color="#ff0000"> 【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>ファイルの入出力用のクラスです。</P>
+<P>読み込みは、yanePack形式(ファイル結合による合体)、yanePackEx形式(LZSS法による圧縮)のファイルも対応しています。書き込みは、残念ながら、yanePack/yanePackEx形式のファイルには書き込めません。</P>
+<P>yanePack形式／yanePackEx形式の仕様については後述します。yanePack形式／yanePackEx形式のファイルを作るためには、別途、yanePack／yanePackExを用意してください。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>ファイル名は&quot;c:\&quot;とかのように:が含まれていなければ、起動ディレクトリ(SetCurrentDirで設定されているディレクトリ)相対パスです。</P>
+<P><FONT color="#009999">◎　ストリーム書き込み系</FONT></P>
+<P>LRESULT Open(const string filename,const
+string access);<BR>
+LRESULT Write(const string);<BR>
+LRESULT Close(void);<BR>
+FILE* GetFilePtr(void)const;<BR>
+void SetFilePtr(FILE*fp);</P>
+<P>Openでファイル名を指定し、オープンします。accessはアクセス指定子で、fopenで指定するものと同じです。Writeは、文字列を出力します（それしか有りません）
+Closeは、ファイルを閉じます。何かのときはGetFilePtrでオープンしているファイルのFILE*が得られるので、それを間接で書き込んで行くことは出来ます。逆にユーザー側でOpenしたFILE*をSetFilePtrを設定し、CFileのメンバ関数(と言ってもWriteとCloseぐらいしかありませんが)を使うことも出来ます。</P>
+<P><FONT color="#009999">◎　一括書き込み系</FONT></P>
+<P>LRESULT Write(string filename,LPVOID mem,DWORD
+size);</P>
+<P>一気にファイルに書き込みます。圧縮ファイルには書き出せません。</P>
+<P>LRESULT WriteBack(string filename);</P>
+<P>ReadOpenしたものを書き戻します。圧縮ファイルには書き戻せません。</P>
+<P>LRESULT CreateTemporary(void);</P>
+<P>必要ならばテンポラリファイルを作成し書き出す。（一括読み込み系のオープンが成功していることが前提）<BR>
+この関数が終了後は、CFileはファイルの中身は保有していない。ファイル名だけは持っているので、GetNameでファイル名の取得は可能。<BR>
+テンポラリファイルを作成する条件は、読み込んでいたファイルが圧縮ファイルであること。<BR>
+テンポラリファイルを作成した場合は、GetNameで返ってくるファイル名は、そのファイル名となる。<BR>
+テンポラリファイルは、Closeか、デストラクタで削除される。</P>
+<P>つまり、メモリ上のファイルでは実行できないAPI(例：MCI関連等)に対し、一時ファイルを用意するのに使う。</P>
+<P><FONT color="#009999">◎　データ（BYTE列）の保存／書き込み系</FONT></P>
+<P>// データの保存／読み込み(CSerializeと併用すると良い)<BR>
+LRESULT Load(string filename,vector&lt;BYTE&gt;*vData);<BR>
+LRESULT Save(string filename,vector&lt;BYTE&gt;*vData);</P>
+<P><FONT color="#009999">◎　一括読み込み系</FONT></P>
+<P>読み込みは、yanepack形式、yanepackEx形式に対応させるため、一括読み込みを基本とします。</P>
+<P>LRESULT Read(string filename);　　　　//
+一括読み込み（yanepack対応）<BR>
+const string GetName(void)const; 　　// 読み込んでいるファイル名を返す<BR>
+string GetPureFileName(void); 　　　　//
+パス無しファイル名を取得<BR>
+string GetSuffix(void); 　　　　　　　　　//
+読み込んでいるファイルの拡張子を返す<BR>
+LPVOID GetMemory(void)const; 　　　// 読み込んでいるメモリの先頭アドレスを返す<BR>
+DWORD GetSize(void)const; 　　　　　// 読み込んでいるファイルサイズを返す</P>
+<P>Readでオープンします。オープンした瞬間に、メモリに一括で読み込まれます。Readで読み込んだものを解放するには、Close()を呼び出します。Close()を呼び出すまで、GetMemoryで取得されるファイルの内容が格納されているメモリは有効です。</P>
+<P><FONT color="#009999">◎　一括読み込みしたものを操作する</FONT></P>
+<P> // メモリに読み込んだファイルを一行ずつ読み出すルーチン<BR>
+LRESULT ReadLine(LPSTR buf,DWORD dwSize);
+// バッファはdwSizeバイト用意しといてねん<BR>
+// 返し値 0: 正常終了 1: EOF 2:バッファあふれ
+3:ファイル読み込んでいない</P>
+<P>LRESULT ReadLine(string&amp;s); // こちらは、バッファは自前で用意しなくて良い。<BR>
+// 返し値 0: 正常終了 1:EOF 3:ファイル読み込んでない＾＾；</P>
+<P>void Reset(void); // 上のReadLineでの読み込みポインタを先頭ポインタに戻す
+</P>
+<P>LRESULT ReadLine2(LPSTR buf,DWORD dwSize);
+// バッファはdwSizeバイト用意しといてねん<BR>
+// これは、シナリオファイル(&quot;...&quot;が1メッセージ,終了文字&quot;END&quot;であるファイル)の読み込み用(VisualBasicで文字列をファイルに出力すると、こうなるらしい＾＾)</P>
+<P>LRESULT ReadData(BYTE*p,DWORD size);<BR>
+// バイト単位の読み出し</P>
+<P><FONT color="#009999">◎　対象フォルダ設定系</FONT></P>
+<P>static string GetCurrentDir(void); // 現在、CFileでカレントフォルダとして設定されているフォルダ名を取得<BR>
+static void SetCurrentDir(void);　 // 現在のカレントフォルダを、CFileのカレントフォルダにする<BR>
+static void SetCurrentDir(string dir); //
+指定したパスをCFileのカレントフォルダにする。</P>
+<P>CFileが対象としているのは、CFileのメンバm_szCurrentDirectoryです。これは、GetCurrentDirかSetCurrentDirが呼び出されるまで初期化されません。<FONT color="#ff0000">起動直後のカレントフォルダをCFileの対象フォルダとしたいのであれば、起動直後にCFile::SetCurrentDir(void)を呼び出す必要があります。</FONT>この関数は、現在のカレントフォルダをCFileのカレントフォルダに設定するからです。Windowsは、ダイアログ等を開いてフォルダ移動を行なうと、そこをカレントフォルダに設定してしまいますので、そうなってからGetCurrentDirを呼び出すと、CFileのメンバm_szCurrentDirectoryは、初期化されていないため、その瞬間、現在のカレントフォルダを取得しようとしますが、それは移動した先のフォルダであるため、起動フォルダ相対にはなりません。細かいことですが、気をつけてください。</P>
+<P>static LRESULT GetParentDir(string&amp; filename);
+// 親フォルダを返す</P>
+<P>例）&nbsp;&quot;c:\test1\test2\test3.exe&quot;
+-&gt; &quot;c:\test1\test2\&quot; -&gt; &quot;c:\test1\&quot;
+-&gt; &quot;c:\&quot; -&gt; &quot;c:\&quot;というように、一度呼び出すごとに一つずつ親フォルダになる。ネットワークドライブにも対応している。（以下の表）</P>
+<CENTER>
+<TABLE bgcolor="#ffffff">
+  <TBODY>
+    <TR>
+      <TD>\\ -&gt; \\<BR>
+      \\aaa -&gt; \\aaa\<BR>
+      \\aaa\ -&gt; \\aaa\<BR>
+      \\aaa\bbb -&gt; \\aaa\<BR>
+      \\aaa\bbb\ -&gt; \\aaa\<BR>
+      \\aaa\bbb\ccc -&gt; \\aaa\bbb\<BR>
+      \\aaa\bbb\ccc\ -&gt; \\aaa\bbb\<BR>
+      \\aaa\bbb\ccc\ddd -&gt; \\aaa\bbb\ccc\<BR>
+      \\aaa\bbb\ccc\ddd\ -&gt; \\aaa\bbb\ccc\<BR>
+      \ -&gt; \<BR>
+      C: -&gt; C:\<BR>
+      C:\ -&gt; C:\<BR>
+      C:\aaa -&gt; C:\<BR>
+      C:\aaa\ -&gt; C:\<BR>
+      C:\aaa\bbb -&gt; C:\aaa\<BR>
+      C:\aaa\bbb\ -&gt; C:\aaa\<BR>
+      C:\aaa\bbb\ccc -&gt; C:\aaa\bbb\<BR>
+      C:\aaa\bbb\ccc\ -&gt; C:\aaa\bbb\<BR>
+      C:\aaa\bbb\ccc\ddd -&gt; C:\aaa\bbb\ccc\<BR>
+      C:\aaa\bbb\ccc\ddd\ -&gt; C:\aaa\bbb\ccc\</TD>
+    </TR>
+  </TBODY>
+</TABLE>
+</CENTER>
+<P>static string MakeFullName(const string&amp;
+filename); // CFileのカレントフォルダを補って完全パス付きのファイル名を作る。<BR>
+⇒　このとき、 / （スラッシュ）は、 \ （バックスラッシュ）へ変換するようになっています。（そうしないと、うまく動かないコーデック等が存在するため）　よって、何らかの読み込み関数を自作する場合は、かならず、このMakeFullNameを経由させたほうが無難と言えます。</P>
+<P>static string GetSystemDir(void); // システムディレクトリ取得（終端は'\'）</P>
+<P> // ファイル関連文字列操作系<BR>
+static string GetSuffixOf(const string);
+// ファイル名の拡張子取得<BR>
+static string GetPureFileNameOf(const string);
+// パス付きファイル名のファイル名取得<BR>
+static void ToLower(string &amp;); // 小文字化する</P>
+<P>static LRESULT GetTemporaryFileName(string&amp;
+szFileName);<BR>
+// テンポラリファイルを取得する<BR>
+// この関数を実行した瞬間、ファイルが生成され、そのファイル名が返る</P>
+<P><FONT size="+1" color="#009900">☆　注意点</FONT></P>
+<P>ファイル名は、内部的にMakeFullNameで完全パス付きのファイル名に変換されてから実行されます。MakeFullNameには、CFileのメンバm_szCurrentDirectoryが使われます。（上の対象フォルダ設定系の説明を読むこと）　最初の呼び出し段階で、このメンバ変数が初期化されていない場合は、現在のカレントディレクトリを取得し、それをm_szCurrentDirectoryにします。通常、この仕様で問題ないと思うのですが、ダイアログ等を使う場合はこの限りではありません。注意してください。</P>
+<P>MakeFullNameでは、&quot;../../test.wav&quot;のような駆け上がりパスもサポートしています。Open等の関数でも、最初にこの関数を呼び出してパス補正をするので、このような駆け上がりパスが利用できます。</P>
+<P>（一応、CAppInitializer::Init関数内でSetCurrentDir(void)を呼び出しているので問題ないと思いますが、CFileだけご自分のプログラムに流用されるときなどには気をつけてください）</P>
+<P>また、ファイルを読み込んだときに内部的に確保されるメモリは、<FONT color="#cc0000">テキストファイルを読み込んだときに、最後は'\0'を保証するため、１バイト多めに確保して最後のバイトを'\0'に</FONT>しています。</P>
+<P><FONT size="+1" color="#009900">☆　メモリイメージをCFileに読み込ませる</FONT></P>
+<P>たとえば、ファイル名をもらい、それをCFileでReadで読み込むようなクラスを作るとき、メモリ上に配置されたイメージを指定したい場合などは、それ用の関数も用意しなくてはなりません。このような部分をCFileが少しでも吸収してくれれば良いと思ったので、メモリ上に配置したデータを、以下のようにして「！」で始まり、１６進数の文字列でメモリの先頭アドレスと、そのブロックのサイズをファイル名として指定してやれば、</P>
+<CENTER>
+<TABLE bgcolor="#ffffff">
+  <TBODY>
+    <TR>
+      <TD> LPCSTR lpsz = &quot;これ表示できるかな？&lt;HR&gt;うまくいけば良いのだけど&quot;<BR>
+      &quot;そう簡単でもないか？&lt;HR&gt;いけてるいけてる．．&lt;HR&gt;&quot;;<BR>
+      ::wsprintf(buf,&quot;!%x,%x&quot;,lpsz,strlen(lpsz)+1);</TD>
+    </TR>
+  </TBODY>
+</TABLE>
+</CENTER>
+<P>CFileは、これをファイルと錯覚し、あたかもファイルであるかのように扱うことが出来ます。</P>
+<P><FONT size="+1" color="#009900">☆　ファイルの探索pathを設定する</FONT></P>
+<P>Readメンバでは、ファイルが存在しなかったときに、以下で設定されたpathも探し出すことが出来る。</P>
+<P>// ReadするときのPath設定<BR>
+static void SetPath(smart_ptr&lt;vector&lt;string&gt;
+&gt; aszPathList);<BR>
+// でvListにかかれているパスへもファイルを見に行く。<BR>
+// カレントフォルダからのパスが優先検索経路。<BR>
+// パス名の最後尾には、'\'は不要。<BR>
+static smart_ptr&lt;vector&lt;string&gt;
+&gt; GetPath();</P>
+<HR>
+<P><FONT size="+2">yanePackの仕様</FONT><A name="CTimeBase"></A>(yaneuraoGameSDK1.00でサポートしていた形式／互換のため読み込めます)</P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>yanePackは、複数ファイルを一つにまとめるためのものです。（圧縮はしません）</P>
+<P>CFileの一括読み込み系の関数ならば、yanePack形式であることを意識せずに読み出しが可能です。</P>
+<P>&nbsp;&lt;yanepack用構造体について&gt;<BR>
+// ファイルヘッダー &quot;yanepack&quot;
+8バイト + 格納ファイル数がDWORDできて、<BR>
+// その後、以下のCFileInfoが格納ファイル数だけ来て、あとはデータです。<BR>
+struct&nbsp;CFileInfo {<BR>
+char filename[32];<BR>
+DWORD startpos; // seek pos(ファイル先頭からのオフセット)<BR>
+size_t filesize; 　　// file size（そのファイルのサイズ）<BR>
+};</P>
+<P>ファイルの拡張子はdatにしてください。</P>
+<HR>
+<P><FONT size="+2">yanePackＥｘの仕様</FONT><A name="CTimeBase"></A>(yaneuraoGameSDK2ndでサポートする形式）</P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>yanePackExは、複数ファイルを一つにまとめ、かつ圧縮するためのものです。圧縮にはLZSS法を用います（CLZSSクラスをそのまま利用します）</P>
+<P>&nbsp;&lt;yanepackEx用構造体について&gt;<BR>
+// ファイルヘッダー &quot;yanepkEx&quot;
+8バイト + 格納ファイル数がDWORDできて、<BR>
+// その後、以下のCFileInfoが格納ファイル数だけ来て、あとはデータです。<BR>
+struct&nbsp;CFileInfo {<BR>
+char filename[32];<BR>
+DWORD startpos; // seek pos(ファイル先頭からのオフセット)<BR>
+size_t filesize; 　　// file size（そのファイルの圧縮サイズ）<BR>
+size_t packsize;　 // packsize（そのファイルの展開後のサイズ)<BR>
+// 非圧縮のファイルは、filesize==packsizeとなっています<BR>
+};</P>
+<P>ファイルの拡張子はdatにしてください。</P>
+<HR>
+</BODY></HTML>

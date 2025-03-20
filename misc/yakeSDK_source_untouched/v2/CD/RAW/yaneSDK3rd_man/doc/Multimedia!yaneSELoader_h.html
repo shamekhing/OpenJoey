@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Multimedia/yaneSELoader.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="CSELoader"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CSELoader</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Multimedia!yaneSoundLoader_h.html#CSoundLoader" target=_self>CSoundLoader</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">enum</SPAN>  <BR>{<BR>　　nSELoaderCount = 5<BR>}</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> OnPlay()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> PlayN(<SPAN class="reserved_word">int</SPAN> nNo)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> Play(<SPAN class="reserved_word">int</SPAN> nNo)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> PlayLN(<SPAN class="reserved_word">int</SPAN> nNo)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> PlayL(<SPAN class="reserved_word">int</SPAN> nNo)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> PlayT(<SPAN class="reserved_word">int</SPAN> nNo, <SPAN class="reserved_word">int</SPAN> nTimes, <SPAN class="reserved_word">int</SPAN> nInterval=0)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> Stop(<SPAN class="reserved_word">int</SPAN> nNo)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> Reset()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> IsPlay(<SPAN class="reserved_word">int</SPAN> nNo)</DIV>
+<DIV class="comment_block">毎フレーム呼び出してね<BR>いますぐ再生する(非ループ再生)<BR>鳴っていなければ再生する(非ループ再生)<BR>いますぐ再生する(ループ再生)<BR>鳴っていなければ再生する(ループ再生)<BR>再生回数指定再生<BR>サウンドを止める<BR>サウンドの排他カウンタのリセット<BR>サウンドは再生中なのか？<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">bool</SPAN>* GetCancelFlag()</DIV>
+<DIV class="comment_block">virtual smart_ptr&lt;ISound&gt;	GetSound(int nNo);	///	サウンドの取得<BR>↑これは class CSoundLoader のメンバを使えば良い<BR>再生キャンセルフラグ<BR>(このフラグがtrueならば、すべての再生はキャンセルされる)<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> OnPlayAndReset()</DIV>
+<DIV class="comment_block">現在、再生依頼のあるものを強制的に再生する<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetLockInterval(<SPAN class="reserved_word">int</SPAN> nLockInterval)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">int</SPAN> GetLockInterval()</DIV>
+<DIV class="comment_block">再生インターバルの設定(ディフォルトではnSELoaderCount)<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CSELoader()</DIV>
+<DIV class="public_member"> virtual ~CSELoader()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">vector&lt;int&gt; m_anPlay</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">vector&lt;<A class="class_link" href="Math!yaneCounter_h.html#CRootCounter" target=_self>CRootCounter</A>&gt; m_anInterval</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> InnerCreate(<SPAN class="reserved_word">int</SPAN> nMax)</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> InnerDelete()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bCancel</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nLockInterval</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

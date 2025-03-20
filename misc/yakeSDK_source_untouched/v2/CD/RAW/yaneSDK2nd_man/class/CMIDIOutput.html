@@ -1,0 +1,38 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CMIDIOutput</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CMIDIOutput</FONT><A name="CTimeBase"></A>　<FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>MIDIの再生を行ないます。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>LRESULT Open(LPCTSTR pFileName); // ファイルの読み込み<BR>
+LRESULT Close(void); // ファイルを閉じる</P>
+<P>LRESULT Play(void); 　　// 再生<BR>
+LRESULT Stop(void);　　// 停止<BR>
+LRESULT Pause(void);　 // 一時停止（実はStopと同じ）<BR>
+LRESULT Replay(void);　// 停止していたものを再開<BR>
+bool&nbsp;IsPlay();　　 // 再生中ならばtrue</P>
+
+<P>LRESULT SetLoopMode(bool bLoop)&nbsp; //
+ループモードにする（終了後、先頭に戻って再生する）<BR>
+bool&nbsp;IsLoopPlay();　　 // ループ再生中ならばtrue</P>
+<P>LONG GetCurrentPos(void); // 現在の再生ポジションを取得する。単位は[ms]。エラーのときは-1が返るので注意。</P>
+<P><FONT size="+1" color="#009900">☆　実装について</FONT></P>
+<P>MCIで実装したCMIDIOutputMCIと、DirectMusicで再生するCMIDIOutputDMがあります。いずれも、<A href="CSoundBase.html">CSoundBase</A>という、MIDI ,WAVE出力基底クラスから派生させてあります。また、CSoundBaseから派生させた、CSoundNullDeviceというクラスがあります。（このクラスのメンバ関数は何もしません。すべて正常値を返します）</P>
+<P>CMIDIOutputDMは、DirectMusicを使うので、コンパイルにはDirectX6（以降の）SDKがインストールされていることが必要。また、実行するのにDirectX6以降が動作する環境でなければいけません。<A href="../etc/config.html">yaneConfig.h</A>で、使わないように出来ますので、使いたくない人は使わないようにしてください。<FONT color="#cc0000">ただし、CMIDIOutputは、DirectMusicが使えない実行環境場合、自動的にMCIで再生するようになっています</FONT>ので、ディフォルトで使う設定にしておくことをお勧めします。</P>
+<P>DirectMusicを使う利点は、再生の安定度です。MCIで再生した場合、DirectDrawとの親和性が悪いため、再生がもたることがありますが、DirectMusicではこの点は解消されています。また、CMIDIOutputDMでは、Openで事前にファイルをメモリに読み込んでおくことが出来ます。このため、Playを呼び出してから再生されるまでの時間が短くて済みます。</P>
+<P>CMIDIOutputクラスは、CSoundNullDevice，CMIDIOutputMCI,CMIDIOutputDMの代理母となっています。どのインスタンスを作るかは、コンストラクタ実行中に、どのデバイスがセレクトされているかによって決まります。このセレクトは、</P>
+<P>// 0:NULL device , 2:CMIDIOutputMCI , 3:CMIDIOutputDM<BR>
+static void SelectDevice(int nDevice);</P>
+<P>で行ないます。ディフォルトでは3です。yaneConfig.hでDirectMusicを使わないように設定している場合、ディフォルトは2。また、MCIも使わない設定にしているときはディフォルトで0になります。</P>
+<P>MCIよりはDMの再生のほうが安定しているため、通常、こちらで作ることをお勧めします。また、このSelectDevice関数は、CMIDIOutputのコンストラクタが呼び出される前に呼び出さないと意味がないので注意が必要です。</P>
+<P>また、SelectDeviceで2を選んでいても、CMIDIOutputのコンストラクタ内でMIDIの初期化に失敗した場合は、自動的に0に変更されます。（サウンドカードがついていない場合は、こうなります）</P>
+<P>あと、GetCurrentPosは結果を[ms]単位で返しますが、CMIDIOutputMCIなどは、０．１秒の精度しかありませんので注意してください。</P>
+<P><FONT size="+1" color="#009900">☆　備考</FONT></P>
+<P>DirectMusicが使える環境であるかを実行時に調べるには、bool
+CMIDIOutputDM::CanUseDirectMusic( )を使います。</P>
+<HR>
+</BODY></HTML>

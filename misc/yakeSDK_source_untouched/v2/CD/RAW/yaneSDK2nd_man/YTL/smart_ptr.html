@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>クラスリファレンス</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">template &lt;class T&gt; class smart_ptr</FONT><A name="CTimeBase"></A>　<FONT color="#ff0000">【テンプレート<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>スマートポインタです。auto_ptrの拡張バージョンです。Javaのような安全なメモリ管理が出来るようになります。</P>
+<P>スマートポインタ間でのコピーでは、オブジェクトは安全に共有され、最後のスマートポインタが解放されるときに、オブジェクトは解放されます。</P>
+<P>実際の使用方法については、<A href="http://www.sun-inet.or.jp/~yaneurao/">私のホームページ</A>の天才ゲームプログラマ養成ギプス第１１章も参考にしてください。</P>
+<P><FONT size="+1" color="#009900">☆　使いかた</FONT></P>
+<P><FONT color="#009900">smart_ptr(T *_P = NULL,bool bOwner = false);<BR>
+smart_ptr(const smart_ptr&lt;T&gt;&amp; _Y);</FONT></P>
+<P>コンストラクタです。前者はbOwnerがtrueだと所有権付きオブジェクトを生成します。ディフォルトではfalseです。auto_ptrとはこの部分が違うので注意してください。</P>
+<P>後者のコンストラクタは、他のスマートポインタとオブジェクトを共有するスマートポインタを作成するためのものです。</P>
+<P><FONT color="#009900">smart_ptr&lt;T&gt;&amp; operator=(const smart_ptr&lt;T&gt;&amp;
+_Y);</FONT></P>
+<P>コピーコンストラクタです。オブジェクト共有されます。所有権付きオブジェクトでなければ、こちらも所有権を持ちません。</P>
+<P><FONT color="#009900">smart_ptr&lt;T&gt;&amp; operator=(const T*
+_P);</FONT></P>
+<P>代入オペレータです。これでポインタを代入しても所有権を持ちません。（よって最終的にスマートポインタはオブジェクトを解放しません）　所有権を持たせたいときは、テンポラリオブジェクトとして所有権付きスマートポインタを生成して、それをコピーするか、Addメンバ関数を使います。</P>
+<P><FONT color="#009900">T&amp; operator*() const;<BR>
+T* operator-&gt;() const;</FONT><BR>
+<FONT color="#009900">operator T* () const;</FONT></P>
+<P>普通のポインタのように振舞うためにあります。</P>
+<P><FONT color="#009900">T* get( ) const;</FONT></P>
+<P>生のポインタを得ます。通常は使いません。</P>
+<P><FONT color="#009900">T* release();</FONT></P>
+<P>（通例、明示的なリリースは行なわないが）これはこのオブジェクトを共有するすべてのsmart_ptrから所有権を剥奪し、T*を返します。通常は使いません。</P>
+<P><FONT color="#009900">void Delete();</FONT></P>
+<P>&nbsp;（通例、明示的な解放は行なわないが）、こちらは、自分の所有権のみを解放します。自分しか所有権を持っているオブジェクトが無ければ、オブジェクトのdeleteも行ないます。このスマートポインタのデストラクタでもDeleteを呼び出します。</P>
+<P> // 所有権を持ったインスタンスの追加生成構文<BR>
+<FONT color="#009900">void Add();<BR>
+void Add(T*_P);</FONT> // ポリモーフィックな型でも可</P>
+<P>所有権付きオブジェクトを生成します。オブジェクトの生成にコンストラクタが必要な場合はnewで生成し、後者の関数でそれを渡すと、所有権付きオブジェクトになります。</P>
+<P><FONT color="#009900">bool IsOwner() const;</FONT></P>
+<P>オーナーであるかを返す関数。ただし、構造上、あとからオーナー権を設定することは出来ない。</P>
+<P>// smart_ptr間の比較構文(実際に指しているオブジェクトを比較する)<BR>
+<FONT color="#009900">bool operator==(const smart_ptr&lt;T&gt;&amp;
+_X) const<BR>
+bool operator!=(const smart_ptr&lt;T&gt;&amp;
+_X) const<BR>
+bool operator&lt;(const smart_ptr&lt;T&gt;&amp;
+_X) const<BR>
+bool operator&gt;(const smart_ptr&lt;T&gt;&amp;
+_X) const<BR>
+bool operator&lt;=(const smart_ptr&lt;T&gt;&amp;
+_X) const<BR>
+bool operator&gt;=(const smart_ptr&lt;T&gt;&amp;
+_X) const</FONT></P>
+<P>保持しているオブジェクトのポインタの比較になります。これにより、たとえば
+== では２つのsmart_ptrが同一のオブジェクトを示しているのかが判定できます。(
+Javaの==も、こうなっている）</P>
+<P><FONT size="+1" color="#009900">☆　備考</FONT></P>
+<P>このテンプレートは、class smart_objから派生させています。これは、JavaのObjectクラスに相当します。よって、あらゆるスマートポインタ（で管理されているオブジェクト）はsmart_objにアップキャストすることが出来ます。これにより、あらゆるオブジェクトを一元管理することが出来ます。</P>
+<HR>
+</BODY></HTML>

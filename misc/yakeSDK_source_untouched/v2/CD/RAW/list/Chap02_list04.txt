@@ -1,0 +1,43 @@
+#ifdef USE_MEMORY_STATE	//	メモリのデバッグクラスを利用するか
+
+CMemoryState* CMemoryState::g_lpMemoryState = NULL;
+
+void* operator new (size_t t){
+	static bool bRecursive = false;
+	// この関数内のset::insertで再帰的に呼び出されるのをガードする
+	
+	LPVOID p = (LPVOID)::malloc(t);
+	if (bRecursive) return p;
+	//	再帰的に呼び出されているならば、このまま帰る
+
+	if (CMemoryState::g_lpMemoryState!=NULL) {
+		bRecursive = true;
+		CMemoryState::g_lpMemoryState->m_alpMemory.insert(pair<LPVOID,size_t>(p,t));
+		bRecursive = false;
+	}
+	return p;
+}
+
+void operator delete(void*p){
+	::free(p);
+	if (CMemoryState::g_lpMemoryState!=NULL) {
+		CMemoryState::g_lpMemoryState->m_alpMemory.erase(p);
+	}
+	//	↑これに失敗するようなら、それはnewしていないメモリのdeleteなのだが、
+	//	そのようなバグは稀なので気にしないことにする
+}
+
+LRESULT	CMemoryState::Dump(ITextOutputStream*pDump) {
+	map<LPVOID,size_t>::iterator it;
+	it = this->m_alpMemory.begin();
+
+	LRESULT lr = 0;
+	pDump->Clear();
+	while (it != this->m_alpMemory.end()) {
+		pDump->Out("解放されていないメモリを発見 00000000 (1240860 bytes)\n",(LONG)(it->first),it->second);
+		it++; lr ++;
+	}
+	return lr;
+}
+
+#endif

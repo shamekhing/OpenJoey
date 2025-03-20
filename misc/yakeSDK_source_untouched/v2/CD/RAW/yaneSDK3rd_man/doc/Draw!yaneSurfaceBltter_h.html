@@ -1,0 +1,33 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Draw/yaneSurfaceBltter.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="CSurfaceBltter"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CSurfaceBltter</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">CSurfaceInfoのGeneralBltの転送の実装のためのヘルパ関数<BR><BR>	Blt1 : ほぼすべてのサーフェース間での転送をサポートする<BR>			WORD型のサーフェース(RGB565等)に対しては<BR>			CFastPlaneEffect::BltDoubleを呼び出す。<BR>			※　CFastPlaneCopySrcで使用。<BR>	Blt2 : Blt1の縮退版<BR>			サポート：<BR>			同じサーフェース間<BR>			非αサーフェース⇒αサーフェース<BR>			αサーフェース⇒非αサーフェース<BR>	Blt3 : Blt2の縮退版<BR>			サポート：<BR>			同じサーフェース間<BR>			αサーフェース⇒非αサーフェース<BR>			※　CFastPlaneCopyMulAlphaで使用<BR><BR>	Effect1（未実装） : サーフェースに対して、エフェクトをかける<BR><BR><BR>	＜マクロ＞<BR>		※　Fnは、DWORD dwで与えられた抜き色情報等が代入される<BR>	CSurfaceBltter_BltHelper1 : 未実装（面倒なので）<BR>	CSurfaceBltter_BltHelper2 : Blt2コンパチ<BR>			※	CFastPlaneCopySrcColorKeyで使用。<BR>	CSurfaceBltter_EffectHelper1 : Effect1とコンパチ<BR>			※	CFastPlaneFillColorで使用。<BR><BR>		例：FnがCFastPlaneCopySrcColorKeyDoubleならば<BR>		Fn ← CFastPlaneCopySrcColorKeyDouble&lt;CFastPlaneRGB565565&gt; rgb(dword);<BR>		とバインドして、Blt2を呼び出すなど。<BR><BR>		C++のテンプレート機構では、<BR>			F&lt;T&gt; というような関数のF&lt;T&gt;ではなくFだけを引数として渡すことが出来ない。<BR>			そこで、マクロが必要になる。<BR><BR>		BltHelper系は、マクロとして実装されているので呼び出し箇所にて<BR>		インライン展開されるので、その点に注意すること。<BR><BR><BR>	ToDo:やっとyaneSDK2ndのyaneFastPlane1,2の実装終了。<BR>		残りは、3,4,5..<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> Fn</SPAN>&gt;<BR><SPAN class="reserved_word">static</SPAN> LRESULT Blt1(<A class="class_link" href="Draw!yaneSurface_h.html#CSurfaceInfo" target=_self>CSurfaceInfo</A>* pSrc, <A class="class_link" href="Draw!yaneSurface_h.html#CSurfaceInfo" target=_self>CSurfaceInfo</A>* pDst, <A class="class_link" href="Draw!yaneSurface_h.html#CBltInfo" target=_self>CSurfaceInfo::CBltInfo</A> * pInfo, Fn fn)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> Fn</SPAN>&gt;<BR><SPAN class="reserved_word">static</SPAN> LRESULT Blt2(<A class="class_link" href="Draw!yaneSurface_h.html#CSurfaceInfo" target=_self>CSurfaceInfo</A>* pSrc, <A class="class_link" href="Draw!yaneSurface_h.html#CSurfaceInfo" target=_self>CSurfaceInfo</A>* pDst, <A class="class_link" href="Draw!yaneSurface_h.html#CBltInfo" target=_self>CSurfaceInfo::CBltInfo</A> * pInfo, Fn fn)</DIV>
+<DIV class="comment_block">//////////////////////////////////////////////////////////////////////////<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">#define CSurfaceBltter_BltHelper2()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">#define CSurfaceBltter_EffectHelper1()</DIV>
+<DIV class="comment_block">この関数の引数はBlt2とコンパチ<BR>	ただし、fnは、dwを食わせてから実体化<BR><BR>		CSurfaceInfo* pDst	:	エフェクトを施す対象<BR>		RECT*		lpRect	:	エフェクトを施す範囲<BR>		template&lt;FN&gt;	Fn	:	エフェクター<BR>		DWORD			dw	:	エフェクターのためのパラメータ<BR><BR></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

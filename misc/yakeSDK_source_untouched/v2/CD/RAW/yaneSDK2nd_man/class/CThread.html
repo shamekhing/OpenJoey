@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CThread</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CThread</FONT></P>
+
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>　スレッドを生成するときの補助として使います。同期オブジェクトを用いているので、結構レスポンスが良い．．かも知れません（笑）</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>virtual void ThreadProc(void) = 0;</P>
+<P>　ワーカースレッドとしてこの関数をオーバーライドします。</P>
+<P>LRESULT CreateThread(void);　// スレッドの生成<BR>
+LRESULT StopThread(void);　　 // スレッドの停止</P>
+<P>　CreateThreadでスレッドを生成すると、ワーカースレッドが発生し、ThreadProcを実行しはじめます。</P>
+<P>　ワーカースレッドの内部では、</P>
+<P>bool IsThreadValid(void)const;</P>
+<P>　この関数がfalseになったときに、ThreadProcから脱出するようにコーディングします。　</P>
+<P>bool IsThreadExecute(void)const;</P>
+<P>　ワーカースレッドが実行中であるかは、この関数で取得できます。</P>
+<P>void InvalidateThread(void);</P>
+<P>　ワーカースレッドをInvalidにします。ワーカースレッドは次にIsThreadValidをチェックしたときにfalseが返ってきますので、そのときにThreadProcから抜け出るでしょう。※　後述のThreadSleepしたときに非０が返るので、そこで抜けるコードを書いても良いです</P>
+<P>LRESULT JumpToThread(void); // スレッドを作らずにジャンプ</P>
+<P>　スレッドをValidにして（m_bValid==true）、ThreadProcの実行を開始します。（CreateThreadと違って新たなスレッドは作りません）<BR>
+　IsThreadExecuteは有効です。新たのスレッドを作らないCreateThreadだと考えてください。</P>
+<P>virtual LRESULT ThreadSleep(int nTime);<BR>
+　Threadが生きていることを示す同期オブジェクトを待ちます。nTime
+[ms]待ちます。待っている最中に、同期オブジェクトがシグナル状態&nbsp;（スレッドを終了させなさい、という状態）になれば、非0が返ります。さもなくば、0が返ります。</P>
+<P>　通例、ワーカースレッドは、</P>
+<CENTER>
+<TABLE bgcolor="#ffffff">
+  <TBODY>
+    <TR>
+      <TD>　　while ( IsThread( ) ) {<BR>
+      　　　処理 ;<BR>
+      　　　Sleep( 20 );<BR>
+      　　}</TD>
+    </TR>
+  </TBODY>
+</TABLE>
+</CENTER>
+<P>　というようなコーディングによって、何かの処理を行なう処理を書きますが、このときにSleep(20)があるため、スレッドがInvalidateされて（終了の合図）から、この分だけレスポンスが低下します。そこで、ここをSleepではなく、if
+(ThreadSleep( 20 )) break; などとすれば、この分のレスポンスを向上させることが出来ます。ThreadSleepの実装は、同期オブジェクトを待つ(::WaitForSingleObject)ようになっているので、この部分においてCPUパワーを、あまり使用せず、効率的にSleepすることが出来ます。</P>
+<HR>
+</BODY></HTML>

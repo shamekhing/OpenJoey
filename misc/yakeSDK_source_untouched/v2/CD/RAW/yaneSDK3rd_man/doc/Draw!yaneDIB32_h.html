@@ -1,0 +1,532 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Draw/yaneDIB32.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="CDIB32Base"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CDIB32Base</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="private_member">friend classCDIB32P5</DIV>
+<DIV class="private_member">friend classCDIB32PMMX</DIV>
+<DIV class="private_member">friend classCDIB32P6</DIV>
+<DIV class="private_member">friend classCDIB32Effect</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Load(string szBitmapFileName, <SPAN class="reserved_word">bool</SPAN> bLoadPalette=false)</DIV>
+<DIV class="comment_block">/////////////////////////////////////////////////////<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT Save(string BitmapFileName, LPRECT lpRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">#ifdef USE_YGALRESULTSaveYGA(string YGAFileName, LPRECT lpRect=NULL, <SPAN class="reserved_word">bool</SPAN> bCompress=true)</DIV>
+<DIV class="public_member">#endif LRESULTCreateSurface(<SPAN class="reserved_word">int</SPAN> nSizeX, <SPAN class="reserved_word">int</SPAN> nSizeY)</DIV>
+<DIV class="public_member">LRESULT Resize(<SPAN class="reserved_word">int</SPAN> nSizeX, <SPAN class="reserved_word">int</SPAN> nSizeY)</DIV>
+<DIV class="public_member">LRESULT Release()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> IsLoad()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> UseDIBSection(<SPAN class="reserved_word">bool</SPAN> bUseDIB)</DIV>
+<DIV class="comment_block">/////////////////////////////////////////////////////<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">HDC GetDC()</DIV>
+<DIV class="public_member">HBITMAP GetHBITMAP()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">#ifdef USE_DirectDrawLRESULTBltToPlane(CPlane*lpDstPlane,<SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member">LRESULT BltFromPlane(CPlane*lpSrcPlane,<SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member">#endif LRESULTSetColorKey(DWORD dwDIB32RGB)</DIV>
+<DIV class="public_member">LRESULT SetColorKey(<SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y)</DIV>
+<DIV class="public_member">LRESULT SetColorKey(<SPAN class="reserved_word">int</SPAN> r, <SPAN class="reserved_word">int</SPAN> g, <SPAN class="reserved_word">int</SPAN> b)</DIV>
+<DIV class="public_member">DWORD GetColorKey()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Blt(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltFast(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBltHalf(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBltFastHalf(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBlt(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, DWORD dwDstRGBRate, DWORD dwSrcRGBRate, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBltFast(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, DWORD dwDstRGBRate, DWORD dwSrcRGBRate, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT AddColorBlt(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT AddColorBltFast(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SubColorBlt(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SubColorBltFast(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltClearAlpha(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltFastClearAlpha(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBltFastAlpha(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBltFastAlpha(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, DWORD dwDstRGBRate, DWORD dwSrcRGBRate, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltWithoutAlpha(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltFastWithoutAlpha(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltFastM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBltHalfM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBltFastHalfM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBltM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, DWORD dwDstRGBRate, DWORD dwSrcRGBRate, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBltFastM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, DWORD dwDstRGBRate, DWORD dwSrcRGBRate, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT AddColorBltM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT AddColorBltFastM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SubColorBltM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SubColorBltFastM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltClearAlphaM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltFastClearAlphaM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBltFastAlphaM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBltFastAlphaM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, DWORD dwDstRGBRate, DWORD dwSrcRGBRate, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltWithoutAlphaM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltFastWithoutAlphaM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltNatural(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltNatural(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, <SPAN class="reserved_word">int</SPAN> nFade, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsYGA()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN>* GetYGA()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltToAlpha(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpSrc, <SPAN class="reserved_word">int</SPAN> nSrcMin, <SPAN class="reserved_word">int</SPAN> nSrcMax, <SPAN class="reserved_word">int</SPAN> nDstMin=0, <SPAN class="reserved_word">int</SPAN> nDstMax=255, LPRECT lpRECT=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT FadeBltAlpha(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpSrc, <SPAN class="reserved_word">int</SPAN> nFadeRate, LPRECT lpRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT MorphBlt(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIB32, LPPOINT lpSrcPoint, LPRECT lpDstRect, LPRECT lpClip=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT MorphBlt(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIB32, LPRECT lpSrcRect, LPPOINT lpDstPoint, LPRECT lpClip=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT MorphBlt(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIB32, LPPOINT lpSrcPoint, LPPOINT lpDstPoint, LPRECT lpClip=NULL, <SPAN class="reserved_word">bool</SPAN> bContinual=false)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT MorphBltFast(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIB32, LPPOINT lpSrcPoint, LPRECT lpDstRect, LPRECT lpClip=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT MorphBltFast(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIB32, LPRECT lpSrcRect, LPPOINT lpDstPoint, LPRECT lpClip=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT MorphBltFast(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIB32, LPPOINT lpSrcPoint, LPPOINT lpDstPoint, LPRECT lpClip=NULL, <SPAN class="reserved_word">bool</SPAN> bContinual=false)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT RotateBlt(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIB32, LPRECT lpSrcRect, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, <SPAN class="reserved_word">int</SPAN> nAngle, <SPAN class="reserved_word">int</SPAN> nRate, <SPAN class="reserved_word">int</SPAN> nType=0, LPRECT lpClip=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT RotateBltFast(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIB32, LPRECT lpSrcRect, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, <SPAN class="reserved_word">int</SPAN> nAngle, <SPAN class="reserved_word">int</SPAN> nRate, <SPAN class="reserved_word">int</SPAN> nType=0, LPRECT lpClip=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT AddColorFast(DWORD dwAddRGB, LPRECT lpSrcRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SubColorFast(DWORD dwSubRGB, LPRECT lpSrcRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT ShadeOff(LPRECT lpSrcRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT MosaicEffect(<SPAN class="reserved_word">int</SPAN> d, LPRECT lpRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT FlushEffect(LPRECT lpRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT FadeEffect(<SPAN class="reserved_word">int</SPAN> nFade, LPRECT lpRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT FadeAlpha(<SPAN class="reserved_word">int</SPAN> nFade, LPRECT lpRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT FlushAlpha(LPRECT lpRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">DWORD GetPixel(<SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetPixel(<SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, DWORD dwDIB32RGB)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">int</SPAN> GetPixelAlpha(<SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> GetSize(<SPAN class="reserved_word">int</SPAN>&amp; sx, <SPAN class="reserved_word">int</SPAN>&amp; sy)</DIV>
+<DIV class="public_member">LPRECT GetRect()</DIV>
+<DIV class="public_member">DWORD* GetPtr()</DIV>
+<DIV class="public_member">RECT GetClipRect(LPRECT lpRect)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT Clear(DWORD dwDIB32RGB=CLR_INVALID, LPRECT lpRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetFillColor(DWORD dwDIB32RGB)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="Draw!yaneSurface_h.html#CSurfaceInfo" target=_self>CSurfaceInfo</A>* GetSurfaceInfo()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CDIB32Base()</DIV>
+<DIV class="public_member"> virtual ~CDIB32Base()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">LRESULT InnerCreateSurface(<SPAN class="reserved_word">int</SPAN> nSizeX, <SPAN class="reserved_word">int</SPAN> nSizeY)</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> ClearMSByte()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">#ifdef USE_YGALRESULTInnerLoadYGA(string BitmapFileName)</DIV>
+<DIV class="protected_member">#endif BYTE*m_lpdwSrcOrg</DIV>
+<DIV class="protected_member">DWORD* m_lpdwSrc</DIV>
+<DIV class="protected_member">RECT m_rcRect</DIV>
+<DIV class="protected_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;DWORD*&gt; m_lpdwLineStart</DIV>
+<DIV class="protected_member">LONG m_lPitch</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="Draw!yaneSurface_h.html#CSurfaceInfo" target=_self>CSurfaceInfo</A> m_vFastPlaneInfo</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">DWORD m_dwColorKey</DIV>
+<DIV class="protected_member">DWORD m_dwFillColor</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">LRESULT InnerLoad(string BitmapFileName)</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bUseDIBSection</DIV>
+<DIV class="protected_member">HBITMAP m_hBitmap</DIV>
+<DIV class="protected_member">HDC m_hDC</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bLoadBitmap</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">LRESULT TestClipping(LPRECT lpRectDstDIB, LPRECT lpRectSrcDIB, LPRECT lpRectSrc, LPPOINT lpDstPoint, LPRECT lpClip=NULL)</DIV>
+<DIV class="comment_block">////////////////////////////////////////////<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">LRESULT Clipping(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect, LPSIZE lpDstSize, LPRECT lpClipRect)</DIV>
+<DIV class="protected_member">LRESULT ClippingM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect, LPSIZE lpDstSize, LPRECT lpClipRect)</DIV>
+<DIV class="comment_block">////////////////////////////////////////////////////////////////////////<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">RECT m_rcSrcRect</DIV>
+<DIV class="protected_member">RECT m_rcDstRect</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bMirror</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bActualSize</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nInitialX</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nStepX</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nCmpX</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nStepsX</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nInitialY</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nStepY</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nCmpY</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nStepsY</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bSrcClip</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bYGA</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">#ifdef USE_YGAstructSYPGHeader{DWORDdwIdentifier</DIV>
+<DIV class="protected_member">DWORD dwSizeX</DIV>
+<DIV class="protected_member">DWORD dwSizeY</DIV>
+<DIV class="protected_member">DWORD bCompress</DIV>
+<DIV class="protected_member">DWORD dwOriginalSize</DIV>
+<DIV class="protected_member">DWORD dwCompressSize</DIV>
+<DIV class="protected_member"> SYPGHeader()</DIV>
+<DIV class="protected_member">#endif }</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CDIB32P5"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CDIB32P5</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32Base" target=_self>CDIB32Base</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Blt(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltFast(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBltHalf(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBltFastHalf(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBlt(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, DWORD dwDstRGBRate, DWORD dwSrcRGBRate, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBltFast(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, DWORD dwDstRGBRate, DWORD dwSrcRGBRate, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT AddColorBlt(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT AddColorBltFast(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SubColorBlt(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SubColorBltFast(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT AddColorFast(DWORD dwAddRGB, LPRECT lpSrcRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SubColorFast(DWORD dwSubRGB, LPRECT lpSrcRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT ShadeOff(LPRECT lpSrcRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT MosaicEffect(<SPAN class="reserved_word">int</SPAN> d, LPRECT lpRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT FlushEffect(LPRECT lpRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT FadeEffect(<SPAN class="reserved_word">int</SPAN> nFade, LPRECT lpRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT FadeAlpha(<SPAN class="reserved_word">int</SPAN> nFade, LPRECT lpRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT FlushAlpha(LPRECT lpRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltClearAlpha(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltFastClearAlpha(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBltFastAlpha(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBltFastAlpha(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, DWORD dwDstRGBRate, DWORD dwSrcRGBRate, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltWithoutAlpha(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltFastWithoutAlpha(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltFastM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBltHalfM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBltFastHalfM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBltM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, DWORD dwDstRGBRate, DWORD dwSrcRGBRate, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBltFastM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, DWORD dwDstRGBRate, DWORD dwSrcRGBRate, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT AddColorBltM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT AddColorBltFastM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SubColorBltM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SubColorBltFastM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltClearAlphaM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltFastClearAlphaM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBltFastAlphaM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBltFastAlphaM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, DWORD dwDstRGBRate, DWORD dwSrcRGBRate, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltWithoutAlphaM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltFastWithoutAlphaM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltToAlpha(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpSrc, <SPAN class="reserved_word">int</SPAN> nSrcMin, <SPAN class="reserved_word">int</SPAN> nSrcMax, <SPAN class="reserved_word">int</SPAN> nDstMin=0, <SPAN class="reserved_word">int</SPAN> nDstMax=255, LPRECT lpRECT=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT FadeBltAlpha(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpSrc, <SPAN class="reserved_word">int</SPAN> nFadeRate, LPRECT lpRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT MorphBlt(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIB32, LPPOINT lpSrcPoint, LPRECT lpDstRect, LPRECT lpClip=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT MorphBlt(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIB32, LPRECT lpSrcRect, LPPOINT lpDstPoint, LPRECT lpClip=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT MorphBlt(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIB32, LPPOINT lpSrcPoint, LPPOINT lpDstPoint, LPRECT lpClip=NULL, <SPAN class="reserved_word">bool</SPAN> bContinual=false)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT MorphBltFast(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIB32, LPPOINT lpSrcPoint, LPRECT lpDstRect, LPRECT lpClip=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT MorphBltFast(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIB32, LPRECT lpSrcRect, LPPOINT lpDstPoint, LPRECT lpClip=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT MorphBltFast(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIB32, LPPOINT lpSrcPoint, LPPOINT lpDstPoint, LPRECT lpClip=NULL, <SPAN class="reserved_word">bool</SPAN> bContinual=false)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT RotateBlt(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIB32, LPRECT lpSrcRect, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, <SPAN class="reserved_word">int</SPAN> nAngle, <SPAN class="reserved_word">int</SPAN> nRate, <SPAN class="reserved_word">int</SPAN> nType=0, LPRECT lpClip=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT RotateBltFast(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIB32, LPRECT lpSrcRect, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, <SPAN class="reserved_word">int</SPAN> nAngle, <SPAN class="reserved_word">int</SPAN> nRate, <SPAN class="reserved_word">int</SPAN> nType=0, LPRECT lpClip=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CDIB32PMMX"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CDIB32PMMX</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32P5" target=_self>CDIB32P5</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Blt(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltFast(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBltHalf(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBltFastHalf(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBlt(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, DWORD dwDstRGBRate, DWORD dwSrcRGBRate, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBltFast(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, DWORD dwDstRGBRate, DWORD dwSrcRGBRate, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT AddColorBlt(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT AddColorBltFast(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SubColorBlt(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SubColorBltFast(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT AddColorFast(DWORD dwAddRGB, LPRECT lpSrcRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SubColorFast(DWORD dwSubRGB, LPRECT lpSrcRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltClearAlpha(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltFastClearAlpha(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBltFastAlpha(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBltFastAlpha(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, DWORD dwDstRGBRate, DWORD dwSrcRGBRate, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltWithoutAlpha(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltFastWithoutAlpha(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltFastM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBltHalfM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBltFastHalfM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBltM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, DWORD dwDstRGBRate, DWORD dwSrcRGBRate, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBltFastM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, DWORD dwDstRGBRate, DWORD dwSrcRGBRate, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT AddColorBltM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT AddColorBltFastM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SubColorBltM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SubColorBltFastM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltClearAlphaM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltFastClearAlphaM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBltFastAlphaM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BlendBltFastAlphaM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, DWORD dwDstRGBRate, DWORD dwSrcRGBRate, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltWithoutAlphaM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltFastWithoutAlphaM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CDIB32P6"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CDIB32P6</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32PMMX" target=_self>CDIB32PMMX</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block">なし</DIV>
+<HR><BR>
+<A name="CDIB32"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CDIB32</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Load(string BitmapFileName, <SPAN class="reserved_word">bool</SPAN> bLoadPalette=false)</DIV>
+<DIV class="public_member">LRESULT Save(string BitmapFileName, LPRECT lpRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">#ifdef USE_YGALRESULTSaveYGA(string BitmapFileName, LPRECT lpRect=NULL, <SPAN class="reserved_word">bool</SPAN> bCompress=true)</DIV>
+<DIV class="public_member">#endif<SPAN class="reserved_word">virtual</SPAN> LRESULT CreateSurface(<SPAN class="reserved_word">int</SPAN> nSizeX, <SPAN class="reserved_word">int</SPAN> nSizeY, <SPAN class="reserved_word">bool</SPAN> bYGA=false)</DIV>
+<DIV class="public_member">LRESULT Resize(<SPAN class="reserved_word">int</SPAN> nSizeX, <SPAN class="reserved_word">int</SPAN> nSizeY)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Release()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> IsLoad()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsLoaded()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT SetColorKey(DWORD dwDIB32RGB)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetColorKey(<SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetColorKey(<SPAN class="reserved_word">int</SPAN> r, <SPAN class="reserved_word">int</SPAN> g, <SPAN class="reserved_word">int</SPAN> b)</DIV>
+<DIV class="public_member">DWORD GetColorKey()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> UseDIBSection(<SPAN class="reserved_word">bool</SPAN> bUseDIB)</DIV>
+<DIV class="comment_block">/////////////////////////////////////////////////////<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">HDC GetDC()</DIV>
+<DIV class="public_member">HBITMAP GetHBITMAP()</DIV>
+<DIV class="public_member">LRESULT ReleaseDC()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">#ifdef USE_DirectDrawLRESULTBltToPlane(CPlane*lpSrcPlane,<SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member">LRESULT BltFromPlane(CPlane*lpSrcPlane,<SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member">#endif LRESULTBlt(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT BltFast(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT BlendBltHalf(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT BlendBltFastHalf(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT BlendBlt(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, DWORD dwDstRGBRate, DWORD dwSrcRGBRate, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT BlendBltFast(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, DWORD dwDstRGBRate, DWORD dwSrcRGBRate, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT AddColorBlt(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT AddColorBltFast(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT SubColorBlt(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT SubColorBltFast(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT BltClearAlpha(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member">LRESULT BltFastClearAlpha(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member">LRESULT BltWithoutAlpha(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT BltFastWithoutAlpha(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT BltM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT BltFastM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT BlendBltHalfM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT BlendBltFastHalfM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT BlendBltM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, DWORD dwDstRGBRate, DWORD dwSrcRGBRate, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT BlendBltFastM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, DWORD dwDstRGBRate, DWORD dwSrcRGBRate, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT AddColorBltM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT AddColorBltFastM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT SubColorBltM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT SubColorBltFastM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT BltClearAlphaM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member">LRESULT BltFastClearAlphaM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member">LRESULT BlendBltFastAlphaM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="public_member">LRESULT BltWithoutAlphaM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT BltFastWithoutAlphaM(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIBSrc32, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT BltToAlpha(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpSrc, <SPAN class="reserved_word">int</SPAN> nSrcMin, <SPAN class="reserved_word">int</SPAN> nSrcMax, <SPAN class="reserved_word">int</SPAN> nDstMin=0, <SPAN class="reserved_word">int</SPAN> nDstMax=255, LPRECT lpRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT FadeAlpha(<SPAN class="reserved_word">int</SPAN> nFade, LPRECT lpRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT FadeBltAlpha(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpSrc, <SPAN class="reserved_word">int</SPAN> nFade, LPRECT lpRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT MorphBlt(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIB32, LPPOINT lpSrcPoint, LPRECT lpDstRect, LPRECT lpClip=NULL)</DIV>
+<DIV class="public_member">LRESULT MorphBlt(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIB32, LPRECT lpSrcRect, LPPOINT lpDstPoint, LPRECT lpClip=NULL)</DIV>
+<DIV class="public_member">LRESULT MorphBlt(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIB32, LPPOINT lpSrcPoint, LPPOINT lpDstPoint, LPRECT lpClip=NULL, <SPAN class="reserved_word">bool</SPAN> bContinual=false)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT MorphBltFast(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIB32, LPPOINT lpSrcPoint, LPRECT lpDstRect, LPRECT lpClip=NULL)</DIV>
+<DIV class="public_member">LRESULT MorphBltFast(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIB32, LPRECT lpSrcRect, LPPOINT lpDstPoint, LPRECT lpClip=NULL)</DIV>
+<DIV class="public_member">LRESULT MorphBltFast(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIB32, LPPOINT lpSrcPoint, LPPOINT lpDstPoint, LPRECT lpClip=NULL, <SPAN class="reserved_word">bool</SPAN> bContinual=false)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT RotateBlt(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIB32, LPRECT lpSrcRect, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, <SPAN class="reserved_word">int</SPAN> nAngle, <SPAN class="reserved_word">int</SPAN> nRate, <SPAN class="reserved_word">int</SPAN> nType=0, LPRECT lpClip=NULL)</DIV>
+<DIV class="public_member">LRESULT RotateBltFast(<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32" target=_self>CDIB32</A>* lpDIB32, LPRECT lpSrcRect, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, <SPAN class="reserved_word">int</SPAN> nAngle, <SPAN class="reserved_word">int</SPAN> nRate, <SPAN class="reserved_word">int</SPAN> nType=0, LPRECT lpClip=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT AddColorFast(DWORD dwAddRGB, LPRECT lpSrcRect=NULL)</DIV>
+<DIV class="public_member">LRESULT SubColorFast(DWORD dwSubRGB, LPRECT lpSrcRect=NULL)</DIV>
+<DIV class="public_member">LRESULT ShadeOff(LPRECT lpSrcRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT MosaicEffect(<SPAN class="reserved_word">int</SPAN> d, LPRECT lpRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT FlushEffect(LPRECT lpRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT FadeEffect(<SPAN class="reserved_word">int</SPAN> nFade, LPRECT lpRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT FlushAlpha(LPRECT lpRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">DWORD GetPixel(<SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetPixel(<SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, DWORD dwDIB32RGB)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> GetSize(<SPAN class="reserved_word">int</SPAN>&amp; sx, <SPAN class="reserved_word">int</SPAN>&amp; sy)</DIV>
+<DIV class="public_member">LPRECT GetRect()</DIV>
+<DIV class="public_member">DWORD* GetPtr()</DIV>
+<DIV class="public_member">RECT GetClipRect(LPRECT lpRect)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT Clear(DWORD dwDIB32RGB=CLR_INVALID, LPRECT lpRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetFillColor(DWORD dwDIB32RGB)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> IsYGA()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">bool</SPAN>* GetYGA()</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneSurface_h.html#CSurfaceInfo" target=_self>CSurfaceInfo</A>* GetSurfaceInfo()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CDIB32()</DIV>
+<DIV class="public_member"> virtual ~CDIB32()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32Base" target=_self>CDIB32Base</A>* GetDIB32BasePtr()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Draw!yaneDIB32_h.html#CDIB32Base" target=_self>CDIB32Base</A>&gt; m_lpDIB</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT ClearRect(LPRECT lpRect=NULL)</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">int</SPAN> GetPixelAlpha(<SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

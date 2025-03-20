@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Auxiliary/yaneIMEWrapper.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="IIMEWrapper"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">IIMEWrapper</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Show()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Hide()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"> virtual ~IIMEWrapper()</DIV>
+<DIV class="comment_block">IMEの表示<BR>IMEの非表示<BR></DIV>
+</DIV>
+<HR><BR>
+<A name="CIMEWrapper"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CIMEWrapper</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">IMEの表示・非表示を制御します。<BR>	Showを連続で呼び出しても、<BR>	一度Hideを呼び出せばIMEは消えます。<BR>	（参照カウントは取っていません）<BR><BR>		CIMEWrapper::GetObj()-&gt;Show();<BR>		CIMEWrapper::GetObj()-&gt;Hide();<BR>	のようにして使います。<BR><BR>	注意：<BR>	ウィンドゥクラス側で、フルスクリーンモードになったときには、<BR>	自動的にオフになるようにしています。<BR>	これは、DirectDrawが、IME(やGDI)を無視して転送してしまうためです。<BR><BR>	一応、Clipperを仕掛けておけばそこは回避できるのですが、<BR>	フルスクリーン時にFlipを行なう設定だと、IMEはちらつきますし、<BR>	ゲーム中にIMEを使うことは無いだろうということで、こういう仕様にします。<BR>	もし気に入らない場合はその２点に気をつけながら変更するようにしてください。<BR><BR>	また、IMEの表示・非表示はWindowと関連して行なわれるため、<BR>	Windowを作る前にHideしても意味がないので注意してください。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Auxiliary!yaneIMEWrapper_h.html#IIMEWrapper" target=_self>IIMEWrapper</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Show()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Hide()</DIV>
+<DIV class="comment_block">IMEの表示<BR>IMEの非表示<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CIMEWrapper()</DIV>
+<DIV class="public_member"> virtual ~CIMEWrapper()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="Auxiliary!yaneIMEWrapper_h.html#CIMEWrapper" target=_self>CIMEWrapper</A>* GetObj()</DIV>
+<DIV class="comment_block">singletonなポインタの取得<BR><BR>		ただし、proxy_ptrなので、非ローカルなstaticオブジェクトの<BR>		コンストラクタから参照してはいけない<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!singleton_h.html#singleton" target=_self>singleton</A>&lt;<A class="class_link" href="Auxiliary!yaneIMEWrapper_h.html#CIMEWrapper" target=_self>CIMEWrapper</A>&gt; m_vIMEWrapper</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nStat</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

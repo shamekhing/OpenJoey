@@ -1,0 +1,31 @@
+
+#ifdef USE_MEMORY_STATE	//	メモリのデバッグクラスを利用するか
+
+#include "yaneDumpContext.h"
+class CMemoryState {
+/**
+	現在newしているメモリのスナップショットを取得して、
+	メモリリークを検出するためのクラス。
+	yaneConfig.hでUSE_MEMORY_STATEをdefineしているときにのみ有効
+*/
+public:
+	void	BeginSnap() { g_lpMemoryState = this; }
+	///	スナップを開始する
+
+	void	EndSnap() { g_lpMemoryState = NULL; }
+	///	スナップを終了する
+
+	LRESULT	Dump(ITextOutputStream*pDump);
+	///	メモリリークの状況をITextOutputStreamに出力。
+	///	リークがなければ、何も出力せずに0が返る
+
+	
+public:
+	map<LPVOID,size_t>	m_alpMemory;
+	//	new しているメモリ列
+
+	static CMemoryState* g_lpMemoryState;
+	//	こいつにスナップ中である
+};
+
+#endif

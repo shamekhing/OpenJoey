@@ -1,0 +1,28 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>AppFrame/yaneSingleApp.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="CSingleApp"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CSingleApp</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">二重起動防止に使います。<BR><BR>	bool IsValid();<BR>	//　他に自分と同じアプリが起動していなかったか？<BR><BR>	二重起動していればfalseになるので、その場合は、<BR>	即座にこのプログラムを終了させてください。<BR>	（その場合、そちらにフォーカスが移ります）<BR>	この処理には class CFindWindow を利用しています。<BR>	class CFindWindow は、現在実行されているモジュール名と<BR>	同じモジュール名のプロセスを探して、そのウィンドゥを<BR>	アクティブにするクラスです。<BR><BR>	CFindWindowでのモジュール名の比較は、フルパスではなく、実行ファイル名のみで<BR>	行なわれるため、他フォルダで同名の実行ファイル名のものが起動している<BR>	場合は、それがActiveになることがあります<BR><BR>☆　使用例<BR><BR>// 言わずと知れたWinMain<BR>int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,int nCmdShow)<BR>{<BR>　　CAppInitializer init(hInstance,hPrevInstance,lpCmdLine,nCmdShow);<BR>　　CSingleApp sapp;<BR>　　if (sapp.IsValid()) {<BR>		//	ゲームの処理<BR>　　}<BR>　　return 0;<BR>}<BR><BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> IsValid(<SPAN class="reserved_word">const</SPAN> string&amp; strMutexName="")</DIV>
+<DIV class="comment_block">　他に自分と同じアプリが起動していなかったか？<BR>二重起動の判定は、「同一のフォルダの同一名の実行ファイルならば<BR>		同一とみなす」という処理になっています。もし、これがまずければ、<BR>		そのアプリケーション固有のMutex名を指定することに<BR>		よって、排他することが出来ます。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="Thread!yaneMutex_h.html#CMutex" target=_self>CMutex</A> m_oMutex</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bValid</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>AppFrame/yaneAppInitializer.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="CAppCallbackList"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CAppCallbackList</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> RegistInitCallback(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="YTL!function_callback_h.html#function_callback" target=_self>function_callback</A>&gt;&amp; p)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> RegistExitCallback(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="YTL!function_callback_h.html#function_callback" target=_self>function_callback</A>&gt;&amp; p)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> InitCallback()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> ExitCallback()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="YTL!smart_list_ptr_h.html#smart_list_ptr" target=_self>smart_list_ptr</A>&lt;<A class="class_link" href="YTL!function_callback_h.html#function_callback" target=_self>function_callback</A>&gt; *GetInitCallbackList()</DIV>
+<DIV class="public_member"><A class="class_link" href="YTL!smart_list_ptr_h.html#smart_list_ptr" target=_self>smart_list_ptr</A>&lt;<A class="class_link" href="YTL!function_callback_h.html#function_callback" target=_self>function_callback</A>&gt; *GetExitCallbackList()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="YTL!smart_list_ptr_h.html#smart_list_ptr" target=_self>smart_list_ptr</A>&lt;<A class="class_link" href="YTL!function_callback_h.html#function_callback" target=_self>function_callback</A>&gt; m_listInitFunc</DIV>
+<DIV class="protected_member"><A class="class_link" href="YTL!smart_list_ptr_h.html#smart_list_ptr" target=_self>smart_list_ptr</A>&lt;<A class="class_link" href="YTL!function_callback_h.html#function_callback" target=_self>function_callback</A>&gt; m_listExitFunc</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CAppInitializer"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CAppInitializer</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">アプリケーション初期化のためのクラス<BR><BR>	コンストラクタにWinMainからそのパラメータをそのまま渡してね。<BR><BR>	非ローカルstaticオブジェクトによるコールバック予約が出来ます。<BR>		RegistInitCallback(コールバックを予約する関数);<BR>		RegistExitCallback(コールバックを予約する関数);<BR>	とすれば、コンストラクタとデストラクタにおいて、その関数に<BR>	自動的にコールバックされます。（複数登録可）<BR><BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CAppInitializer(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, <SPAN class="reserved_word">int</SPAN> nCmdShow)</DIV>
+<DIV class="comment_block">WinMainからそのパラメータをそのまま渡してね。<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> ~CAppInitializer()</DIV>
+<DIV class="comment_block">このデストラクタでRegistExitCallbackしておいた関数が呼び出される<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> HINSTANCE GetInstance()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">static</SPAN> HINSTANCE GetPrevInstance()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">static</SPAN> LPSTR GetCmdLine()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">int</SPAN> GetCmdShow()</DIV>
+<DIV class="comment_block">singletonを通じて取得する<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">void</SPAN> RegistInitCallback(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="YTL!function_callback_h.html#function_callback" target=_self>function_callback</A>&gt;&amp; p)</DIV>
+<DIV class="comment_block">Init呼び出しのあとにコールバックして欲しいものを登録しておく<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">void</SPAN> RegistExitCallback(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="YTL!function_callback_h.html#function_callback" target=_self>function_callback</A>&gt;&amp; p)</DIV>
+<DIV class="comment_block">終了時にコールバックして欲しいものを登録しておく<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="AppFrame!yaneAppInitializer_h.html#CAppInitializer" target=_self>CAppInitializer</A>* GetObj()</DIV>
+<DIV class="comment_block">///////////////////////////////////////////////////////////<BR>singletonオブジェクトの取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">HINSTANCE GetInstance2()</DIV>
+<DIV class="public_member">HINSTANCE GetPrevInstance2()</DIV>
+<DIV class="public_member">LPSTR GetCmdLine2()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">int</SPAN> GetCmdShow2()</DIV>
+<DIV class="comment_block">WinMainで渡しておいたパラメータの取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">HINSTANCE m_hInstance</DIV>
+<DIV class="protected_member">HINSTANCE m_hPrevInstance</DIV>
+<DIV class="protected_member">LPSTR m_lpCmdLine</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nCmdShow</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="AppFrame!yaneAppInitializer_h.html#CAppInitializer" target=_self>CAppInitializer</A>* m_vObj</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!singleton_h.html#singleton" target=_self>singleton</A>&lt;<A class="class_link" href="AppFrame!yaneAppInitializer_h.html#CAppCallbackList" target=_self>CAppCallbackList</A>&gt; m_AppCallBackObj</DIV>
+<DIV class="private_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="AppFrame!yaneAppInitializer_h.html#CAppCallbackList" target=_self>CAppCallbackList</A>* GetCallbackObj()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

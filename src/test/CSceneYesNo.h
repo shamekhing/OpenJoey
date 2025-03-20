@@ -20,7 +20,8 @@ public:
 private:
     CKey1 key;
     CFixMouse m_mouse;
-    CPlane m_vBackground;      // Background capture
+    smart_ptr<ISurface> m_vBackground;      // Background capture
+	CFastPlane m_vFastBackground;      // Background capture1
     CPlaneLoader m_vPlaneLoader;
     CPlane m_pMessageSurface;  // "Exit?" message surface
     

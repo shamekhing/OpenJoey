@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>YTL/smart_ptr.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="smart_ptr_base"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">smart_ptr_base</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> virtual ~smart_ptr_base()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="smart_ptr"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;T</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">smart_ptr</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">a real smart pointer<BR>	スマートポインタクラス（非配列／配列統合版）<BR><BR>	（参照カウントを持っていて、どこからも参照されなくなったときに<BR>	自動的にオブジェクトを解体するような賢いポインタ）<BR><BR>	使い方：<BR>			smart_ptr&lt;CHoge&gt; s1(new CHoge);<BR><BR>		というようにすれば、あとは、<BR><BR>			smart_ptr&lt;CHoge&gt; s2;<BR>			s2 = s1;<BR><BR>		というようなコピー等をやっても、最後に残ったスマートポインタさんが<BR>		責任を持ってオブジェクトを解体してくれる！<BR><BR>		☆　配列オブジェクトも可能：<BR><BR>			smart_ptr&lt;CHoge&gt; s1;<BR>			s1.AddArray(10);<BR>			//	↑CHoge* s1 = new CHoge[10]; の意味に近い<BR><BR>			//	CHogeDerivedはCHoge派生クラス<BR>			s1.AddArray(new CHogeDerived[10],10);<BR>			も可。<BR><BR>		☆　配列ポインタの正しいアップキャスト等も可能。<BR><BR>		また、コンストラクタはexplicitで定義されているので、<BR>			void function(smart_array&lt;CHoge&gt; av);<BR>		というような関数の呼び出しで、普通のポインタを渡したいときは、<BR>		所有権無しのスマートポインタを生成して渡すこと！<BR><BR>		つまり、<BR>			function(smart_array&lt;CHoge&gt;(pHoge,false));<BR>		とやって、コンストラクタの第２パラメータをfalseにして呼び出す。<BR><BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr_base" target=_self>smart_ptr_base</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> S</SPAN>&gt;<BR> explicit smart_ptr(S * _P, <SPAN class="reserved_word">bool</SPAN> bOwner=true)</DIV>
+<DIV class="comment_block">他のポインタ（非配列オブジェクト）を取るコンストラクタ<BR>_Pは、オブジェクトを渡します。<BR>		bOwnerは、この配列スマートポインタに発令オブジェクトを<BR>			自動削除して欲しいときにtrueにします。defaultではtrue。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> smart_ptr()</DIV>
+<DIV class="comment_block">ディフォルトコンストラクタ<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> smart_ptr(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&amp; s)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&amp; s)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> ~smart_ptr()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">T&amp; operator*()</DIV>
+<DIV class="public_member">T* operator-&gt;()</DIV>
+<DIV class="comment_block">ポインタのふりをするための仕掛け<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">T&amp; operator[](<SPAN class="reserved_word">int</SPAN> n)</DIV>
+<DIV class="comment_block">要素へのアクセス<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">T* get(<SPAN class="reserved_word">int</SPAN> n=0)</DIV>
+<DIV class="comment_block">ポリモーフィックな配列オブジェクトを取得する<BR>		範囲外への要素へのアクセス時には、<BR>		CIndexOutOfBoundsException例外が送出される<BR>		NULLポインタに対するアクセスはCNullPointerException例外<BR>		スマートポインタがNULLかどうかはisNullでチェックするので<BR>		こういう仕様で良い<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">T* getPointer(<SPAN class="reserved_word">int</SPAN> n=0)</DIV>
+<DIV class="comment_block">get()のアクセス違反なポインタでも例外が発生しないバージョン<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;T&gt; get_smart_ptr(<SPAN class="reserved_word">int</SPAN> n=0)</DIV>
+<DIV class="public_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;T&gt; begin()</DIV>
+<DIV class="public_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;T&gt; end()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> isEnd()</DIV>
+<DIV class="comment_block">以下のメソッドで取得できるsmart_ptrは、<BR>		参照カウント等も共有しているので、こいつが解放されない限り<BR>		配列オブジェクトも解放されない<BR>	<BR>配列オブジェクトのある要素へのスマートポインタを取得する<BR>配列オブジェクトの先頭要素へのスマートポインタを取得する<BR>配列の最後の要素へのスマートポインタを取得する<BR>このポインタが配列の範囲外を指しているかをチェックする<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> Add()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> S</SPAN>&gt;<BR><SPAN class="reserved_word">void</SPAN> Add()</DIV>
+<DIV class="comment_block">所有権を持ったインスタンスの追加生成構文<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> S</SPAN>&gt;<BR><SPAN class="reserved_word">void</SPAN> Add()</DIV>
+<DIV class="comment_block">解体手段を規定したポインタを渡す<BR>		（その後、このスマートポインタは所有権を持つ）<BR><BR>		例)	smart_ptr&lt;CHoge&gt; pHoge;<BR>			pHoge.Add(new CHoge,new my_ref_object);<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> S</SPAN>&gt;<BR><SPAN class="reserved_word">void</SPAN> Set()</DIV>
+<DIV class="comment_block">所有権の無いポインタの設定<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> AddArray(<SPAN class="reserved_word">int</SPAN> n)</DIV>
+<DIV class="comment_block">所有権を持った配列インスタンスの追加生成構文<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> S</SPAN>&gt;<BR><SPAN class="reserved_word">void</SPAN> AddArray(S* p, <SPAN class="reserved_word">int</SPAN> n=INT_MAX)</DIV>
+<DIV class="comment_block">所有権を持った配列インスタンスの追加生成構文<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> S</SPAN>&gt;<BR><SPAN class="reserved_word">void</SPAN> SetArray(S* p, <SPAN class="reserved_word">int</SPAN> n=INT_MAX)</DIV>
+<DIV class="comment_block">所有権を持たない配列インスタンスの追加構文<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> S</SPAN>&gt;<BR><SPAN class="reserved_word">void</SPAN> AddArray(S*_P,<SPAN class="reserved_word">int</SPAN> n)</DIV>
+<DIV class="comment_block">解体手段を規定した配列ポインタを渡す<BR>		（その後、このスマートポインタは所有権を持つ）<BR><BR>		例)	smart_ptr&lt;CHoge&gt; pHoge;<BR>			pHoge.Add(new CHoge[10],new my_ref_object);<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> RelateType</SPAN>&gt;<BR><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;T&gt;&amp; UpCast(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;RelateType&gt;&amp; s)</DIV>
+<DIV class="comment_block">明示的アップキャスト構文<BR>ただし、同じ実体であるsmart_ptr間でアップキャストしてはいけない<BR>		すなわち、<BR>			smart_ptr&lt;CHoge&gt; p;<BR>			p.Upcast(p); // これはやってはいけない<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> unique()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">int</SPAN> count()</DIV>
+<DIV class="comment_block">オブジェクトを参照しているのが唯一か？<BR>オブジェクトの参照数を返す<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">int</SPAN> get_obj_size()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> isNull()</DIV>
+<DIV class="comment_block">指しているオブジェクトはNULLか？<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">int</SPAN> size()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> set_size(<SPAN class="reserved_word">int</SPAN> nSize)</DIV>
+<DIV class="comment_block">配列オブジェクトならば、最大数を返す<BR>非配列オブジェクトならば、1が返る<BR>↑で取得できるサイズを変更する<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="YTL!ref_deleter_h.html#ref_object" target=_self>ref_object</A>* getRefObj()</DIV>
+<DIV class="public_member">T* getObj()</DIV>
+<DIV class="comment_block">解体子オブジェクトへのポインタを返す（内部実装用）<BR>オブジェクトの実装（内部実装用）<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> Delete()</DIV>
+<DIV class="comment_block">このオブジェクトを解体する（ただし、他のスマートポインタから参照<BR>されていれば、実際にdeleteまでは出来ない）<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> dec()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> inc()</DIV>
+<DIV class="comment_block">スマートポインタの加減算<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">int</SPAN>* getIndex()</DIV>
+<DIV class="comment_block">indexの取得(iterator的に使用しているとき)／内部実装用<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;T&gt;&amp; operator++()</DIV>
+<DIV class="public_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;T&gt; operator++()</DIV>
+<DIV class="public_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;T&gt;&amp; operator--()</DIV>
+<DIV class="public_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;T&gt; operator--()</DIV>
+<DIV class="public_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;T&gt;&amp; operator+=(<SPAN class="reserved_word">int</SPAN> _N)</DIV>
+<DIV class="public_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;T&gt;&amp; operator-=(<SPAN class="reserved_word">int</SPAN> _N)</DIV>
+<DIV class="public_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;T&gt; operator+(<SPAN class="reserved_word">int</SPAN> _N)</DIV>
+<DIV class="public_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;T&gt; operator-(<SPAN class="reserved_word">int</SPAN> _N)</DIV>
+<DIV class="comment_block">加減算のためのオペレータ<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> operator==(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;T&gt; &amp; _X)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> operator!=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;T&gt;&amp; _X)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> operator&lt;(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;T&gt;&amp; _X)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> operator&gt;(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;T&gt;&amp; _X)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> operator&lt;=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;T&gt;&amp; _X)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> operator&gt;=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;T&gt;&amp; _X)</DIV>
+<DIV class="comment_block">比較のためのオペレータ<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> S</SPAN>&gt;<BR><SPAN class="reserved_word">void</SPAN> Init(S * s, <SPAN class="reserved_word">bool</SPAN> bOwner, <SPAN class="reserved_word">int</SPAN> nSize)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> inc_ref(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;T&gt;&amp; s)</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> dec_ref()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">T* m_lpObj</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nIndex</DIV>
+<DIV class="protected_member"><A class="class_link" href="YTL!ref_deleter_h.html#ref_object" target=_self>ref_object</A>* m_lpRefObj</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

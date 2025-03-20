@@ -1,0 +1,20 @@
+void　　CApp::MainThread() {			//　　 これが実行される
+	GetDraw()->SetDisplay(false);		//　　Windowモード
+
+	CFPSTimer t;
+	t.SetFPS(30);
+
+	CSceneControl sc;
+	sc.JumpScene(SceneA);				//	最初スタートするのはSceneA
+
+	while(IsThreadValid()) {			//　　これがValidの間、まわり続ける
+		sc.OnMove(GetDraw());
+		if (sc.GetScene().IsEnd()) break; 　// シーン終わってるやん？ 
+		if (!t.ToBeSkip()){
+		//	フレームスキップが発生しないときのみ描画
+	　　　　sc.OnDraw(GetDraw());
+　　	　　GetDraw()->OnDraw();
+		}
+		t.WaitFrame();
+	}
+} 

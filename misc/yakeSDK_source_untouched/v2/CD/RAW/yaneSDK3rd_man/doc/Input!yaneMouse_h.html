@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Input/yaneMouse.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="IMouse"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">IMouse</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetXY(<SPAN class="reserved_word">int</SPAN> &amp; x, <SPAN class="reserved_word">int</SPAN> &amp; y)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> RButton()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> LButton()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetInfo(<SPAN class="reserved_word">int</SPAN> &amp; x, <SPAN class="reserved_word">int</SPAN> &amp; y, <SPAN class="reserved_word">int</SPAN> &amp; b)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> GetButton()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> ResetButton()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetXY(<SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetOutScreenInput(<SPAN class="reserved_word">bool</SPAN> bEnable)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> virtual ~IMouse()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CMouse"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CMouse</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">マウスのリアルタイム状態取得用のクラスです。<BR><BR>	先行してウィンドゥが完成している必要があるので<BR>	class CAppFrame 派生クラス内で使用するようにしてください。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Window!yaneWinHook_h.html#IWinHook" target=_self>IWinHook</A><BR>
+<SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Input!yaneMouse_h.html#IMouse" target=_self>IMouse</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetXY(<SPAN class="reserved_word">int</SPAN> &amp; x, <SPAN class="reserved_word">int</SPAN> &amp; y)</DIV>
+<DIV class="comment_block">マウスポジションを得る（クライアント座標系にて）<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> RButton()</DIV>
+<DIV class="comment_block">右ボタン状態を得る（現在のリアルタイムの情報）<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> LButton()</DIV>
+<DIV class="comment_block">左ボタン状態を得る（現在のリアルタイムの情報）<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetInfo(<SPAN class="reserved_word">int</SPAN> &amp; x, <SPAN class="reserved_word">int</SPAN> &amp; y, <SPAN class="reserved_word">int</SPAN> &amp; b)</DIV>
+<DIV class="comment_block">マウスポジションとボタン状態を返す<BR>(b:右ボタン押下ならば+1,左ボタン押下ならば+2 両方ならば+1+2==+3)<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> GetButton()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> ResetButton()</DIV>
+<DIV class="comment_block">前回のGetButtonから押されたか？<BR>GetButton↑で取得できるボタン状態のリセット<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetXY(<SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y)</DIV>
+<DIV class="comment_block">マウスを指定のポジションに移動（クライアント座標系にて）<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetOutScreenInput(<SPAN class="reserved_word">bool</SPAN> bEnable)</DIV>
+<DIV class="comment_block">押したまま、マウスを画面外にやったとき、どうなるのか？<BR>			true  == ボタンは押したままだと見なされる<BR>			false == ボタンは離されたものと見なされる<BR>			defaultではfalse<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CMouse()</DIV>
+<DIV class="public_member"> virtual ~CMouse()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">LRESULT WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bRB</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bLB</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bHistRB</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bHistLB</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bOutScreenInput</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFixMouse"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFixMouse</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">マウスのリアルタイム情報の取得のためのクラスです<BR><BR>	ゲームでCMouseを使う場合、１フレームの間は、<BR>	固定値が返ってきたほうが望ましい。<BR><BR>	class CTimer に対する CFixTimer の関係と同じである。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Input!yaneMouse_h.html#IMouse" target=_self>IMouse</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Flush()</DIV>
+<DIV class="comment_block">フラッシュさせる<BR>マウスの座標、ボタン状態を更新する。<BR>		これをした瞬間の状態に基づいて各メンバ関数で値が返るようになる。<BR>		あとはほとんど、class CMouse と同じ。ただし、<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetXY(<SPAN class="reserved_word">int</SPAN> &amp; x, <SPAN class="reserved_word">int</SPAN> &amp; y)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> RButton()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> LButton()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetInfo(<SPAN class="reserved_word">int</SPAN> &amp; x, <SPAN class="reserved_word">int</SPAN> &amp; y, <SPAN class="reserved_word">int</SPAN> &amp; b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> GetButton()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsPushRButton()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsPushLButton()</DIV>
+<DIV class="comment_block">前回のFlushから押されたか？<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> GetUpButton()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsPushUpRButton()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsPushUpLButton()</DIV>
+<DIV class="comment_block">前回のFlushから押し上げられたか？<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> ResetButton()</DIV>
+<DIV class="comment_block">↑ボタン状態リセット<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetXY(<SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y)</DIV>
+<DIV class="comment_block">マウスを指定のポジションに移動（クライアント座標系にて）<BR>これで座標を移動させた場合、FlushしなくともGetXYすればその座標が返る。<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsGuardTime()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetGuardTime(<SPAN class="reserved_word">int</SPAN> nTime)</DIV>
+<DIV class="comment_block">ガードタイムとは、シーン管理をしていたりするとき、ボタンが押されて、<BR>		次のシーンに移動して、次のシーンでいきなりボタンが押されたと判定されて<BR>		しまうことを防止するために、一定時間「入力が無い」と嘘を返すための<BR>		機構です。SetGuardTimeで設定した数だけFlushメンバ関数を呼び出すまでは、<BR>		GetButton/IsPushRButton/IsPushLButtonではすべてボタンは<BR>		押されていないと返ります。<BR>	<BR>ガードタイム中かどうかを返す<BR>ガードタイムを設定する<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetOutScreenInput(<SPAN class="reserved_word">bool</SPAN> bEnable)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CFixMouse()</DIV>
+<DIV class="public_member"> virtual ~CFixMouse()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bRBN</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bLBN</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nRLBN</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nX,m_nY</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nGuardTime</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bHistRB</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bHistLB</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="Input!yaneMouse_h.html#CMouse" target=_self>CMouse</A> m_vMouse</DIV>
+<DIV class="protected_member"><A class="class_link" href="Input!yaneMouse_h.html#CMouse" target=_self>CMouse</A>* GetMouse()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>YTL/exceptions.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="CException"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CException</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">すべての例外は、こいつから派生させる<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CException()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> string getError()</DIV>
+<DIV class="comment_block">このダイアログが出た直後に、VSから<BR>		プロセスのアタッチをして、ビルド⇒ブレーク<BR>		すればコールスタックを見てどこで発生した例外か特定できる<BR>	<BR>ついでにメモリエラーをわざと発生させるコードを仕掛ける<BR>WinNT/2000系ならば、わざとこのメモリエラーを発生させて、<BR>デバッグしたほうが手っ取り早い<BR></DIV>
+</DIV>
+<HR><BR>
+<A name="CIndexOutOfBoundsException"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CIndexOutOfBoundsException</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">配列範囲外へのメモリへのアクセス例外</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!exceptions_h.html#CException" target=_self>CException</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="private_member"><SPAN class="reserved_word">virtual</SPAN> string getError()</DIV>
+<DIV class="comment_block">class smart_ptr を使用しているときにチェック機構により発生<BR></DIV>
+</DIV>
+<HR><BR>
+<A name="CNullPointerException"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CNullPointerException</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">Null pointerからのアクセス例外</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!exceptions_h.html#CException" target=_self>CException</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="private_member"><SPAN class="reserved_word">virtual</SPAN> string getError()</DIV>
+<DIV class="comment_block">class smart_ptr を使用しているときにチェック機構により発生<BR></DIV>
+</DIV>
+<HR><BR>
+<A name="CRuntimeException"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CRuntimeException</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">範囲外の数字が指定されているときのアクセス例外</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!exceptions_h.html#CException" target=_self>CException</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CRuntimeException(<SPAN class="reserved_word">const</SPAN> string&amp; strErrorName="")</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> string getError()</DIV>
+<DIV class="protected_member">string m_str</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CSyntaxException"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CSyntaxException</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">一般的な文法エラーに対するアクセス例外</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!exceptions_h.html#CException" target=_self>CException</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CSyntaxException(<SPAN class="reserved_word">const</SPAN> string&amp; strErrorName)</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> string getError()</DIV>
+<DIV class="protected_member">string m_str</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

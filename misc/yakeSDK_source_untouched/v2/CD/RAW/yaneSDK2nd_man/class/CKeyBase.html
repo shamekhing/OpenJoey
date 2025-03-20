@@ -1,0 +1,23 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CKeyBase</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CKeyBase</FONT><A name="CTimeBase"></A> <FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>キー入力のための基底クラス。DirectInput,JoyStick,MIDI
+Input等の入力系に対して共通のインターフェースを与えるために使う。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>virtual LRESULT GetKeyState(void); 　// 状態取得（これを実行した瞬間、キーのリアルタイム情報を取得する）</P>
+<P>　リアルタイムゲームならば、描画ループにごとに１回必要。</P>
+<P>virtual bool IsKeyPress(int key) const; //
+あるキーが現在押されているか<BR>
+virtual bool IsKeyPush(int key) const; //
+あるキーが前回のGetKeyStateのときから押されたか）</P>
+<P>　この２つの関数で、キー判定を行なう。GetKeyStateによって得られた情報を調べて返すだけなので、GetKeyStateを忘れないように注意。</P>
+<P>virtual BYTE* GetKeyData(void) const; //
+取得したキー情報(BYTE byKeyData[256])へのポインタを得る)</P>
+<P>　直接ポインタを得てぐりぐりする人のために＾＾</P>
+<HR>
+</BODY></HTML>

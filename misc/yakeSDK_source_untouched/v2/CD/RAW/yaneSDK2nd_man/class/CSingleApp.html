@@ -1,0 +1,29 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CSingleApp</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CSingleApp</FONT><A name="CTimeBase"></A>　<FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>二重起動防止に使います。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>コンストラクタで二重起動のチェックを行ないます。その後、</P>
+<P>bool IsValid(void); //　他に自分と同じアプリが起動していなかったか？</P>
+<P>二重起動していればfalseになるので、その場合は、即座にこのプログラムを終了させてください。<BR>
+（その場合、そちらにフォーカスが移ります。この処理にはCFindWindowを利用しています。CFindWindowは、現在実行されているモジュール名と同じモジュール名のプロセスを探して、そのウィンドゥをアクティブにするクラスです。モジュール名の比較は、フルパスではなく、実行ファイル名のみで行なわれるため、他フォルダで同名の実行ファイル名のものが起動している場合は、それがActiveになることがあります）</P>
+<P><FONT size="+1" color="#009900">☆　使用例</FONT></P>
+<P>// 言わずと知れたWinMain<BR>
+int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE
+hPrevInstance,LPSTR lpCmdLine,int nCmdShow)<BR>
+{<BR>
+　　CAppInitializer::Init(hInstance,hPrevInstance,lpCmdLine,nCmdShow);
+// 必ず書いてね<BR>
+　　CSingleApp sapp;<BR>
+　　if (sapp.IsValid()) {<BR>
+　　　　CAppMainWindow().Run(); // 上で定義したメインのウィンドゥを作成<BR>
+　　}<BR>
+　　return 0;<BR>
+}</P>
+<HR>
+</BODY></HTML>

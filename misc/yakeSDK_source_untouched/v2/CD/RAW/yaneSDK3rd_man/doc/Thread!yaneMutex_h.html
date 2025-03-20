@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Thread/yaneMutex.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="IMutex"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">IMutex</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Open(<SPAN class="reserved_word">const</SPAN> string&amp; szMutexName)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Wait()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Release()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"> virtual ~IMutex()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CMutex"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CMutex</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">Mutexクラスです。ＯＳレベルで１つしか存在しない相互排他を目的とします。<BR>	２重起動の防止などに使います。<BR>	２重起動防止は、class CSingleApp も参照すること。<BR><BR>	他スレッドとの相互排他ならば class CCriticalSection を用いること。<BR>	そちらのほうが処理は断然軽いです。<BR><BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Thread!yaneMutex_h.html#IMutex" target=_self>IMutex</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Open(<SPAN class="reserved_word">const</SPAN> string&amp; szMutexName)</DIV>
+<DIV class="comment_block">　szMutexNameは、ミューテックス名（任意につけて良い）<BR><BR>	　返し値は<BR>	　0 : 他に同名のものは存在しない→所有権獲得成功！<BR>	　1 : 他に同名のものが存在する。(error)⇒このあとWaitで待つと良い<BR>	  2 : 既存のセマフォ、ミューテックス、待機可能なタイマ、ジョブ、<BR>		ファイルマッピングオブジェクトのいずれかの名前と一致したのでエラー<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Wait()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Release()</DIV>
+<DIV class="comment_block">Openで１が返ってきているときに呼び出して、<BR>		所有権が獲得できるのを待つ。<BR>	<BR>Mutexを解放する<BR>		デストラクタも自動的にこのReleaseを呼び出すので、<BR>		すぐに解体するならば、明示的に呼び出す必要は無い。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CMutex()</DIV>
+<DIV class="public_member"> virtual ~CMutex()</DIV>
+<DIV class="protected_member">HANDLE m_hMutex</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="IMutexSection"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">IMutexSection</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Enter(<SPAN class="reserved_word">const</SPAN> string&amp; szMutexName)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Leave()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"> virtual ~IMutexSection()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CMutexSection"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CMutexSection</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">MutexによるLock～unlockです<BR>		class CCriticalSectionと同じ感覚で使えます<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Thread!yaneMutex_h.html#IMutexSection" target=_self>IMutexSection</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Enter(<SPAN class="reserved_word">const</SPAN> string&amp; szMutexName)</DIV>
+<DIV class="comment_block">MutexSectionに入る<BR>返し値：<BR>　　　　　０：成功<BR>		　１：既存のセマフォ、ミューテックス、待機可能なタイマ、ジョブ、<BR>		ファイルマッピングオブジェクトのいずれかの名前と一致したのでエラー<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Leave()</DIV>
+<DIV class="comment_block">MutexSectionから出る<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="Thread!yaneMutex_h.html#CMutex" target=_self>CMutex</A> m_vMutex</DIV>
+<DIV class="comment_block">デストラクタではCMutexを解放するので、そのときに<BR>		自動的にMutexは解放される。<BR>	<BR></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

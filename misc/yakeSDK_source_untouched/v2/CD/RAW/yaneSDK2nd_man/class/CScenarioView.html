@@ -1,0 +1,458 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CScenarioView</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CScenarioView</FONT><A name="CTimeBase"></A> <FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>HTML風、マークアップ言語を解釈し、それを表示します。アドベンチャーゲームのメッセージ表示等に使うと便利です。<BR>
+タグとして、サイズ変更、センタリング、右寄せ、フォント変更、色変更等をサポートしているので、ホームページビルダー等で作成したHTMLファイルに基づいてそれを表示することが出来ます。</P>
+<P><A href="CTextDraw.html">CTextDraw</A>を上位拡張した簡易スクリプト言語になっています。表示に際しては、バックログ機能を有し、途中セーブ、途中ロードをサポート、strategyによるエフェクト置換等をサポートしています。</P>
+<P>WAFFLE販売『蒼き大地』で使用したもので、プロフェッショナルユースの本格的なシナリオビュアーで、yaneSDK2ndの最大規模のサンプルです。</P>
+<HR>
+<P><A href="CTextDraw.html">CTextDraw</A>（基本的に標準htmlタグ）には無い、独自で追加した特殊タグ一覧。if～else～endifタグ等は、CTextDrawでサポートされていますので、そちらのほうも確認しておいてください。</P>
+<P><FONT color="#cc0000" size="+1">【タグ表記上のカンマについて】</FONT></P>
+<P>以下のタグで、カンマ（，）で区切って記述するように書いてありますが、実際は、スペースやタブでも構いません。</P>
+<P><BR>
+</P>
+<P><FONT size="+1">☆　ＳＥＰＬＡＹ　：　効果音再生</FONT></P>
+<P>&lt;SEPLAY 演奏するSEナンバー[,ループ再生か？(省略時は0)]&gt;<BR>
+例)<BR>
+&lt;SEPLAY 2,1&gt; : 2番のSEをループ再生(繰り返し再生される。次のシーンに移行するときまで再生され続ける)します。<BR>
+&lt;SEPLAY 2,0&gt; : 2番のSEを１回だけ再生します<BR>
+&lt;SEPLAY 2&gt; : 上の&lt;SEPLAY 2,0&gt;と同じ意味です</P>
+<P>　何番のSEが何の効果音であるかは、ゲームによって変わります。<BR>
+(&quot;cfg/se_define.txt&quot;に定義した順番になります。SEは0番から始まり、たとえば2番のSEとは、このファイルの３行目にあるものを意味します。もし1番から始めたい場合は、SEPLAYで0番は使用せず、かつこの定義ファイルの１行目は空行にしてください)</P>
+<P>　複数のSEを同時に再生することが出来ます。<BR>
+　再生しているものを強制停止させるには、</P>
+<P>&lt;SESTOP 2&gt; : 2番のSEを停止させる</P>
+<P>　このSESTOPを用います。</P>
+<P>　第２パラメータにマイナスの値を指定してやると、その絶対値の回数だけ再生されます。（つまり
+-3ならば3回再生される）<BR>
+　第３パラメータは、その再生のインターバル。(<A href="CSELoader.html">CSELoader</A>::PlayTの第３パラメータ)</P>
+<P>&lt;SEPLAY 2,-5,30&gt; : 2番のSEを５回再生する。ｎ回目終了後、（ｎ＋１）回目が再生されるには30回画面描画が行なわれてから。</P>
+<P><FONT size="+1">☆　ＢＧＭＰＬＡＹ　：　ＢＧＭ再生</FONT></P>
+<P>&lt;BGMPLAY 演奏するBGMナンバー [ループ再生か？(省略時は1)]&gt;<BR>
+例)<BR>
+&lt;BGMPLAY 2 1&gt; : 2番のBGMをループ再生(繰り返し再生される。次のシーンに移行するときまで再生され続ける)します。<BR>
+&lt;BGMPLAY 2 0&gt; : 2番のBGMを１回だけ再生します<BR>
+&lt;BGMPLAY 2&gt; : 上の&lt;BGMPLAY 2 1&gt;と同じ意味です</P>
+<P>　何番のBGMが何のBGMであるかは、ゲームによって変わります。これはSEと同じく&quot;cfg/bgm_define.txt&quot;によって決まります。（SE同様0番から始まります）</P>
+<P>　複数のBGMを同時に再生することは出来ません。<BR>
+BGMが再生されている状態で次のBGMが再生されると、前のBGMは自動的に停止します。しかし、同じ番号が指定された場合は、そのまま再生されつづけます。（曲頭に戻したいときは、いったんBGMを停止させて再度再生させればＯＫ）</P>
+<P>　また再生しているBGMを強制停止させるには、</P>
+<P>&lt;BGMSTOP&gt; : BGMを停止させる</P>
+<P>　このBGMSTOPを用います。シーンの最後でもし、演奏を止めたいならばこれを入れる必要があります。通常は入れなくても、次のシーンで新たなＢＧＭ再生を指定しているので、止める必要はないはずです。</P>
+<P><FONT size="+1">☆　背景ＣＧ</FONT></P>
+<P>&lt;BGCG CGナンバー [画面効果番号]&gt;</P>
+<P>例：&lt;BGCG 3&gt; 背景ＣＧを３番のＣＧにします（画面効果はなし。いきなり切り替わります）<BR>
+例：&lt;BGCG 3 5&gt; 背景ＣＧを３番のＣＧに、５番のトランジション（画面効果）を伴いながら変化させます</P>
+<P>ＢＧは、ＳＥ同様&quot;cfg/bg_define.txt&quot;に登録されている順番になります。０番は、真っ黒のＣＧにしておくと、そのＣＧをカットインさせることによって画面をブラックアウトできるので、便利かも知れません。（同様に真っ白のＣＧを用意しておくと、そのＣＧをカットインさせることによって画面をホワイトアウトできるので、便利かも知れません）</P>
+<P>【画面効果番号について】</P>
+<P>画面効果名は、yaneSDK2ndのサンプル５，７で表示されている名前と対応します。</P>
+<P>０→なし<BR>
+１→ &quot;MirrorBlt1&quot;,CPlaneTransBlt::MirrorBlt1,<BR>
+２→&quot;MirrorBlt2&quot;,CPlaneTransBlt::MirrorBlt2,<BR>
+３→&quot;MirrorBlt3&quot;,CPlaneTransBlt::MirrorBlt3,<BR>
+４→&quot;MirrorBlt4&quot;,CPlaneTransBlt::MirrorBlt4,<BR>
+５→&quot;CutInBlt1&quot;,CPlaneTransBlt::CutInBlt1,<BR>
+６→&quot;CutInBlt2&quot;,CPlaneTransBlt::CutInBlt2,<BR>
+７→&quot;CutInBlt3&quot;,CPlaneTransBlt::CutInBlt3,<BR>
+８→&quot;CutInBlt4&quot;,CPlaneTransBlt::CutInBlt4,<BR>
+９→&quot;CutInBlt5&quot;,CPlaneTransBlt::CutInBlt5,<BR>
+１０→&quot;CutInBlt6&quot;,CPlaneTransBlt::CutInBlt6,<BR>
+１１→&quot;CutInBlt7&quot;,CPlaneTransBlt::CutInBlt7,<BR>
+１２→&quot;CutInBlt8&quot;,CPlaneTransBlt::CutInBlt8,<BR>
+１３→&quot;CutInBlt9&quot;,CPlaneTransBlt::CutInBlt9,<BR>
+１４→&quot;CutInBlt10&quot;,CPlaneTransBlt::CutInBlt10,<BR>
+１５→&quot;CutInBlt11&quot;,CPlaneTransBlt::CutInBlt11,<BR>
+１６→&quot;CutInBlt12&quot;,CPlaneTransBlt::CutInBlt12,<BR>
+１７→&quot;CutInBlt13&quot;,CPlaneTransBlt::CutInBlt13,<BR>
+１８→&quot;CutInBlt14&quot;,CPlaneTransBlt::CutInBlt14,<BR>
+１９→&quot;CutInBlt15&quot;,CPlaneTransBlt::CutInBlt15,<BR>
+２０→&quot;CutInBlt16&quot;,CPlaneTransBlt::CutInBlt16,<BR>
+２１→&quot;CutInBlt17&quot;,CPlaneTransBlt::CutInBlt17,<BR>
+２２→&quot;CutInBlt18&quot;,CPlaneTransBlt::CutInBlt18,<BR>
+２３→&quot;CutInBlt19&quot;,CPlaneTransBlt::CutInBlt19,<BR>
+２４→&quot;WaveBlt1&quot;,CPlaneTransBlt::WaveBlt1,<BR>
+２５→&quot;WaveBlt2&quot;,CPlaneTransBlt::WaveBlt2,<BR>
+２６→&quot;WaveBlt3&quot;,CPlaneTransBlt::WaveBlt3,<BR>
+２７→&quot;WaveBlt4&quot;,CPlaneTransBlt::WaveBlt4,<BR>
+２８→&quot;CircleBlt1&quot;,CPlaneTransBlt::CircleBlt1,<BR>
+２９→&quot;CircleBlt2&quot;,CPlaneTransBlt::CircleBlt2,<BR>
+３０→&quot;CircleBlt3&quot;,CPlaneTransBlt::CircleBlt3,<BR>
+３１→&quot;CircleBlt4&quot;,CPlaneTransBlt::CircleBlt4,<BR>
+３２→&quot;CircleBlt5&quot;,CPlaneTransBlt::CircleBlt5,<BR>
+３３→&quot;RectBlt1&quot;,CPlaneTransBlt::RectBlt1,<BR>
+３４→&quot;RectBlt2&quot;,CPlaneTransBlt::RectBlt2,<BR>
+３５→&quot;RectBlt3&quot;,CPlaneTransBlt::RectBlt3,<BR>
+３６→&quot;BlindBlt1&quot;,CPlaneTransBlt::BlindBlt1,<BR>
+３７→&quot;BlindBlt2&quot;,CPlaneTransBlt::BlindBlt2,<BR>
+３８→&quot;BlindBlt3&quot;,CPlaneTransBlt::BlindBlt3,<BR>
+３９→&quot;BlindBlt4&quot;,CPlaneTransBlt::BlindBlt4,<BR>
+４０→&quot;BlindBlt5&quot;,CPlaneTransBlt::BlindBlt5,<BR>
+４１→&quot;BlindBlt6&quot;,CPlaneTransBlt::BlindBlt6,<BR>
+４２→&quot;BlindBlt7&quot;,CPlaneTransBlt::BlindBlt7,<BR>
+４３→&quot;BlindBlt8&quot;,CPlaneTransBlt::BlindBlt8,<BR>
+４４→&quot;BlindBlt9&quot;,CPlaneTransBlt::BlindBlt9,<BR>
+４５→&quot;BlindBlt10&quot;,CPlaneTransBlt::BlindBlt10,<BR>
+４６→&quot;WhorlBlt1&quot;,CPlaneTransBlt::WhorlBlt1,<BR>
+４７→&quot;WhorlBlt2&quot;,CPlaneTransBlt::WhorlBlt2,<BR>
+４８→&quot;WhorlBlt3&quot;,CPlaneTransBlt::WhorlBlt3,<BR>
+４９→&quot;WhorlBlt4&quot;,CPlaneTransBlt::WhorlBlt4,<BR>
+５０→&quot;WhorlBlt5&quot;,CPlaneTransBlt::WhorlBlt5,<BR>
+５１→&quot;WhorlBlt6&quot;,CPlaneTransBlt::WhorlBlt6,<BR>
+５２→&quot;WhorlBlt7&quot;,CPlaneTransBlt::WhorlBlt7,<BR>
+５３→&quot;WhorlBlt8&quot;,CPlaneTransBlt::WhorlBlt8,<BR>
+５４→&quot;BlendBlt1&quot;,CPlaneTransBlt::BlendBlt1,<BR>
+５５→&quot;DiagonalDiffusionBlt&quot;,CPlaneTransBlt::DiagonalDiffusionBlt,<BR>
+５６→&quot;DiffusionCongeriesBlt1&quot;,CPlaneTransBlt::DiffusionCongeriesBlt1,<BR>
+５７→&quot;DiffusionCongeriesBlt2&quot;,CPlaneTransBlt::DiffusionCongeriesBlt2,<BR>
+５８→&quot;DiffusionCongeriesBlt3&quot;,CPlaneTransBlt::DiffusionCongeriesBlt3,<BR>
+５９→&quot;SquashBlt&quot;,CPlaneTransBlt::SquashBlt,<BR>
+６０→&quot;ForwardRollBlt&quot;,CPlaneTransBlt::ForwardRollBlt,<BR>
+６１→&quot;RotationBlt1&quot;,CPlaneTransBlt::RotationBlt1,<BR>
+６２→&quot;RotationBlt2&quot;,CPlaneTransBlt::RotationBlt2,<BR>
+６３→&quot;RotationBlt3&quot;,CPlaneTransBlt::RotationBlt3,<BR>
+６４→&quot;RotationBlt4&quot;,CPlaneTransBlt::RotationBlt4,<BR>
+６５→&quot;EnterUpBlt1&quot;,CPlaneTransBlt::EnterUpBlt1,<BR>
+６６→&quot;EnterUpBlt2&quot;,CPlaneTransBlt::EnterUpBlt2,<BR>
+６７→&quot;CellGatherBlt1&quot;,CPlaneTransBlt::CellGatherBlt1,<BR>
+６８→&quot;CellGatherBlt2&quot;,CPlaneTransBlt::CellGatherBlt2,<BR>
+６９→&quot;MosaicBlt1&quot;,CPlaneTransBlt::MosaicBlt1,<BR>
+７０→&quot;FlushBlt1&quot;,CPlaneTransBlt::FlushBlt1,<BR>
+７１→&quot;SlitCurtainBlt1&quot;,CPlaneTransBlt::SlitCurtainBlt1,<BR>
+７２→&quot;SlitCurtainBlt2&quot;,CPlaneTransBlt::SlitCurtainBlt2,<BR>
+７３→&quot;SlitCurtainBlt3&quot;,CPlaneTransBlt::SlitCurtainBlt3,<BR>
+７４→&quot;SlitCurtainBlt4&quot;,CPlaneTransBlt::SlitCurtainBlt4,<BR>
+７５→&quot;SlitCurtainBlt5&quot;,CPlaneTransBlt::SlitCurtainBlt5,<BR>
+７６→&quot;SlitCurtainBlt6&quot;,CPlaneTransBlt::SlitCurtainBlt6,<BR>
+７７→&quot;SlitCurtainBlt7&quot;,CPlaneTransBlt::SlitCurtainBlt7,<BR>
+７８→&quot;SlitCurtainBlt8&quot;,CPlaneTransBlt::SlitCurtainBlt8,<BR>
+７９→&quot;TensileBlt1&quot;,CPlaneTransBlt::TensileBlt1,<BR>
+８０→&quot;TensileBlt2&quot;,CPlaneTransBlt::TensileBlt2,<BR>
+８１→&quot;TensileBlt3&quot;,CPlaneTransBlt::TensileBlt3,<BR>
+８２→&quot;TensileBlt4&quot;,CPlaneTransBlt::TensileBlt4,</P>
+<P><BR>
+<FONT size="+1">☆　立ちキャラ</FONT></P>
+<P>&lt;StandCharaIn キャラ番号 表示位置 [ 画面効果]
+&gt;</P>
+<P>キャラをインさせる。</P>
+<P>例：&lt;StandCharaIn 3 1 80&gt;</P>
+<P>３番の立ちキャラ（これは&quot;cfg/sc_define.txtで定義されている）を１番の位置（１番＝左，２番＝中央，３番＝右）に表示する。80番の画面効果（これはＢＧの効果番号と同じ）の画面効果を伴う。</P>
+<P>例：&lt;StandCharaIn 3 1&gt;　→ &lt;StandCharaIn
+3 1 0&gt;と同じ意味になる。</P>
+<P>&lt;StandCharaOut 表示位置 [,画面効果]&gt;</P>
+<P>キャラをアウト（画面から消す）させる。</P>
+<P>例：&lt;StandCharaOut 3 80&gt;</P>
+<P>現在３番の位置の表示させている立ちキャラクターを８０番の画面効果を伴いながら消す。</P>
+<P>例：&lt;StandCharaOut 3&gt; →　&lt;StandCharaOut
+3 0&gt;と同じ意味になる。</P>
+<P><FONT color="#cc0000">次のシーンに移行するとき、ＢＧと立ちキャラ、フェイスマーク、ネームプレートはいったんリセットさせるので、通常は消す必要はない。</FONT><FONT color="#cc0000">ただし、これらは、同じシーンの間は、一度設定すると次に設定しなおすまで有効である。</FONT></P>
+<P><FONT size="+1">☆　フェイスマーク</FONT></P>
+<P>&lt;FaceMark 顔番号&gt;</P>
+<P>これはフェイスマークの指定。ＳＥ等と同じく、&quot;cfg/face_define.txt&quot;に書いてあるファイルが選択され顔マークとして表示される。</P>
+<P><FONT size="+1">☆　ネームプレート</FONT></P>
+<P>&lt;NamePlate ネームプレート番号&gt;</P>
+<P>ネームプレートの指定。&quot;cfg/name_define.txt&quot;に書いてあるものが表示される。通常シナリオコンバートの時に自動的に追加されるので、シナリオファイル内に自前で指定する必要はない。</P>
+<P><FONT size="+1">☆　特殊タグ</FONT></P>
+<P>&lt;IndentForBracket&gt;</P>
+<P>その段落の２行目以降をインデント（１文字、字下げ）する。通常、シナリオコンバータで、<FONT color="#cc0000">（　）</FONT>で囲まれた会話文があると、行頭に自動的にこのタグを放り込む。これにより、</P>
+<CENTER>
+<TABLE bgcolor="#ffffff">
+  <TBODY>
+    <TR>
+      <TD>　（あいうえおかきくけこ<BR>
+      　　さしすせそたちつてと<BR>
+      　　なにぬねののののの）</TD>
+    </TR>
+  </TBODY>
+</TABLE>
+</CENTER>
+<P>このように、（　のぶんだけインデントされて文章が表示される。</P>
+<P>&lt;GameOption nOption nNum&gt;</P>
+<P>nOption( 0 &lt;= nOption &lt; 16)に、値nNumを設定します。これは、そのゲームに依存するパラメータ等の設定に使います。</P>
+<P>&lt;SetReadPosition nReadPos&gt;</P>
+<P>読み上げ位置を設定します。読み上げとは、１文字ずつ表示されることで、途中までは、一気に表示して、そこから先を一文字ずつ表示する、というようなことをしたいときに使います。たとえば、途中でマウスクリックを促すような処理をしたいときは、</P>
+<CENTER>
+<TABLE bgcolor="#ffffff">
+  <TBODY>
+    <TR>
+      <TD>が&lt;HR&gt;<BR>
+      &lt;SetReadPosition 1&gt;<BR>
+      が、がぉ…&lt;HR&gt;<BR>
+      &lt;SetReadPosition 5&gt;<BR>
+      が、がぉ…ポカっ&lt;HR&gt;<BR>
+      &lt;SetReadPosition 8&gt;<BR>
+      が、がぉ…ポカっポカっ&lt;HR&gt;<BR>
+      &lt;SetReadPosition 0&gt;</TD>
+    </TR>
+  </TBODY>
+</TABLE>
+</CENTER>
+<P>と書きます。</P>
+<P>&lt;AutoPlay フレーム数&gt;　次のメッセージからは、ユーザーのキー入力を待たず、次々と垂れ流します。フレーム数で指定した数字が経過するごとに、次メッセージに送ります。０を指定すると、AutoPlayはキャンセルされます。</P>
+<HR noshade>
+<P><FONT size="+1" color="#990099">☆　エフェクター</FONT></P>
+<P>画面のエフェクトのためのシナリオタグなのですが、少しややこしいので、ゆっくり説明します。</P>
+<P>&lt;EffectOn a b c d e&gt; : エフェクトを開始する<BR>
+&lt;EffectOff a&gt; : エフェクトを終了する<BR>
+&lt;EffectBG a b&gt; : エフェクターにＢＧを渡す<BR>
+&lt;EffectChange a c d e&gt; : エフェクトのパラメータだけを変更する</P>
+<P>《エフェクトレイヤ》</P>
+<P>エフェクトには、１６のエフェクトレイヤというものを想定しています。<BR>
+１６枚存在するレイヤのどのレイヤに、エフェクトさせるかを指定できます。</P>
+<P>描画時には番号が若い順番に効果を掛けていきます。<BR>
+よって、番号が大きいものほど上に表示されるレイヤだと言えます。</P>
+<P>これにより最大、１６個の異なった画面効果を同時にほどこすことが出来ます。</P>
+<P>ＢＧ描画のあとは、０番～７番のレイヤ，立ちキャラ描画のあとは<BR>
+８～１５番のエフェクトレイヤが呼び出されます。</P>
+<P>たとえば、<BR>
+０番のエフェクトレイヤに雪を降らせながら、<BR>
+１番のエフェクトレイヤに雨を降らせる<BR>
+ということもできます。<BR>
+この場合、雪のほうが雨より後ろに見えることになります。（先に描画<BR>
+されるのは０番の雪だから）</P>
+<P>またこのとき、立ちキャラには雨が重なりません。０～７番は立ちキャラ描画の前に呼び出されるため。<BR>
+立ちキャラにも雨が重なっているように見せるためには、８～１５番のレイヤに描画してやる必要があります。</P>
+<P>まず、エフェクトするためには、</P>
+<P>&lt;EffectOn a b c d e&gt; : エフェクトを開始する</P>
+<P>を使います。a,b,c,d,eは、数値です。実際は、</P>
+<P>&lt;EffectOn 0 0 0 255 1&gt;</P>
+<P>のように書きます。</P>
+<P>各パラメータを説明します。<BR>
+　　ａ ：　エフェクトレイヤ番号です。０～１５を指定します。<BR>
+　　ｂ　：　エフェクトタイプです。<FONT color="#cc0000">（これは、CScenarioView::SetScenarioEffectFactoryで渡したものになります。いくらでも無制限に増やすことが出来ます。ここでは、仮に、『蒼き大地』のものが設定されているとして説明します。これは、私のホームページにあるyaneSDK2ndのサンプル２４がそれですので、参考にしてください）</FONT><BR>
+　　０：sub color（減色）<BR>
+　　１：add color（加色）<BR>
+　　２：雪<BR>
+　　３：雨<BR>
+　　４：異次元<BR>
+　　５：不思議な光<BR>
+　　６：ぼかし<BR>
+　　７：クロスフェーダー<BR>
+　　ｃ，ｄ，ｅ　：<BR>
+　　　エフェクトのレベルを指定します。<BR>
+　　ｃ　＝　開始値<BR>
+　　ｄ　＝　終了値<BR>
+　　ｅ　＝　変化分<BR>
+　　（ｃ，ｄ，ｅは、<A href="CRootCounter.html#CRootCounterS">CRootCounterS</A>::Setで設定する値です。エフェクトのフェーズカウンターとして、CRootCounterSを使用しているのです）</P>
+<P>たとえば、雪ならば、エフェクトのレベルは、雪の画面上の数を意味します。<BR>
+雪を降らせてみるには、</P>
+<P>例）<BR>
+&lt;EffectOn 0 2 0 20 1&gt;</P>
+<P>とやれば、０番のエフェクトレイヤに、雪が降ることになります。<BR>
+そのとき、０から２０に毎フレーム、１ずつ雪が増えていくことになります。<BR>
+描画は秒間３０フレームですので、２／３秒で、雪が２０になり、雪の数はそこで２０のまま停止します。</P>
+<P>&lt;EffectOn 1 3 0 60 3&gt;<BR>
+<BR>
+とやれば、１番のエフェクトレイヤに、雨が降ることになります。<BR>
+そのとき、０から６０に毎フレーム、３ずつ雨が増えていくことになります。<BR>
+描画は秒間３０フレームですので、２秒で、雨が６０になり、雨の数はそこで６０のまま停止します。</P>
+<P>&lt;EffectOn 1 5 0 50 5&gt;</P>
+<P>とやれば、１番のエフェクトレイヤに、光の舞い上がるエフェクトが発生します。<BR>
+そのとき、０から５０に毎フレーム、５ずつ光が増えていくことになります。<BR>
+描画は秒間３０フレームですので、１／３秒で、光が６０になり、光の数はそこで６０のまま停止します。</P>
+<P>このとき、以前にエフェクトレイヤ１にかけられていた画面効果は消えます。</P>
+<P>&lt;EffectOn 1 5 0 50 -5&gt;</P>
+<P>上のと同じですが、変化分がマイナスになっています。ここにマイナスを指定すると、１／５を指定したのと同じことになります。つまり、５フレームに１回１つずつ光が増えます。ものすごくゆっくり変化させたいときにはこれを使います。</P>
+<P>&lt;EffectOn 0 4 45 210 2&gt;</P>
+<P>異次元のエフェクトです。この例では状態は45から始まって210まで。<BR>
+2というのは変化スピードです。一応、この数字でそれらしく見えますがそれぞれの数値をいじって、調整すると良いと思います。</P>
+<P>&lt;EffectOn 0 6 2 5 -5&gt;</P>
+<P>ぼかしのエフェクトです。この例では２から始まって５まで変化します。<BR>
+この数字は、ぼかしの量子化レベルを意味します。すなわち、ぼかしの粗さを意味します。この例では、徐々にぼかしがひどくなります。<BR>
+実際に試してみてください。</P>
+<P>&lt;EffectOn 0 1 0 255 8&gt;</P>
+<P>加色します。この例では、０から２５５まで８のスピードで変化させます。<BR>
+最後には２５５になるので、画面は真っ白になります。言われていた、「フラッシュ」は、この機能で再現できるはずです。</P>
+<P>立ち絵を含めて加色する場合は、<BR>
+&lt;EffectOn 8 1 0 255 8&gt;<BR>
+のように、８～１５のエフェクトレイヤで行なえばＯＫです。</P>
+<P>&lt;EffectOn 0 0 0 255 8&gt;</P>
+<P>減色します。この例では、０から２５５まで８のスピードで変化させます。<BR>
+最後には２５５になるので、画面は真っ黒になります。これを使えば画面を自由に暗くすることが出来ます。</P>
+<P>&lt;EffectOn 0 0 0 128 8&gt;</P>
+<P>これならば、完全に暗くなる前に停止します。</P>
+<P>///////////////////////////////////////////////////////////////////////</P>
+<P>エフェクトを停止させる。<BR>
+&lt;EffectOff a&gt;</P>
+<P>ａ：エフェクトレイヤ（０－１５）<BR>
+あるエフェクトレイヤのエフェクトを停止させます。</P>
+<P>使ったエフェクトは必ず停止させてください。</P>
+<P>///////////////////////////////////////////////////////////////////////</P>
+<P>&lt;EffectBG a b&gt; : エフェクターにＢＧを渡す</P>
+<P>クロスフェードをＢＧで行なうためには、エフェクターにまずＢＧを渡してやる必要があります。</P>
+<P>具体的には、</P>
+<P>&lt;EffectOn 0 7 0 255 8&gt;<BR>
+&lt;EffectBG 0 20&gt;</P>
+<P>とやれば、０番のエフェクトレイヤに、２０番のＢＧをこっそり読み込み（その時点では表示はされない）、いま存在するＢＧから８のスピードでクロスフェードします。255のところ128ならば、クロスフェードの途中で停止します。</P>
+<P>この２つはセットにして使ってください。また、使い終わったらEffectOffするのも忘れないようにしてください。</P>
+<P>///////////////////////////////////////////////////////////////////////</P>
+<P>&lt;EffectChange a c d e&gt; : エフェクトのパラメータだけを変更する</P>
+<P>EffectOnでエフェクトを有効にしている状態で、雪の数を減らしたいというような場合、これでパラメータだけを変更できます。</P>
+<P>ａ：エフェクトレイヤ番号（０－１５）<BR>
+ｃ，ｄ，ｅ：初期値・終了値・変化分</P>
+<P>例）<BR>
+&lt;EffectOn 0 2 0 20 1&gt;<BR>
+雪が降っている<BR>
+・・<BR>
+&lt;EffectChange 0 20 0 1&gt;</P>
+<P>このようにすれば、EffectOnで雪が降り出し、雪の数が２０になっているはずですので、EffectChangeで２０から０に減っていき、すなわち徐々に雪は減っていくことになります。</P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P><FONT color="#009900"> // 使用法　STEP1.以下のものをまず最初に設定すること<BR>
+// （使用するものについては必ず設定すること）<BR>
+</FONT>/////////////////////////////////////////////////////////////////////<BR>
+// 母体となるテキスト描画<BR>
+void SetTextDraw(smart_ptr&lt;CTextDrawBase&gt;
+v);<BR>
+// BGM Loader<BR>
+void SetBGMLoader(smart_ptr&lt;CBGMLoader&gt;
+v);<BR>
+// SE Loader<BR>
+void SetSELoader(smart_ptr&lt;CSELoader&gt;
+v);<BR>
+// MouseEx<BR>
+void SetMouse(smart_ptr&lt;CMouseEx&gt; v);<BR>
+// CVirtualKey(eg.CKey..)<BR>
+void SetKey(smart_ptr&lt;CVirtualKey&gt;
+v);</P>
+<P>// 以下の２つは、CPlaneLoaderかCDIB32Loaderを渡すこと<BR>
+// つまり、<BR>
+// scn.SetBGLoader(smart_ptr&lt;CPlaneLoaderBasePre)(new
+CDIB32Loader,true));<BR>
+// のように設定する<BR>
+// BG Loader<BR>
+void SetBGLoader(smart_ptr&lt;CPlaneLoaderBasePre&gt;
+v)<BR>
+// SC Loader // 立ちキャラ<BR>
+void SetSCLoader(smart_ptr&lt;CPlaneLoaderBasePre&gt;
+v);<BR>
+// Face Loader // 顔マーク<BR>
+void SetFaceLoader(smart_ptr&lt;CPlaneLoaderBasePre&gt;
+v);<BR>
+// Name Loader // 名前プレート<BR>
+void SetNameLoader(smart_ptr&lt;CPlaneLoaderBasePre&gt;
+v);<BR>
+// ボタンのローダー<BR>
+void SetButtonLoader(smart_ptr&lt;CPlaneLoaderBasePre&gt;
+v);<BR>
+// 過去ログ(これは設定しなくとも、ディフォルトでCScenarioDrawBackLogManager)<BR>
+void SetBackLog(smart_ptr&lt;CScenarioDrawBackLogManager&gt;
+v);<BR>
+// 画面エフェクトを使うならばこれを設定する<BR>
+void SetScenarioEffectFactory(smart_ptr&lt;CScenarioEffectFactory&gt;
+v);</P>
+<P><FONT color="#009900">// 使用法　STEP2.設定ファイル名。これに基づいて各種設定を行なう<BR>
+// 簡単な画面レイアウトもこれで設定する<BR>
+</FONT>virtual LRESULT SetConfigFile(string filename);<BR>
+<FONT color="#009900">// （STEP3.を経てからも、再度この関数で、<BR>
+// 別の設定ファイルを読み込ませることも可能）</FONT></P>
+<P><FONT color="#009900">// property<BR>
+</FONT>// 上で設定したクラスオブジェクト等を取得する。<BR>
+smart_ptr&lt;CTextDrawBase&gt; GetTextDraw(void);<BR>
+smart_ptr&lt;CBGMLoader&gt; GetBGMLoader(void);<BR>
+smart_ptr&lt;CSELoader&gt; GetSELoader(void);<BR>
+smart_ptr&lt;CTextDrawContext&gt; GetTextDrawContext(void);<BR>
+smart_ptr&lt;CMouseEx&gt; GetMouse(void);<BR>
+smart_ptr&lt;CVirtualKey&gt; GetKey(void);<BR>
+smart_ptr&lt;CFile&gt; GetFile(void);<BR>
+smart_ptr&lt;CPlaneLoaderBasePre&gt; GetBGLoader(void);<BR>
+smart_ptr&lt;CPlaneLoaderBasePre&gt; GetSCLoader(void);<BR>
+smart_ptr&lt;CPlaneLoaderBasePre&gt; GetFaceLoader(void);<BR>
+smart_ptr&lt;CPlaneLoaderBasePre&gt; GetNameLoader(void);<BR>
+smart_ptr&lt;CPlaneLoaderBasePre&gt; GetButtonLoader(void);<BR>
+smart_ptr&lt;CScenarioDrawBackLogManager&gt;
+GetBackLog(void);<BR>
+// 一応ボタンも得られる。こいつのListenerを差し替えることも出来る＾＾；<BR>
+smart_ptr&lt;CGUIButton&gt; GetButtonX();&nbsp;//
+削除ボタン<BR>
+smart_ptr&lt;CGUIButton&gt; GetButtonB();
+// 戻りボタン<BR>
+smart_ptr&lt;CGUIButton&gt; GetButtonP();
+// 早送りボタン<BR>
+virtual bool IsSkipFastNow( );&nbsp;// 現在高速スキップ中か？</P>
+<P>// エフェクト用のfactoryを渡す<BR>
+smart_ptr&lt;CScenarioEffectFactory&gt; GetScenarioEffectFactory(
+);</P>
+<P><FONT color="#009900">画面エフェクトは、strategyパターンによるfunctor置換で実現します。詳しくは、CScenarioEffectFactoryと、私のホームページの「天才ゲームプログラマ養成ギプス」の第１３章を参考にすること。</FONT></P>
+<P>// オプションフラグを取得する（バッファは16×sizeof(int)）<BR>
+int* GetOption( );</P>
+<P>ゲームオプションとは、シナリオファイルのほうで、&lt;GameOption
+nOptionNo nNum&gt;で、その値を変更できます。GetOptionを介して、そのゲーム特有の、ちょっとした値の受け渡しが出来ます。</P>
+<P><FONT color="#009900">// ------ set parameters..<BR>
+</FONT>// メッセージスピードの設定(1フレームに新たに表示される文字数)<BR>
+// ⇒　マイナスの値ならば、その絶対値のフレーム数で１文字表示される<BR>
+virtual void SetMessageSpeed(int n);<BR>
+// ディフォルト:1</P>
+<P><FONT color="#009900">// メッセージ表示座標<BR>
+</FONT>virtual void SetMessageXY(int x,int y);</P>
+<P><FONT color="#009900">// 使用法　STEP3.htmlファイルを実際に読み込む<BR>
+</FONT>virtual LRESULT Open(string filename);</P>
+<P><FONT color="#009900">// 実描画処理<BR>
+</FONT>virtual LRESULT OnDraw(CPlaneBase* lpPlane);
+// ここに描画</P>
+<P><FONT color="#009900">// 実描画処理２（表示できなかったネームプレート等をテキストで表現する）<BR>
+</FONT>virtual LRESULT OnDrawText(HDC hdc); // ここに描画</P>
+<P><FONT color="#009900">通常は、この関数は呼び出さなくて良いのですが、万が一、用意していない画像データを表示するように指定している場合、それを文字列として何番のファイルが現在表示するように指定されているかを表示してくれます。<BR>
+</FONT></P>
+<P>// 次の段落に読み進む<BR>
+virtual LRESULT GoNext(void);</P>
+<P>// 過去ログの表示用<BR>
+virtual LRESULT GoBack(CTextDrawContext*lp);</P>
+<P>// キー入力を行ない、メッセージを読み進める<BR>
+// この関数を使うためには、SetMouse,SetKeyで正しく<BR>
+// 入力デバイスを設定しておくこと。<BR>
+// 返し値　０：正常終了<BR>
+// １：テキストが終端まで達した<BR>
+virtual LRESULT Input(void);<BR>
+// また、Mouseのボタンを正常にフックするためにOnDrawのあとに行なうこと。</P>
+<P>// メッセージをスキップボタンを許可する(早送りボタンが無ければ無意味)
+default:true<BR>
+virtual void SetSkipFast(bool b);<BR>
+// ↑一度設定したら、再度設定するまで有効</P>
+<P>// メッセージの早送りを開始する<BR>
+virtual void SkipFast(bool bEnable);</P>
+<P>// メッセージウィンドゥの表示／非表示を切り替える<BR>
+void SetMesVisible(bool b);<BR>
+bool IsMesVisible( );</P>
+<P>// メッセージウィンドゥの表示／非表示を切り替える<BR>
+// （ただし、メッセージは進む）<BR>
+void SetMesVisible2(bool b);<BR>
+bool IsMesVisible2( );</P>
+<P>// PlaneLoaderで保持している全イメージの強制解放と再生されていないSE/BGMの解放<BR>
+void ReleaseCacheAll(void);</P>
+<P>// エフェクターの解放<BR>
+void ResetEffect();</P>
+<P>// 開始ラベルと終了ラベルの設定<BR>
+// (これが設定されていると、htmlファイルのOpenのあと自動的にその場所まで飛びます)<BR>
+void SetStartLabel(string szLabel) ;<BR>
+void SetEndLabel(string szLabel) ;</P>
+<P>// 指定ラベルまでskip<BR>
+LRESULT SkipToLabel(string szLabel);</P>
+<P>// 現在位置の取得と設定(ゲームの途中Load/Save用)<BR>
+int GetReadPosition();<BR>
+LRESULT SetReadPosition(int nPos);<BR>
+// (これが設定されていると、htmlファイルのOpenのあと自動的にその場所まで飛びます)<BR>
+void SetStartReadPosition(int nPos);<BR>
+void SetEndReadPosition(int nPos);</P>
+<P>// 現在のBGNo,現在のBGMNo<BR>
+virtual int GetBGNo(void);&nbsp;// -1なら非セレクト<BR>
+virtual int GetRealBGNo(void); // いま描画している本当のBG</P>
+<P>GetBGNo / GetRealBGNoですが、実際に読み込みは<A href="CPlaneLoader.html">CPlaneLoader</A>を使うわけで、このクラスは、読み込み時に指定されたナンバーと違うナンバーのものを読み込めるので（<A href="CLoadCache.html">CLoadCache</A>のCLoadCacheListener::OnLoadを参照のこと）、前者と後者の違いが、この２つの関数の違いです。通常、後者を使うことは、まず無いでしょう。</P>
+<P>virtual int GetBGMNo(void); // -1なら非セレクト<BR>
+virtual bool GetBGMLoop(void);</P>
+<P><FONT color="#009900">// 途中ロード＆セーブ対策<BR>
+</FONT>void GetGameContext(int*); // 256*4バイトデータ<BR>
+void SetGameContext(int*);<BR>
+void SetStartGameContext(int *); // これが設定されていればopen後に読み込まれる</P>
+<P>現在の画面ＢＧ，立ちキャラ、トランジション状態、エフェクト状態、エフェクト用のfunctor、それらのphase等を、バイト列として書き出すのがGetGameContext。それを設定するのが、SetGameContext。ただし、シナリオファイルを開く前だと、SetGameContextは使えないので、SetStartGameContextで、GetGameContextで得たバイト列を用意してあるデータアドレスを指定して、その後、Openでシナリオファイルを読み込んでください。そうすれば、そのシナリオ位置から再現されます。</P>
+<P><FONT size="+1">☆　 外字の使用</FONT></P>
+<P><FONT color="#00cc00">&lt;Gaiji n&gt;</FONT>　タグで指定されたユーザー定義外字を使うことが出来ます。SetGaiji／GetGaijiメンバ関数で、外字とするスプライト（<A href="CSpriteChara.html">CSpriteChara</A>）を設定／取得します。そのスプライトキャラナンバーnを指定します。スプライトアニメーションは出来ません。外字はsmart_ptr&lt;CSpriteChara&gt;として渡します。<FONT color="#cc0000">⇒実装において、CTextDrawに委譲しているので、先にSetTextDrawしておく必要がある。</FONT></P>
+<P><FONT size="+1">☆　 置換文字列の使用</FONT></P>
+<P><FONT color="#00cc00">&lt;ReplaceString n&gt;</FONT> 文字列置換を行ないます。主人公の名前が可変になるような場合は、これで主人公の名前を埋めておきます。SetRepString／GetRepStringメンバ関数で、置換する文字列を設定／取得します。置換文字列は、smart_ptr&lt;vector&lt;string&gt;
+&gt;として渡します。<FONT color="#cc0000">⇒実装において、CTextDrawに委譲しているので、先にSetTextDrawしておく必要がある。</FONT></P>
+<HR>
+</BODY></HTML>

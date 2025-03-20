@@ -1,0 +1,8 @@
+	if (::CoCreateInstance(CLSID_DirectDraw,
+			NULL, CLSCTX_ALL, IID_IDirectDraw, (LPVOID*)&m_lpDirectDraw)!=DD_OK){
+		Err.Out("CDirectDrawBase::Initialize‚ÅCoCreateInstance‚ÉŽ¸”s");
+		m_lpDirectDraw = NULL;
+		return 1;
+	}
+	if (m_lpDirectDraw->Initialize((GUID*)DDCREATE_EMULATIONONLY)!=DD_OK) {
+		//	ˆÈ‰º—ª

@@ -1,0 +1,35 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CFPSTimer</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CFPSTimer</FONT><A name="CTimeBase"></A></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>時間を効率的に待つためのタイマー。フレームレート（一秒間の描画枚数）を６０ＦＰＳ（Frames
+Par Second）に調整する時などに使う。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P><FONT color="#009900">void SetFPS(DWORD fps); // FPSの設定（イニシャライズを兼ねる）</FONT></P>
+<P>　ディフォルトでは６０ＦＰＳ。</P>
+<P><FONT color="#009900">DWORD GetFPS(void); // SetFPSで設定したFPSの取得</FONT></P>
+<P><FONT color="#009900">void WaitFrame(void); // １フレーム分の時間が来るまで待つ</FONT></P>
+<P><FONT color="#ff0000">　メインループのなかでは、描画処理を行なったあと、このWaitFrameを呼び出せば、SetFPSで設定したフレームレートに自動的に調整される。</FONT></P>
+<P><FONT color="#009900">bool ToBeSkip(void) const; // 次のフレームをスキップすべきか？</FONT></P>
+<P><FONT color="#ff0000">　もし、これがtrueを返してくるならば、そのフレームの描画をまるごとスキップしてしまえば（ただし、キャラの移動等の計算だけは行なう）、秒間のＦＰＳは遅いマシンでも一定と仮定してプログラムすることが出来る。ただし、そのときもWaitFrameは呼び出すこと。</FONT>詳しい解説は、<A href="http://www.sun-inet.or.jp/~yaneurao/">やねうらおのホームページ</A>の天才ゲームプログラマ養成ギプス第２１章を参照のこと。</P>
+<P>　また、フレームをスキップするかどうかは、WaitFrameの段階で確定する。そのため、次のWaitFrameを呼び出すまで、ToBeSkipは同じ真偽値を返しつづける。</P>
+<P><FONT color="#009900">DWORD GetSkipFrame(void) const;</FONT></P>
+<P>　SetFPSされた値までの描画に、ToBeSkipがtrueになっていたフレーム数を返す。ただし、ここで言うフレーム数とは、WaitFrameの呼び出しごとに１フレームと計算。</P>
+<P><FONT color="#009900">DWORD GetRealFPS(void); // FPSの取得（測定値）</FONT></P>
+<P>　1秒間に何回WaitFrameを呼び出すかを、前回１６回の呼び出し時間の平均から算出する。</P>
+<P><FONT color="#009900">DWORD GetCPUPower(void); // CPU稼動率の取得（測定値）</FONT></P>
+<P>　ＣＰＵの稼働率に合わせて、0～100の間の値が返る。ただしこれは、WaitFrameでSleepした時間から算出されたものであって、あくまで参考値である。</P>
+<P><FONT color="#009900">void ResetTimer(void); // 待ち時間の端数のリセット（普通、使う必要はない）</FONT></P>
+<P>　WaitFrameでは、前回のWaitFrameを呼び出した時間を、今回の待ち時間を算出するのに使う（SetFPSで設定した値に近づけようとするため、前回、不足していた時間を今回の待ち時間から減らす）ので、前回の呼び出し時間を現在時にすることによって、今回の待ち時間への修正項を消すのがこの関数。通常、使うことは無い。</P>
+<P><FONT color="#009900">void ResetElapseTimeCounter(void); // 消費時間のリセット<BR>
+DWORD GetElapseTimeCounter(void); // 消費時間の取得</FONT></P>
+<P>　WaitFrameで消費した時間を累計でカウントしている。そのカウンタのりセットと取得するのがこの関数である。</P>
+<P><FONT color="#009900">void ResetCallCounter(void); // 呼出しカウンタのリセット<BR>
+DWORD GetCallCounter(void); // 呼出しカウンタの取得</FONT></P>
+<P>　WaitFrameを呼び出すごとに内部的な呼び出しカウンタがインクリメントされる。そのカウンタをリセットするのと取得するのがこの関数である。</P>
+<HR>
+</BODY></HTML>

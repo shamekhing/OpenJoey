@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Math/yaneCounter.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="ICounter"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">ICounter</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">カウンタ用の基底クラス<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> operator int()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">const</SPAN> <SPAN class="reserved_word">int</SPAN> operator=(<SPAN class="reserved_word">int</SPAN> n)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block">intとの親和性<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Inc()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Dec()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block">加減算<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsBegin()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsEnd()</DIV>
+<DIV class="comment_block">初期位置か？<BR>終端に達したのか？<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> virtual ~ICounter()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CRootCounter"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CRootCounter</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">初期値(nStart)・終了値(nEnd)、そして必要ならば増加値(nStep)を設定します。<BR>	そのあと、Inc関数を実行すると、1ずつ増えます。(nStepが設定されていれば、<BR>	その数だけ増えます)　そして、加算した結果、nEnd以上になると自動的に<BR>	nStartに戻ります。(nEndにはなりません)<BR><BR>	Reset関数は、カウンタ値を初期値nStartに戻します。<BR>	あるいは、SetInit関数でReset後の初期値が設定されていれば、その値にします。<BR><BR>	また、int型との相互変換が可能ですので、あたかもint型の変数であるかのように<BR>	使えます。<BR><BR>	例）<BR>	CRootCounter r;<BR>	r.Set ( 0, 256 , -5 );<BR>	// nStart == 0 , nEnd == 256というようにカウンタを設定する<BR>	r = 128;<BR><BR>	この状態で、r++; を５回実行すると５回目で r == 129になる。r--;<BR>	を５回実行すると５回目で r == 127になる。<BR><BR>	また、nStart≦nEndでなくて良いのです。<BR>	つまり、加算( Inc / ++ )では、nEnd方向へインクリメントします。<BR>	減算( Dec / -- )では、nStart方向へインクリメントします。<BR><BR>	また、Stepがマイナスである場合は、<BR>	その絶対値回数のIncメンバ関数の呼び出しによって、1だけnEnd方向に進みます。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Math!yaneCounter_h.html#ICounter" target=_self>ICounter</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> Set(<SPAN class="reserved_word">int</SPAN> nStart, <SPAN class="reserved_word">int</SPAN> nEnd, <SPAN class="reserved_word">int</SPAN> nStep=1)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetStep(<SPAN class="reserved_word">int</SPAN> nStep)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetStart(<SPAN class="reserved_word">int</SPAN> nStart)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetEnd(<SPAN class="reserved_word">int</SPAN> nEnd)</DIV>
+<DIV class="comment_block">nStepは一回の増分の絶対値。マイナスは1/nStepの意味<BR>nStart≦nEndでなくて良い<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">int</SPAN> GetStep()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">int</SPAN> GetStart()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">int</SPAN> GetEnd()</DIV>
+<DIV class="comment_block">取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> Reset()</DIV>
+<DIV class="comment_block">カウンタのリセット<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsBegin()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsEnd()</DIV>
+<DIV class="comment_block">property..<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CRootCounter()</DIV>
+<DIV class="public_member"> CRootCounter(<SPAN class="reserved_word">int</SPAN> nEnd)</DIV>
+<DIV class="public_member"> CRootCounter(<SPAN class="reserved_word">int</SPAN> nStart, <SPAN class="reserved_word">int</SPAN> nEnd, <SPAN class="reserved_word">int</SPAN> nStep=1)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">operator int()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">const</SPAN> <SPAN class="reserved_word">int</SPAN> operator=(<SPAN class="reserved_word">int</SPAN> n)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">int</SPAN> Get()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> Inc()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> Dec()</DIV>
+<DIV class="public_member"><A class="class_link" href="Math!yaneCounter_h.html#CRootCounter" target=_self>CRootCounter</A>&amp; operator++()</DIV>
+<DIV class="public_member"><A class="class_link" href="Math!yaneCounter_h.html#CRootCounter" target=_self>CRootCounter</A> operator++()</DIV>
+<DIV class="public_member"><A class="class_link" href="Math!yaneCounter_h.html#CRootCounter" target=_self>CRootCounter</A>&amp; operator--()</DIV>
+<DIV class="public_member"><A class="class_link" href="Math!yaneCounter_h.html#CRootCounter" target=_self>CRootCounter</A> operator--()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> inc(<SPAN class="reserved_word">bool</SPAN> bAdd=true)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nRootCount</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nStart</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nEnd</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nStep</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nRate</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CInteriorCounter"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CInteriorCounter</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">内分カウンタを提供します。<BR><BR>	Setメンバ関数で、初期値(nStart)・終了値(nEnd)、<BR>	そして分割数(nFrames)を設定します。<BR><BR>	そうすれば、このカウンタはnStartから始まり、<BR>	nFrame回のIncメンバ関数の呼び出しによってnEndに到達するような<BR>	内分カウンタとなります。<BR><BR>	また、Incは、operator++としても定義してあります。<BR>	Incの逆操作であるDecもあり、それはoperator--としても定義してあります。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Math!yaneCounter_h.html#ICounter" target=_self>ICounter</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CInteriorCounter()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> operator int()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">const</SPAN> <SPAN class="reserved_word">int</SPAN> operator=(<SPAN class="reserved_word">int</SPAN> n)</DIV>
+<DIV class="comment_block">intとの相互変換<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Inc()</DIV>
+<DIV class="public_member"><A class="class_link" href="Math!yaneCounter_h.html#CInteriorCounter" target=_self>CInteriorCounter</A>&amp; operator++()</DIV>
+<DIV class="public_member"><A class="class_link" href="Math!yaneCounter_h.html#CInteriorCounter" target=_self>CInteriorCounter</A> operator++()</DIV>
+<DIV class="comment_block">加算<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Dec()</DIV>
+<DIV class="public_member"><A class="class_link" href="Math!yaneCounter_h.html#CInteriorCounter" target=_self>CInteriorCounter</A>&amp; operator--()</DIV>
+<DIV class="public_member"><A class="class_link" href="Math!yaneCounter_h.html#CInteriorCounter" target=_self>CInteriorCounter</A> operator--()</DIV>
+<DIV class="comment_block">減算<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> Set(<SPAN class="reserved_word">int</SPAN> nStart, <SPAN class="reserved_word">int</SPAN> nEnd, <SPAN class="reserved_word">int</SPAN> nFrames)</DIV>
+<DIV class="comment_block">初期値(nStart)・終了値(nEnd)、そして分割数(nFrames)を設定します。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> Set(<SPAN class="reserved_word">int</SPAN> nNow)</DIV>
+<DIV class="comment_block">現在の値を（一時的に）変更する。次のInc/Decで、正常な値に戻る<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsBegin()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsEnd()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">int</SPAN> GetFrame()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">int</SPAN> GetStart()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">int</SPAN> GetEnd()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">int</SPAN> GetFrameNow()</DIV>
+<DIV class="comment_block">property<BR>現在のフレーム数(incをした回数)の取得。<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nNow</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nStart</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nEnd</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nFrames</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nFramesNow</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

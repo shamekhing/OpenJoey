@@ -1,0 +1,45 @@
+template<class T> class vectorEx : public vector<T>
+{
+public:
+	void push_back( const T& _X )
+	{
+		insert( end(), _X ) ;
+	}
+	iterator insert( iterator _P, const T& _X = _Ty() )
+	{
+		size_type _O = _P - begin() ;
+		insert( _P, 1, _X ) ;
+		return ( begin() + _O ) ;
+	}
+	void insert( iterator _P, size_type _M, const T& _X)
+	{
+		if ( _End - _Last < _M )
+		{
+			size_type _ORIG = size() ;
+			size_type _N = _ORIG + ( _M < _ORIG ? _ORIG : _M ) ;
+			iterator _S = allocator.allocate( _N, (void *)0 ) ;
+			iterator _Q = _Ucopy( _First, _P, _S ) ;
+			_Ufill( _Q, _M, _X ) ;
+			_Ucopy( _P, _Last, _Q + _M ) ;
+			_Destroy( _First, _Last ) ;
+			allocator.deallocate( _First, _End - _First ) ;
+			_End = _S + _N ;
+			_Last = _S + _ORIG + _M ;
+			_First = _S ;
+		}
+		else if ( _Last - _P < _M )
+		{
+			_Ucopy( _P, _Last, _P + _M ) ;
+			_Ufill( _Last, _M - ( _Last - _P ), _X ) ;
+			fill( _P, _Last, _X ) ;
+			_Last += _M ;
+		}
+		else if ( 0 < _M )
+		{
+			_Ucopy( _Last - _M, _Last, _Last ) ;
+			copy_backward( _P, _Last - _M, _Last ) ;
+			fill( _P, _P + _M, _X ) ;
+			_Last += _M ;
+		}
+	}
+} ;

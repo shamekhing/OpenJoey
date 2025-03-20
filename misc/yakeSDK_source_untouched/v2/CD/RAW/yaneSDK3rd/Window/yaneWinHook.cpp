@@ -1,0 +1,61 @@
+#include "stdafx.h"
+#include "yaneWinHook.h"
+
+void CWinHookList::Add(IWinHook* hook)
+{
+	CCriticalLock cl(GetCriticalSection());
+	{
+		m_HookPtrList.push_back(hook);
+	}
+}
+
+void CWinHookList::Del(IWinHook* hook){
+
+	// 自分がHookしたやつを探して削除してゆく（複数ありうる）
+	CCriticalLock cl(GetCriticalSection());
+		//	削除中に他のプロセスが介入してくると死ぬため
+	{
+		for(list<IWinHook*>::iterator it=m_HookPtrList.begin();it!=m_HookPtrList.end();) {
+			if (*it==hook) {
+				it = m_HookPtrList.erase(it);
+			} else {
+				it ++;
+			}
+		}
+	}
+}
+
+void CWinHookList::Clear(){
+
+	CCriticalLock cl(GetCriticalSection());
+		//	削除中に他のプロセスが介入してくると死ぬため
+	{
+		m_HookPtrList.clear();
+	}
+}
+
+//	message dispatcher
+//	  CWindowのWndProcから呼び出されるので、このCriticalSectionは、各ウィンドゥにつき一つ存在することになる。
+//	  つまりこのCriticalSectionは、メッセージループと、それに対応するメインスレッド間での相互排他のためのものである。
+LRESULT CWinHookList::Dispatch(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam,WNDPROC pWndProc){
+
+	{
+		CCriticalLock cl(GetCriticalSection());
+		list<IWinHook*>::iterator it=m_HookPtrList.begin();
+		while (it!=m_HookPtrList.end()) {
+			LRESULT l;
+			l = (*it)->WndProc(hWnd,uMsg,wParam,lParam);
+			if (l) {
+				return l; // 返し値として０以外を持つならばメッセージは処理されたと見なす
+			}
+			it ++ ;
+		}
+	}
+
+	if (pWndProc == NULL) {
+		return ::DefWindowProc(hWnd,uMsg,wParam,lParam);
+	} else {
+		//	hookしたウィンドゥ関数を呼び出す
+		return ::CallWindowProc(pWndProc,hWnd,uMsg,wParam,lParam);
+	}
+}

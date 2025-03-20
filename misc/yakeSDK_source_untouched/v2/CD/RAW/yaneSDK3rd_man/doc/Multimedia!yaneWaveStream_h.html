@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Multimedia/yaneWaveStream.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="CWaveStream"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CWaveStream</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">wav形式のサウンドデータを読み込む class ISoundStream 派生クラス<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Multimedia!yaneSoundStream_h.html#ISoundStream" target=_self>ISoundStream</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CWaveStream()</DIV>
+<DIV class="public_member"> virtual ~CWaveStream()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT Open(<SPAN class="reserved_word">const</SPAN> <SPAN class="reserved_word">char</SPAN>* filename)</DIV>
+<DIV class="public_member">LRESULT Close()</DIV>
+<DIV class="public_member">LONG GetLength()</DIV>
+<DIV class="public_member">LRESULT SetCurrentPos(LONG lPosition)</DIV>
+<DIV class="public_member">LONG GetCurrentPos()</DIV>
+<DIV class="public_member">DWORD Read(BYTE* lpDest, DWORD dwSize)</DIV>
+<DIV class="public_member">DWORD GetPacketSize()</DIV>
+<DIV class="public_member">WAVEFORMATEX* GetFormat()</DIV>
+<DIV class="comment_block">override from class ISoundStream<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Auxiliary!yaneFile_h.html#IFile" target=_self>IFile</A>&gt; GetFile()</DIV>
+<DIV class="protected_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Auxiliary!yaneFile_h.html#IFile" target=_self>IFile</A>&gt; m_vFile</DIV>
+<DIV class="comment_block">ファイル操作用のIFileを得る<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">LRESULT Initialize()</DIV>
+<DIV class="comment_block">Open用のヘルパ関数<BR>mmioOpenし、WAVEFORMATEXの設定、データサイズの取得などを行う<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">LONG ByteToMsec(DWORD dwByte)</DIV>
+<DIV class="protected_member">DWORD MsecToByte(LONG lMsec)</DIV>
+<DIV class="comment_block">単位変換用ヘルパ関数（0xffffffffはエラー）<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bStaticOpen</DIV>
+<DIV class="protected_member">WAVEFORMATEX m_vWaveFormat</DIV>
+<DIV class="protected_member">DWORD m_dwDataOffset</DIV>
+<DIV class="protected_member">DWORD m_dwDataLength</DIV>
+<DIV class="protected_member">DWORD m_dwReadPosition</DIV>
+<DIV class="protected_member">HMMIO m_hmmio</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

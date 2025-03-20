@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Multimedia/yaneSoundStream.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="ISoundStream"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">ISoundStream</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">サウンドデータをPCM形式で読み出すためのインターフェース<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> ISoundStream()</DIV>
+<DIV class="public_member"> virtual ~ISoundStream()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Open(<SPAN class="reserved_word">const</SPAN> <SPAN class="reserved_word">char</SPAN>* filename)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block">オープンする<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Close()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block">クローズする<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LONG GetLength()</DIV>
+<DIV class="comment_block">サウンドデータの長さをmsec単位で返す<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetCurrentPos(LONG lPosition)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block">再生位置をmsec単位で設定する<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LONG GetCurrentPos()</DIV>
+<DIV class="comment_block">再生位置をmsec単位で返す<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> DWORD Read(BYTE* lpDest, DWORD dwSize)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block">lpDestに、dwSizeだけPCM形式で展開する<BR>[in] lpDest - 展開バッファへのポインタ<BR>[in] dwSize - 展開サイズ<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> DWORD GetPacketSize()</DIV>
+<DIV class="comment_block">↑のdwSizeの最小値<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> WAVEFORMATEX* GetFormat()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CNullSoundStream"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CNullSoundStream</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">class ISoundStream のNullDeviceクラス<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Multimedia!yaneSoundStream_h.html#ISoundStream" target=_self>ISoundStream</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CNullSoundStream()</DIV>
+<DIV class="public_member"> virtual ~CNullSoundStream()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT Open(<SPAN class="reserved_word">const</SPAN> <SPAN class="reserved_word">char</SPAN>* filename)</DIV>
+<DIV class="public_member">LRESULT Close()</DIV>
+<DIV class="public_member">LONG GetLength()</DIV>
+<DIV class="public_member">LRESULT SetCurrentPos(LONG dwPosition)</DIV>
+<DIV class="public_member">LONG GetCurrentPos()</DIV>
+<DIV class="public_member">DWORD Read(BYTE* lpDest, DWORD dwSize)</DIV>
+<DIV class="public_member">DWORD GetPacketSize()</DIV>
+<DIV class="public_member">WAVEFORMATEX* GetFormat()</DIV>
+<DIV class="comment_block">override from class ISoundStream<BR></DIV>
+</DIV>
+<HR><BR>
+<A name="ISoundStreamFactory"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">ISoundStreamFactory</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">class ISoundStream 派生クラスを生成するfactory のインターフェース<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> ISoundStreamFactory()</DIV>
+<DIV class="public_member"> virtual ~ISoundStreamFactory()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSoundStream_h.html#ISoundStream" target=_self>ISoundStream</A>&gt; Open(<SPAN class="reserved_word">const</SPAN> string&amp; filename)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block">ISoundStreamを生成する<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="Auxiliary!yaneStringMap_h.html#IStringMap" target=_self>IStringMap</A>* GetPlugInMap()</DIV>
+<DIV class="comment_block">拡張子⇒生成するサウンドPlugInのクラス名<BR>		へのmapです。<BR>		GetPluginMap()-&gt;Write("ogg", "CVorbisStream");<BR>		のようにしてプラグインを追加していきます。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Auxiliary!yaneStringMap_h.html#IStringMap" target=_self>IStringMap</A>&gt; m_vPlugInMap</DIV>
+<DIV class="comment_block">拡張子からPlugInのクラス名へのmap<BR></DIV>
+</DIV>
+<HR><BR>
+<A name="CSoundStreamFactory"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CSoundStreamFactory</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">class ISoundStream 派生クラスを生成するfactory<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Multimedia!yaneSoundStream_h.html#ISoundStreamFactory" target=_self>ISoundStreamFactory</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CSoundStreamFactory()</DIV>
+<DIV class="public_member"> virtual ~CSoundStreamFactory()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSoundStream_h.html#ISoundStream" target=_self>ISoundStream</A>&gt; Open(<SPAN class="reserved_word">const</SPAN> string&amp; filename)</DIV>
+<DIV class="comment_block">override from class ISoundStreamFactory<BR></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

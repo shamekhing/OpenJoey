@@ -1,0 +1,16 @@
+	//	dynamic_castの無いときヽ(´▽｀)ノ
+	//	Debug build:960ms Release build:126ms
+	for (int i=0;i<10000000;i++){
+		if (p->GetTypeInfo()==1){
+			q = static_cast<A*>(p) + i;
+		}
+	}
+
+	//	dynamic_castのあるとき(;´Д`)
+	//	Debug build:2033ms Release build:1414ms
+	for (int i=0;i<10000000;i++){
+		q = dynamic_cast<A*>(p) + i;
+	}
+
+	※　このキャストのあと+iしているのは、最適化によって削除されて
+		しまわないようにするためで、あまり気にしないでください。

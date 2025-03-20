@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>クラスリファレンス</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CMsgSender , class CMsgReceiver</FONT>　<A name="CTimeBase"></A><FONT color="#ff0000">【汎用クラス<FONT color="#ff0000">】</FONT></FONT></P>
+<P align="left"><FONT color="#009900" size="-1">→ ファイルは、yaneMsgSR.h,yaneMsgSR.cpp</FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>相互にクラス階層等の関係のないクラス間でのメッセージ送受信を行なう。JavaのObservable
+- Observerクラス。<BR>
+まっとうなオブジェクト指向設計するのに便利。</P>
+<P>CMsgSenderとCMsgReceiverとを対にして使う。ひとつのCMsgSender派生クラスのインスタンスは、複数のCMsgReceiver派生クラスのインスタンスと<FONT color="#cc0000">接続</FONT>できる。この接続は、<FONT color="#cc0000">どちらかのインスタンスがデストラクトされるときに自動的に断ち切られる</FONT>。</P>
+<P><FONT size="+1" color="#009900">☆　CMsgSenderのメンバ関数</FONT></P>
+<P>void AddReceiver(CMsgReceiver*); // レシーバー追加<BR>
+void DeleteReceiver(CMsgReceiver*); // レシーバー削除<BR>
+void DeleteReceivers(void); // 全レシーバー削除<BR>
+void NotifyReceivers(void* lpArg=NULL); //
+接続されているレシーバーに全通知</P>
+<P><FONT size="+1" color="#009900">☆　CMsgReceiverのメンバ関数</FONT></P>
+<P>virtual void OnNotifiedMsg(CMsgSender*lpSender,void*lpArg=NULL)
+= 0;</P>
+<P>これをオーバーライドして使う。CMsgSenderの派生クラスのインスタンスから、NotifyReceiversされると、それに接続されているCMsgReceiver派生クラスのインスタンスの、この関数が呼び出される。</P>
+<P><FONT size="+1" color="#009900">☆　使用例</FONT></P>
+<PRE>class CS : public CMsgSender {
+public:
+    void test(void) {
+        NotifyReceivers((void*)123);
+    }
+    void test2(int xy){
+        // この例だとxy == 123が入ってくる
+    }
+};
+
+class CR : public CMsgReceiver {
+    virtual void OnNotifiedMsg(CMsgSender*lpSender,void*lpArg=NULL){
+        CS* lp = dynamic_cast&lt;CS*&gt;(lpSender);
+        if (lp!=NULL){
+             lp-&gt;test2((int)lpArg);
+        }
+    }
+};
+
+void    CApp::MainThread(void) {                                 //      これが実行される
+    CS cs;
+    CR cr;
+    cs.AddReceiver(&amp;cr);  // 接続する。
+    cs.test();            // 試しに呼び出してみる。 
+}</PRE>
+<P>このように、CMsgSenderからdynamic_castは、成功すれば非NULLになるので、それを使ってCMsgSenderクラスのメンバ関数にアクセスすることが出来るようになります。なお、dynamic_castは、RTTIが有効になっていないと使えません。VC++ならば、「プロジェクト
+→ 設定 → C/C++ → C++言語 → ランタイムタイプ情報(RTTI)を有効にする」で有効になります。</P>
+<P>また、メッセージを送受信する２つのクラスの場合は、双方のクラスをCMsgSender,CMsgReceiverの両方から多重継承して、互いに接続を持ち合うようにします。</P>
+<P>CMsgReceiverのクラス内でnewしたCMsgSender派生クラスのポインタを保持しているならば、上例のようにdynamic_castしなくとも、そのポインタと比較するだけでＯＫです。上の例は、あくまで、CMsgSender派生クラスのメンバを呼び出す必要があるときに行なう処理です。</P>
+<HR>
+</BODY></HTML>

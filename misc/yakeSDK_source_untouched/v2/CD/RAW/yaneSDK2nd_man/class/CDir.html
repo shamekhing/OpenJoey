@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CDir</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CDir</FONT><A name="CTimeBase"></A>　<FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>ディレクトリ内のファイル検索用。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P><FONT color="#009900">void SetFindFile(const string&amp; file);
+// 検索ファイル名設定</FONT><BR>
+<FONT color="#009900">void SetPath(const string&amp; file); //
+検索パス設定</FONT></P>
+<P>　SetFindFile/SetPathで検索ファイル名と検索パスを設定する。<BR>
+　検索パスは、カレントフォルダであるなら、<A href="CFile.html">CFile</A>::GetCurrentDirectoryを使って、それを取得して、これに渡してください。</P>
+<P>　検索ファイル名には、複数のワイルドカード(*,
+?)を使用することが出来る。<BR>
+　この２つの関数を設定したならば、あとはFindFileを呼び出すと実際の検索を行なってくれる。</P>
+<P><FONT color="#009900">LRESULT FindFile(string&amp; file); // ファイルを取得(返し値非０ならばNot
+Found)</FONT></P>
+<P>　これが非0が返ってくるようになるまで呼び出しつづけることによって、一致するファイルを次々と取得することが出来る。</P>
+<P><FONT color="#009900">void&nbsp;Reset(); // FindFileで検索しているファイルをリセットする。</FONT></P>
+<P>　FindFileでファイルを取得しているときに、これを呼び出せば、検索はリセットされる。よって次のFindFileで、また最初からファイルが読み出せる。FindFileで非0が返ってきたあとには、自動的にリセットされるので、この関数を呼び出す必要はない。</P>
+<P><FONT color="#009900">bool IsDir(void) const; // FindFileで取得したのはフォルダか？</FONT></P>
+<P>　EnableDirListup(true);と設定しているときのみ有効。</P>
+<P><FONT color="#009900">void EnableSubdir(bool b); // 検索のときにサブフォルダを有効にするのか</FONT></P>
+<P>　ディフォルトではtrue。</P>
+<P><FONT color="#009900">void EnablePackFile(bool b); // yanePack/yanePackExファイルも検索対象にするのか？</FONT></P>
+<P>　ディフォルトではtrue。</P>
+<P><FONT color="#009900">void EnableDirListup(bool b);　// フォルダ名もマッチング対象にする</FONT></P>
+<P>　ディフォルトではfalse。</P>
+<P><FONT color="#009900">static bool IsMatch(LPCSTR it1,LPCSTR it2);
+// 二つの文字列が一致するか？(wildcard使用可能)</FONT></P>
+<P><FONT color="#009900">bool IsFileExist(const string&amp; file);
+// ファイルが存在するかを調べる。</FONT></P>
+<P><FONT color="#009900">DWORD CheckDrive(void); 　// 各ドライブの有無を調べる<BR>
+bool IsExistDrive(int n) const; // CheckDriveで調べたドライブの有無を得る。n
+== 0ならばAドライブの有無、n == 1ならばBドライブの有無…、</FONT></P>
+
+<HR>
+</BODY></HTML>

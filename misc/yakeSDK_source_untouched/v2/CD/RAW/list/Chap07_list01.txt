@@ -1,0 +1,11 @@
+class CMySceneFactory : public ISceneFactory {
+	virtual smart_ptr<IScene> CreateScene(int nScene){
+		IScene *p=NULL;
+		switch(nScene){
+		case	SceneA : p=new CSceneA; break;
+		case	SceneB : p=new CSceneB; break;
+		case	SceneC : p=new CSceneC; break;
+		}
+		return smart_ptr<IScene>(p);
+	}
+};

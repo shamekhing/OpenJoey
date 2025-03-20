@@ -1,0 +1,34 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CTextDIB32</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CTextDIB32</FONT><A name="CTimeBase"></A> <FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>文字をプレーン(<A href="CDIB32.html">CDIB32</A>)に描画して保持するクラスです。<A href="CPlane.html">CPlane</A>に対する<A href="CTextPlane.html">CTextPlane</A>と同じ役割を果たします。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P><A href="CDIB32.html">CDIB32</A>派生クラスです。追加されたメンバは、</P>
+<P><FONT color="#009900">CFont* GetFont(void);<BR>
+LRESULT UpdateText(void); </FONT><BR>
+<FONT color="#009900">LRESULT UpdateTextA(void); </FONT><FONT color="#cc0000">// アンチェリかけるバージョン→α値を持つようになるので描画はBlendBltFastAlphaで行なう。</FONT><BR>
+<FONT color="#009900">LRESULT UpdateTextAA(void); </FONT><FONT color="#cc0000">// 精細なアンチェリかけるバージョン→α値を持つようになるので描画はBlendBltFastAlphaで行なう。</FONT></P>
+<P>の３つ。GetFontは、新たにメンバに追加された<A href="CFont.html">CFont</A>にアクセスするためのものです。こいつ間接で、フォントのプロパティ、テキストを設定し、UpdataTextかUpdateTextAを呼び出すことによって、その文字に応じたサーフェースサイズが確保され、そこに文字が描画されます。（以降はCDIB32のメンバを使ってBltしたりすることが出来る。プレーンなので、一度UpdateTextしてしまえば、あとは超高速）</P>
+<P>CFontによって設定されている文字列がemptyのときは、このUpdateTextによって、１×１のサーフェースが作成されます。よって、文字列がemptyのときでも、UpdateTextのあとにBltFastして構いません。</P>
+<P><FONT color="#cc0000">UpdateTextAAは、UpdateTextAより高い精度でアンチェリをかけます。その分、遅いです。あまり見た目は変わりないので、速度が要求される部分では使わないようにしてください。</FONT></P>
+<P>◎　ビットマップ＋テキスト</P>
+<P>その他、通常のビットマップと混合したプレーンにもできます。CTextDIB32のインスタンス対してLoadでビットマップを読み込みます。そのあと、GetFontを介してフォントを設定後、UpdateTextをすれば出来上がりです。（ただし、そのテキストを変更してUpdateTextしてもビットマップの読み直しは行ないません。これは仕様です。また、UpdateTextAを行なう場合、クリッピングしてませんので、ビットマップのほうが描画される文字より確実に大きくなるようにしてください）　またそのとき、</P>
+<P>void SetTextPos(int x,int y);<BR>
+void GetTextPos(int &amp;x,int &amp;y);</P>
+<P>によって、ビットマップのどの位置にテキストを描画するか設定／取得できます。</P>
+<P>◎　背景色の変更</P>
+<P>CDIB32::SetFillColorで変更できます。</P>
+<P><FONT color="#cc0000">◎　UseDIBSection</FONT></P>
+<P>文字描画は<A href="CFont.html">CFont</A>を使っています。これにHDCが必要となるため、コンストラクタで<A href="CDIB32.html">CDIB32</A>::UseDIBSectionを呼び出しています。ユーザー側で呼び出す必要はありません。また、DIBはりソースを消費するため、Windows95/98環境では同時に使用できる量に制限があります。そのため、使いもしないCTextDIB32を不用意に作るのは避けるようにしましょう。</P>
+<P><FONT size="+1" color="#009900">☆　使用例</FONT></P>
+<P>CTextDIB32 tp;<BR>
+tp.GetFont()-&gt;SetText(&quot;こにゃにゃちわーなのだ&quot;);<BR>
+tp.GetFont()-&gt;SetSize(40);<BR>
+tp.UpdateText(); </P>
+<HR>
+</BODY></HTML>

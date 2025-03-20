@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CSpriteChara</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CSpriteChara</FONT><A name="CTimeBase"></A><FONT color="#ff0000"> 【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>スプライト(<A href="CSprite.html">CSpriteBase</A>)の定義情報をテキストファイルから読み込み、一括定義して管理します。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P> // キャラパターン定義ファイルをテキストファイルから読み込む<BR>
+<FONT color="#009900">LRESULT Load(LPSTR szFileName);<BR>
+void Release(void); // 解放</FONT></P>
+<P><FONT color="#009900">CSpriteBase* GetSprite(void);</FONT></P>
+<P>Loadで読み込まれたCSpriteBaseの先頭アドレスを得る。GetSprite(
+)[2]のようにして3つ目のスプライトにアクセスできる。</P>
+<P><FONT size="+1" color="#009900">☆　注意点</FONT></P>
+<P>スプライトは、CSpriteChara::Load(&nbsp;)したときに、CAppManager::IsDirectDraw(
+)でDirectDrawを使用中かどうかを調べて、CPlane
+, CDIB32のどちらかをCreateします。この仕組みは、CPlaneBase::CreatePlane(
+)によって実現されます。そこで、DirectDrawを使いながらCreateSecondaryDIB(
+)をして、そこにスプライト描画をしようとする場合、CDIB32のスプライトを作らないといけないのに、ディフォルトではCPlaneのスプライトが出来てしまいます。これを回避するには、CPlaneBase::SetPlaneBaseFactoryで、CDIB32のFactoryを渡してやることです。詳しくは、<A href="CPlaneBase.html">CPlaneBase</A>::CreatePlane( )をご覧ください。</P>
+<HR>
+<P><FONT size="+2">スプライトキャラ定義ファイルのフォーマット</FONT></P>
+<P><FONT color="#999900">・大文字小文字は区別しない<BR>
+・１行は２５６文字まで<BR>
+・矩形定義は256まで<BR>
+・スプライトとは、ある一連の動き（CSprite）を定義する<BR>
+・スプライト定義は、矩形を順番に指定することによって行なう<BR>
+・各行、//以降はコメントとできる<BR>
+・プレーンは無限に利用できる<BR>
+・矩形とともに、足の位置（ベースライン）を指定することがある<BR>
+・矩形とともに、オフセットを指定することがある<BR>
+・スプライト・矩形番号は０から始まる<BR>
+・スプライト定義するときに指定される矩形は、事前に（それより前の行で）定義されていなければならない。<BR>
+#SpriteMax 4 // スプライト定義数は４。これは先頭で指定する<BR>
+#Plane 0,&quot;test.bmp&quot; // プレーン0としてtest.bmpを読み込む<BR>
+#ColorKey 0,4,10 // 0番のプレーンの抜き色を位置で指定し、それは(4,10)とする(ディフォルトは(0,0))<BR>
+#ColorKeyA 0,34,4,10 // 0～34のプレーンのカラーキーは位置で指定し、それは(4,10)とする(ディフォルトは(0,0))<BR>
+#ColorKeyB 0,107,0,255,0 // 0-107番のプレーンの抜き色をRGBで指定し、それは(0,255,0)とする<BR>
+#Plane 1,&quot;test2.bmp&quot; // プレーン1としてtest2.bmpを読み込む<BR>
+#Rect 0,1,48,48,64,128 // 矩形0としてプレーン1の(48,48)からW64×H128の矩形とする<BR>
+#Rect 1,1,112,48,64,128 // 矩形1としてプレーン1の(112,48)からW64×H128の矩形とする<BR>
+#Sprite 1,0,1,1,0 // スプライト1は矩形0→矩形1→矩形1→矩形0という循環とする<BR>
+#SpriteF 0,0,1,1,0 // スプライト0は矩形0→矩形1→矩形1→矩形0という循環とする。ただし抜き色は無効</FONT><FONT color="#999900"><BR>
+#RectA 12,0,10,15,32,64,4,3 // 矩形12～は、プレーン0に対する、W32×H64のサイズであり、<BR>
+// それは(10,15)に始まり、横4列、縦3行の12回分繰り替えし<BR>
+// 定義される。つまり矩形12～23までが一気に定義される<BR>
+#RectOffset 10,16,5,6 // 矩形10から16までに、(5,6)のオフセットを与える<BR>
+</FONT></P>
+<HR>
+</BODY></HTML>

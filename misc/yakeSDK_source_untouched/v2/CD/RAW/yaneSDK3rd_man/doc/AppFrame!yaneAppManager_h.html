@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>AppFrame/yaneAppManager.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="CAppManager"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CAppManager</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">typedef smart_vector_ptr&lt;CAppManageInfo&gt;CAppManageList</DIV>
+<DIV class="protected_member">CAppManageList m_alpInfo</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">typedef smart_vector_ptr&lt;function_callback&gt;CAppCallBackList</DIV>
+<DIV class="protected_member">CAppCallBackList m_alpCallBack</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">void</SPAN> Add()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">void</SPAN> Del()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">void</SPAN> Add()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">void</SPAN> Del()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">void</SPAN> Add()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">void</SPAN> Del()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="AppFrame!yaneAppBase_h.html#IAppBase" target=_self>IAppBase</A>* GetMyApp()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="AppFrame!yaneAppFrame_h.html#IAppFrame" target=_self>IAppFrame</A>* GetMyFrame()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="AppFrame!yaneAppDraw_h.html#IAppDraw" target=_self>IAppDraw</A>* GetMyDraw()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="Window!yaneWindow_h.html#IWindow" target=_self>IWindow</A>* GetMyWindow()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">void</SPAN> Hook()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">void</SPAN> Unhook()</DIV>
+<DIV class="comment_block">自分の属するアプリスレッドの保有しているウィンドゥに関連付ける。<BR>（ウィンドゥメッセージがコールバックされるようになる）<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> HWND GetHWnd()</DIV>
+<DIV class="comment_block">自分の属するアプリスレッドの保有するウィンドゥハンドルを返す<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">bool</SPAN> IsFullScreen()</DIV>
+<DIV class="comment_block">フルスクリーンモードかどうかを返す<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">int</SPAN> GetAppInstanceNum()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">void</SPAN> StopAllThread()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">void</SPAN> Inc()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">void</SPAN> Dec()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">int</SPAN> GetRef()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> CAppCallBackList* GetCallBackList()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="Thread!yaneCriticalSection_h.html#CCriticalSection" target=_self>CCriticalSection</A>* GetCriticalSection()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CAppManager()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!singleton_h.html#singleton" target=_self>singleton</A> &lt;CAppManager&gt;m_obj</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="AppFrame!yaneAppManager_h.html#CAppManager" target=_self>CAppManager</A>* GetObj()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> _Add()</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> _Del()</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> _Add()</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> _Del()</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> _Add()</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> _Del()</DIV>
+<DIV class="protected_member"><A class="class_link" href="AppFrame!yaneAppBase_h.html#IAppBase" target=_self>IAppBase</A>* _GetMyApp()</DIV>
+<DIV class="protected_member"><A class="class_link" href="AppFrame!yaneAppFrame_h.html#IAppFrame" target=_self>IAppFrame</A>* _GetMyFrame()</DIV>
+<DIV class="protected_member"><A class="class_link" href="AppFrame!yaneAppDraw_h.html#IAppDraw" target=_self>IAppDraw</A>* _GetMyDraw()</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> _Hook()</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> _Unhook()</DIV>
+<DIV class="protected_member">HWND _GetHWnd()</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> _IsFullScreen()</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> _GetAppInstanceNum()</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> _StopAllThread()</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> _Inc()</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> _Dec()</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> _GetRef()</DIV>
+<DIV class="protected_member">CAppCallBackList* _GetCallBackList()</DIV>
+<DIV class="protected_member"><A class="class_link" href="Thread!yaneCriticalSection_h.html#CCriticalSection" target=_self>CCriticalSection</A>* _GetCriticalSection()</DIV>
+<DIV class="comment_block">singleton経由でアクセスを行なうため、非staticなバージョンが必要<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member"><A class="class_link" href="Thread!yaneCriticalSection_h.html#CCriticalSection" target=_self>CCriticalSection</A> m_oCriticalSection</DIV>
+<DIV class="private_member"><SPAN class="reserved_word">int</SPAN> m_nRef</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CAppManageInfo"></A>
+<SPAN class="reserved_word">struct</SPAN>&nbsp;<SPAN class="class_name">CAppManager::CAppManageInfo</SPAN>
+<HR>
+<DIV class="block_title">構造体の説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="AppFrame!yaneAppBase_h.html#IAppBase" target=_self>IAppBase</A>* m_lpAppBase</DIV>
+<DIV class="public_member"><A class="class_link" href="AppFrame!yaneAppFrame_h.html#IAppFrame" target=_self>IAppFrame</A>* m_lpAppFrame</DIV>
+<DIV class="public_member"><A class="class_link" href="AppFrame!yaneAppDraw_h.html#IAppDraw" target=_self>IAppDraw</A>* m_lpAppDraw</DIV>
+<DIV class="public_member">DWORD m_dwThreadID</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

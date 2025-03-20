@@ -1,0 +1,36 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>GTLについて</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+3" color="#009900"><B>GTL</B></FONT><FONT size="+2">(Graphic Template Library)</FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>グラフィックの転送を行なうためのfunctor等を集めたものです。定義は、yaneGTL.h
+/ cppで行なっています。</P>
+<P><A href="../class/CFastPlane.html">CFastPlane</A>で使用する各ピクセルフォーマットごとのクラスを用意しています。また、各ピクセルフォーマットごとのエフェクトを定義しています。各bppモードにおける加色合成や、RGB555⇒256のような変換ルーチンも、この中に存在します。</P>
+<P>この部分のプログラムは非常に汎用性のあるものなので、この部分だけをぶっこ抜いて流用することも可能です。</P>
+<P>ソースには、詳しい説明が書いてあるので、yaneGTL.hを直接見ていただければ、ある程度、意味は理解できると思います。</P>
+<P>中でも重要なのは、</P>
+<P>CFastPlaneEffectというクラスで、これは、functorを用いた転送を定義しています。</P>
+<P>Effect　：　あるサーフェースのある矩形に対して、functorを適用する描画関数<BR>
+Blt　　　：　サーフェース間でfunctorを適用しながら転送する描画関数。拡大縮小をしながら転送することも出来る。</P>
+<P>EffectDouble：　Effectを倍サイズで行なうための描画関数。たとえば、RGB565(WORD)に対する処理を、可能な限りDWORD単位で処理することによって、速度向上を期待するためのもの。<BR>
+BltDouble　　：　Bltを倍サイズで行なうための描画関数。内容は上のと同様。</P>
+<P>たとえば、<A href="../class/CDIB32.html">CDIB32</A>で、α付きサーフェースからα付きサーフェースへPhotoShopのレイヤ的に転送するには、CDIB32::GetPlaneInfoを使用して、</P>
+<CENTER>
+<TABLE bgcolor="#ffffff">
+  <TBODY>
+    <TR>
+      <TD>CFastPlaneEffect::Blt(<BR>
+      CFastPlaneARGB8888(),lpSrc-&gt;GetPlaneInfo(),<BR>
+      CFastPlaneARGB8888(),lpDst-&gt;GetPlaneInfo(),<BR>
+      CFastPlaneCopyMulAlphaToAlpha(),<BR>
+      x,y,lpSrcRect,lpDstSize,lpClipRect);</TD>
+    </TR>
+  </TBODY>
+</TABLE>
+</CENTER>
+<P>とやります。</P>
+<HR>
+</BODY></HTML>

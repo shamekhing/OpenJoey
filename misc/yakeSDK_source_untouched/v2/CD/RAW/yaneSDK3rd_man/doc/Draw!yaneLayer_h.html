@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Draw/yaneLayer.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="ILayerBase"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">ILayerBase</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> OnDraw()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> OnDraw()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetPos(<SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> GetPos(<SPAN class="reserved_word">int</SPAN>&amp; x, <SPAN class="reserved_word">int</SPAN>&amp; y)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> Enable(<SPAN class="reserved_word">bool</SPAN> bEnable)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> IsEnable()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> ILayerBase()</DIV>
+<DIV class="public_member"> virtual ~ILayerBase()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nX,m_nY</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bEnable</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="ILayer"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">ILayer</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Draw!yaneLayer_h.html#ILayerBase" target=_self>ILayerBase</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> ILayer()</DIV>
+<DIV class="public_member"> virtual ~ILayer()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="IAfterLayer"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">IAfterLayer</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Draw!yaneLayer_h.html#ILayerBase" target=_self>ILayerBase</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> IAfterLayer()</DIV>
+<DIV class="public_member"> virtual ~IAfterLayer()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="IHDCLayer"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">IHDCLayer</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Draw!yaneLayer_h.html#ILayerBase" target=_self>ILayerBase</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> IHDCLayer()</DIV>
+<DIV class="public_member"> virtual ~IHDCLayer()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="ILayerList"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">ILayerList</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Add()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Del()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Clear()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsEmpty()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> OnDraw()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> OnDraw()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> virtual ~ILayerList()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CLayerList"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CLayerList</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Draw!yaneLayer_h.html#ILayerList" target=_self>ILayerList</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Add()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Del()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Clear()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsEmpty()</DIV>
+<DIV class="comment_block">自分自身をフックに加える<BR>自分自身をフックから外す<BR>すべてをクリアする<BR>空であるか？<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> OnDraw()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> OnDraw()</DIV>
+<DIV class="comment_block">自分の保持しているフックリストに対してOnDrawを呼び出す<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="YTL!list_chain_h.html#list_chain" target=_self>list_chain</A>&lt;<A class="class_link" href="Draw!yaneLayer_h.html#ILayerBase" target=_self>ILayerBase</A>&gt; m_listLayer</DIV>
+<DIV class="protected_member"><A class="class_link" href="YTL!list_chain_h.html#list_chain" target=_self>list_chain</A>&lt;<A class="class_link" href="Draw!yaneLayer_h.html#ILayerBase" target=_self>ILayerBase</A>&gt;* GetList()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

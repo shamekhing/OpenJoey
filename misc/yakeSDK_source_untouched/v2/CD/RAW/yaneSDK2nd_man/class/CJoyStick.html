@@ -1,0 +1,35 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CJoyStick</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CJoyStick</FONT><A name="CTimeBase"></A> <FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>JoyStick入力のためのクラス。<A href="CKeyBase.html">CKeyBase</A>から派生。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>LRESULT SetButtonMax(int max);</P>
+<P>　検知する最大ボタン数を設定。0～32。ディフォルトでは2。</P>
+<P>int GetButtonMax(void)const;</P>
+<P>　検知する最大ボタン数を取得。0～32。</P>
+<P>LRESULT SelectDevice(JoySelector j);</P>
+<P>　使用するジョイスティックを指定。</P>
+<P>enum JoySelector {<BR>
+jsJOYSTICK1,<BR>
+jsJOYSTICK2,<BR>
+jsJOYSTICK1OR2 // default<BR>
+};</P>
+<P>jsJOYSTICK1OR2を指定すると、JoyStickポート１を調べ、反応がなければJoyStickポート２を使う。（ディフォルト）</P>
+<P><A href="../Config/yaneConfig.html">yaneConfig.h</A>でUSE_DIRECTINPUT_JOYSTICKがdefineされていれば、</P>
+<P>jsDIRECT_JOYSTICK1,jsDIRECT_JOYSTICK2,jsDIRECT_JOYSTICK3,jsDIRECT_JOYSTICK4,<BR>
+jsDIRECT_JOYSTICK5,jsDIRECT_JOYSTICK6,jsDIRECT_JOYSTICK7,jsDIRECT_JOYSTICK8,<BR>
+jsDIRECT_JOYSTICK9,jsDIRECT_JOYSTICK10,jsDIRECT_JOYSTICK11,jsDIRECT_JOYSTICK12,<BR>
+jsDIRECT_JOYSTICK13,jsDIRECT_JOYSTICK14,jsDIRECT_JOYSTICK15,jsDIRECT_JOYSTICK16</P>
+<P>を指定したときは、これらのJoyStickが使えるようになります。これは、DirectX5（以降）のDirectInputを利用したもので、Windowsが認識した順番にjsDIRECT_JOYSTICK1から割り振られていきます。つまり、３本のJoyStickが刺さっている状態ならば、jsDIRECT_JOYSTICK1,jsDIRECT_JOYSTICK2,jsDIRECT_JOYSTICK3が、それらのJoyStickに相当します。</P>
+<P>また、刺さっているJoyStickの数については、</P>
+<P><FONT color="#009900">static int GetDirectInputJoyStickNum(void);</FONT></P>
+<P>この関数を利用すれば、DirectInput経由でJoyStickの数を問い合わせることが出来ます。(前述USE_DIRECTINPUT_JOYSTICKがdefineされていなければ、この関数は使用できません）</P>
+<P>その他の入力系は、<A href="CKeyBase.html">CKeyBase</A>のほうの関数に準拠。</P>
+<P>方向入力は、IsPushKey/IsPressKeyの引数に0,1,2,3が上下左右。そのあと4～35が、ボタン1～32（最大）に対応する。</P>
+<HR>
+</BODY></HTML>

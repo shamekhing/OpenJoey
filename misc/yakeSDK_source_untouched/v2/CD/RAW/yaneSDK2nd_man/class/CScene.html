@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>クラスリファレンス</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CScene／CSceneControl/CSceneFactory</FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>シーン管理クラス。ゲーム等で必須。詳しくは、やねうらおホームページ「天才ゲームプログラマ養成ギプス」の第８，９，１１，１３章を参考のこと。</P>
+<P>１．CSceneクラスとmediatorから多重継承してシーンクラスを作って使う。<BR>
+２．CSceneFactoryとmediatorと多重継承して使う。それのsmart_ptrをCSceneControlに渡してやる。</P>
+<P>あとは、１．で作成したCScene派生クラスのなかで、次に行きたいシーン名を指定すれば自由にシーン間を移動（ジャンプ・コール）が出来ます。</P>
+<P>詳しくは、以下の使用例と、yaneScene.hのほうにも詳しい説明があるので、そちらも参考にしてください。また、私のホームページにあるyaneSDK2ndのサンプル２２，２３が参考になると思います。</P>
+<P><FONT size="+1" color="#009900">☆　使用例</FONT></P>
+<TABLE bgcolor="#ffffff">
+  <TBODY>
+    <TR>
+      <TD>
+      <PRE>#include &quot;stdafx.h&quot;
+#include &quot;CApp.h&quot;
+
+//  --------------   シーンのつかいかた   -------------------------
+
+//  1.シーン名をenumする
+enum SCENE {    //  シーン名
+    SCENE1,SCENE2,SCENE3
+};
+
+//  2.ベースシーンを作る (CSceneとmediatorから多重継承する)
+class CBaseScene : public CScene , public mediator&lt;CApp&gt; {
+};  //  これで完成＾＾
+
+//  3.シーンを作る ( ベースシーンから派生させる )
+class CScene1 : public CBaseScene {
+    //  初期化は、OnInitをオーバーロードして行なう。このなかでouterも使える。
+    virtual void OnInit() {
+        dib.Load(&quot;data/1.jpg&quot;);
+        text.GetFont()-&gt;SetText(&quot;スペースキーでシーン２へジャンプ\nリターンキーでシーン１をスタックに積んでシーン３へジャンプ&quot;);
+        text.SetPos(50,200);
+    }
+    virtual void OnDraw(CPlaneBase*lp){
+        //  ※　outer識別子で、CAppクラスにアクセスできる！
+        if (outer.GetKey()-&gt;IsVKeyPush(5)) JumpScene(SCENE2);
+        if (outer.GetKey()-&gt;IsVKeyPush(6)) {
+            PushScene(SCENE1);  //  PushScene + JumpScene == CallScene
+            JumpScene(SCENE3);
+        }
+
+        lp-&gt;ClearRect();
+        lp-&gt;BltFast(&amp;dib,0,0);
+    }   
+    CDIB32 dib;
+    CTextLayer text;
+};
+class CScene2 : public CBaseScene {
+    virtual void OnInit() {
+        dib.Load(&quot;data/2.jpg&quot;);
+        text.GetFont()-&gt;SetText(&quot;スペースキーでシーン１へジャンプ\nリターンキーでシーン３をコール&quot;);
+        text.SetPos(50,200);
+    }
+    virtual void OnDraw(CPlaneBase*lp){
+        //  ※　outer識別子で、CAppクラスにアクセスできる！
+        if (outer.GetKey()-&gt;IsVKeyPush(5)) JumpScene(SCENE1);
+        if (outer.GetKey()-&gt;IsVKeyPush(6)) CallScene(SCENE3);
+
+        lp-&gt;ClearRect();
+        lp-&gt;BltFast(&amp;dib,0,0);
+    }   
+    CDIB32 dib;
+    CTextLayer text;
+};
+class CScene3 : public CBaseScene {
+    virtual void OnInit() {
+        dib.Load(&quot;data/3.jpg&quot;);
+        text.GetFont()-&gt;SetText(&quot;スペースキーでリターン\nリターンキーで終了&quot;);
+        text.SetPos(50,200);
+    }
+    virtual void OnDraw(CPlaneBase*lp){
+        if (outer.GetKey()-&gt;IsVKeyPush(5)) ReturnScene();
+        if (outer.GetKey()-&gt;IsVKeyPush(6)) ExitScene();
+
+        lp-&gt;ClearRect();
+        lp-&gt;BltFast(&amp;dib,0,0);
+    }   
+    CDIB32 dib;
+    CTextLayer text;
+};
+
+//  4.上のに対応するfactoryをつくる
+class CMySceneFactory : public CSceneFactory,public mediator&lt;CApp&gt; {
+public:
+    CMySceneFactory(CApp* pv) : mediator&lt;CApp&gt;(pv){}
+protected:
+    virtual CScene* CreateScene(int nScene) {
+        CBaseScene* lp;
+        switch ((SCENE)nScene){
+        case SCENE1: lp = new CScene1; break;
+        case SCENE2: lp = new CScene2; break;
+        case SCENE3: lp = new CScene3; break;
+        default:     lp = NULL; // error..
+        }
+        lp-&gt;SetOutClass(&amp;outer);
+        return lp;
+    }
+};
+
+/////////////////////////////////////////////////
+
+void    CApp::MainThread(void) {                 //  これが実行される
+
+    GetDraw()-&gt;SetDisplay(false);               //  Windowモード
+
+    CFPSTimer t;
+    t.SetFPS(30);
+
+    //  5.シーンコントローラーにSceneFactoryを渡してやる
+    CSceneControl sc(smart_ptr&lt;CSceneFactory&gt;(new CMySceneFactory(this),true));
+    sc.JumpScene(SCENE1);
+
+    while(IsThreadValid()) {                    //  これがValidの間、まわり続ける
+        GetKey()-&gt;Input();
+        if (GetKey()-&gt;IsVKeyPush(0)) break;
+
+        //  6.これでシーンコントローラーを調べ、返り値が非０ならループから抜けるようにする
+        if (sc.OnDraw(GetDraw())) break;
+        GetDraw()-&gt;OnDraw();
+        t.WaitFrame();
+    }
+}
+
+//  これがmain windowのためのクラス。
+class CAppMainWindow : public CAppBase {    //  アプリケーションクラスから派生
+    virtual void MainThread(void){          //  これがワーカースレッド
+        CApp().Start();                     //  CApp app; app.Start();の意味ね
+    }
+};
+
+//  言わずと知れたWinMain
+int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,int nCmdShow)
+{
+    CAppInitializer::Init(hInstance,hPrevInstance,lpCmdLine,nCmdShow);  //  必ず書いてね
+    CSingleApp sapp;
+    if (sapp.IsValid()) {
+        CAppMainWindow().Run();                 //  上で定義したメインのウィンドゥを作成
+    }
+    return 0;
+}</PRE>
+      </TD>
+    </TR>
+  </TBODY>
+</TABLE>
+<HR>
+</BODY></HTML>

@@ -1,0 +1,32 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>クラスリファレンス</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">template &lt;class T&gt; class ProtoTypeFactory</FONT>　<FONT color="#ff0000">【テンプレート<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>FactoryMethod + PrototypePattern w/z auto_ptrExです＾＾；<BR>
+作成動機については、<A href="http://www.sun-inet.or.jp/~yaneurao/">やねうらおのホームページ</A>の「「天才ゲームプログラマー養成ギプス第六回未来形でプログラミングする」を参考のこと。</P>
+<P>たとえば<A href="CGraphicLoader.html">CGraphicLoader</A>クラスは、このテンプレートによって生成を行ないます。実際、CGraphicLoaderの使用法を通して、このテンプレートのメリット、使い方を説明します。</P>
+<P>あなたがCGraphicLoaderを拡張した、CGraphicLoaderExと差し替えたいとします。そうすると、yaneSDK2nd中のCGraphicLoaderもすべてCGraphicLoaderExと置換しなくてはなりません。ところが、そんなことをしてしまうと、yaneSDK2ndのバージョンがあがるごとに置換する手間が増えます。とても効率の悪いことです。</P>
+<P>そこで、CGraphicLoaderを使う人は、特殊な方法で生成します。いわゆるFactoryMethodなのですが、<A href="auto_ptrEx.html">auto_ptrEx</A>を絡めて以下のようにして、生成します。</P>
+<P><FONT color="#cc0000">auto_ptrEx&lt;CGraphicLoader&gt; gl(CGraphicLoader::GetPrototypeFactory()-&gt;CreateInstance());</FONT></P>
+<P>あとは、gl-&gt;Render();などと、普通にポインタを使う気分で処理を書けば良いのです。auto_ptrExなので、スコープアウトするときに自動的にオブジェクトを解放してくれます。実に簡単です。</P>
+<P>では、CGraphicLoader::GetPrototypeFactory(
+)がどうなっているのかというと、</P>
+<P><FONT color="#cc00cc">static PrototypeFactory&lt;CGraphicLoader&gt;*
+GetPrototypeFactory(void) { return&amp; m_factory;
+}<BR>
+static PrototypeFactory&lt;CGraphicLoader&gt;
+m_factory;</FONT></P>
+<P>PrototypeFactoryのテンプレートを使って、m_factoryを用意し、そのアドレスを返すGetPrototypeFactory(
+)という関数があるだけです。</P>
+<P>これで、CGraphicLoader拡張クラスCGraphicLoaderExを作った人は、</P>
+<P><FONT color="#cc0000">CGraphicLoader::GetPrototypeFactory()-&gt;SetFactory(new
+Factory&lt;CGraphicLoaderEx&gt;);</FONT></P>
+<P>自分のFactoryをPrototypeFactoryに登録します。ここで出てきているFactoryテンプレートも、PrototypeFactory.hで定義されています。こうしておけば、あとは、CGraphicLoaderを使おうとして、さきほどの、</P>
+<P><FONT color="#cc0000">auto_ptrEx&lt;CGraphicLoader&gt; gl(CGraphicLoader::GetPrototypeFactory()-&gt;CreateInstance());</FONT></P>
+<P>を実行すると、何故か、CFactoryExのインスタンスがglに入ってくるという仕組みなのです。</P>
+<HR>
+</BODY></HTML>

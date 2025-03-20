@@ -25,9 +25,12 @@ void CSceneYesNo::OnInit() {
     // Check factory (for background)
     CFastPlaneFactory* factoryX = app->GetDrawFactory();
     if (factoryX) {
-        smart_ptr<ISurface> secondary = smart_ptr<ISurface>(factoryX->GetDraw()->GetSecondary(), false);
-        if (secondary.get()) {
-            m_vBackground = CPlane(secondary);
+		smart_ptr<ISurface> screenPtr = factoryX->GetDraw()->GetSecondary()->clone();
+		//smart_ptr<ISurface> secondary = smart_ptr<ISurface>(factoryX->GetDraw()->GetSecondary(), false);
+        if (screenPtr.get()) {
+			screenPtr->SubColorBltFastFade(screenPtr.get(), 0, 0, 172);  // Darken
+			m_vBackground = screenPtr;
+			//m_vFastBackground = CFastPlane(secondary.get());
             OutputDebugStringA("Background loaded with app factory\n");
         }
     } else {
@@ -86,7 +89,7 @@ void CSceneYesNo::OnInit() {
     CFastPlaneFactory* factory = app->GetDrawFactory();
     if (factory && factory->GetDraw()) {
         // Create a new plane from the current screen
-        m_vBackground = CPlane(factory->GetDraw()->GetSecondary());
+        //m_vBackground = CPlane(factory->GetDraw()->GetSecondary());
         
         // If you want to darken it, do it in OnDraw instead of here
         // This way we avoid surface locking issues during initialization
@@ -133,7 +136,7 @@ void CSceneYesNo::OnMove(const smart_ptr<ISurface>& lp) {
         
         // Check for button clicks
         if (m_nButton == 0 && m_vButtons[i].IsLClick()) {
-            m_nButton = i + 1;
+            m_nButton = i + 1; // Selected button (0=none, 1=yes, 2=no)
 			CGUIButtonEventListener* e	= m_vButtons[i].GetEvent().get();
 			CGUINormalButtonListener* p	= (CGUINormalButtonListener*)e;
 			//p->SetType(32);
@@ -145,9 +148,10 @@ void CSceneYesNo::OnMove(const smart_ptr<ISurface>& lp) {
 void CSceneYesNo::OnDraw(const smart_ptr<ISurface>& lp) {
 
     // Draw darkened background
-	//CSurfaceInfo* m_vBackgroundInfo = m_vBackground->GetSurfaceInfo();
-    //lp->Blt(m_vBackground, 0, 0);
+	CSurfaceInfo* m_vBackgroundInfo = m_vBackground->GetSurfaceInfo();
+    lp->Blt(m_vBackground.get(), 0, 0);
 
+	//factoryZ->GetDraw()->GetSecondary()->Blt(m_vBackground, 0, 0);
 	//CPlane bgPlane;
 	//bgPlane->Load("test/yesno/01.yga");
 	//bgPlane = m_vPlaneLoader.GetPlane(0);
@@ -176,13 +180,16 @@ void CSceneYesNo::OnDraw(const smart_ptr<ISurface>& lp) {
         m_nFade++;
         if (m_nFade.IsEnd()) {
             if (m_nButton == 1) {
-                GetSceneControl()->ReturnScene();
-            }
+				GetSceneControl()->ReturnScene();
+			} else {
+				//app->Exit
+				app->OnPreClose();
+			}
             return;
         }
 
         // Apply fade effect
-        BYTE fadeAlpha = (BYTE)(255 - ((int)m_nFade * 16));
-        lp->BlendBltFast(m_vBackground.get(), 0, 0, fadeAlpha);
+        //BYTE fadeAlpha = (BYTE)(255 - ((int)m_nFade * 16));
+        //lp->BlendBltFast(m_vBackground.get(), 0, 0, fadeAlpha);
     }
 }

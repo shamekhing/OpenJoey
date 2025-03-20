@@ -1,0 +1,21 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CPlaneTransBlt</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CPlaneTransBlt</FONT><A name="CTimeBase"></A></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P><A href="CPlaneBase.html">CPlaneBase</A>に対するトランジション関数です。CPlaneBaseは、<A href="CPlane.html">CPlane</A>,<A href="CDIB32.html">CDIB32</A>の共通基底クラスなので、このどちらに対してもトランジションが行なえます。</P>
+<P>トランジションとは、初期状態（何も表示されていない）から、あるグラフィックの完成状態へ、なめらかに遷移するための表現です。<BR>
+トランジション関数では、フェーズを指定します。初期状態は０，完成状態は２５６で、この間の数字が、その中間というわけです。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>このクラスのメンバ関数は、すべてstaticで、以下のプロトタイプによる。</P>
+<P>#define TransBltFunc(FuncName) \<BR>
+LRESULT FuncName(CPlaneBase*lpDst,CPlaneBase*lpSrc,int
+x,int y,int nPhase,bool bUseColorKey=false);</P>
+<P>lpDstは、転送先のCPlaneBaseのポインタ。もちろんCPlane,CDIB32のポインタを渡せば、暗黙のアップキャストによって、うまく関数が呼び出される。lpSrcは転送元のCPlaneBaseのポインタ。x,yは表示座標。nPhaseは、トランジションのフェーズ（０－２５６）
+bUseColorKeyは、ヌキ色を有効にするかどうか。</P>
+<P>私のホームページのサンプル５が、このクラスのサンプルになっていますので、それぞれの内容については、そちらをご覧になってください。</P>
+<HR>
+</BODY></HTML>

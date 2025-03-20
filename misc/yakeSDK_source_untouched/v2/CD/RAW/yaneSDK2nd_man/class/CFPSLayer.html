@@ -1,0 +1,17 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CFPSLayer</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CFPSLayer</FONT><A name="CTimeBase"></A><FONT color="#ff0000">【CHDCLayer派生クラス】</FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>ＦＰＳ（Frames Per Second／１秒当たりのフレーム数）を描画するレイヤです。<A href="CLayer.html">CHDCLayer</A>から派生させています。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>virtual void OnDraw(HDC hdc); // これはCHDCLayerからローバーロードしたもの<BR>
+CFPSLayer(CFPSTimer*); // コンストラクタで描画に使っている<A href="CFPSTimer.html">CFPSTimer</A>へのポインタを渡す。</P>
+<P>使いかたは、いたって簡単。CFPSLayerをコンストラクタで渡せば、あとはCHDCLayerなので自動的にCDirectDraw::OnDrawでコールバックされます。</P>
+<P>void SetSkipFrameDraw(bool bEnable); // スキップしたフレーム数も描画する(ディフォルトではfalse)<BR>
+スキップしたフレーム数については、<A href="CFPSTimer.html">CFPSTimer</A>::ToBeSkipメンバ関数を参照のこと。</P>
+<HR>
+</BODY></HTML>

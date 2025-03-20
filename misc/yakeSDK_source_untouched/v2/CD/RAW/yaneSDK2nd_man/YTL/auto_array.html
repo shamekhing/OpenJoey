@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>クラスリファレンス</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">template &lt;class T&gt; class auto_array</FONT><A name="CTimeBase"></A>　<FONT color="#ff0000">【テンプレート<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P><A href="auto_ptrEx.html">auto_ptrEx</A>の配列バージョンです。所有権インジケーターを持つ、ポインタで、デストラクトされるときに所有権を持っていれば、そのオブジェクトを自動的に解放します。これを使えば、ポインタ管理は飛躍的に楽になります。動的に増えていくときは<A href="auto_vector_ptr.html">auto_vector_ptr</A>を使います。</P>
+<P><FONT size="+1" color="#009900">☆　使いかた</FONT></P>
+<P>　auto_array&lt;CObject&gt; lpObject;<BR>
+として、<BR>
+<FONT color="#009900">　lpObject.resize(nSize);<BR>
+</FONT>とすれば、要素数nSizeのCObject配列が得られます。このとき所有権を持ちます。このauto_arrayのデストラクタで、所有権を持ったままであれば、そのオブジェクトを解放(delete[
+] )します。また、現在配列オブジェクトをすでに確保しており、それに対して所有権を持っているときに、この関数を呼び出すと、前の配列オブジェクトは解放されたのちに新たにnSizeの配列オブジェクトが確保されます。</P>
+<P><FONT color="#000000">コンストラクタで同時にオブジェクトを生成することも出来ます。</FONT></P>
+<P><FONT color="#009900">　auto_array&lt;BYTE&gt; lpByte(nSize);</FONT></P>
+<P><FONT color="#000000">C++では配列の添え字は定数でなければなりませんが、それに代わって動的に確保する場合に使えます。</FONT></P>
+<P><FONT color="#009900">　lpByte.clear();</FONT></P>
+<P>確保した配列オブジェクトの解放を行ないます。auto_arrayのデストラクタで自動的に解放されるので、普通に使う場合は、明示的に呼び出す必要はありません。</P>
+<P>resize,clearは、<A href="auto_vector_ptr.html">auto_vector_ptr</A>とコンパチにするためにこの名前になっています。</P>
+<P>releaseはauto_ptrと同じく所有権を解放するための構文です。所有権を解放後、auto_arrayはNULLを指すようになります。<BR>
+<FONT color="#009900">　T* release();</FONT></P>
+<P>T*と互換性を保つために用意されているもの。<BR>
+<FONT color="#009900">　operator T* () const;<BR>
+</FONT><FONT color="#009900">　T* get(int n=0) const;&nbsp;// n番目の要素位置を返す</FONT></P>
+<P>代入演算子<BR>
+　auto_array&lt;T&gt;&amp; operator = (auto_array&lt;T&gt;&amp;
+rhs);<BR>
+　auto_array&lt;T&gt;&amp; operator = (const
+T* _P);</P>
+<P>auto_arrayから代入した場合、右辺のauto_arrayが所有権を持っている場合は、その所有権も移動します。<BR>
+const T*から代入した場合、その所有権は判らないので、所有権は発生しません。newしたオブジェクトを所有権付きで代入したいときは、</P>
+<P><FONT color="#009900">　void Add(const T* _P);</FONT></P>
+<P>を使います。コンストラクタで、所有権付きオブジェクトを用意したい場合は、</P><P><FONT color="#009900">　auto_array(const S* p);<BR>
+　auto_array(auto_array&lt;T&gt;&amp;rhs);</FONT></P>
+<P>の２つの構文があります。前者は、Addしたのと同じ効果があります。<BR>
+後者は、代入演算子でコピーしたのと同じ効果があります。（所有権も移動します）</P>
+<P>オーナーであるか（所有権が有るか）を返す関数<BR>
+<FONT color="#009900">　bool IsOwner();</FONT><BR>
+オーナー権の設定<BR>
+<FONT color="#009900">　void SetOwner(bool b);</FONT></P>
+<HR>
+</BODY></HTML>

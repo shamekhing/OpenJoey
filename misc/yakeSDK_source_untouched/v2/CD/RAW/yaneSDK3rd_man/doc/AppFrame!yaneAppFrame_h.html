@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>AppFrame/yaneAppFrame.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="IAppFrame"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">IAppFrame</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Start()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> MesSleep(<SPAN class="reserved_word">int</SPAN> nTime)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> InvalidateThread()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="AppFrame!yaneAppBase_h.html#IAppBase" target=_self>IAppBase</A>* GetMyApp()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsThreadValid()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> MainThread()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> IAppFrame()</DIV>
+<DIV class="public_member"> virtual ~IAppFrame()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CAppFrame"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CAppFrame</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">アプリケーションの中核となるクラスです。<BR><BR>	アプリケーションとは、アプリケーションクラス(class CAppBaseの派生クラス)<BR>	のことです。アプリケーションクラスは、一つのウィンドゥと<BR>	一つのスレッドループ、１つの描画クラスを保有します。<BR><BR>	このワーカースレッドのなかから呼び出すのがCAppFrameというわけです。<BR><BR>	使い方：<BR><BR>	ユーザーは、CAppFrameを派生し、そこにメンバとして自分の使いたい<BR>	コンポーネントをメンバとして持たせます。<BR><BR>	virtual void MainThread() = 0;<BR>	この関数をオーバーライドして、Startメンバ関数を呼び出してください。<BR>	そうすれば、初期化後、この関数が実行されます。<BR><BR>	このクラスの基底クラスである、class IAppFrame のコンストラクタで<BR>	CAppManagerに登録してあるので、同一スレッドならばどこからでも<BR>	CAppManager::GetMyFrameで取得することが出来ます。<BR>	必要に応じて、こいつをダウンキャストして使うと良いでしょう。<BR><BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="AppFrame!yaneAppFrame_h.html#IAppFrame" target=_self>IAppFrame</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsThreadValid()</DIV>
+<DIV class="comment_block">スレッドの正当性<BR>MainThreadのなかでは、この関数がtrueの間、まわり続けるようにします。<BR>		（ただし、これがtrueであっても強制的に抜けても構いません）<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> InvalidateThread()</DIV>
+<DIV class="comment_block">スレッドの無効化<BR>この関数を実行すると、IsThreadValidがfalseを返すようになります。<BR>		CAppManager::GetMyFrameと絡めて、外部からこのフレームスレッドに<BR>		停止要求を出すのに使うと便利です。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="AppFrame!yaneAppBase_h.html#IAppBase" target=_self>IAppBase</A>* GetMyApp()</DIV>
+<DIV class="comment_block">呼び出し元のアプリクラスの取得<BR>この関数を呼び出すことで、自分の属するアプリケーションクラスの<BR>		取得が出来ます。（ほとんど使う必要はないはずですが）<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Start()</DIV>
+<DIV class="comment_block">このクラスでの実行に際しては、MainThreadをオーバーライドしておき<BR>		このメソッドを呼び出してください。そうすれば初期化が行なわれたあと<BR>		MainThreadが呼び出されます。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> MesSleep(<SPAN class="reserved_word">int</SPAN> nTime)</DIV>
+<DIV class="comment_block">Windowsメッセージ処理をしないと、<BR>		IntervalTimerでのコールバックがされないので、<BR>		WindowMessage処理を行ないながらSleepする関数です。<BR>		nTime[ms]の間、Sleepします。<BR>		また、少なくとも、nTime[ms]は経過するまでは、この関数から抜けません。<BR>		class CVolumeFaderでフェードさせるときなどに呼び出すと<BR>		効果的かも知れません。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member"><A class="class_link" href="AppFrame!yaneAppBase_h.html#IAppBase" target=_self>IAppBase</A>* m_lpMyApp</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

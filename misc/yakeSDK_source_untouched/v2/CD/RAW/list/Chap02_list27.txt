@@ -1,0 +1,19 @@
+template<class T> class surrogate_mother {	//	代理母クラス
+public:
+	surrogate_mother(const smart_ptr<function_callback>& fn)
+		: m_ptr(new T),m_fn(fn) {}
+	virtual ~surrogate_mother(){
+		delete m_ptr;
+
+		m_fn->run();
+		//	<B>↑このコールバックを利用して、その先で、
+		//	ControlクラスのDeleteも呼び出す処理を書く</B>
+	}
+	operator T* () const { return m_ptr; }
+	T& operator*() const  {return *m_ptr; }
+	T* operator->() const {return m_ptr;  }
+
+protected:
+	T* m_ptr;	//	こいつに委譲するのだ
+	smart_ptr<function_callback>	m_fn;	//	解体後にコールバックする関数
+};

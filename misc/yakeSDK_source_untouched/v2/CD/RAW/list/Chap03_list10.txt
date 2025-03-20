@@ -1,0 +1,32 @@
+CMutex::CMutex(){
+	m_hMutex = NULL;
+}
+
+CMutex::~CMutex(){
+	Release();
+}
+
+LRESULT CMutex::Open(const string& szMutexName){
+	// 同一プロセスのスレッド間でならCriticalSectionを用いるべき！
+	Release();
+
+	// この名前で登録
+	m_hMutex = ::CreateMutex(NULL,true,szMutexName.c_str());
+	if (GetLastError()==ERROR_ALREADY_EXISTS) return 1;
+	//	⇒エラーではなく、既存であるという意味で1を返している
+	//	この場合も、MutexのOpenには成功していると考えることが出来る。
+
+	// 既存のため所有権が獲得できていない
+	return 0; // それ以外のエラーって想定できないし、いいんでない？
+}
+
+void CMutex::Wait(){
+	::WaitForSingleObject(m_hMutex,INFINITE);	// 所有権が得られるまで待つ
+}
+void CMutex::Release(){
+	if (m_hMutex!=NULL) {
+		::ReleaseMutex(m_hMutex);	//	所有権の解放
+		::CloseHandle(m_hMutex);	//	生成したMutexの破壊
+		m_hMutex = NULL;
+	}
+}

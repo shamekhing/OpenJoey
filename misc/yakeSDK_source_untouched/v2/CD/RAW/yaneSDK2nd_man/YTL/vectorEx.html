@@ -1,0 +1,23 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>クラスリファレンス</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">template &lt;class T&gt; class vectorEx</FONT><A name="CTimeBase"></A>　<FONT color="#ff0000">【テンプレート<FONT color="#ff0000">】</FONT></FONT></P>
+<P><FONT size="+2">template&lt;class T&gt; class chain : public
+vectorEx&lt;T*&gt;</FONT><FONT color="#ff0000">【テンプレート】</FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>std::setには、重複を許さない要素追加を行なう、insert，要素の削除を行なうeraseという関数があるが、これをstd::vectorに追加したのが、このvectorExである。</P>
+<P>setのinsert,eraseは速いが、その半面、iteratorで巡回するのが遅い。insert,eraseは頻繁に行なわないが、iteratorで巡回するのは速くあって欲しい場合は、setは適さない。しかしvectorだと、insert,eraseをいちいち記述するのは面倒である。そこで、insert,erase機能つきのvectorを作ったわけである。</P>
+<P>また、chainテンプレートは、単なるvectorEx&lt;T*&gt;であって、これは、ポインタ列を扱うのに使う。（と便利かも知れない）</P>
+<P><FONT size="+1" color="#009900">☆　使いかた</FONT></P>
+<P><FONT color="#009900">pair&lt;iterator,bool&gt; insert(T t);</FONT></P>
+<P><FONT color="#00cc00">set的追加（同一要素の存在を認めない）<BR>
+set::insertと同機能 /insert出来たとき時に&lt;it,true&gt;<BR>
+insert出来なかった時は&lt;同一要素へのイテレータit,false&gt;</FONT></P>
+<P><FONT color="#009900">bool erase(T t);</FONT></P>
+<P><FONT color="#00cc00">// set的削除(同一要素の存在を削除する)<BR>
+// set::eraseと同機能/削除した時にtrue</FONT></P>
+<HR>
+</BODY></HTML>

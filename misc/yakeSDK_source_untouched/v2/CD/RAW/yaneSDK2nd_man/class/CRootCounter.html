@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CRootCounter</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2"><A name="CRootCounter">class CRootCounter</A></FONT><FONT color="#ff0000">　【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR noshade>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>自動カウンターを提供します。カウンタとしては、<A href="#CRootCounterS">CRootCounterS</A>,<A href="CInteriorCounter.html">CInteriorCounter</A>なども参考にしてください。</P>
+<P>初期値(nStart)・終了値(nEnd)、そして必要ならば増加値(nStep)を設定します。そのあと、Inc関数を実行すると、1ずつ増えます。(nStepが設定されていれば、その数だけ増えます)　そして、加算した結果、nEnd以上になると自動的にnStartに戻ります。(nEndにはなりません)</P>
+<P><FONT color="#00cc00">Reset関数</FONT>は、カウンター値を初期値nStartに戻します。あるいは、<FONT color="#00cc00">SetInit関数</FONT>でReset後の初期値が設定されていれば、その値にします。Incしたときに、nEndを超えた場合にのみ<FONT color="#00cc00">IsLapAround</FONT>関数はtrueを返します。また、<FONT color="#00cc00">int型との相互変換が可能</FONT>ですので、あたかもint型の変数であるかのように使えます。</P>
+<P><FONT color="#cc0000">nStepとして負の数を指定</FONT>した場合、その回数で分周します。たとえばnStep==-5ならば、5回Incされたときに、はじめてカウンタが１増えます。</P>
+<P><FONT color="#00cc00">SetReverse</FONT>関数を使えばオートリバースカウンタになります。オートリバースカウンタは、IncしてnEndまで達したときに、今度は、リバースしてカウンタは減り始めます。nStartに戻ると、また、リバースしてnEndに向かって増えはじめます。<FONT color="#00cc00">GetReversing</FONT>関数を使うと、カウンタ増加方向がリバース中であるかのboolのポインタを取得できます。ただし、*GetReversing(
+) = true;としてもSetReverse関数でリバースカウンタにしていなければ、減少方向ではなく増加方向に向かいます。</P>
+<P><FONT color="#009900">IncS</FONT>は、Incの飽和バージョンで、終了値に達すると、そこで初期値には戻らず停止します（次回IncSを行なっても終了値のままです）　SetReverse関数で設定した値は関係ありません。また、*GetReversing(
+) = true;としてあれば、減少方向に向かいます。（初期値に達すると、そこで停止します）</P>
+<P>また、Incは、operator++として定義してあるので、++とも書けます。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P><FONT color="#666666">// コンストラクタ<BR>
+</FONT><FONT color="#00cc00">CRootCounter(void);<BR>
+CRootCounter(int nEnd);<BR>
+CRootCounter(int nStart,int nEnd,int nStep=1);</FONT></P>
+<P><FONT color="#666666">// コンストラクタで設定せず、あとで設定する</FONT><FONT color="#00cc00"><BR>
+void Set(int nStart,int nEnd,int nStep=1);<BR>
+void SetStep(int nStep);<BR>
+void SetStart(int nStart);<BR>
+void SetEnd(int nEnd);</FONT></P>
+<P><FONT color="#666666">// カウンタのリセット</FONT><FONT color="#00cc00"><BR>
+void Reset(void);</FONT></P>
+<P><FONT color="#666666">//// 初期値</FONT><FONT color="#00cc00"><BR>
+void SetInit(int n);</FONT></P>
+<P><FONT color="#666666">// カウンタのインクリメント</FONT><FONT color="#00cc00"><BR>
+void Inc(void);</FONT><BR>
+<FONT color="#00cc00">void IncS(void); // カウンタの飽和的インクリメント</FONT></P>
+<P><FONT color="#666666">// Incの代わりに、 ++ 演算子を使用できる！</FONT><BR>
+<FONT color="#00cc00">CRootCounter&amp; operator++( );<BR>
+CRootCounter operator++(int);</FONT></P>
+<P><FONT color="#666666">// intとの相互変換</FONT><FONT color="#00cc00"><BR>
+operator int (void);<BR>
+const int operator = (int n);<BR>
+int Get (void); // 明示的に取得する</FONT></P>
+<P><FONT color="#666666">// Incした結果、周回したか？</FONT><FONT color="#00cc00"><BR>
+bool IsLapAround(void);</FONT></P>
+<P><FONT color="#666666">// Incした結果、初期値に戻ったか？</FONT><FONT color="#00cc00"><BR>
+bool IsLapAroundI(void);</FONT></P>
+<P><FONT color="#666666">//// オートリバースカウンタ<BR>
+</FONT><FONT color="#00cc00">void SetReverse(bool bReverse); // リバースカウンタにする<BR>
+bool*&nbsp;GetReversing(void); // 反転カウント中か？<BR>
+</FONT></P>
+<HR>
+<P><FONT size="+2"><A name="CRootCounterS">class CRootCounterS</A></FONT><FONT color="#ff0000">　【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR noshade>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>自動カウンターを提供します。プレステの開発キットであった（らしい）クラスです。<BR>
+カウンタとしては、<A href="#CRootCounter">CRootCounter</A>,<A href="CInteriorCounter.html">CInteriorCounter</A>なども参考にしてください。</P>
+<P>メンバ関数はCRootCounterとほぼ同じですが、こちらは、nStart≦nEndでなくて良いのです。</P>
+<P>つまり、加算( Inc / ++ )では、nEnd方向へインクリメントします。減算(
+Dec / -- )では、nStart方向へインクリメントします。<BR>
+この仕様の違いを除けばCRootCounterとほぼ同じです。(ただし、リバース機能等はありません)</P>
+<P>また、Stepがマイナスである場合は、その絶対値回数のIncメンバ関数の呼び出しによって、1だけnEnd方向に進みます。</P>
+<P><FONT color="#009900">例）<BR>
+CRootCounterS r;<BR>
+r.Set ( 0, 256 , -5 ); // nStart == 0 , nEnd
+== 256というようにカウンタを設定する<BR>
+r = 128;</FONT></P>
+<P><FONT color="#009900">この状態で、r++; を５回実行すると５回目で
+r == 129になる。r--; を５回実行すると５回目で
+r == 127になる。</FONT></P>
+<HR>
+</BODY></HTML>

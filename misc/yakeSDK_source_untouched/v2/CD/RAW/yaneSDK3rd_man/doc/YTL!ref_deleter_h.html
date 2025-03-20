@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>YTL/ref_deleter.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="ref_object"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">ref_object</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">参照カウント管理をやりつつ、<BR>	任意の要素をdeleteするための基底オブジェクト<BR><BR>	独自の解体処理がしたいならば、<BR>	たとえばref_object派生クラスを以下のように用意する。<BR><BR>class my_ref_object : public ref_object {<BR>public:<BR>	my_ref_object(CSound* p,const smart_ptr&lt;function_callback&gt;&amp;func)<BR>		: m_p(p),m_func(func) {}<BR>	virtual void	delete_instance() {<BR>		delete m_p;<BR>		m_func-&gt;run();<BR>	}<BR>private:<BR>	CSound* m_p;<BR>	smart_ptr&lt;function_callback_v&gt; m_func;<BR>	//	↑汎用コールバックテンプレート<BR>};<BR><BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> delete_instance()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block">保持しているオブジェクトをdeleteする。派生クラスで定義する<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> inc_ref()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> dec_ref()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> set_ref(<SPAN class="reserved_word">int</SPAN> n)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">int</SPAN> get_ref()</DIV>
+<DIV class="comment_block">参照カウンタの設定／取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> set_owner(<SPAN class="reserved_word">bool</SPAN> b)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> get_owner()</DIV>
+<DIV class="comment_block">オーナー権の設定／取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> set_obj_size(<SPAN class="reserved_word">int</SPAN> n)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">int</SPAN> get_obj_size()</DIV>
+<DIV class="comment_block">オブジェクトサイズの設定／取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> set_size(<SPAN class="reserved_word">int</SPAN> n)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">int</SPAN> get_size()</DIV>
+<DIV class="comment_block">配列オブジェクトの最大数の設定／取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> virtual ~ref_object()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nRef</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bOwner</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nObjSize</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nMaxSize</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="nonarray_ref_object"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;T</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">nonarray_ref_object</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!ref_deleter_h.html#ref_object" target=_self>ref_object</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> nonarray_ref_object(T* p)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> delete_instance()</DIV>
+<DIV class="private_member">T* m_p</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="array_ref_object"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;T</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">array_ref_object</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!ref_deleter_h.html#ref_object" target=_self>ref_object</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> array_ref_object(T* pa)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> delete_instance()</DIV>
+<DIV class="private_member">T* m_pa</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="null_ref_object"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">null_ref_object</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!ref_deleter_h.html#ref_object" target=_self>ref_object</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> delete_instance()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

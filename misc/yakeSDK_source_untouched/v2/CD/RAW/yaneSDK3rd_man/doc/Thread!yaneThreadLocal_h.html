@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Thread/yaneThreadLocal.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="ThreadLocalBaseHelper"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">ThreadLocalBaseHelper</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">class ThreadLocalBase のためのSingletonオブジェクト<BR>	（非localなオブジェクトの初期化順序は不定のためこういうのが必要になる）<BR><BR>	class ThreadLocalBase から呼び出されるので、<BR>	これらの関数は直接呼び出して使うというものではない。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="Thread!yaneThreadLocal_h.html#ThreadLocalBaseHelper" target=_self>ThreadLocalBaseHelper</A>* GetObj()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> insert()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> erase()</DIV>
+<DIV class="comment_block">チェインに追加／チェインから消去<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> OnThreadEnd()</DIV>
+<DIV class="comment_block">スレッドが停止するときにそのスレッドから呼び出される<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> OnExit()</DIV>
+<DIV class="comment_block">WinMainから抜けるときに、CAppInitializerからコールバックされる<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> ThreadLocalBaseHelper()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!singleton_h.html#singleton" target=_self>singleton</A>&lt;<A class="class_link" href="Thread!yaneThreadLocal_h.html#ThreadLocalBaseHelper" target=_self>ThreadLocalBaseHelper</A>&gt; m_obj</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="YTL!list_chain_h.html#list_chain" target=_self>list_chain</A>&lt;<A class="class_link" href="Thread!yaneThreadLocal_h.html#ThreadLocalBase" target=_self>ThreadLocalBase</A>&gt;* GetChain()</DIV>
+<DIV class="protected_member"><A class="class_link" href="YTL!list_chain_h.html#list_chain" target=_self>list_chain</A>&lt;<A class="class_link" href="Thread!yaneThreadLocal_h.html#ThreadLocalBase" target=_self>ThreadLocalBase</A>&gt; m_threadlocal_list</DIV>
+<DIV class="comment_block">チェインの取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="Thread!yaneCriticalSection_h.html#CCriticalSection" target=_self>CCriticalSection</A> ms_cr</DIV>
+<DIV class="protected_member"><A class="class_link" href="Thread!yaneCriticalSection_h.html#CCriticalSection" target=_self>CCriticalSection</A>* GetCriticalSection()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="ThreadLocalBase"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">ThreadLocalBase</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">class ThreadLocal テンプレートのための基底クラス<BR>	class ThreadLocal も参照のこと。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Clear()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> ClearAll()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetExit()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"> virtual ~ThreadLocalBase()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">void</SPAN> OnThreadEnd()</DIV>
+<DIV class="comment_block">スレッドは終了するときに必ずこの関数を呼び出して、現存する<BR>		すべてのThreadLocalのインスタンスのClearを呼び出さなければ<BR>		ならない<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">void</SPAN> insert()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">void</SPAN> erase()</DIV>
+<DIV class="comment_block">チェインに追加／チェインから消去<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">void</SPAN> OnExit()</DIV>
+<DIV class="comment_block">WinMainから抜ける前に、この関数を呼び出して、<BR>チェインを断ち切っておく必要がある<BR>ただし、この関数はCAppInitializerから自動的に<BR>コールバックされるのでユーザーは呼び出す必要は無い<BR></DIV>
+</DIV>
+<HR><BR>
+<A name="ThreadLocal"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;T</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">ThreadLocal</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">スレッド固有のオブジェクトを用意するためのテンプレートクラス<BR><BR>	ThreadLocal&lt;HWND&gt; hWnd;<BR><BR>	とやれば、<BR>	hWnd = GetHWnd();<BR>	というようにスレッド固有の変数が自動的に用意されて、<BR>	こいつに代入が出来る。<BR><BR>	あるいは、<BR>	ThreadLocal&lt;HWND&gt; hWnd;<BR>	HWND	h = hWnd;<BR>	というように、こいつからの代入も出来る。<BR><BR>	すべてのスレッドは消滅するときに、<BR>	class CThreadLocalBase::OnThreadEnd() を呼び出して、現存する<BR>	ThreadLocalのインスタンスすべてのClearを呼び出さなければならない。<BR><BR>	（最後のスレッドは、このクラスのデストラクタが保有するオブジェクトを<BR>	解体してくれるので、この関数を呼び出す必要は無い）<BR><BR>	※　参考にすると良いクラス<BR>	class CCOMBase<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Thread!yaneThreadLocal_h.html#ThreadLocalBase" target=_self>ThreadLocalBase</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> Set(<SPAN class="reserved_word">const</SPAN> T&amp; t)</DIV>
+<DIV class="public_member">T* Get()</DIV>
+<DIV class="comment_block">データの設定／取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> isEmpty()</DIV>
+<DIV class="comment_block">要素がまだ代入されていないかをテストする<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">operator T()</DIV>
+<DIV class="comment_block">暗黙変換子<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">const</SPAN> T operator=(<SPAN class="reserved_word">const</SPAN> T&amp; t)</DIV>
+<DIV class="comment_block">代入演算子<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Clear()</DIV>
+<DIV class="comment_block">そのスレッドに属するデータをクリア<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> ClearAll()</DIV>
+<DIV class="comment_block">全スレッドに属するデータをクリア<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetExit(<SPAN class="reserved_word">bool</SPAN> b)</DIV>
+<DIV class="comment_block">終了処理が終わっているのならば、チェインから外す等の操作は不要<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> ThreadLocal()</DIV>
+<DIV class="public_member"> virtual ~ThreadLocal()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">map &lt;DWORD,T*&gt;m_map</DIV>
+<DIV class="protected_member">map &lt;DWORD,T*&gt;*GetMap()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="Thread!yaneCriticalSection_h.html#CCriticalSection" target=_self>CCriticalSection</A> m_cr</DIV>
+<DIV class="protected_member"><A class="class_link" href="Thread!yaneCriticalSection_h.html#CCriticalSection" target=_self>CCriticalSection</A>* GetCriticalSection()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bExit</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

@@ -1,0 +1,21 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CMouseLayer</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CMouseLayer</FONT><A name="CTimeBase"></A><FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>ソフトウェアマウスカーソルです。DirectDrawを使うと、画面描画に際してマウスカーソルのちらつきが発生するので、それをソフトウェアで描画する手段を提供します。CPlaneBaseを渡すので、CDIB32,CDirectDrawのどちらでも動作します。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P><FONT color="#009900">CMouseLayer(smart_ptr&lt;CPlaneBase&gt;v,int
+x=0,int y=0);<BR>
+CMouseLayer(void);</FONT></P>
+<P>コンストラクタは２通りある。前者は、プレーンのポインタと、プレーンのどの位置がマウスカーソル先端部なのかというオフセットを指定する。前者は、即、使用状態になる。後者は、そのままでは使用しない状態になるので、この後でSetPlaneしなければ使えるようにはならない。</P>
+<P><FONT color="#009900">void Enable(bool bEnable); // 有効にする<BR>
+bool IsEnable(void); // 有効か？</FONT></P>
+<P><FONT color="#009900">void SetPlane(smart_ptr&lt;CPlaneBase&gt;v,int
+x=0,int y=0);</FONT></P>
+<P>コンストラクタCMouseLayer(void)の、あとでプレーンを設定するのに使う。SetPlaneの各パラメータはコンストラクタで指定しているものと同じです。</P>
+<HR>
+</BODY></HTML>

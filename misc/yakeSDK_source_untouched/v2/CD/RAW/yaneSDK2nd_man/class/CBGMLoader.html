@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CBGMLoader</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CBGMLoader</FONT><A name="CTimeBase"></A><FONT color="#ff0000"> 【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>WAVEサウンド(<A href="CSound.html">CSound</A>,<A href="CStreamSound.html">CStreamSound</A>)とMIDI(<A href="CMIDIOutput.html">CMIDIOutput</A>)の読み込み管理を行ないます。サウンドを番号で管理できます。読み込んでいるサウンドは２度読みしません。事前に読み込んでおくことも出来ます。擬似キャッシュのような働きをします。<A href="CLoadCache.html">CLoadCache</A>派生クラスです。アプリケーションクラスのメンバとして持たせると便利です。<A href="CSoundLoader.html">CSoundLoader</A>と<A href="CMIDILoader.html">CMIDILoader</A>も参考にしてください。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P><FONT color="#009900">void Set(SLOAD_CACHE*); // これ設定するなりよ＾＾</FONT></P>
+<P>ファイルを設定します。形式は、SLOAD_CACHE形式なので、<A href="CLoadCache.html">CLoadCache</A>を参考にしてください。<BR>
+拡張子でMIDIファイルかそれ以外(WAV等)かを判別しています。MIDIファイルは必ずmidの拡張子にしてください。<BR>
+（大文字・小文字は区別しません）</P>
+<P><FONT color="#009900">void Load(int nBGMNo); // 事前に読み込む<BR>
+void Play(int nBGMNo); // 再生。現在、同番が再生されていれば再生しない<BR>
+void PlayN(int nBGMNo); // 再生。現在、同番が再生されていれば、先頭から。<BR>
+void PlayOnce(int nBGMNo); // 非ループ再生。現在、同番が再生されていれば再生しない<BR>
+void PlayOnceN(int nBGMNo); // 非ループ再生。現在、同番が再生されていれば、先頭から。
+<BR>
+void Stop(void); // 停止<BR>
+void Pause(void); // Pause</FONT><BR>
+<FONT color="#009900">void Replay(void); // ↑でとめたやつの再開</FONT><FONT color="#009900"><BR>
+int GetPlayNo(void); // 現在再生中の番号を得る<BR>
+void Release(int nNo); // 指定番号のものを解放<BR>
+void ReleaseAll(int nReleaseLevel=INT_MAX);
+// 指定リリースレベル以下のものを全解放<BR>
+void ReleaseAll(int nStart,int nEnd,int nReleaseLevel=INT_MAX);
+// 開始番号・終了番号とリリースレベルを指定して全解放</FONT><BR>
+<FONT color="#009900">bool IsLoopPlay(void); // それはループ再生なのか？<BR>
+bool IsPlay(int nNo); // nNoのファイルが再生中か返します</FONT></P>
+<P><FONT color="#009900">smart_ptr&lt;CVolumeFader&gt; GetFader(void);</FONT></P>
+<P>ボリュームのコントロールのために、<A href="CVolumeFader.html">CVolumeFader</A>をメンバとして持っています。そのポインタを取得します。smart_ptrになっていて、コンストラクタで外部からsmart_ptr&lt;CVolumeFader&gt;を渡してやることも出来ます。もし、コンストラクタでsmart_ptr&lt;CVolumeFader&gt;を渡さなかった場合は、内部的に生成します。</P>
+<P><FONT color="#009900">bool* GetCancelFlag(void);</FONT></P>
+<P>再生要求をキャンセルするかどうかを決定するフラグを取得します。ディフォルトではfalse（キャンセルしない）です。<BR>
+無音化するときなどに呼びます。</P>
+<P>LONG GetCurrentPos(void); // 現在の再生位置取得([ms])</P>
+<P>再生時間を取得します。エラーのときは－１が返ります。精度等は<A href="CSoundBase.html">CSoundBase</A>::GetCurrentPosに委譲しているので、仕様はそちらと同じです。</P>
+<P>// <FONT color="#cc0000">ストリーム再生を強制するオプション</FONT>(default : false)<BR>
+void UseStreamSound(bool bEnable);</P>
+<P>これでtrueを引数にして呼び出すと、以降、wavの再生は、<A href="CStreamSound.html">CStreamSound</A>を使うようになります。すなわちストリーム再生（ファイルから読み込みながらの再生）が可能になります。DirectShow+CODECが入っている環境ならば、mp3等に対してもストリーム再生が出来ます。ディフォルトでは、ストリーム再生は行なわない、です。</P>
+
+<P><FONT color="#009900">virtual void SetReaderFactory(smart_ptr&lt;CPCMReaderFactory&gt; lpPlugin);
+<BR>
+virtual void SetReaderFactory(string PluginFilename);
+<BR>
+virtual smart_ptr&lt;CPCMReaderFactory&gt; GetReaderFactory(void);</FONT></P>
+<P>外部プラグインによるファイルの読み込みに対応しました。CBGMLoaderのコンストラクト時にデフォルトのCPCMReaderFactoryが用意されます。GetReaderFactory()でfactoryを取得して、AddPlugin()することによって、任意のオーディオ形式のファイルをOpen()できるようになります。現在は<FONT color="#cc0000">ストリーム再生時のみ</FONT>対応しています。</P>
+<P><FONT color="#009900">- Plugin追加の例 -<br>
+　CBGMLoader bgm;<br>
+　bgm.GetReaderFactory()->AddPlugin("plugin/OggVorbisPlugin.dll");<br>
+<HR>
+</BODY></HTML>

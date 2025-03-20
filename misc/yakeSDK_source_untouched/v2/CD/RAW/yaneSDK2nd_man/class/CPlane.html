@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CPlane</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CPlane</FONT><A name="CTimeBase"></A> <FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>DirectDrawSurfaceの制御用。CPlaneのメンバ関数の使用に先駆けて<A href="CDirectDraw.html">CDirectDraw</A>のインスタンスを生成する必要があります。<A href="CPlaneBase.html">CPlaneBase</A>派生クラスです。</P>
+<P>エフェクトについては、<A href="../etc/Effect.html">こちらの解説</A>をどうぞ。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P><FONT color="#009900">LRESULT Load(string szBitmapFileName,bool
+bLoadPalette=true);</FONT></P>
+<P>ビットマップの読み込み。（<A href="CGraphicLoader.html">CGraphicLoader</A>で読み込むのでJPEG等にも対応）<BR>
+bLoadPaletteは、256色のときしか意味をなさない。<BR>
+これがfalseだと、現在のパレットカラーに準じてSetDIBitsToDeviceで読み込まれる。<BR>
+（WM_PALETTECHANGEDに応答するアプリの場合、これで読み込む必要あり）<BR>
+これがtrueだと、パレットも読み込み、それをリアライズする。</P>
+<P><FONT color="#009900">LRESULT LoadW(string szBitmapFileName256,string
+szBitmapFileNameElse<BR>
+,bool bLoadPalette=true);</FONT></P>
+<P>256色モードと、それ以外のモードで、別のファイルを読む場合は、この関数で２つのファイルを指定する。</P>
+<P><FONT color="#009900">LRESULT Save(LPSTR szFileName,LPRECT lpRect=NULL);</FONT></P>
+<P>プレーンをビットマップファイルとして保存する。lpRect==NULLならば全域。</P>
+<P><FONT color="#009900">void GetSize(int &amp;x,int &amp;y);</FONT></P>
+<P>生成されたSurfaceのサイズを得る。Loadのあとに実行すれば、読み込まれたビットマップのサイズが得られる。</P>
+<P><FONT color="#009900">void Release(void);</FONT></P>
+<P>読み込まれているプレーンを解放する。デストラクタでもこの処理を行なうので明示的に呼び出す必要は無いが、サイズが大きいとメモリを圧迫するので使わなくなった時点で呼び出すべき。</P>
+<P>//////////////////////////////////////////////////////////////////////////<BR>
+// 透過キー設定関連<BR>
+<FONT color="#009900">LRESULT SetColorKey(COLORREF rgb); // 特定の色を転送のときの透過キーに設定する<BR>
+static DWORD DDColorMatch(LPDIRECTDRAWSURFACE
+pdds, COLORREF rgb); // 同じ色を探す</FONT></P>
+<P><FONT color="#009900">LRESULT SetColorKey(int x,int y); // (x,y)の点を透過キーに設定する<BR>
+static DWORD DDGetPixel(LPDIRECTDRAWSURFACE
+pdds,int x,int y); // 特定の点の色を調べる</FONT></P>
+<P>透過キーとは、いわゆるヌキ色で、透過キー付き転送を使ったときにその色は転送されない。<BR>
+ただし、現在の画面モードでの色に準ずるもので、16bpp（ハイカラーモード）だと、16bppの精度でしかヌキ色は区別されないので注意が必要です。つまり、RGB=(0,0,0)をヌキ色として指定した場合、RGB=(1,1,1)も抜けてしまいますので、ヌキ色は、他の部分とまったく異なる色にしなくてはなりません。</P>
+<P>Load／CreateSurface関数を呼び出した直後は、ヌキ色は左上の（原点(0,0)）ピクセルの色が指定されています。</P>
+<P>//////////////////////////////////////////////////////////////////////////<BR>
+// 通常転送系</P>
+<P><FONT color="#009900">LRESULT Blt(CPlane*lpSrc,int x,int y,LPRECT
+lpSrcRect=NULL,LPRECT lpClipDstRect=NULL);<BR>
+LRESULT BltFast(CPlane*lpSrc,int x,int y,LPRECT
+lpSrcRect=NULL,LPRECT lpClipDstRect=NULL);<BR>
+LRESULT BlendBlt(CPlane*lpSrc,int x,int y,int
+ar,int ag,int ab,int br,int bg,int bb,LPRECT
+lpSrcRect=NULL,LPRECT lpClipDstRect=NULL);<BR>
+<FONT color="#009900">LRESULT BlendBltFast(CPlane*lpSrc,int x,int
+y,int ar,int ag,int ab,int br,int bg,int
+bb,LPRECT lpSrcRect=NULL,LPRECT lpClipDstRect=NULL);<BR>
+</FONT>LRESULT BltR(CPlane*lpSrc,int x,int y,LPRECT
+lpSrcRect=NULL,LPSIZE lpDstSize=NULL,LPRECT
+lpClipDstRect=NULL);<BR>
+LRESULT BltFastR(CPlane*lpSrc,int x,int y,LPRECT
+lpSrcRect=NULL,LPSIZE lpDstSize=NULL,LPRECT
+lpClipDstRect=NULL);<BR>
+LRESULT BlendBltR(CPlane*lpSrc,int x,int
+y,int ar,int ag,int ab,int br,int bg,int
+bb,LPRECT lpSrcRect=NULL,LPSIZE lpDstSize=NULL,LPRECT
+lpClipDstRect=NULL);</FONT><BR>
+<FONT color="#009900">LRESULT BlendBltFastR(CPlane*lpSrc,int x,int
+y,int ar,int ag,int ab,int br,int bg,int
+bb,LPRECT lpSrcRect=NULL,LPSIZE lpDstSize=NULL,LPRECT
+lpClipDstRect=NULL); </FONT></P>
+<P>転送系です。lpSrcは転送元のCPlaneのポインタ。自分自身(CPlane)が転送先。転送先としてセカンダリプレーンを使いたいのならばCDirectDrawに同等のインターフェースを持つ関数があるので、そちらを使ってください。</P>
+<P>(x,y)は転送先、lpSrcRectは転送元矩形。lpClipDstRectは転送先のクリップ矩形（この矩形からははみ出さないように転送される）　関数名にRがついているものは拡縮つき転送。lpDstSizeは転送先の矩形。lpSrcRectがlpDstRectに拡大（あるいは縮小）されて転送される。lpSrcRectにNULLを指定した場合、プレーン全域が対象となる。lpDstSizeにNULLを指定した場合は、転送先サーフェースのサイズになる。</P>
+<P>Fastがついていないものはヌキ色有効。（SetColorKeyで設定したもの）<BR>
+Fastがついているものはヌキ色無効型伝送。</P>
+<P>Blend転送は、転送元のr,g,b比率(各0～255)を(ar,ag,ab)，転送先のr,g,b比率(br,bg,bb)を指定します。その他は、Bltと同じです。</P>
+<P>//////////////////////////////////////////////////////////////////////////<BR>
+// 通常エフェクト系</P>
+<P><FONT color="#009900">LRESULT Clear(LPRECT lpRect=NULL); // 矩形クリア<BR>
+LRESULT SetFillColor(COLORREF c); // Clearする色を指定する(Default==RGB(0,0,0))</FONT></P>
+<P>Clearは矩形のクリア。SetFillColorで設定された色でクリアされる。lpRect==NULLであればプレーン全域。</P>
+<P>色は、COLORREFなので、RGBマクロを使って、SetFillColor(RGB(100,200,150));のように設定する。<BR>
+FillColorは初期値は0で、その後、SetFillColorで変更するまで有効。</P>
+<P>//////////////////////////////////////////////////////////////////////////<BR>
+// 各種設定</P>
+<P><FONT color="#009900">LRESULT SetSystemMemoryUse(bool bEnable);
+// システムメモリを使うのか</FONT></P>
+<P>このプレーンの作成に当たり、システムメモリを使うのかどうかを変更できる。<BR>
+BlendBlt、拡大縮小付き転送等はハードウェアでサポートされていないため、ビデオメモリを使うとかえって遅くなる。システムメモリを使っていれば高速化が期待できる。GetDC等で直接HDCを得て書き込む場合も同様である。</P>
+<P>Load/CreateSurfaceする前に、この関数を呼び出すこと。<BR>
+一度設定したら、このクラスのデストラクタが呼び出されるまで有効です。</P>
+<P>//////////////////////////////////////////////////////////////////////////<BR>
+// HDCを得て、直接書き書き:p</P>
+<P><FONT color="#009900">HDC GetDC(void);<BR>
+void ReleaseDC(void);</FONT></P>
+<P>このプレーンのHDCを得る。これにより、通常のWin32のAPIを使ってプレーンに描画してやることが出来る。<BR>
+GetDCに失敗すると返し値はNULLなので、必ずそのチェックは行なうこと。</P>
+<P><FONT color="#009900">LRESULT CreateSurface(int sx,int sy); //
+サイズ指定でプレーン作成</FONT></P>
+<P>オーナードローでプレーンを作成することが出来る。この場合、プレーンの消失イベントに対してvirtual
+void OnDraw(void)が呼び出されるので、それをオーバーロードしてやる必要がある。CreateSurfaceされた瞬間は、サーフェースのFillColorは黒(RGB=(0,0,0))であることが保証される。</P>
+<P><FONT color="#009900">// プライマリサーフェースの生成<BR>
+LRESULT CreatePrimary(bool&amp; bUseFilp);<BR>
+// セカンダリサーフェースの生成<BR>
+LRESULT CreateSecondary(CPlane*lpPrimary,bool&amp;
+bUseFlip);</FONT></P>
+<P>この２つは、プライマリサーフェースとセカンダリサーフェースを作るのに使う。<BR>
+CDirectDrawがこれを利用している。こうすることにより、プライマリとセカンダリをCPlaneとして扱うことが出来る。<BR>
+通例ユーザーがこの関数を呼び出すことは無い。</P>
+<P><FONT color="#009900">//　他プレーンと入れ換える機能<BR>
+void SwapPlane(CPlane*lpPlane);</FONT></P>
+<P>他のプレーンと入れ替えます。サイズ、LPDIRECTDRAWSURFACEだけが入れ替わるので、入れ替えて描画関数を呼び出したあとはすぐに元通りにしてください。主に、セカンダリと入れ替えて、セカンダリに対して描画したのちに、摩り替えることによって、プレーンのバックアップを取るのに使います。</P>
+<P>//////////////////////////////////////////////////////////////////////////<BR>
+// property...</P>
+<P><FONT color="#009900">bool IsLoaded(void) const; // ビットマップが読み込まれていればtrue<BR>
+string GetFileName(void) const; // ファイル名を返す</FONT></P>
+<P><FONT color="#009900">LPDIRECTDRAWSURFACE GetSurface(void); //
+見ての通り＾＾<BR>
+LPDIRECTDRAWPALETTE GetPalette(void); //
+見ての通り＾＾</FONT></P>
+<P>直接DIRECTDRAWSURFACEのポインタを取得できるので、これを使って直接カリカリと書き込める。</P>
+<P>//////////////////////////////////////////////////////////////////////////<BR>
+// static members..</P>
+<P><FONT color="#009900">static int GetBpp(void); // 現在のbppを取得</FONT></P>
+<P>現在のbpp(Bits Per Pixel＝ピクセルあたりのビット数)を取得する。有り得る値としては4,8,16,24,32。</P>
+<P><FONT color="#009900">static LRESULT RestoreAll(void); // 全プレーンのリストア</FONT></P>
+<P>WM_ACTIVATEAPP時にサーフェースのリストアを行なうためのもの。<BR>
+CDirectDraw側から自動的に呼び出される。ユーザーが明示的に呼び出す必要は無い。</P>
+<P><FONT size="+1" color="#009900">☆　protectedメンバ関数</FONT></P>
+<P>LRESULT Restore(void); // プレーン消失時のリストアイベント応答用</P>
+<P>プレーンは画面解像度の切り替えに応じてLOSTするので、それに応答して復帰するためのもの。<BR>
+サーフェースのLOSTの検知とCPlaneの全インスタンスのRestoreの呼び出しはCDirectDrawが担う。<BR>
+オーナードローサーフェース(CreateSurfaceで作ったもの)の場合、Restore要求に対して、OnDrawが呼び出されるので、必要であればそちらをオーバーロードしてください。</P>
+
+<HR>
+</BODY></HTML>

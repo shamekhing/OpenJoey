@@ -1,0 +1,22 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CSinTable</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CSinTable</FONT><A name="CTimeBase"></A> <FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>sin,cosのテーブルを提供します。高速なsin,cosが実現できます。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>// n:0-511で一周（360゜）。結果は&lt;&lt;16されて返る<BR>
+static LONG Cos(int n){ return m_lTable[n
+&amp; 511]; }<BR>
+static LONG Sin(int n){ return m_lTable[(n+128)
+&amp; 511]; }</P>
+<P>テーブルは、このクラスのコンストラクタで初期化するため、CSinTableクラスを使用する場合は必ずどこかでコンストラクトする必要がある。</P>
+<P>例）<BR>
+sin,cosを使用したい関数のあるcppファイル内ではすべて、<BR>
+<FONT color="#009900">　　static CSinTable gSinTable;<BR>
+</FONT>のようにして、gSinTable.Cos(x)だとかgSinTable.Sin(y)だとかして使うと良いです。</P>
+<HR>
+</BODY></HTML>

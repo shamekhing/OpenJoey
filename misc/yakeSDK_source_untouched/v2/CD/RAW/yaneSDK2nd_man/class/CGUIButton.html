@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CGUIButton</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CGUIButton</FONT>　：　<A href="IGUIParts.html">IGUIParts</A>派生クラス</P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>グラフィカルなボタンを実現します。Windowsのボタンを擬似的に再現したりします。</P>
+<P>やねうらおのホームページの「天才プログラマ養成ギプス　第１１章」も参考にしていただければ良いかと思います。</P>
+<P>使用に当たっては、派生元の<A href="IGUIParts.html">IGUIParts</A>も参照してください。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P> // 設定して欲しいやつ＾＾<BR>
+void SetEvent(smart_ptr&lt;CGUIButtonEventListener&gt;
+pv);</P>
+<P>　ボタンのリスナ（情報を取得するクラス）を設定する。通常のボタンであれば、CGUINormalButtonListenerを使えば良いでしょう。</P>
+<P>// ---設定したければしてもいいやつ＾＾<BR>
+void SetLeftClick(bool b);<BR>
+// 左クリックで反応するボタンか？(default:true)<BR>
+void SetRightClick(bool b);<BR>
+// 右クリックで反応するボタンか？(default:false)</P>
+<P>// property..<BR>
+smart_ptr&lt;CGUIButtonEventListener&gt;
+GetEvent( ); // 設定したリスナの取得</P>
+<P>bool IsPushed(void); // ボタンが押し下げられている状態であるか？<BR>
+※　一度、マウスカーソルをこのボタンの中で押し下げて、押し下げたままこのボタンの外にマウスカーソルを移動させたときも、これはtrueを返しつづけます。（フォーカスは、このボタンにあるというWindowsのボタンを忠実にエミュレートするため）　よって、表示が押し下げ状態であるかとはまた違います。下のIsInメンバ関数も参照してください。</P>
+<P>bool IsIn(void);<BR>
+※　マウスカーソルが、そのボタンの範囲内に乗っているのかを調べます。押し下げタイプのボタンであれば、上のIsPush(
+) &amp;&amp; IsIn ( ) のようにして判定をとれば、表示が押し下げ状態であるかがわかります。これらの状態はOnDrawのあとに更新されるので、このチェックは、OnDrawのあとで行なうようにしてください。</P>
+<P>// そのフレーム内にクリックされたか？<BR>
+bool IsLClick( );<BR>
+bool IsRClick( );</P>
+<P>　ボタンが押されたメッセージは、本来はリスナに通達され、リスナが能動的に働くので、この手の関数で状態を読み出してやる必要は無いが、C++でいちいちリスナクラスを書くのは面倒なので（Javaの内部クラスのようなものが無いため）そこで、直接ボタンがそのフレーム内にクリックされたかどうかを返す関数を用意してあるのです。（この関数を呼び出すと、リスナの同名の関数を呼び出して結果を返します）</P>
+<P>// 前回、フォーカスが無くて、今回、このボタンのフォーカス内に入ったか？<BR>
+bool IsFocusing( )</P>
+<P>// 実際の使用は、毎フレームこれを呼び出す<BR>
+// MouseExは、外部でflushしていると仮定している<BR>
+<FONT color="#009900">virtual LRESULT OnDraw(CPlaneBase*lp);</FONT></P>
+<P>virtual void Reset( );<BR>
+// マウスの表示を消して、再度表示したときに、いきなり押したことになるのを避けるために、これでいったん内部状態をリセットできます。</P>
+<HR>
+<P><FONT size="+2">class CGUIButtonEventListener</FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>CGUIButtonのための、リスナです。要は、ボタンが押された時の通知用ハンドラで、こいつと<A href="../YTL/mediator.html">mediator</A>から多重継承して派生させると便利です。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>virtual void OnInit(void) {} // ボタンクラスのOnDrawを呼び出したとき<BR>
+// 最初に送られる<BR>
+// その後、ボタンの入力によって、以下のイベントが発生<BR>
+<BR>
+virtual void OnRBClick(void){} // 右ボタンクリック<BR>
+virtual void OnLBClick(void){} // 左ボタンクリック<BR>
+virtual void OnRBDown(void){} // 右ボタン押し下げ<BR>
+virtual void OnLBDown(void){} // 左ボタン押し下げ<BR>
+virtual void OnRBUp(void){} // 右ボタン押し上げ<BR>
+virtual void OnLBUp(void){} // 左ボタン押し上げ<BR>
+<BR>
+// --------これらは必ずオーバーライドすること<BR>
+virtual bool IsButton(int px,int py){ return
+true; }<BR>
+// ボタン画像の(px,py)の地点はボタンの座標か？<BR>
+virtual LRESULT OnDraw(CPlaneBase*lp,int
+x,int y,bool bPush,bool bIn){ return 0; }<BR>
+// ボタンを(x,y)の座標にbPushの状態で表示する<BR>
+<BR>
+virtual bool IsLClick(){ return false; }
+// そのフレーム内にクリックされたか？<BR>
+virtual bool IsRClick(){ return false; }
+// そのフレーム内にクリックされたか？<BR>
+// ↑受動的にイベントを受けるので、外部のクラスからこれをチェックする</P>
+<P>見ての通りなので解説は不要でしょうか＾＾；<BR>
+通常のタイプのボタンであれば、CGUINormalButtonListenerで出来ますので、自分でこのクラスを派生させて使うことは無いかも知れません。</P>
+<HR>
+<P><FONT size="+2">class CGUINormalButtonListener</FONT>　<FONT color="#cc0000">【CGUIButtonEventListener派生クラス】</FONT></P>
+<HR>
+<P>上の、CGUIButtonEventListenerの実装例。通常のボタン用のリスナであれば、何も考えずに、これを使えば良い。</P>
+<P>virtual SetPlaneLoader(smart_ptr&lt;CPlaneLoaderBasePre&gt;
+pv,int nNo);</P>
+<P><A href="CPlaneLoader.html">PlaneLoader</A>と、その何番目からが、このボタン用のイメージなのかを設定します。<BR>
+nNoがボタンが押し下げでいないとき、(nNo+1)がボタン押し下げのときのイメージとして使用されます。リバースボタンだと、(nNo+2)が、リバース時の非押し下げイメージ、(nNo+3)がリバース時の押し下げイメージになります。</P>
+<P>リバースボタンとは、通常の状態のほかに、リバース状態（特殊な状態）を持つボタンです。</P>
+<P>// ボタンタイプの取得／設定<BR>
+virtual void SetType(int nType);<BR>
+virtual int GetType( );</P>
+<P>ボタンタイプは、<BR>
+　　&nbsp;0:無効<BR>
+　　&nbsp;+1:On/Offボタン(通常ボタン)<BR>
+　　&nbsp;+2:On1/Off1,On2/Off2の４つの表示を持つボタン(リバースボタン。On2/Off2はReverseモード)<BR>
+　　&nbsp;（このタイプでなければ、SetReverseは無効になる。<BR>
+　　&nbsp;+4:YGA画像の場合、画像のα≠0の部分だけ有効（通常は画像の矩形全体が有効）<BR>
+　　&nbsp;+8:On/Offボタンだが、カーソルを上に置くとアクティブになり、<BR>
+　　&nbsp;左クリック押し下げの瞬間に押したことになる。<BR>
+　　&nbsp;（このタイプでなければ、WindowsGUIボタン互換となる）<BR>
+　　 <FONT color="#cc0000">(このボタンだと、ボタンイベントのクリックイベントは発生しない。IsRClick等も反応なし
+0と+16のボタンも同じく)</FONT><BR>
+　　+16:点滅(On/Offを繰り返す)。入力は受付けない。押されたことを示すのに使う。<BR>
+　　　　　+8のカーソルを押すと押し下げ状態になるボタンで使うと効果的。<BR>
+　　　　　点滅スピードはSetBlinkSpeedで設定する。<BR>
+　　　　　この関数で設定したフレーム数×２の周期で点滅する。点滅中は入力を受け付けない。<BR>
+　　+32:入力情報を完全に無視して SetImageOffsetで設定されたボタンを表示。<BR>
+　　+64:入力は行なうが、表示は常にSetImageOffsetで設定されたボタンを表示する。</P>
+<P>つまり、４つの表示を持つボタンで、カーソルを上に置くとアクティブになるタイプのボタンならば、＋２＋８＝１０を、SetTypeで設定すれば良い。</P>
+<P>初期状態では、1。</P>
+<P>// リバースボタンに設定する／取得<BR>
+virtual void SetReverse(bool bReverse);<BR>
+virtual bool GetReverse( );</P>
+<P>　これをtrueにすると、最初、SetPlaneLoaderで設定した(nNo+2)が、非押し下げイメージ、(nNo+3)が押し下げイメージになります。</P>
+<P>virtual void SetBlinkSpeed(int n);<BR>
+virtual void SetImageOffset(int n);<BR>
+virtual int GetImageOffset(void);</P>
+<P>SetTypeで設定したボタンの種類によっては、上記の関数が有効になる。詳しくは、SetType/GetTypeメンバ関数の説明を見てください。</P>
+<P>virtual CPlaneBase* GetMyPlane(bool bPush=false);
+// 表示プレーン取得</P>
+<P>現在のボタン状態に応じた（表示すべき）プレーンを返す。</P>
+<P>// ボタンが押されたときの通知<BR>
+virtual void OnLButtonClick(void) ;&nbsp;//
+派生クラスではこれをオーバーライドする<BR>
+// ↑能動的にイベントを受け付けてmediatorで親クラスにアクセスする<BR>
+virtual bool IsLClick( ); // そのフレーム内にクリックされたか？<BR>
+// ↑受動的にイベントを受けるので、外部のクラスからこれをチェックする</P>
+<P>ボタンの通知は、能動的に受ける方法と受動的に受ける方法とあります。前者は、このクラスを派生させてOnLButtonClickをオーバーライドする方法です。後者は、IsLClickを、毎フレーム、（外部から）チェックしてやる方法です。後者のほうが使いやすいでしょう。また、CGUIButtonには同名の関数があって、その関数を呼び出すと、このIsLClickが呼び出されるので、このクラスのIsLClickを直接呼び出す必要はありません。</P>
+</BODY></HTML>

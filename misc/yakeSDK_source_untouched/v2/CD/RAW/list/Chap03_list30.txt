@@ -1,0 +1,97 @@
+class ILoadCacheListener {
+/**
+	class CLoadCache の読み込み時のコールバック。
+	必要ならばnNoを変更できる
+	読み込むはずのファイルを他のファイルへ置換するのに使う。
+*/
+public:
+	virtual void OnLoad(int &nNo) {}
+	virtual ~ILoadCacheListener() {}
+};
+
+class CLoadCache : public ILoadCache {
+/**
+	擬似キャッシュのような働きをします。
+	使用方法等については、このクラスの派生も見てください。
+*/
+public:
+	virtual LRESULT	Set(const string& filename);
+	///	定義ファイルの設定（読み込み）
+
+	virtual LRESULT	Load(int nNo);
+	///	そのナンバーのデータの読み込み
+
+	virtual LRESULT	Release(int nNo);
+	///	そのナンバーのデータの解放
+	virtual LRESULT	ReleaseAll();
+	///	読み込んでいるデータの全解放
+
+	virtual void SetCacheMax(int nCacheMax=INT_MAX);
+	/**
+		キャッシュ上限を設定する仕組み。
+		読み込んでいる数がnCacheMaxを超えた場合
+		最近使っていないものから解放する仕組み
+		defaultではINT_MAX（なのでいつまでも解放されない）
+	*/
+
+	///	---- おまけ
+	///	Setで設定した、ファイル名リストの要素数を返します。
+	virtual int		GetSize() const { return m_aLoadCache.size(); }
+
+	///	property..
+	///	リスナの設定～取得
+	virtual void	SetLoadCacheListener(const smart_ptr<ILoadCacheListener>& v) { m_vLoadCacheListener = v;}
+	virtual smart_ptr<ILoadCacheListener> GetLoadCacheListener() const { return m_vLoadCacheListener; }
+
+	//	設定ファイルの２度読みの禁止(default:true == ２度読み可能)
+	virtual void	SetCanReloadAgain(bool b) { m_bCanReloadAgain = b; }
+
+	CLoadCache();
+	virtual ~CLoadCache();
+
+protected:
+	class CLoadCacheInfo {
+	//	読み込むための構造体
+	public:
+	string	strFilename;		//	読み込むファイル名
+	bool	bLoaded;			//	読み込み済みなのか？
+	int		nStaleTime;			//	解放するまでの時間
+
+	CLoadCacheInfo() :
+		bLoaded(false),nStaleTime(-1) {}
+	};
+	smart_vector_ptr<CLoadCacheInfo> m_aLoadCache;
+	smart_vector_ptr<CLoadCacheInfo>* GetLoadCache() { return& m_aLoadCache; }
+	CLoadCacheInfo* GetLoadCache(int n){ return (*GetLoadCache())[n].get(); }
+
+	/**
+	まず、このクラスから派生させ、以下の４つの関数をオーバーライドします。
+	たとえば、smart_vector_ptr<ISound> m_apSound; をメンバとして
+	持っているのならば、
+	１．InnerCreate　⇒
+			m_apSound.resize(nMax);
+	２．InnerDelete　⇒
+			m_apSound.clear();
+	３．InnerLoad(int nNo)　⇒
+			Loadを呼び出し、そのあと
+			nNoの要素を読み込む処理を書く
+	４．InnerRelease(int nNo) ⇒
+			nNoの要素を解体する処理を書く
+	５．デストラクタ⇒
+			必ずInnerDeleteを呼び出す
+	*/
+	//	nMax分だけ配列を確保／解放
+	virtual void	InnerCreate(int nMax) = 0;
+	virtual void	InnerDelete() = 0;
+	//	ひとつの要素に読み込み／解放
+	virtual	LRESULT InnerLoad(int) = 0;
+	virtual LRESULT InnerRelease(int) = 0;
+
+	int		m_nCacheMax;		//	この数を超えたやつから解放する
+	void	InnerPushOut();		//	↑そのpush_out処理
+	void	InnerUse(int nNo);	//	使ったときにカウンタを調整する処理
+
+	//	設定ファイルの２度読み禁止フラグ
+	bool	m_bCanReloadAgain;
+	smart_ptr<ILoadCacheListener>	m_vLoadCacheListener;
+};

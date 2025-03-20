@@ -1,0 +1,28 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class IGUIParts</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class IGUIParts</FONT> <FONT color="#cc0000">【インターフェースクラス】</FONT></P>
+
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>グラフィカルなボタン<A href="CGUIButton.html">CGUIButton</A>等、マウスを扱うクラスの基底クラスです。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>// 座標の設定<BR>
+void SetXY(int x,int y);<BR>
+void GetXY(int&amp;x,int&amp;y);</P>
+<P>座標の初期値は(0,0)です。</P>
+<P>// マウスの設定／取得<BR>
+virtual void SetMouse(smart_ptr&lt;CMouseEx&gt;
+pv);<BR>
+virtual smart_ptr&lt;CMouseEx&gt; GetMouse(
+);</P>
+<P>これで、事前に<A href="CMouse.html#CMouseEx">CMouseEx</A>の<A href="../YTL/smart_ptr.html">スマートポインタ</A>を設定してください。</P>
+<P>// 実際の使用は、毎フレームこれを呼び出す<BR>
+// CMouseExは、外部でflushしていると仮定している<BR>
+virtual LRESULT OnDraw(CPlaneBase*)=0;</P>
+<P>実際の使用は、毎フレーム、このOnDrawを呼び出すだけです。このOnDraw内で、CMouseExからの入力を行ない、もし、マウスイベント等が発生した場合、CMouseExにリセットをかけ、このあとCMouseExからボタン情報を取得しても、ボタン押し下げは行なっていないかのように値が返ります。</P>
+<P>これによって、ボタンにマウスメッセージが吸い取られる（？）処理が擬似的に実現できます。要は、<FONT color="#cc0000">CMouseExを呼び出したのちに、このクラスのOnDrawを呼び出してから、CMouseExからボタン情報のチェックを行なうようにする</FONT>と良いということです。</P>
+<HR>
+</BODY></HTML>

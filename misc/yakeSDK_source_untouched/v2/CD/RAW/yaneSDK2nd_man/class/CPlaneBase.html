@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CPlaneBase</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CPlaneBase</FONT><A name="CTimeBase"></A> <FONT color="#ff0000">【基底クラス<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P><A href="CPlane.html">CPlane</A>,<A href="CDIB32.html">CDIB32</A>,<A href="CFastPlane.html">CFastPlane</A>の共通基底クラスです。このクラスのメンバ関数だけ使うようにすれば、CPlane,CDIB32,CFastPlaneのどれに対しても有効な関数が用意できます。<A href="CPlaneEffectBlt.html">CPlaneEffectBlt</A>クラスは、これを利用しています。<A href="CDirectDraw.html">CDirectDraw</A>,<A href="CDIBDraw.html">CDIBDraw</A>も、このクラスから派生させています。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>// CPlaneBaseの派生クラスでは、これをオーバーライドすべし<BR>
+virtual EDrawType GetID() const;</P>
+<P>RTTIの真似事が出来ます＾＾；　すなわち、動的な型が取得できます。このEDrawTypeというのは、描画サーフェースの種類を示す以下のような列挙型です。</P>
+<CENTER>
+<TABLE bgcolor="#ffffff">
+  <TBODY>
+    <TR>
+      <TD>enum EDrawType {<BR>
+      　eDraw_NullPlane,　<FONT color="#009900">// 不正なサーフェース</FONT><BR>
+      　eDraw_CPlane, 　　<FONT color="#009900">// CPlane</FONT><BR>
+      　eDraw_CDIB32,　　<FONT color="#009900">// CDIB32</FONT><BR>
+      　eDraw_CFastPlane<FONT color="#009900"> // CFastPlane</FONT><BR>
+      };</TD>
+    </TR>
+  </TBODY>
+</TABLE>
+</CENTER>
+<P> // 矩形描画<BR>
+virtual LRESULT Blt(CPlaneBase* lpSrc,int
+x,int y,LPRECT lpSrcRect=NULL,LPSIZE lpDstSize=NULL,LPRECT
+lpClipRect=NULL) = 0;<BR>
+virtual LRESULT BltFast(CPlaneBase* lpSrc,int
+x,int y,LPRECT lpSrcRect=NULL,LPSIZE lpDstSize=NULL,LPRECT
+lpClipRect=NULL) = 0;</P>
+<P>// ブレンド転送<BR>
+virtual LRESULT BlendBlt(CPlaneBase* lpSrc,int
+x,int y,DWORD dwDstRGBRate,DWORD dwSrcRGBRate<BR>
+,LPRECT lpSrcRect=NULL,LPSIZE lpDstSize=NULL,LPRECT
+lpClipRect=NULL) = 0;<BR>
+virtual LRESULT BlendBltFast(CPlaneBase*
+lpSrc,int x,int y,DWORD dwDstRGBRate,DWORD
+dwSrcRGBRat<BR>
+,LPRECT lpSrcRect=NULL,LPSIZE lpDstSize=NULL,LPRECT
+lpClipRect=NULL) = 0;</P>
+<P>// サイズ取得<BR>
+virtual void GetSize(int &amp;x,int &amp;y)
+= 0;</P>
+<P> // Mosaic（そのプレーンに対するエフェクト）<BR>
+virtual LRESULT MosaicEffect(int d, LPRECT
+lpRect=NULL) = 0;<BR>
+// Flush （そのプレーンに対するエフェクト）<BR>
+virtual LRESULT FlushEffect(LPRECT lpRect=NULL)
+= 0;<BR>
+// 画面クリア<BR>
+virtual LRESULT ClearRect(LPRECT lpRect=NULL)
+= 0;<BR>
+// ビットマップ関連<BR>
+virtual LRESULT Load(string szBitmapFileName,bool
+bLoadPalette=false) = 0;<BR>
+// bLoadPalette==falseだと、現在のパレットカラーに準じてSetDIBitsToDeviceで<BR>
+// 読み込まれる。WM_PALETTECHANGEDに応答するアプリの場合、これで読み込む必要あり<BR>
+virtual LRESULT LoadW(string szBitmapFileName256,string
+szBitmapFileNameElse<BR>
+,bool bLoadPalette=true) = 0;<BR>
+// 256色モードならば、別のファイルを読む場合<BR>
+virtual LRESULT Release(void) = 0;<BR>
+virtual LRESULT SetColorKey(int x,int y)
+= 0; // (x,y)の点を透過キーに設定する</P>
+<P>関数仕様は、<A href="CDIB32.html">CDIB32</A>と同じなのでそちらを参照してください。また、BlendBltのDWORDで指定する色は、<BR>
+　inline DWORD PlaneRGB(DWORD r,DWORD g,DWORD
+b);<BR>
+というインライン関数を用意していますので、これを利用してください。上の関数のうち、CDIB32は、LoadWはサポートしていませんので、注意してください。</P>
+<P>// α付き画像転送系(ただしCDIB32でしか実装されておらず)<BR>
+virtual LRESULT BlendBltFastAlpha(CPlaneBase*
+lpSrc,int x,int y,LPRECT lpSrcRect=NULL,LPSIZE
+lpDstSize=NULL,LPRECT lpClipRect=NULL) =
+0;<BR>
+virtual LRESULT BlendBltFastAlpha(CPlaneBase*
+lpSrc,int x,int y,DWORD dwDstRGBRate,DWORD
+dwSrcRGBRate<BR>
+,LPRECT lpSrcRect=NULL,LPSIZE lpDstSize=NULL,LPRECT
+lpClipRect=NULL) = 0;<BR>
+virtual LRESULT FadeBltAlpha(CPlaneBase*
+lpSrc,int x,int y,int nFadeRate)=0;</P>
+<P>　これらもCDIB32のほうと同じですので、そちらを参考にしてください。</P>
+<P> // 画像が読み込まれているかどうか<BR>
+virtual bool IsLoaded(void) const = 0;</P>
+<P>// YGA画像であるかどうか(CDIB32に対して有効。CPlaneの場合かならずfalse)<BR>
+virtual bool IsYGA(void);</P>
+<P>// 自然な転送(CPlaneならばBlt, CDIB32ならばBlt,CDIB32でyga画像ならばBlendBltFastAlpha)<BR>
+virtual LRESULT BltNatural(CPlaneBase* lpSrc,int
+x,int y,LPRECT lpSrcRect=NULL,LPSIZE lpDstSize=NULL,LPRECT
+lpClipRect=NULL);<BR>
+virtual LRESULT BltNatural(CPlaneBase* lpSrc,int
+x,int y,<FONT color="#cc0000">int nFade</FONT>,LPRECT lpSrcRect=NULL,LPSIZE lpDstSize=NULL,LPRECT
+lpClipRect=NULL);</P>
+<P>この関数を使えば、CPlane,CDIB32,CDIB32のyga画像すべてに対してうまく動作するトランジション関数を書いたりすることが出来ます。後者の関数はは、フェードレベル（明るさ）を指定できます。(0～256)　256ならば前者のBltNaturalと同じ意味になります。</P>
+<P>virtual LRESULT BltNaturalPos(CPlaneBase*
+lpSrc,int x,int y,int nMode,int nFade=256);<BR>
+// nMode == ベース位置(0:画像中心 1:左上
+2:右上 3:左下 4:右下)</P>
+<P>BltNaturalのベース位置を指定できるバージョンです。転送元画像の右下が、転送先の座標(x,y)に来るように転送するというようなことが出来ます。センタリングとか結構便利です。</P>
+<P>virtual LRESULT CreateSurface(int sx,int
+sy);<BR>
+派生クラスであるCDIB32 or CPlaneのCreateSurfaceに委譲します。（当然、同じ仕様なので、そちらの説明も見てください）</P>
+<P>void SetColorKey(int r,int g,int b); 読み込むPlaneのColorKeyを設定します。設定はRGBで行ないます。r,g,bは、それぞれ0～255の範囲で指定します。CDIB32の場合は問題ないですが、CPlaneの場合は、現在の画面モードでの色に準ずるもので、16bpp（ハイカラーモード）だと、16bppの精度でしかヌキ色は区別されないので注意が必要です。つまり、RGB=(0,0,0)をヌキ色として指定した場合、RGB=(1,1,1)も抜けてしまいますので、ヌキ色は、他の部分とまったく異なる色にしなくてはなりません。</P>
+<P>// (x,y)のα値を返す(DIB32,CFastPlaneのみ)<BR>
+// 非αサーフェースならば抜き色と同じであれば0,違うのならば255を返す<BR>
+virtual int GetPixelAlpha(int x,int y);<BR>
+　　⇒　マウスでクリックされた場所が、画像の範囲内であるかを調べるのに使うと便利です。（例：ボタン画像など）</P>
+<P>static CPlaneBase* CreatePlane(void);<BR>
+// 生成関数。現在CDirectDrawを使っているのかCDIBDrawを使っているのかに応じて<BR>
+// CPlane,CDIB32を生成する。</P>
+<P><FONT color="#cc0000">ただし、↓この関数でFactoryが設定されていれば、それをCreateして返します。</FONT></P>
+<P> // CreatePlaneのためのFactoryを設定する<BR>
+<FONT color="#009900">static void SetPlaneBaseFactory(smart_ptr&lt;CPlaneBaseFactory&gt;
+pv);</FONT></P>
+<P>例）<BR>
+CPlaneBase::SetPlaneBaseFactory(smart_ptr&lt;CPlaneBaseFactory&gt;(new
+CPlaneBaseFactoryForCDIB32,true));</P>
+<P>とやれば、現在DirectDrawを使っていてもCreatePlaneではCDIB32が作られます。</P>
+<P>CPlaneBase::SetPlaneBaseFactory(smart_ptr&lt;CPlaneBaseFactory&gt;(new
+CPlaneBaseFactoryForCPlane,true));</P>
+<P>とやれば、現在CDIB32を使っていてもCreatePlaneではCPlaneが作られます。</P>
+<P>// サーフェースのバックアップを作成して返す<BR>
+<FONT color="#009900">smart_ptr&lt;CPlaneBase&gt; GetBackup(void);</FONT></P>
+<P>CreatePlaneで、サーフェースを作成し、そちらにBltFastで転送して、そのsmart_ptrを返す。</P>
+<HR>
+</BODY></HTML>

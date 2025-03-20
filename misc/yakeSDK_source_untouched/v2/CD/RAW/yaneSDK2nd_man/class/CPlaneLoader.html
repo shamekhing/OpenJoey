@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>クラスリファレンス</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CPlaneLoader,CDIB32Loader</FONT><A name="CTimeBase"></A><FONT color="#ff0000"> 【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<P><FONT color="#cc0000">両方yanePlaneLoader.hのなかでテンプレートとして宣言されています。</FONT><BR>
+　typedef CPlaneLoaderBase&lt;CPlane&gt;
+CPlaneLoader;<BR>
+　typedef CPlaneLoaderBase&lt;CDIB32&gt;
+CDIB32Loader;<BR>
+です。</P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>プレーン(<A href="CPlane.html">CPlane</A>,<A href="CDIB32.html">CDIB32</A>)の読み込み管理を行ないます。プレーンを番号で管理できます。読み込んでいるプレーンは２度読みしません。事前に読み込んでおくことも出来ます。擬似キャッシュのような働きをします。アプリケーションクラスのメンバとして持たせると便利です。<A href="CLoadCache.html">CLoadCache</A>から派生させています。参考にしてください。</P>
+<P>また、これのサウンドバージョン<A href="CSoundLoader.html">CSoundLoader</A>についても参考にしてください。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>まず、読み込むべきプレーンのファイル名と解放レベルの設定のための構造体。</P>
+<P>struct SLOAD_CACHE&nbsp;{<BR>
+LPSTR lpszFilename; // CSoundで読み込むファイル名<BR>
+int nReleaseLevel;　　// 解放レベル<BR>
+};</P>
+<P>void Set(SLOAD_CACHE*); // 全画像定義ファイルの設定<BR>
+LRESULT Load(int nNo,int ReleaseLevel=-1);
+// 読み込み<BR>
+void Release(int nNo); // 解放<BR>
+void ReleaseAll(int nReleaseLevel); // 全解放<BR>
+void ReleaseAll(int nStart,int nEnd,int nReleaseLevel=INT_MAX);//
+全解放<BR>
+<FONT color="#cc0000">CPlane*</FONT>GetPlane(int nNo); // プレーンの取得</P>
+<P>Setで定義ファイルリストを食わせて、Loadでその番号の画像を読み込み、必要に応じてGetPlaneして<A href="CPlane.html">CPlane</A>を取得。Releaseはナンバー指定での解放。ReleaseAllは、そのリリースレベル以下のものだけ解放。</P>
+<P>また、GetPlaneをした場合、そのプレーンを読み込んでいなければ、自動的にLoadする。よって、Loadは明示的に指定する必要はない。ただし、事前に読み込んでおかないと、読み込みのタイムラグが必要になるので、その場合だけは事前にLoadすると良い。</P><P>void SetColorKey(int r,int g,int b); 読み込むPlaneのColorKeyを<FONT color="#cc0000"><U>事前に</U></FONT>設定します。設定はRGBで行ないます。実装においては、プレーン読み込み後、<A href="CPlaneBase.html">CPlaneBase</A>::SetColorKeyに委譲します。そちらの注意事項もあわせて確認してください。</P>
+<P><FONT color="#cc0000">◎　注意</FONT><BR>
+　CDIB32Loaderのほうは、GetPlaneメンバ関数でCDIB32*が返ります。</P>
+<HR>
+<P>参考：ＣＰｌａｎｅＬｏａｄｅｒＢａｓｅＰｒｅ基底クラス</P>
+<P>テンプレートによって生成されたクラスをベーステンプレートに差し戻す変換が出来無いので、基底クラスとしてCPlaneLoaderBasePreというクラスを用意し、そこからCPlaneLoader,CDIB32Loaderを派生させてあります。</P>
+<P>よって、CPlaneLoader,CDIB32Loaderの両方で動作しなくてはならないプログラムを作成するときは、このクラスにアップキャストして使うといいでしょう。</P>
+<P> virtual CPlaneBase* GetPlaneBase(int nNo)
+= 0; </P>
+<P>このメンバ関数によって、指定のプレーンを得ます。</P>
+<HR>
+</BODY></HTML>

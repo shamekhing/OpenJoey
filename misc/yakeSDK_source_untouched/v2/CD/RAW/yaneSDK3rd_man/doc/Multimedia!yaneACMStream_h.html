@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Multimedia/yaneACMStream.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="CACMStream"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CACMStream</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">ACMを利用してサウンドデータを読み込む class ISoundStream 派生クラス<BR>	圧縮ファイルはHDDから逐次読み出しするのではなく、一気に読み込む。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Multimedia!yaneSoundStream_h.html#ISoundStream" target=_self>ISoundStream</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CACMStream()</DIV>
+<DIV class="public_member"> virtual ~CACMStream()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT Open(<SPAN class="reserved_word">const</SPAN> <SPAN class="reserved_word">char</SPAN>* filename)</DIV>
+<DIV class="public_member">LRESULT Close()</DIV>
+<DIV class="public_member">LONG GetLength()</DIV>
+<DIV class="public_member">LRESULT SetCurrentPos(LONG lPosition)</DIV>
+<DIV class="public_member">LONG GetCurrentPos()</DIV>
+<DIV class="public_member">DWORD Read(BYTE* lpDest, DWORD dwSize)</DIV>
+<DIV class="public_member">DWORD GetPacketSize()</DIV>
+<DIV class="public_member">WAVEFORMATEX* GetFormat()</DIV>
+<DIV class="comment_block">override from class ISoundStream<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">LRESULT InnerRead(BYTE* lpDest, DWORD dwSize, DWORD&amp; dwReaded)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Auxiliary!yaneFile_h.html#IFile" target=_self>IFile</A>&gt; GetFile()</DIV>
+<DIV class="protected_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Auxiliary!yaneFile_h.html#IFile" target=_self>IFile</A>&gt; m_vFile</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">LRESULT InitializeNormal()</DIV>
+<DIV class="protected_member">LRESULT InitializeMP3()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">LONG ByteToMsec(DWORD dwByte)</DIV>
+<DIV class="protected_member">DWORD MsecToByte(LONG lMsec)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">HMMIO m_hmmio</DIV>
+<DIV class="protected_member">WAVEFORMATEX* m_pSrcFormat</DIV>
+<DIV class="protected_member">WAVEFORMATEX* m_pDestFormat</DIV>
+<DIV class="protected_member">WAVEFORMATEX m_vDestFormat</DIV>
+<DIV class="protected_member">MPEGLAYER3WAVEFORMAT m_vMP3Format</DIV>
+<DIV class="protected_member">HACMSTREAM m_hAcm</DIV>
+<DIV class="protected_member">ACMSTREAMHEADER m_vAcmHeader</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">DWORD m_dwSrcLength</DIV>
+<DIV class="protected_member">DWORD m_dwDataOffset</DIV>
+<DIV class="protected_member">DWORD m_dwReadPosition</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">DWORD m_dwDestLength</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">DWORD m_dwSrcBlockLength</DIV>
+<DIV class="protected_member">DWORD m_dwDstBlockLength</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

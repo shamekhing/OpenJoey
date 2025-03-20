@@ -11,6 +11,7 @@ public:
     /// Drawing
     CFastDraw* GetDraw() { return GetDrawFactory()->GetDraw(); }
     CFastPlaneFactory* GetDrawFactory() { return &planeFactory_; }
+	//ISceneControl* GetSceneControl() { return m_sceneControl.get(); }
 
     // Helper to trigger exit confirmation
     void RequestExit() { m_bWindowClosing = true; }

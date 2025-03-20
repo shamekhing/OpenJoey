@@ -1,0 +1,20 @@
+	for(int y=0;y<sy;y++){
+		for(int x=0;x<sx;x++){
+			DWORD r,g,b,alpha;
+			b=*src_b & 0xff;
+			g=(*src_b >>8) & 0xff;
+			r=(*src_b >>16) & 0xff;
+			DWORD d = 255*3 + (b+g+r)
+				-((*src_w & 0xff) + ((*src_w>>8) & 0xff) + ((*src_w>>16) & 0xff));
+			if(d==0){
+				*(pd++) = 0;
+			}else{
+				b = b * (255*3)/d;
+				g = g * (255*3)/d;
+				r = r * (255*3)/d;
+				alpha = 255 * d/(255*3);
+				*(pd++) = (r<<16) + (g<<8) + b + (alpha<<24);
+			}
+			src_w++; src_b++;
+		}
+	}

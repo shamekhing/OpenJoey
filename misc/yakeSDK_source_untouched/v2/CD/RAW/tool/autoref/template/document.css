@@ -1,0 +1,106 @@
+/* スタイルシート */
+
+	BODY {
+			font-family: 'MS ゴシック';
+			padding: 0px 0px 0px 0px;
+			margin: 20px 25px 20px 25px;
+		}
+
+	.reserved_word {
+			font-family: 'MS ゴシック';
+			color: #0000ff;
+			padding: 0px 0px 0px 0px;
+			margin: 0px 0px 0px 0px;
+		}
+	.class_name {
+			font-family: 'MS ゴシック';
+			font-weight: bold;
+			color: #000000;
+			padding: 0px 0px 0px 0px;
+			margin: 0px 0px 0px 0px;
+		}
+	.block_title {
+			font-family: 'MS ゴシック';
+			font-weight: bold;
+			color: #000000;
+			padding: 0px 0px 0px 0px;
+			margin: 0px 0px 0px 0px;
+		}
+	.header_filename_block {
+			font-family: 'ＭＳ ゴシック';
+			color: #202020;
+			padding: 0px 0px 0px 0px;
+			margin: 0px 0px 10px 15px;
+		}
+	.comment_block {
+			font-family: 'MS ゴシック';
+			color: #208020;
+			padding: 0px 0px 0px 0px;
+			margin: 0px 0px 10px 15px;
+		}
+	.super_class_block {
+			font-family: 'MS ゴシック';
+			color: #202020;
+			padding: 0px 0px 0px 0px;
+			margin: 0px 0px 10px 15px;
+		}
+	.class_member_block {
+			font-family: 'MS ゴシック';
+			color: #202020;
+			padding: 0px 0px 0px 0px;
+			margin: 0px 0px 10px 15px;
+		}
+	.public_member {
+			font-family: 'MS ゴシック';
+			color: #000000;
+			padding: 0px 0px 0px 0px;
+			margin: 0px 0px 0px 0px;
+		}
+	.protected_member {
+			font-family: 'MS ゴシック';
+			color: #555555;
+			padding: 0px 0px 0px 0px;
+			margin: 0px 0px 0px 0px;
+		}
+	.private_member {
+			font-family: 'MS ゴシック';
+			color: #999999;
+			padding: 0px 0px 0px 0px;
+			margin: 0px 0px 0px 0px;
+		}
+
+	/* リンクに関するスタイル */
+	A {
+		text-decoration: none;
+		}
+	A.super_class_link:hover {
+			background-color: #fffff5;
+			padding: 0px 0px 0px 0px;
+			margin: 0px 0px 0px 0px;
+		}
+	A.super_class_link:link, .super_class_link:visited {
+			color: #ff3333;
+			padding: 0px 0px 0px 0px;
+			margin: 0px 0px 0px 0px;
+		}
+
+	A.class_link:active {
+			color: #ff3333;
+			padding: 0px 0px 0px 0px;
+			margin: 0px 0px 0px 0px;
+		}
+	A.class_link:hover {
+			background-color: #fffff5;
+			padding: 0px 0px 0px 0px;
+			margin: 0px 0px 0px 0px;
+		}
+	A.class_link:link, .class_link:visited {
+			color: #ff3333;
+			padding: 0px 0px 0px 0px;
+			margin: 0px 0px 0px 0px;
+		}
+	A.class_link:active {
+			color: #ff3333;
+			padding: 0px 0px 0px 0px;
+			margin: 0px 0px 0px 0px;
+		}

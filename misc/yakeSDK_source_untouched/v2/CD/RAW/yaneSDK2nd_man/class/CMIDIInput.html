@@ -1,0 +1,15 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CMIDIInput</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CMIDIInput</FONT><A name="CTimeBase"></A> <FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>MIDI入力のためのクラス。<A href="CKeyBase.html">CKeyBase</A>から派生。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>入力系の関数は、<A href="CKeyBase.html">CKeyBase</A>のほうの関数に準拠。</P>
+<P>BYTE GetVelocity(int key)const;<BR>
+　押されたかどうかだけでなく、この関数を用いて、押されたときの圧力を検知することも出来る。(押されていなければ0、押されていれば、その圧力1～255)</P>
+<P>IsPushKey/IsPressKeyの引数で指定する値は、MIDIノートナンバーに準拠。</P><HR>
+</BODY></HTML>

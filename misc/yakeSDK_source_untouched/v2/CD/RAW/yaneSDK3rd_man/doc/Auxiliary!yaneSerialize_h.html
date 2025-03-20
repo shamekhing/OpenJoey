@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Auxiliary/yaneSerialize.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="IArchive"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">IArchive</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">シリアライズ用アーカイブクラス<BR><BR>// シリアライズ用アーカイブクラス<BR><BR>virtual void Serialize(ISerialize&amp;)=0;<BR>// こいつをオーバーライドして使うといいのだ<BR><BR>例）<BR>　　void Serialize(ISerialize&amp;s){<BR>　　　s &lt;&lt; nData &lt;&lt; szData;<BR>　　}<BR><BR>// こんな感じでシリアライズしたい、メンバをすべて書き出すコードを書くべし<BR><BR>そうすれば、<BR>　　　CSerialize s;<BR>　　　CArchive派生クラス a;<BR>　　　s &lt;&lt; a;<BR>とシリアライズできるようになる。<BR><BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Serialize()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> virtual ~IArchive()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="ISerialize"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">ISerialize</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Clear()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsStoring()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN>* GetStoring()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetStoring(<SPAN class="reserved_word">bool</SPAN> b)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> InnerSetStoring(<SPAN class="reserved_word">bool</SPAN> b)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> vector&lt;BYTE&gt;* GetData()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; operator&lt;&lt;(<A class="class_link" href="Auxiliary!yaneSerialize_h.html#IArchive" target=_self>IArchive</A>&amp; vData)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; operator&lt;&lt;(<SPAN class="reserved_word">int</SPAN>&amp; nData)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; operator&lt;&lt;(<SPAN class="reserved_word">bool</SPAN>&amp; bData)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; operator&lt;&lt;(BYTE&amp; byData)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; operator&lt;&lt;(string&amp; szData)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; operator&lt;&lt;(WORD&amp; wData)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; operator&lt;&lt;(DWORD&amp; dwData)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; operator&lt;&lt;(vector&lt;int&gt;&amp; anData)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; operator&lt;&lt;(vector&lt;bool&gt;&amp; abData)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; operator&lt;&lt;(vector&lt;BYTE&gt;&amp; abyData)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; operator&lt;&lt;(vector&lt;string&gt;&amp; szData)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; operator&lt;&lt;(vector&lt;WORD&gt;&amp; awData)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; operator&lt;&lt;(vector&lt;DWORD&gt;&amp; adwData)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; operator&lt;&lt;(<A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; vData)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; operator=(<A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; vSeri)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Save(<SPAN class="reserved_word">const</SPAN> string&amp; filename)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Load(<SPAN class="reserved_word">const</SPAN> string&amp; filename)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">int</SPAN>* GetPos()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> T</SPAN>&gt;<BR><A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; SerializeT(T&amp; vData)</DIV>
+<DIV class="comment_block">任意のデータ型を書き出すためのもの<BR>メンバ関数テンプレートで実装<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> T</SPAN>&gt;<BR><A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; Store(T* pavData, <SPAN class="reserved_word">int</SPAN> nSize)</DIV>
+<DIV class="comment_block">あるいは、Arrayも、、<BR>メンバ関数テンプレートでの実装<BR>pavData[nSize]をシリアライズ<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> virtual ~ISerialize()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CSerialize"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CSerialize</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">シリアライズ用クラス<BR><BR>	シリアライズ（データ永続化）のため手段。<BR>	メンバ変数・配列などを、ストリームにつっこみ、あるいは取り出して、<BR>	それをファイルに保存／復元することで、アプリケーションが終了したあとも、<BR>	前回の状態を保つことが出来る。<BR><BR>	概略については class IArchive を参照すること。<BR><BR>１．保存するとき<BR>　CSerialize s;<BR>　IArchive派生クラス v;<BR>　s &lt;&lt; v; // これで格納<BR>　vector&lt;BYTE&gt;&amp; vData = *(s.GetData());<BR>　↑あとは、こいつを、&amp;vData[0]から、vData.size()バイトだけ<BR>　ファイルとして保存すれば、シリアライズ完了。<BR><BR>２．シリアライズしたデータを読み出すとき<BR>　CSerialize s;<BR>　IArchive派生クラス v;<BR>　vector&lt;BYTE&gt;&amp; vData = *(s.GetData());<BR>　vDataに１．でシリアライズしたファイルから読み込む。<BR>　s.SetStoring(false); // いまから読み出すねん！<BR>　// ↑このフラグさえ、このようにストリームからの読み出しであると<BR>　// 宣言さえすれば、<BR>　s &lt;&lt; v; // これ、１．と同じ表記でＯＫ。<BR>　これで、ストリームからの読み出しが完了。<BR><BR>３．上の手順でIArchive派生クラスを使わないとき保存）<BR><BR>　CSerialize s;<BR>　int x,y,z;<BR>　s &lt;&lt; x &lt;&lt; y &lt;&lt; z;<BR>　CSerialize s;<BR>　s.SetStoring(false); // このフラグを倒しておけば取り出し<BR>　int x,y,z;<BR>　s &lt;&lt; x &lt;&lt; y &lt;&lt; z;<BR><BR>　例１．<BR>　int x = 1,y = 2,z = 3;<BR>　CSerialize s;<BR>　string sz;<BR>　sz = "あいうえお";<BR>　s &lt;&lt; sz;<BR>　s &lt;&lt; x &lt;&lt; y &lt;&lt; z; // ストリームに保存<BR><BR>　CFile file;<BR>　file.Save("test.dat",s.GetData()); // 保存してみよう＾＾；<BR>　file.Load("test.dat",s.GetData()); // 読み込んでみよう＾＾；<BR><BR>// ↑ s.Save("test.dat");<BR>// s.Load("test.dat"); でも同じ意味<BR><BR>　s.SetStoring(false); // ストリームから獲得<BR>　string sy;<BR>　s &lt;&lt; sy; // syには、あいうえおが返ってくる<BR>　s &lt;&lt; z &lt;&lt; y &lt;&lt; x; // z,y,zには、それぞれ1,2,3が返ってくる<BR><BR>注意点：<BR><BR>CSerialize x,y,z;<BR>　x &lt;&lt; y &lt;&lt; z;を<BR>　x.SetStoring(false); // このフラグを倒しておけば取り出し<BR>　x &lt;&lt; y &lt;&lt; z;と復元できる。これは、CSerializeの保持している<BR>　アーカイブは、vector&lt;BYTE&gt;であり、vectorの書き出し時には、<BR>　そのサイズvector::size() を先頭にintデータとして書き出してあるためである。よって、<BR><BR>　CSerialize x,y;<BR>　int a,b;<BR>　y &lt;&lt; a &lt;&lt; b; // yにa,bをシリアライズ<BR>　x &lt;&lt; y; // xにyをシリアライズ<BR>とした場合、<BR>　x.SetStoring(false); // このフラグを倒しておけば取り出し<BR>　x &lt;&lt; a &lt;&lt; b;<BR>では正しく取り出せない。なぜならば、先頭にyのアーカイブサイズが混入しているからである。これを取り除くために、ダミーでintの値を取り出してやると良い。<BR><BR>　int dummy;<BR>　x &lt;&lt; dummy &lt;&lt; a &lt;&lt; b;<BR><BR>配列に対しても正しくシリアライズできる<BR>　例<BR>　int n[5];<BR>　CSerialize x;<BR>　x.Store(&amp;n[0],NELEMS(n));<BR>この部分を、さらにマクロを利用して、<BR><BR>x.Store(ArraySerialize(n));と書ける<BR>（ただし、以下のマクロによる実装なので配列サイズがわかっているときのみ）<BR><BR>#define ArraySerialize(n) &amp;n[0],NELEMS(n)<BR><BR>たとえば、stringに対しても同じように<BR>　string s[5];<BR>　CSerialize x;<BR>　x.Store(ArraySerialize(s));と書ける。<BR><BR>また、IArchive派生クラスに対しても同様に<BR>　CArchiveDerived ar[5];<BR>　CSerialize x;<BR>　x.Store(ArraySerialize(ar));と書けます<BR><BR>☆　CSerializeのシリアライズに関する注意事項　☆<BR><BR>CSerializeは、現在のポジション・格納方向も同時にシリアライズします。<BR><BR>CSerialize s1,s2,s3;<BR>s1 &lt;&lt; s2;<BR>のようにした場合、このときs2は、普通、CSerializeの記録時は、格納方向になっているでしょうし、push_backしていくわけで、その格納位置(GetPosで返る)は、末尾になっています。<BR><BR>よって、s1から、<BR>s1.SetStoring(false);<BR>s1 &lt;&lt; s3;<BR>と、デシリアライズ（復元）してすぐ、s3からすぐにデータを取り出すことは出来ません。s3からデータをデシリアライズするには、s3.SetStoring(false)として、取り出し方向にしてポジションを先頭にするという作業を行なう必要があります。<BR><BR>よくハマルので、注意しましょう。<BR><BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Clear()</DIV>
+<DIV class="comment_block">データの初期化。<BR>内部のストリームをクリアして、IsStoring()はtrueを返すようになる<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsStoring()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN>* GetStoring()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetStoring(<SPAN class="reserved_word">bool</SPAN> b)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> InnerSetStoring(<SPAN class="reserved_word">bool</SPAN> b)</DIV>
+<DIV class="comment_block">格納方向を調べる<BR>格納方向へのポインタを取得する<BR>↑これをfalseを設定して、取得（復元）方向にしたとき、<BR>		データのどこから読み出しているかを示す<BR>		データポジションポインタもクリアする<BR>		データを保存方向にしたときは、データもクリアする<BR>		（そうしないと、前回のデータに上書きしてしまう）<BR>	<BR>データポジションのリセット・データクリア等を行なわずに格納方向だけ<BR>変更するならば、こっちを使うべし<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> vector&lt;BYTE&gt;* GetData()</DIV>
+<DIV class="comment_block">ストリームの取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; operator&lt;&lt;(<A class="class_link" href="Auxiliary!yaneSerialize_h.html#IArchive" target=_self>IArchive</A>&amp; vData)</DIV>
+<DIV class="comment_block">アーカイブ！<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; operator&lt;&lt;(<SPAN class="reserved_word">int</SPAN>&amp; nData)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; operator&lt;&lt;(<SPAN class="reserved_word">bool</SPAN>&amp; bData)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; operator&lt;&lt;(BYTE&amp; byData)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; operator&lt;&lt;(string&amp; szData)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; operator&lt;&lt;(WORD&amp; wData)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; operator&lt;&lt;(DWORD&amp; dwData)</DIV>
+<DIV class="comment_block">primitive dataに対するシリアライズ<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; operator&lt;&lt;(vector&lt;int&gt;&amp; anData)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; operator&lt;&lt;(vector&lt;bool&gt;&amp; abData)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; operator&lt;&lt;(vector&lt;BYTE&gt;&amp; abyData)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; operator&lt;&lt;(vector&lt;string&gt;&amp; szData)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; operator&lt;&lt;(vector&lt;WORD&gt;&amp; awData)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; operator&lt;&lt;(vector&lt;DWORD&gt;&amp; adwData)</DIV>
+<DIV class="comment_block">vectorも！<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; operator&lt;&lt;(<A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; vData)</DIV>
+<DIV class="comment_block">自分自身も！＾＾；<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; operator=(<A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; vSeri)</DIV>
+<DIV class="comment_block">そして、シリアライズ間のコピー！<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Save(<SPAN class="reserved_word">const</SPAN> string&amp; filename)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Load(<SPAN class="reserved_word">const</SPAN> string&amp; filename)</DIV>
+<DIV class="comment_block">あまり、こういうの用意したくないが．．<BR>ストリームのファイルへの保存<BR>ストリームのファイルからの復元<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">int</SPAN>* GetPos()</DIV>
+<DIV class="comment_block">現在の格納位置へのポインタを取得<BR>（使わんほうがええけどデバッグ用に。）<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CSerialize()</DIV>
+<DIV class="public_member"> virtual ~CSerialize()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">vector&lt;BYTE&gt; m_abyData</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bStoring</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nDataPos</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

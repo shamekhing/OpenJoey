@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Draw/yaneFastPlane.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="CFastPlane"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlane</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">DirectDrawによる２次元向き　描画クラス（サーフェース）<BR>	class CFastDraw も参考にすること。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Draw!yaneSurface_h.html#ISurfaceDefault" target=_self>ISurfaceDefault</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">int</SPAN> GetType()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Load(<SPAN class="reserved_word">const</SPAN> string&amp; szBitmapFileName)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Save(<SPAN class="reserved_word">const</SPAN> string&amp; szBitmapFileName, LPRECT lpRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetSize(<SPAN class="reserved_word">int</SPAN> &amp; x, <SPAN class="reserved_word">int</SPAN> &amp; y)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetSize(<SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Release()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetColorKey(ISurfaceRGB rgb)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetColorKeyPos(<SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> ISurfaceRGB GetColorKey()</DIV>
+<DIV class="comment_block">---- ISurfaceのメンバ<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Clear(LPRECT lpRect=NULL)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetFillColor(ISurfaceRGB c)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> ISurfaceRGB GetFillColor()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Draw!yaneSurface_h.html#ISurface" target=_self>ISurface</A>&gt; clone()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT SetSystemMemoryUse(<SPAN class="reserved_word">bool</SPAN> bEnable)</DIV>
+<DIV class="comment_block">///////////////////////////////////////////////////////////////////////<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">HDC GetDC()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> ReleaseDC()</DIV>
+<DIV class="comment_block">///////////////////////////////////////////////////////////////////////<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT CreateSurface(<SPAN class="reserved_word">int</SPAN> sx, <SPAN class="reserved_word">int</SPAN> sy, <SPAN class="reserved_word">bool</SPAN> bYGA=false)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT CreatePrimary(<SPAN class="reserved_word">bool</SPAN>&amp; bUseFilp, <SPAN class="reserved_word">int</SPAN> nSx=0, <SPAN class="reserved_word">int</SPAN> nSy=0)</DIV>
+<DIV class="public_member">LRESULT CreateSecondary(<A class="class_link" href="Draw!yaneFastPlane_h.html#CFastPlane" target=_self>CFastPlane</A>*lpPrimary,<SPAN class="reserved_word">bool</SPAN>&amp; bUseFlip)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT FadeEffect(BYTE nFadeRate, LPRECT lpRect=NULL)</DIV>
+<DIV class="comment_block">///////////////////////////////////////////////////////////////////////<BR>----	Effector<BR>　ブライトネスを下げる(nFadeRateが255 == 100%)<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT FlushAlpha(LPRECT lpRect=NULL)</DIV>
+<DIV class="comment_block">　α値を反転させる（αサーフェースに対してのみ有効）<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">int</SPAN> GetPixelAlpha(<SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y)</DIV>
+<DIV class="comment_block">//// todo<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> IsLoaded()</DIV>
+<DIV class="public_member">string GetFileName()</DIV>
+<DIV class="comment_block">///////////////////////////////////////////////////////////////////////<BR>property...<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsYGA()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">bool</SPAN>* GetYGA()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetYGAUse(<SPAN class="reserved_word">bool</SPAN> bUse)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> GetYGAUse()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetAutoRestore(<SPAN class="reserved_word">bool</SPAN> bEnable)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> GetAutoRestore()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LPDIRECTDRAWSURFACE GetSurface()</DIV>
+<DIV class="public_member">LPDIRECTDRAWPALETTE GetPalette()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">int</SPAN> GetBpp()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetFastDraw()</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneFastDraw_h.html#CFastDraw" target=_self>CFastDraw</A>* GetFastDraw()</DIV>
+<DIV class="comment_block">///////////////////////////////////////////////////////////////////////<BR>FastDrawのmediator<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CFastPlane(<A class="class_link" href="Draw!yaneFastDraw_h.html#CFastDraw" target=_self>CFastDraw</A>* pFastDraw=NULL)</DIV>
+<DIV class="public_member"> virtual ~CFastPlane()</DIV>
+<DIV class="comment_block">///////////////////////////////////////////////////////////////////////<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">friend classCFastDraw</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">LPDIRECTDRAWSURFACE m_lpSurface</DIV>
+<DIV class="protected_member">LPDIRECTDRAWPALETTE m_lpPalette</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">HBITMAP m_hBitmap</DIV>
+<DIV class="protected_member">HDC m_hDC</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bLoad256</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nSizeX</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nSizeY</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">string m_szBitmapFile</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Restore()</DIV>
+<DIV class="comment_block">///////////////////////////////////////////////////////////////////////<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT OnDraw()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> ResetColorKey()</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT InnerLoad(<SPAN class="reserved_word">const</SPAN> string&amp; szFileName)</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT InnerCreateSurface(<SPAN class="reserved_word">int</SPAN> sx, <SPAN class="reserved_word">int</SPAN> sy, <SPAN class="reserved_word">bool</SPAN> bYGA=false, <SPAN class="reserved_word">bool</SPAN> bSecondary256=false)</DIV>
+<DIV class="protected_member">LRESULT InnerCreateMySurface(<SPAN class="reserved_word">int</SPAN> sx, <SPAN class="reserved_word">int</SPAN> sy, <SPAN class="reserved_word">int</SPAN> nSurfaceType)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">LRESULT InnerRestoreSurface()</DIV>
+<DIV class="protected_member">LRESULT UpdateSurfaceInfo()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> ClearMSB()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bUsePosColorKey</DIV>
+<DIV class="protected_member">COLORREF m_ColorKey</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nCX,m_nCY</DIV>
+<DIV class="protected_member">LRESULT SetColorKey()</DIV>
+<DIV class="protected_member">DWORD m_dwColorKey</DIV>
+<DIV class="comment_block">///////////////////////////////////////////////////////////////////////<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bUseSystemMemory</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">ISurfaceRGB m_FillColor</DIV>
+<DIV class="protected_member">DWORD m_dwFillColor</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bYGA</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bYGAUse</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bAutoRestore</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bMySurface</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bSecondary256</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bSecondary256DIB</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bOwnerDraw</DIV>
+<DIV class="comment_block">///////////////////////////////////////////////////////////////////////<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">LRESULT InnerLoadYGA(<SPAN class="reserved_word">const</SPAN> string&amp; szFilename)</DIV>
+<DIV class="comment_block">///////////////////////////////////////////////////////////////////////<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="Draw!yaneFastDraw_h.html#CFastDraw" target=_self>CFastDraw</A>* m_pFastDraw</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

@@ -1,0 +1,14 @@
+//	WARNINGマクロ
+#ifdef _DEBUG
+	#define WARNING(b,s)				\
+		if(b) {						\
+			CHAR buf[256];				\
+			wsprintf(buf,"(null)ファイルの1240860行\nｸﾀ秀",__FILE__,__LINE__,s);	\
+			MessageBox(NULL,buf,"WARNING!!",MB_OK);	\
+			* LPLONG(0xcdcdcdcd) = 0;	\
+		}
+	//	最後の* LPLONG(0xcdcdcdcd) = 0;の部分は、メモリエラーをわざと起こすコード
+#else
+	#define WARNING(var,s) {}
+	//	{}にしているのは、if文のあとWARNINGを入れているときなどのため。
+#endif

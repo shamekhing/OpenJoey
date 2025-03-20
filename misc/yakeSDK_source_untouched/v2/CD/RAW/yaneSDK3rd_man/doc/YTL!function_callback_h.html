@@ -1,0 +1,540 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>YTL/function_callback.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="function_callback"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">function_callback</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">関数のコールバック用基底クラス<BR>	こいつの、smart_ptrを相手に渡して、<BR>	相手からは、run()を呼び出してもらえればそれで良い<BR><BR>	例)<BR>		smart_ptr&lt;function_callback_r&gt;<BR>			s(function_callback_r&lt;int&gt;::Create(&amp;test,1,10));<BR>		//	コールバックオブジェクトが完成<BR>		int nResult = s-&gt;run();<BR>		//	int test(int n1,int n2)という関数をtest(1,10)と呼び出す<BR><BR>		function_callback_rg2のrg2とは、<BR>			r : result有り	vならばresult無し<BR>			g : グローバルな関数 mならばmember関数<BR>			2 : 関数の引数は２つ<BR>		の意味です。<BR><BR>		引数は5つのテンプレートまで用意してあります。<BR>		それ以上については、自前で用意してください。<BR><BR>		例：<BR>		smart_ptr&lt;function_callback_v&gt;<BR>			s(function_callback_v::Create(&amp;CHoge::test,this,1,10));<BR>		//	コールバックオブジェクトが完成<BR>		s-&gt;run();<BR>		//	void CHoge::test(int n1,int n2)という関数をtest(1,10)と呼び出す<BR><BR>		function_callback_vもfunction_callback_rも、<BR>		このfunction_callback派生クラスなので、戻り値はどうでも良いのならば<BR>		受け取るのは、smart_ptr&lt;function_callback&gt;でも構いません。<BR><BR>		void test(int n)という関数をtest(m)とコールバックするならば、<BR>		smart_ptr&lt;function_callback&gt; f(function_callback_v::Create(test,m));<BR>		f-&gt;run();<BR><BR>		//	int CHoge::test(int n1,int n2,int n3)という関数をtest(1,10,100)と呼び出す<BR>		smart_ptr&lt;function_callback_r&lt;int&gt; &gt;<BR>			s(function_callback_r&lt;int&gt;::Create(CHoge::test,this,1,10,100));<BR>		s-&gt;run();<BR>		int r = s-&gt;GetResult();	//	これで返し値を取得<BR><BR>		//	グローバルな関数int	SukiSukiSakura(int n1,int n2)を呼び出す場合<BR>		smart_ptr&lt;function_callback_r&lt;int&gt; &gt;<BR>			s(function_callback_r&lt;int&gt;::Create(&amp;SukiSukiSakura,2,3));<BR>		s-&gt;run();<BR>		int r = s-&gt;GetResult();	//	これで返し値を取得<BR><BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> run()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"> virtual ~function_callback()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="function_callback_v"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">function_callback_v</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">返し値を持たないバージョン</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!function_callback_h.html#function_callback" target=_self>function_callback</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!function_callback_h.html#function_callback_v" target=_self>function_callback_v</A>* Create()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> Arg1,&nbsp;<SPAN class="reserved_word">class</SPAN> T</SPAN>&gt;<BR><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!function_callback_h.html#function_callback_v" target=_self>function_callback_v</A>* Create(<SPAN class="reserved_word">const</SPAN> Arg1&amp; void)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> Arg1</SPAN>&gt;<BR><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!function_callback_h.html#function_callback_v" target=_self>function_callback_v</A>* Create(<SPAN class="reserved_word">const</SPAN> Arg1&amp; void)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> Arg1,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg2</SPAN>&gt;<BR><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!function_callback_h.html#function_callback_v" target=_self>function_callback_v</A>* Create(<SPAN class="reserved_word">const</SPAN> Arg1&amp; void, <SPAN class="reserved_word">const</SPAN> Arg2&amp; (*f)(Arg1,Arg2))</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> Arg1,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg2,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg3</SPAN>&gt;<BR><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!function_callback_h.html#function_callback_v" target=_self>function_callback_v</A>* Create(<SPAN class="reserved_word">const</SPAN> Arg1&amp; void, <SPAN class="reserved_word">const</SPAN> Arg2&amp; (*f)(Arg1,Arg2,Arg3), <SPAN class="reserved_word">const</SPAN> Arg3&amp; a1)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> Arg1,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg2,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg3,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg4</SPAN>&gt;<BR><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!function_callback_h.html#function_callback_v" target=_self>function_callback_v</A>* Create(<SPAN class="reserved_word">const</SPAN> Arg1&amp; void, <SPAN class="reserved_word">const</SPAN> Arg2&amp; (*f)(Arg1,Arg2,Arg3,Arg4), <SPAN class="reserved_word">const</SPAN> Arg3&amp; a1, <SPAN class="reserved_word">const</SPAN> Arg4&amp; a2)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> Arg1,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg2,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg3,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg4,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg5</SPAN>&gt;<BR><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!function_callback_h.html#function_callback_v" target=_self>function_callback_v</A>* Create(<SPAN class="reserved_word">const</SPAN> Arg1&amp; void, <SPAN class="reserved_word">const</SPAN> Arg2&amp; (*f)(Arg1,Arg2,Arg3,Arg4,Arg5), <SPAN class="reserved_word">const</SPAN> Arg3&amp; a1, <SPAN class="reserved_word">const</SPAN> Arg4&amp; a2, <SPAN class="reserved_word">const</SPAN> Arg5&amp; a3)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> obj</SPAN>&gt;<BR><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!function_callback_h.html#function_callback_v" target=_self>function_callback_v</A>* Create(obj* void)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> obj,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg1</SPAN>&gt;<BR><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!function_callback_h.html#function_callback_v" target=_self>function_callback_v</A>* Create(obj* void, <SPAN class="reserved_word">const</SPAN> Arg1&amp; (obj::*f)(Arg1))</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> obj,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg1,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg2</SPAN>&gt;<BR><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!function_callback_h.html#function_callback_v" target=_self>function_callback_v</A>* Create(obj* void, <SPAN class="reserved_word">const</SPAN> Arg1&amp; (obj::*f)(Arg1,Arg2), <SPAN class="reserved_word">const</SPAN> Arg2&amp; o)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> obj,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg1,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg2,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg3</SPAN>&gt;<BR><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!function_callback_h.html#function_callback_v" target=_self>function_callback_v</A>* Create(obj* void, <SPAN class="reserved_word">const</SPAN> Arg1&amp; (obj::*f)(Arg1,Arg2,Arg3), <SPAN class="reserved_word">const</SPAN> Arg2&amp; o, <SPAN class="reserved_word">const</SPAN> Arg3&amp; a1)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> obj,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg1,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg2,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg3,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg4</SPAN>&gt;<BR><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!function_callback_h.html#function_callback_v" target=_self>function_callback_v</A>* Create(obj* void, <SPAN class="reserved_word">const</SPAN> Arg1&amp; (obj::*f)(Arg1,Arg2,Arg3,Arg4), <SPAN class="reserved_word">const</SPAN> Arg2&amp; o, <SPAN class="reserved_word">const</SPAN> Arg3&amp; a1, <SPAN class="reserved_word">const</SPAN> Arg4&amp; a2)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> obj,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg1,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg2,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg3,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg4,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg5</SPAN>&gt;<BR><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!function_callback_h.html#function_callback_v" target=_self>function_callback_v</A>* Create(obj* void, <SPAN class="reserved_word">const</SPAN> Arg1&amp; (obj::*f)(Arg1,Arg2,Arg3,Arg4,Arg5), <SPAN class="reserved_word">const</SPAN> Arg2&amp; o, <SPAN class="reserved_word">const</SPAN> Arg3&amp; a1, <SPAN class="reserved_word">const</SPAN> Arg4&amp; a2, <SPAN class="reserved_word">const</SPAN> Arg5&amp; a3)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="function_callback_r"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;Result</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">function_callback_r</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">返し値をテンプレート化されたバージョン</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!function_callback_h.html#function_callback" target=_self>function_callback</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">Result GetResult()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!function_callback_h.html#function_callback_r" target=_self>function_callback_r</A>* Create(Result (*f)())</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> Arg1</SPAN>&gt;<BR><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!function_callback_h.html#function_callback_r" target=_self>function_callback_r</A>* Create(Result (*f)(Arg1), <SPAN class="reserved_word">const</SPAN> Arg1&amp; a1)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> Arg1,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg2</SPAN>&gt;<BR><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!function_callback_h.html#function_callback_r" target=_self>function_callback_r</A>* Create(Result (*f)(Arg1,Arg2), <SPAN class="reserved_word">const</SPAN> Arg1&amp; a1, <SPAN class="reserved_word">const</SPAN> Arg2&amp; a2)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> Arg1,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg2,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg3</SPAN>&gt;<BR><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!function_callback_h.html#function_callback_r" target=_self>function_callback_r</A>* Create(Result (*f)(Arg1,Arg2,Arg3), <SPAN class="reserved_word">const</SPAN> Arg1&amp; a1, <SPAN class="reserved_word">const</SPAN> Arg2&amp; a2, <SPAN class="reserved_word">const</SPAN> Arg3&amp; a3)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> Arg1,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg2,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg3,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg4</SPAN>&gt;<BR><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!function_callback_h.html#function_callback_r" target=_self>function_callback_r</A>* Create(Result (*f)(Arg1,Arg2,Arg3,Arg4), <SPAN class="reserved_word">const</SPAN> Arg1&amp; a1, <SPAN class="reserved_word">const</SPAN> Arg2&amp; a2, <SPAN class="reserved_word">const</SPAN> Arg3&amp; a3, <SPAN class="reserved_word">const</SPAN> Arg4&amp; a4)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> Arg1,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg2,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg3,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg4,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg5</SPAN>&gt;<BR><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!function_callback_h.html#function_callback_r" target=_self>function_callback_r</A>* Create(Result (*f)(Arg1,Arg2,Arg3,Arg4), <SPAN class="reserved_word">const</SPAN> Arg1&amp; a1, <SPAN class="reserved_word">const</SPAN> Arg2&amp; a2, <SPAN class="reserved_word">const</SPAN> Arg3&amp; a3, <SPAN class="reserved_word">const</SPAN> Arg4&amp; a4, <SPAN class="reserved_word">const</SPAN> Arg5&amp; a5)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> obj</SPAN>&gt;<BR><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!function_callback_h.html#function_callback_r" target=_self>function_callback_r</A>* Create(Result (obj::*f)(), obj* o)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> obj,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg1</SPAN>&gt;<BR><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!function_callback_h.html#function_callback_r" target=_self>function_callback_r</A>* Create(Result (obj::*f)(Arg1), obj* o, <SPAN class="reserved_word">const</SPAN> Arg1&amp; a1)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> obj,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg1,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg2</SPAN>&gt;<BR><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!function_callback_h.html#function_callback_r" target=_self>function_callback_r</A>* Create(Result (obj::*f)(Arg1,Arg2), obj* o, <SPAN class="reserved_word">const</SPAN> Arg1&amp; a1, <SPAN class="reserved_word">const</SPAN> Arg2&amp; a2)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> obj,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg1,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg2,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg3</SPAN>&gt;<BR><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!function_callback_h.html#function_callback_r" target=_self>function_callback_r</A>* Create(Result (obj::*f)(Arg1,Arg2,Arg3), obj* o, <SPAN class="reserved_word">const</SPAN> Arg1&amp; a1, <SPAN class="reserved_word">const</SPAN> Arg2&amp; a2, <SPAN class="reserved_word">const</SPAN> Arg3&amp; a3)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> obj,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg1,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg2,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg3,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg4</SPAN>&gt;<BR><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!function_callback_h.html#function_callback_r" target=_self>function_callback_r</A>* Create(Result (obj::*f)(Arg1,Arg2,Arg3,Arg4), obj* o, <SPAN class="reserved_word">const</SPAN> Arg1&amp; a1, <SPAN class="reserved_word">const</SPAN> Arg2&amp; a2, <SPAN class="reserved_word">const</SPAN> Arg3&amp; a3, <SPAN class="reserved_word">const</SPAN> Arg4&amp; a4)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> obj,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg1,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg2,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg3,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg4,&nbsp;<SPAN class="reserved_word">class</SPAN> Arg5</SPAN>&gt;<BR><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!function_callback_h.html#function_callback_r" target=_self>function_callback_r</A>* Create(Result (obj::*f)(Arg1,Arg2,Arg3,Arg4,Arg5), obj* o, <SPAN class="reserved_word">const</SPAN> Arg1&amp; a1, <SPAN class="reserved_word">const</SPAN> Arg2&amp; a2, <SPAN class="reserved_word">const</SPAN> Arg3&amp; a3, <SPAN class="reserved_word">const</SPAN> Arg4&amp; a4, <SPAN class="reserved_word">const</SPAN> Arg5&amp; a5)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">Result _r</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="function_callback_vg0"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">function_callback_vg0</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!function_callback_h.html#function_callback_v" target=_self>function_callback_v</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">typedef void()</DIV>
+<DIV class="public_member"> function_callback_vg0(function_type f)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> run()</DIV>
+<DIV class="protected_member">function_type _f</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="function_callback_vg1"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;Arg1</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">function_callback_vg1</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!function_callback_h.html#function_callback_v" target=_self>function_callback_v</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">typedef void()</DIV>
+<DIV class="public_member"> function_callback_vg1(function_type f, Arg1 a1)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> run()</DIV>
+<DIV class="protected_member">function_type _f</DIV>
+<DIV class="protected_member">Arg1 _a1</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="function_callback_vg2"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;Arg1,&nbsp;class&nbsp;Arg2</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">function_callback_vg2</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!function_callback_h.html#function_callback_v" target=_self>function_callback_v</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">typedef void()</DIV>
+<DIV class="public_member"> function_callback_vg2(function_type f, Arg1 a1, Arg2 a2)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> run()</DIV>
+<DIV class="protected_member">function_type _f</DIV>
+<DIV class="protected_member">Arg1 _a1</DIV>
+<DIV class="protected_member">Arg2 _a2</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="function_callback_vg3"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;Arg1,&nbsp;class&nbsp;Arg2,&nbsp;class&nbsp;Arg3</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">function_callback_vg3</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!function_callback_h.html#function_callback_v" target=_self>function_callback_v</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">typedef void()</DIV>
+<DIV class="public_member"> function_callback_vg3(function_type f, Arg1 a1, Arg2 a2, Arg3 a3)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> run()</DIV>
+<DIV class="protected_member">function_type _f</DIV>
+<DIV class="protected_member">Arg1 _a1</DIV>
+<DIV class="protected_member">Arg2 _a2</DIV>
+<DIV class="protected_member">Arg3 _a3</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="function_callback_vg4"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;Arg1,&nbsp;class&nbsp;Arg2,&nbsp;class&nbsp;Arg3,&nbsp;class&nbsp;Arg4</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">function_callback_vg4</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!function_callback_h.html#function_callback_v" target=_self>function_callback_v</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">typedef void()</DIV>
+<DIV class="public_member"> function_callback_vg4(function_type f, Arg1 a1, Arg2 a2, Arg3 a3, Arg4 a4)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> run()</DIV>
+<DIV class="protected_member">function_type _f</DIV>
+<DIV class="protected_member">Arg1 _a1</DIV>
+<DIV class="protected_member">Arg2 _a2</DIV>
+<DIV class="protected_member">Arg3 _a3</DIV>
+<DIV class="protected_member">Arg4 _a4</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="function_callback_vg5"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;Arg1,&nbsp;class&nbsp;Arg2,&nbsp;class&nbsp;Arg3,&nbsp;class&nbsp;Arg4,&nbsp;class&nbsp;Arg5</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">function_callback_vg5</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!function_callback_h.html#function_callback_v" target=_self>function_callback_v</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">typedef void()</DIV>
+<DIV class="public_member"> function_callback_vg5(function_type f, Arg1 a1, Arg2 a2, Arg3 a3, Arg4 a4, Arg5 a5)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> run()</DIV>
+<DIV class="protected_member">function_type _f</DIV>
+<DIV class="protected_member">Arg1 _a1</DIV>
+<DIV class="protected_member">Arg2 _a2</DIV>
+<DIV class="protected_member">Arg3 _a3</DIV>
+<DIV class="protected_member">Arg4 _a4</DIV>
+<DIV class="protected_member">Arg5 _a5</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="function_callback_rg0"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;Result</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">function_callback_rg0</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!function_callback_h.html#function_callback_r" target=_self>function_callback_r</A>&lt;Result&gt;<BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">typedef Result()</DIV>
+<DIV class="public_member"> function_callback_rg0(function_type f)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> run()</DIV>
+<DIV class="protected_member">function_type _f</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="function_callback_rg1"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;Result,&nbsp;class&nbsp;Arg1</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">function_callback_rg1</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!function_callback_h.html#function_callback_r" target=_self>function_callback_r</A>&lt;Result&gt;<BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">typedef Result()</DIV>
+<DIV class="public_member"> function_callback_rg1(function_type f, Arg1 a1)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> run()</DIV>
+<DIV class="protected_member">function_type _f</DIV>
+<DIV class="protected_member">Arg1 _a1</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="function_callback_rg2"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;Result,&nbsp;class&nbsp;Arg1,&nbsp;class&nbsp;Arg2</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">function_callback_rg2</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!function_callback_h.html#function_callback_r" target=_self>function_callback_r</A>&lt;Result&gt;<BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">typedef Result()</DIV>
+<DIV class="public_member"> function_callback_rg2(function_type f, Arg1 a1, Arg2 a2)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> run()</DIV>
+<DIV class="protected_member">function_type _f</DIV>
+<DIV class="protected_member">Arg1 _a1</DIV>
+<DIV class="protected_member">Arg2 _a2</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="function_callback_rg3"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;Result,&nbsp;class&nbsp;Arg1,&nbsp;class&nbsp;Arg2,&nbsp;class&nbsp;Arg3</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">function_callback_rg3</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!function_callback_h.html#function_callback_r" target=_self>function_callback_r</A>&lt;Result&gt;<BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">typedef Result()</DIV>
+<DIV class="public_member"> function_callback_rg3(function_type f, Arg1 a1, Arg2 a2, Arg3 a3)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> run()</DIV>
+<DIV class="protected_member">function_type _f</DIV>
+<DIV class="protected_member">Arg1 _a1</DIV>
+<DIV class="protected_member">Arg2 _a2</DIV>
+<DIV class="protected_member">Arg3 _a3</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="function_callback_rg4"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;Result,&nbsp;class&nbsp;Arg1,&nbsp;class&nbsp;Arg2,&nbsp;class&nbsp;Arg3,&nbsp;class&nbsp;Arg4</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">function_callback_rg4</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!function_callback_h.html#function_callback_r" target=_self>function_callback_r</A>&lt;Result&gt;<BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">typedef Result()</DIV>
+<DIV class="public_member"> function_callback_rg4(function_type f, Arg1 a1, Arg2 a2, Arg3 a3, Arg4 a4)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> run()</DIV>
+<DIV class="protected_member">function_type _f</DIV>
+<DIV class="protected_member">Arg1 _a1</DIV>
+<DIV class="protected_member">Arg2 _a2</DIV>
+<DIV class="protected_member">Arg3 _a3</DIV>
+<DIV class="protected_member">Arg4 _a4</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="function_callback_rg5"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;Result,&nbsp;class&nbsp;Arg1,&nbsp;class&nbsp;Arg2,&nbsp;class&nbsp;Arg3,&nbsp;class&nbsp;Arg4,&nbsp;class&nbsp;Arg5</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">function_callback_rg5</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!function_callback_h.html#function_callback_r" target=_self>function_callback_r</A>&lt;Result&gt;<BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">typedef Result()</DIV>
+<DIV class="public_member"> function_callback_rg5(function_type f, Arg1 a1, Arg2 a2, Arg3 a3, Arg4 a4, Arg5 a5)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> run()</DIV>
+<DIV class="protected_member">function_type _f</DIV>
+<DIV class="protected_member">Arg1 _a1</DIV>
+<DIV class="protected_member">Arg2 _a2</DIV>
+<DIV class="protected_member">Arg3 _a3</DIV>
+<DIV class="protected_member">Arg4 _a4</DIV>
+<DIV class="protected_member">Arg5 _a5</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="function_callback_vm0"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;ObjectType</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">function_callback_vm0</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!function_callback_h.html#function_callback_v" target=_self>function_callback_v</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">typedef void()</DIV>
+<DIV class="public_member"> function_callback_vm0(function_type f)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> run()</DIV>
+<DIV class="protected_member">function_type _f</DIV>
+<DIV class="protected_member">ObjectType* _o</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="function_callback_vm1"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;ObjectType,&nbsp;class&nbsp;Arg1</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">function_callback_vm1</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!function_callback_h.html#function_callback_v" target=_self>function_callback_v</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">typedef void()</DIV>
+<DIV class="public_member"> function_callback_vm1(function_type f, ObjectType*o,Arg1 a1)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> run()</DIV>
+<DIV class="protected_member">function_type _f</DIV>
+<DIV class="protected_member">ObjectType* _o</DIV>
+<DIV class="protected_member">Arg1 _a1</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="function_callback_vm2"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;ObjectType,&nbsp;class&nbsp;Arg1,&nbsp;class&nbsp;Arg2</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">function_callback_vm2</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!function_callback_h.html#function_callback_v" target=_self>function_callback_v</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">typedef void()</DIV>
+<DIV class="public_member"> function_callback_vm2(function_type f, ObjectType*o,Arg1 a1, Arg2 a2)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> run()</DIV>
+<DIV class="protected_member">function_type _f</DIV>
+<DIV class="protected_member">ObjectType* _o</DIV>
+<DIV class="protected_member">Arg1 _a1</DIV>
+<DIV class="protected_member">Arg2 _a2</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="function_callback_vm3"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;ObjectType,&nbsp;class&nbsp;Arg1,&nbsp;class&nbsp;Arg2,&nbsp;class&nbsp;Arg3</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">function_callback_vm3</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!function_callback_h.html#function_callback_v" target=_self>function_callback_v</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">typedef void()</DIV>
+<DIV class="public_member"> function_callback_vm3(function_type f, ObjectType*o,Arg1 a1, Arg2 a2, Arg3 a3)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> run()</DIV>
+<DIV class="protected_member">function_type _f</DIV>
+<DIV class="protected_member">ObjectType* _o</DIV>
+<DIV class="protected_member">Arg1 _a1</DIV>
+<DIV class="protected_member">Arg2 _a2</DIV>
+<DIV class="protected_member">Arg3 _a3</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="function_callback_vm4"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;ObjectType,&nbsp;class&nbsp;Arg1,&nbsp;class&nbsp;Arg2,&nbsp;class&nbsp;Arg3,&nbsp;class&nbsp;Arg4</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">function_callback_vm4</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!function_callback_h.html#function_callback_v" target=_self>function_callback_v</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">typedef void()</DIV>
+<DIV class="public_member"> function_callback_vm4(function_type f, ObjectType*o,Arg1 a1, Arg2 a2, Arg3 a3, Arg4 a4)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> run()</DIV>
+<DIV class="protected_member">function_type _f</DIV>
+<DIV class="protected_member">ObjectType* _o</DIV>
+<DIV class="protected_member">Arg1 _a1</DIV>
+<DIV class="protected_member">Arg2 _a2</DIV>
+<DIV class="protected_member">Arg3 _a3</DIV>
+<DIV class="protected_member">Arg4 _a4</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="function_callback_vm5"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;ObjectType,&nbsp;class&nbsp;Arg1,&nbsp;class&nbsp;Arg2,&nbsp;class&nbsp;Arg3,&nbsp;class&nbsp;Arg4,&nbsp;class&nbsp;Arg5</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">function_callback_vm5</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!function_callback_h.html#function_callback_v" target=_self>function_callback_v</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">typedef void()</DIV>
+<DIV class="public_member"> function_callback_vm5(function_type f, ObjectType*o,Arg1 a1, Arg2 a2, Arg3 a3, Arg4 a4, Arg5 a5)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> run()</DIV>
+<DIV class="protected_member">function_type _f</DIV>
+<DIV class="protected_member">ObjectType* _o</DIV>
+<DIV class="protected_member">Arg1 _a1</DIV>
+<DIV class="protected_member">Arg2 _a2</DIV>
+<DIV class="protected_member">Arg3 _a3</DIV>
+<DIV class="protected_member">Arg4 _a4</DIV>
+<DIV class="protected_member">Arg5 _a5</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="function_callback_rm0"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;Result,&nbsp;class&nbsp;ObjectType</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">function_callback_rm0</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!function_callback_h.html#function_callback_r" target=_self>function_callback_r</A>&lt;Result&gt;<BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">typedef Result()</DIV>
+<DIV class="public_member"> function_callback_rm0(function_type f)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> run()</DIV>
+<DIV class="protected_member">function_type _f</DIV>
+<DIV class="protected_member">ObjectType* _o</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="function_callback_rm1"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;Result,&nbsp;class&nbsp;ObjectType,&nbsp;class&nbsp;Arg1</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">function_callback_rm1</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!function_callback_h.html#function_callback_r" target=_self>function_callback_r</A>&lt;Result&gt;<BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">typedef Result()</DIV>
+<DIV class="public_member"> function_callback_rm1(function_type f, ObjectType*o,Arg1 a1)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> run()</DIV>
+<DIV class="protected_member">function_type _f</DIV>
+<DIV class="protected_member">ObjectType* _o</DIV>
+<DIV class="protected_member">Arg1 _a1</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="function_callback_rm2"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;Result,&nbsp;class&nbsp;ObjectType,&nbsp;class&nbsp;Arg1,&nbsp;class&nbsp;Arg2</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">function_callback_rm2</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!function_callback_h.html#function_callback_r" target=_self>function_callback_r</A>&lt;Result&gt;<BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">typedef Result()</DIV>
+<DIV class="public_member"> function_callback_rm2(function_type f, ObjectType*o,Arg1 a1, Arg2 a2)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> run()</DIV>
+<DIV class="protected_member">function_type _f</DIV>
+<DIV class="protected_member">ObjectType* _o</DIV>
+<DIV class="protected_member">Arg1 _a1</DIV>
+<DIV class="protected_member">Arg2 _a2</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="function_callback_rm3"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;Result,&nbsp;class&nbsp;ObjectType,&nbsp;class&nbsp;Arg1,&nbsp;class&nbsp;Arg2,&nbsp;class&nbsp;Arg3</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">function_callback_rm3</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!function_callback_h.html#function_callback_r" target=_self>function_callback_r</A>&lt;Result&gt;<BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">typedef Result()</DIV>
+<DIV class="public_member"> function_callback_rm3(function_type f, ObjectType*o,Arg1 a1, Arg2 a2, Arg3 a3)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> run()</DIV>
+<DIV class="protected_member">function_type _f</DIV>
+<DIV class="protected_member">ObjectType* _o</DIV>
+<DIV class="protected_member">Arg1 _a1</DIV>
+<DIV class="protected_member">Arg2 _a2</DIV>
+<DIV class="protected_member">Arg3 _a3</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="function_callback_rm4"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;Result,&nbsp;class&nbsp;ObjectType,&nbsp;class&nbsp;Arg1,&nbsp;class&nbsp;Arg2,&nbsp;class&nbsp;Arg3,&nbsp;class&nbsp;Arg4</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">function_callback_rm4</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!function_callback_h.html#function_callback_r" target=_self>function_callback_r</A>&lt;Result&gt;<BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">typedef Result()</DIV>
+<DIV class="public_member"> function_callback_rm4(function_type f, ObjectType*o,
+ Arg1a1, Arg2 a2, Arg3 a3, Arg4 a4)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> run()</DIV>
+<DIV class="protected_member">function_type _f</DIV>
+<DIV class="protected_member">ObjectType* _o</DIV>
+<DIV class="protected_member">Arg1 _a1</DIV>
+<DIV class="protected_member">Arg2 _a2</DIV>
+<DIV class="protected_member">Arg3 _a3</DIV>
+<DIV class="protected_member">Arg4 _a4</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="function_callback_rm5"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;Result,&nbsp;class&nbsp;ObjectType,&nbsp;class&nbsp;Arg1,&nbsp;class&nbsp;Arg2,&nbsp;class&nbsp;Arg3,&nbsp;class&nbsp;Arg4,&nbsp;class&nbsp;Arg5</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">function_callback_rm5</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!function_callback_h.html#function_callback_r" target=_self>function_callback_r</A>&lt;Result&gt;<BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">typedef Result()</DIV>
+<DIV class="public_member"> function_callback_rm5(function_type f, ObjectType*o,
+ Arg1a1, Arg2 a2, Arg3 a3, Arg4 a4, Arg5 a5)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> run()</DIV>
+<DIV class="protected_member">function_type _f</DIV>
+<DIV class="protected_member">ObjectType* _o</DIV>
+<DIV class="protected_member">Arg1 _a1</DIV>
+<DIV class="protected_member">Arg2 _a2</DIV>
+<DIV class="protected_member">Arg3 _a3</DIV>
+<DIV class="protected_member">Arg4 _a4</DIV>
+<DIV class="protected_member">Arg5 _a5</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

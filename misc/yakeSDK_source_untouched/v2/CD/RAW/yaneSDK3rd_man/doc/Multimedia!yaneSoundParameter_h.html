@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Multimedia/yaneSoundParameter.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="CSoundParameter"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CSoundParameter</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CSoundParameter()</DIV>
+<DIV class="public_member"> virtual ~CSoundParameter()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetGlobalFocus(<SPAN class="reserved_word">bool</SPAN> b)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsGlobalFocus()</DIV>
+<DIV class="comment_block">サウンドバッファが、グローバルフォーカスを持つのか設定・取得<BR>		これをtrueにしておけば、フォーカスがこのスレッドが生成した<BR>		ウィンドゥから離れてもサウンドは聞こえ続ける<BR>		ただし、サウンドバッファを生成し直さなければ反映されない<BR>		デフォルトではfalse<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetPanControl(<SPAN class="reserved_word">bool</SPAN> b)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsPanControl()</DIV>
+<DIV class="comment_block">サウンドバッファが、パンコントロール機能を持つのか設定・取得<BR>		デフォルトではfalse<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetFrequencyControl(<SPAN class="reserved_word">bool</SPAN> b)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsFrequencyControl()</DIV>
+<DIV class="comment_block">サウンドバッファが、周波数コントロール機能を持つのか設定・取得<BR>		デフォルトではfalse<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetStreamFactory(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSoundStream_h.html#ISoundStreamFactory" target=_self>ISoundStreamFactory</A>&gt;&amp; p)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSoundStream_h.html#ISoundStreamFactory" target=_self>ISoundStreamFactory</A>&gt; GetStreamFactory()</DIV>
+<DIV class="comment_block">ISoundStreamFactory派生クラスの設定・取得<BR>		外部プラグインなどの指定はこのクラスに対して行う<BR>		デフォルトではCSoundStreamFactory<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bGlobalFocus</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bPanControl</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bFrequencyControl</DIV>
+<DIV class="protected_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSoundStream_h.html#ISoundStreamFactory" target=_self>ISoundStreamFactory</A>&gt; m_pStreamFactory</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

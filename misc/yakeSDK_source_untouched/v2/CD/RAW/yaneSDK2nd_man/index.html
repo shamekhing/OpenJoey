@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>クラスリファレンス</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">ｙａｎｅｕｒａｏＧａｍｅＳＤＫ２ｎｄ　クラスリファレンス</FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　全般的な説明</FONT></P>
+<P><A href="etc/yaneSDK2nd.html">yaneSDK2nd</A>　yaneuraoGameSDK2ndについての紹介<BR>
+<A href="etc/howto.html">howto</A>　　　　　yaneuraoGameSDK2ndの利用の手引き<BR>
+<A href="etc/faq.html">ＦＡＱ</A>　　　　　　よくある質問と回答集です。<BR>
+<A href="etc/devfaq.html">開発Q&amp;A</A>　　　よくある開発上の質問Ｑ＆Ａです。<BR>
+<A href="etc/macro.html">macro</A>　　　　　yaneMacro.hで定義されているマクロ(yaneSDK.hからincludeされる)　使うと便利かも<BR>
+<A href="etc/WM_USER.html">WM_USER</A>　　　yaneWMUSER.hで定義されているウィンドゥメッセージ。<BR>
+<A href="etc/precompile.html">プリコンパイルヘッダの設定</A> <FONT color="#cc0000">コンパイルするには、これが必要です。必ず読んでください。</FONT><BR>
+<A href="etc/compile.html">コンパイル上の注意点</A>　<FONT color="#cc0000">yaneSDK2nd version 1.5以降でのコンパイルするための注意点です。必ず読んでください</FONT>。</P>
+<HR>
+<P><FONT size="+1" color="#ff0000">ここにあるものは、すべてyaneSDK.hからincludeされる。</FONT></P>
+<P><FONT size="+1" color="#009900">☆　最重要クラス</FONT></P>
+<P><A href="class/CAppFrame.html">CAppFrame</A>　　 アプリケーションフレームクラス<BR>
+<A href="class/CAppInitializer.html">CAppInitializer</A>　アプリケーション初期化クラス<BR>
+<A href="class/CAppBase.html">CAppBase</A>　　　　アプリケーション基底クラス</P>
+<P><FONT size="+1" color="#009900">☆　主要クラス</FONT></P>
+<P>描画関連<BR>
+<A href="class/CDirectDraw.html">CDirectDraw</A>　　DirectDraw管理クラス(CPlaneを使うときに使う)<BR>
+<A href="class/CPlane.html">CPlane</A>　　　　　 DirectDrawSurface管理クラス<BR>
+<A href="class/CPlaneLoader.html">CPlaneLoader</A>　 CPlaneの読み込みマネージャ<BR>
+<A href="class/CDIB32.html">CDIB32</A>　　　　　32bppのDIB(一種のプレーン)<BR>
+<A href="class/CDIBDraw.html">CDIBDraw</A>　　　　DIBDraw管理クラス。(CDIB32を使うときに使う)<BR>
+<A href="class/CPlaneLoader.html">CDIB32Loader</A>　CDIB32の読み込みマネージャ<BR>
+<A href="class/CDIB32Morph.html">CDIB32Morph</A>　 DIB32用モーフィングクラス<BR>
+<A href="class/CDIB32Effect.html">CDIB32Effect</A>　 DIB32用エフェクトクラス<BR>
+<A href="class/CFastDraw.html">CFastDraw</A>　　　CDirectDrawコンパチ高速描画クラス(CFastPlaneを使うときに使う)<BR>
+<A href="class/CFastPlane.html">CFastPlane</A>　　　CPlaneコンパチ高速描画プレーン<BR>
+<A href="class/CSaverDraw.html">CSaverDraw</A>　　スクリーンセーバークラス。作りかたは、<A href="class/CSaverXXXX.html">これ</A>。<BR>
+<A href="class/CSprite.html">CSprite</A>　　　　　スプライトクラス<BR>
+<A href="class/CSpriteChara.html">CSpriteChara</A>　 スプライトマネージャ<BR>
+<A href="class/CSpriteLoader.html">CSpriteLoader</A>&nbsp; スプライトの読み込みマネージャ<BR>
+<A href="class/CPlaneBase.html">CPlaneBase</A>　　 CDIB32,CPlane共通基底クラス<BR>
+<A href="class/CPlaneTransBlt.html">CPlaneTransBlt</A>&nbsp;CPlaneBaseに対するトランジションクラス<BR>
+<A href="class/CCellAutomaton.html">CCellAutomaton</A> CDIB32用セルオートマトンクラス</P>
+<P>シーン描画<BR>
+<A href="class/CScene.html">CScene</A>　　　　　　　シーン管理クラス<BR>
+<A href="class/CSceneTransiter.html">CSceneTransiter</A>　 CScene間のトランジションを実現する</P>
+<P>レイヤ関連<BR>
+<A href="class/CLayer.html">CLayer</A>　　　　　 CDirectDrawで描画時にコールバックされるもの<BR>
+<A href="class/CMouseLayer.html">CMouseLayer</A>　ソフトウェアマウスカーソル<BR>
+<A href="class/CFPSLayer.html">CFPSLayer</A>　　　ＦＰＳ（秒間フレームレート描画）レイヤ</P>
+<P>GUI系<BR>
+<A href="class/IGUIParts.html">IGUIParts</A>　　　　CGUI～のインターフェースクラス<BR>
+<A href="class/CGUIButton.html">CGUIButton</A>　　ボタン管理クラス</P>
+<P>マルチメディア関連<BR>
+<A href="class/CSound.html">CSound</A>　　　　　 WAVEサウンドクラス<BR>
+<A href="class/CStreamSound.html">CStreamSound</A>　WAVEのストリーム再生クラス<BR>
+<A href="class/CSoundLoader.html">CSoundLoader</A>　WAVEサウンドの読み込みマネージャ<BR>
+<A href="class/CSELoader.html">CSELoader</A>　　　ＳＥの読み込みマネージャ<BR>
+<A href="class/CMIDIOutput.html">CMIDIOutput</A>　　MIDI再生クラス<BR>
+<A href="class/CMIDILoader.html">CMIDILoader</A>　　MIDIの読み込みマネージャ<BR>
+<A href="class/CSoundBase.html">CSoundBase</A>　　CSound,CStreamSound,CMIDIOutput系の共通基底クラス<BR>
+<A href="class/CCDDA.html">CCDDA</A>　　　　　 CD再生クラス<BR>
+<A href="class/CAudioMixer.html">CAudioMixer</A>　　オーディオのミキシング用クラス<BR>
+<A href="class/CVolumeFader.html">CVolumeFader</A>　ヴォリュームのフェーダークラス<BR>
+<A href="class/CBGMLoader.html">CBGMLoader</A>　　WAVE/MIDI統合的BGM再生マネージャ<BR>
+<A href="class/CMovie.html">CMovie</A>　　　　　ムービー(AVI,MPEG等)再生クラス</P>
+<P>テキスト関連<BR>
+<A href="class/CFont.html">CFont</A>　　　　　 文字のフォント描画<BR>
+<A href="class/CTextPlane.html">CTextPlane</A>　　テキスト描画用プレーン<BR>
+<A href="class/CTextLayer.html">CTextLayer</A>　　テキスト描画用レイヤ<BR>
+<A href="class/CTextDIB32.html">CTextDIB32</A>　　テキスト描画用DIB32<BR>
+<A href="class/CTextDraw.html">CTextDraw</A>　　 HTML風データの表示<BR>
+<A href="class/CScenarioView.html">CScenarioView</A>　シナリオ描画のためのクラス(CTextDrawの拡張版)</P>
+<P>ファイル処理<BR>
+<A href="class/CFile.html">CFile</A>　　　　　 　ファイル入出力クラス(圧縮ファイル対応)<BR>
+<A href="class/CDir.html">CDir</A>　　　　　 　 ディレクトリ検索用クラス(圧縮ファイル対応)</P>
+<P>入力関連<BR>
+<A href="class/CKeyBase.html">CKeyBase</A>　　 　キー入力基底クラス<BR>
+<A href="class/CDirectInput.html">CDirectInput</A>　　キーボード入力クラス<BR>
+<A href="class/CJoyStick.html">CJoyStick</A>　　 　ジョイスティッククラス<BR>
+<A href="class/CMIDIInput.html">CMIDIInput</A>　 　 ＭＩＤＩ入力クラス<BR>
+<A href="class/CMouse.html">CMouse</A>　　　　 マウス状態取得クラス<BR>
+<A href="class/CMouse.html#CMouseEx">CMouseEx</A>　　　ゲーム用マウス状態取得クラス<BR>
+<A href="class/CVirtualKey.html">CVirtualKey</A>　　ユーザー定義仮想キー入力管理クラス<BR>
+<A href="class/CKey.html">CKey</A>　　　　　　簡易キー入力クラス</P>
+<P>時間制御<BR>
+<A href="class/CTimer.html#CTimer">CTimer</A>　　　　　独立タイマ<BR>
+<A href="class/CTimer.html#CTimerEx">CTimerEx</A>　　　 ゲーム用独立タイマ<BR>
+<A href="class/CFPSTimer.html">CFPSTimer</A>　　 ＦＰＳ調整のためのタイマ<BR>
+<A href="class/CSequencer.html">CSequencer</A>　　時間制御クラス</P>
+<P>シェル関数<BR>
+<A href="class/CShell.html">CShell</A>　　　　　　シェル関数，壁紙設定</P>
+<P>ゲーム用補助<BR>
+<A href="class/CGameObjectBase.html">CGameObjectBase</A>　ゲームオブジェクト<BR>
+<A href="class/CScene.html">CScene</A>　　　　　シーン管理クラス</P>
+<P>ウィンドゥ形状の自由変形<BR>
+<A href="class/CRegion.html">CRegion</A>　リージョン管理クラス<BR>
+<A href="class/CRegionHook.html">CRegionHook</A> 変形ウィンドゥのドラッグによる移動をサポートするクラス</P>
+<P><FONT size="+1" color="#009900">☆　デバッグクラス</FONT></P>
+<P><A href="class/CErrorLog.html">CErrorLog</A>　　　　エラーログ出力クラス<BR>
+<A href="class/CDebugWindow.html">CDebugWindow</A>　デバッグウィンドゥクラス<BR>
+<A href="class/CMsgDlg.html">CMsgDlg</A>　　　　　メッセージボックス</P>
+<P><A href="etc/yaneMemory.html">Memory</A> 　　　　　newで確保して解放されていない箇所を診断する<BR>
+<A href="class/CFlagDebugger.html">CFlagDebugger</A>　配列をビジュアルに表示・変更する</P>
+<P><FONT size="+1" color="#009900">☆　アシストクラス</FONT></P>
+<P><A href="class/CSinTable.html">CSinTable</A>　　　　cos,sinテーブル<BR>
+<A href="class/CRand.html">CRand</A>　　　　　　高速高精度乱数発生ルーチン<BR>
+<A href="class/CMsgSR.html">CMsgSenderとCMsgReceiver</A>　異なるクラス間におけるメッセージ送受信(JavaのObservable,Observerクラス)<BR>
+<A href="class/CRootCounter.html">CRootCounter</A>　自動カウンタその１<BR>
+<A href="class/CRootCounter.html#CRootCounterS">CRootCounterS</A> 自動カウンタその２<BR>
+<A href="class/CInteriorCounter.html">CInteriorCounter</A> 内分カウンタ<BR>
+<A href="class/CSerialize.html">CSerializeとCArchive</A> シリアライズ用クラス</P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内部的に使用しているクラス</FONT><FONT size="-1">（このSDKを使うだけの人は、理解する必要は無いです）</FONT></P>
+<P><A href="class/CCriticalSection.html">CCriticalSection</A>　 スレッド間の排他制御<BR>
+<A href="class/CThread.html">CThread</A>　 　　　　　スレッド生成のための基底クラス</P>
+<P><A href="class/CTimeBase.html">CTimeBase</A>　　　　 ミリ秒単位の時間取得<BR>
+<A href="class/CIntervalTimer.html">CIntervalTimer</A>　　インターバル割り込みのアシスト用<BR>
+<A href="class/CAppIntervalTimer.html">CAppIntervalTimer</A>　CAppBaseに寄生するインターバル割り込み</P>
+<P><A href="class/CWinHook.html#CWinHook">CWinHook</A>　　　　　ウィンドゥメッセージのフック用基底クラス<BR>
+<A href="class/CWinHook.html#CWinHookList">CWinHookList</A>　　 CWinHook管理クラス<BR>
+<A href="class/CAppManager.html">CAppManager</A>　　 アプリケーションの管理クラス</P>
+<P><A href="class/CCOMBase.html">CCOMBase</A>　　　　COMコンポーネントの初期化／終了処理クラス</P>
+<P><A href="class/CLZSS.html">CLZSS</A>　　　　 　　LZSS法による圧縮／解凍ルーチン</P>
+<P><A href="class/CCPUID.html">CCPUID</A>　　　　　　CPUの判別</P>
+<P><A href="class/CIMEBase.html">CIMEBase</A>　　　　　IMEの制御</P>
+<P><A href="class/CGraphicLoader.html">CGraphicLoader</A>　汎用グラフィックローダー（BMP,JPEG,GIF画像読み込み及び、SusiePlugInでの画像読み込み等）<BR>
+<A href="class/CDIBitmap.html">CDIBitmap</A>　　　　　DIB(Device Independent Bitmap)クラス。</P>
+<P><A href="class/CWindow.html">CWindow</A>　　　　　 Windowクラス。</P>
+<P><A href="class/CMutex.html">CMutex,CMutexSection</A>　Mutexクラス。<BR>
+<A href="class/CSingleApp.html">CSingleApp</A>　　 　　２重起動の防止</P>
+<P><A href="class/CLineParser.html">CLineParser</A>　　　一行を解析する<BR>
+<A href="class/CStringScanner.html">CStringScanner</A>　トークンを解析する</P>
+<P><A href="class/CLoadCache.html">CLoadCache</A>　　　読み込みキャッシュマネージメント。<A href="class/CSoundLoader.html">CSoundLoader</A>や<A href="class/CSpriteLoader.html">CSpriteLoader</A>，<A href="class/CSELoader.html">CSELoader</A>で使用している。</P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　ＹＴＬ（Yaneurao Template Library）</FONT></P>
+<P><A href="YTL/auto_ptrEx.html">auto_ptrEx</A>　auto_ptrの拡張バージョン。これでポインタ管理は楽々。<BR>
+<A href="YTL/auto_array.html">auto_array</A>　auto_ptrの配列バージョン。これで配列ポインタ管理は楽々。<BR>
+<A href="YTL/auto_vector_ptr.html">auto_vector_ptr</A> auto_ptrのvectorバージョン。これでオブジェクト管理も楽々～。<BR>
+<A href="YTL/smart_ptr.html">smart_ptr</A>　　スマートポインタ。これで、ポインタ管理は楽勝。<BR>
+<A href="YTL/smart_array.html">smart_array</A>　スマートポインタの配列バージョン。これで配列ポインタ管理は楽勝。<BR>
+<A href="YTL/smart_vector_ptr.html">smart_vector_ptr</A> スマートポインタのvectorバージョン。<BR>
+<A href="YTL/vectorEx.html">vectorEx</A>　　setのinsert,eraseを実装したvectorです。chainは、これをベースに実装しています。<BR>
+<A href="YTL/swap.html">swap</A>　　　　　値を交換するだけのテンプレート＾＾；<BR>
+<A href="YTL/prototypefactory.html">PrototypeFactory</A>　未来形でプログラミングするための必需品。Prototypeパターン＋FactoryMethodテンプレート。<BR>
+<A href="YTL/mediator.html">mediator</A>　　内部クラスを擬似的に実現するためのテンプレート</P>
+<P><A href="YTL/etc.html">その他、実験的テンプレート</A> 使いものにならない＾＾；</P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　技術資料</FONT></P>
+<P><A href="etc/YGA.html">YGAフォーマット</A>　　αチャンネル付き可逆圧縮フォーマット<BR>
+<A href="etc/GTL.html">GTL</A>　　　　　　　　　GraphicTemplateLibrary</P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　サンプルプログラム</FONT></P>
+<P><A href="sample/sample1.html">sample1</A>　　　最小限度のプログラム。MP3の再生を行なう。<BR>
+<A href="sample/sample2.html">sample2</A>　　　最小限度のプログラム。ディレクトリの検索を行なう。<BR>
+<A href="sample/sample3.html">sample3</A>　　　『Revolution』の店頭デモ用Setup/Movieフォルダセレクトプログラム。<BR>
+<A href="sample/sample4.html">sample4</A>　　　CDIB32での画像エフェクト。<BR>
+<A href="sample/sample5.html">sample5</A>　　　マウスの位置情報を取得して表示する。</P>
+<P>その他、私（やねうらお）の<A href="http://www.sun-inet.or.jp/~yaneurao/">ホームページ</A>に<A href="http://www.sun-inet.or.jp/~yaneurao/yaneSDK2nd/">yaneSDK2ndの講座</A>がありますんで、そちらのサンプルもあわせてご覧ください。</P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　参考用（あくまで参考なので解説文は用意していません）</FONT></P>
+<P>☆　マップ描画</P>
+<P>yaneMapLayer.h/yaneMapLayer.cpp/yaneMapIO.h/yaneMapIO.cpp</P>
+<HR>
+</BODY></HTML>

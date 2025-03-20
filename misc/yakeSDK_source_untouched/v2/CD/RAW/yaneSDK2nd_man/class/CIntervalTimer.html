@@ -1,0 +1,26 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CIntervalTimer</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CIntervalTimer</FONT><A name="CTimeBase"></A></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>インターバルタイマーを使うときの基底クラス。このクラスから派生させ、</P>
+<P>virtual void TimerProc(void); // コールバックされる関数</P>
+<P>を継承して使う。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>LRESULT Start(DWORD dwInterval,bool bMultiMediaTimer=true);</P>
+<P>　インターバル割り込みを開始する。そうすると仮想関数TimerProcをコールバックする。</P>
+<P>　dwIntervalは、割り込み間隔。最小は1[ms]。ただし、マルチメディアタイマが存在しない時（サウンドカードの搭載されていなくて、かつ凄く古い一部のマシン）など、小さな値は失敗することがある。（気にしなくて良い）</P>
+<P>　bMultiMediaTimer==falseのときは、通常のインターバルタイマ(::SetTimer～::KillTimer)を使う。こちらは、非常に精度が悪いが、システムにはあまり負荷をかけないので、ある程度以上の間隔である場合は、なるべくこちらを使うようにしたほうが良い。20ms以上の数字が指定された場合、強制的に通常のインターバルタイマを使う。逆に、<FONT color="#cc0000">マルチメディアタイマーは、システム負荷率が非常に高いので</FONT>、割り込み間隔の短いもの(dwInterval が1のもの)を複数使うと、<FONT color="#cc0000">システムがフリーズしかねない</FONT>。現在、yaneSDK2ndのなかで、このマルチメディアタイマーを使っているのは、CMIDIOutputMMクラスだけで、dwIntervalは1よりは、甘い数字にしてあるが、もし気になるならば、CMIDIOutputMMクラスは使わず、CMIDIOutputMCIで再生するべきだろう。</P>
+<P>LRESULT StartM(DWORD dwInterval);</P>
+<P>　こちらは、マルチメディアタイマーをOneShotでで呼び出し続けて、インターバルタイマを擬似的に実現する。こうすることによって、割り込み時間中に次の割り込み待ちになって、割り込みを抜けると同時に次の割り込みがかかってきてシステムに高い負荷を掛ける事態を少しだけ回避できる。万全ではないので、やはり使わないに越したことはないようだ。</P>
+<P>LRESULT Stop(void); // タイマを止める</P>
+<P>　Startでスタートさせたインターバル割り込みを停止させる。</P>
+<P>bool IsTimer(void) const; // タイマが回っているのか</P>
+<P>　Startでスタートさせたあとは、Stopするまで、この関数はtrueを返す。</P>
+<P><FONT size="+1" color="#cc0000">☆　注意点</FONT></P>
+<P>通常のインターバルタイマは、WM_TIMER（実際は、コールバック関数を指定しているが）の処理によって行なうので、メッセージループが処理されないことには、メッセージがやってこない。また、WM_TIMERは、非常に優先順位の低いメッセージなので、他にメッセージがあればそちらを優先してしまう。<FONT color="#cc0000">また、このクラスのStop関数を呼び出して、インターバルタイマをKillTimerしたあとでも、メッセージキューにWM_TIMERが残って、コールバック関数が呼び出されることがある。</FONT>そのときに、そのCIntervalTimerのインスタンスが消失していると、メモリエラーになってしまう。よって、このようになって困る場合は、<A href="CAppIntervalTimer.html">CAppIntervalTimer</A>のほうを使うこと。</P>
+<HR>
+</BODY></HTML>

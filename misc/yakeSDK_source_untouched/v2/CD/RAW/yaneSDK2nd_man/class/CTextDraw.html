@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CTextDraw</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CTextDraw</FONT><A name="CTimeBase"></A> <FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>HTML風、マークアップ言語を解釈し、それを表示します。アドベンチャーゲームのメッセージ表示等に使うと便利です。<BR>
+タグとして、サイズ変更、センタリング、右寄せ、フォント変更、色変更等をサポートしているので、ホームページビルダー等で作成したHTMLファイルに基づいてそれを表示することが出来ます。</P>
+<P>この上位クラスの実装例として、<A href="CScenarioView.html">CScenarioView</A>クラスがあります。</P>
+<P><FONT size="+1" color="#009900">☆　サポートしているタグ(HTMLのサブセット)</FONT></P>
+<P><FONT color="#00cc00">&lt;BR&gt;</FONT>　改行。改行コード(CR+LF)では改行されません。あるいは、表示が右端になると、自動的に改行が入ります。<BR>
+<FONT color="#00cc00">&lt;P&gt;～ &lt;/P&gt;</FONT>　&lt;BR&gt;と同じ効果があります。また、&lt;P
+align=&quot;center&quot;&gt;のようにしてセンタリング（中央寄せ）することが出来ます。align=&quot;left&quot;とalign=&quot;right&quot;もサポートしています。（ディフォルトでは左寄せです）<BR>
+<FONT color="#00cc00">&lt;HR&gt;</FONT>　HTMLでは水平線を意味しますが、１回に表示するメッセージの区切り記号として使います。<BR>
+<FONT color="#00cc00">&lt;! コメント&gt;</FONT>　コメントタグです。表示はされませんが、内部バッファに格納されるので取り出すことが出来ます。<BR>
+<FONT color="#00cc00">&lt;HEAD&gt; ～ &lt;/HEAD&gt;</FONT>　ヘッダタグです。囲まれている領域は無視されます。<BR>
+<FONT color="#00cc00">&lt;html&gt;,&lt;/html&gt;,&lt;body&gt;,&lt;/body&gt;</FONT>　それぞれ無視します。<BR>
+<FONT color="#00cc00">&lt;B&gt;</FONT>　ボールド体（太字）にします。<BR>
+<FONT color="#00cc00">&lt;/B&gt;</FONT>　ボールド体（太字）をもとに戻します。<BR>
+<FONT color="#00cc00">&lt;I&gt;</FONT>　イタリック体（斜体）にします。（サポート甘いので、斜め右上欠けることあり＾＾；）<BR>
+<FONT color="#00cc00">&lt;/I&gt;</FONT>　イタリック体（斜体）をもとに戻します。<BR>
+<FONT color="#00cc00">&lt;U&gt;</FONT>　アンダーライン付きにします。<BR>
+<FONT color="#00cc00">&lt;/U&gt;</FONT>　アンダーライン付きをもとに戻します。<BR>
+<FONT color="#00cc00">&lt;S&gt;</FONT>　取り消し線付きにします。<BR>
+<FONT color="#00cc00">&lt;/S&gt;</FONT>　取り消し線付きをもとに戻します。<BR>
+<FONT color="#00cc00">&lt;FONT&gt;～&lt;/FONT&gt;</FONT>　フォント指定をします。FONT指定のなかで使えるのは、size=&quot;+4&quot;とかのサイズ指定（絶対指定は不可。相対指定のみ）と、color=&quot;#ff0000&quot;での色指定（色名での指定は不可。色は16進数でR,G,B順）、face=&quot;ＭＳ
+ゴシック&quot;というようなフォント指定(ディフォルトではＭＳ
+ゴシックで、使えるのは、ＭＳ ゴシック、ＭＳ
+Ｐゴシック、ＭＳ 明朝、ＭＳ Ｐ明朝の４種）のみです。<FONT color="#cc0000">&lt;FONT&gt;～&lt;/FONT&gt;タグは、ネストできます。</FONT><BR>
+</P>
+<P><FONT size="+1">☆　HTMLには存在しないタグ</FONT></P>
+<P><FONT color="#00cc00">&lt;VDATA=&quot;整数データ列&quot;&gt;</FONT>　隠しデータです。ここで設定した整数データ列を、あとで取得することが出来ます。グラフィックの指定や、ＳＥの指定等に使うと便利です。データは、16個のvector&lt;int&gt;配列に入ります。たとえば&lt;VDATA=&quot;3,1,2,3,5&quot;&gt;とすれば、3番目のvector&lt;int&gt;配列に、1,2,3,5という数字が入ります。この値は、次に同じ番号の配列に再代入されるまで有効です。</P>
+<P><FONT color="#00cc00">&lt;IndentForBracket&gt;</FONT> 鍵括弧による会話文を表示するときなど、２行目以降、全角スペース<FONT color="#cc0000">ひとつ分</FONT>インデントしたい時に使います。一行目の行頭で書きます。</P>
+<P><FONT color="#00cc00">&lt;IndentForBracket n&gt;</FONT> 鍵括弧による会話文を表示するときなど、２行目以降、全角スペースを<FONT color="#cc0000">ｎ個分</FONT>インデントしたい時に使います</P>
+<P>あと、&amp;lt;　&amp;gt; &amp;amp;は、それぞれ
+&lt; &gt; &amp; と自動的に変換されて表示されます。</P>
+<P><FONT color="#00cc00">&lt;top&gt; &lt;middle&gt; &lt;bottom&gt;</FONT> 文字列の縦の表示位置を指定します。一行に、サイズの違う文字列が混在している場合などに、上寄せ、センタリング（縦方向）、下寄せを指定します。指定がなければ、下寄せです。</P>
+<P><FONT size="+1">☆　特殊タグ</FONT></P>
+<P><FONT color="#00cc00">&lt;Gaiji n&gt;</FONT>　ユーザー定義外字を使うことが出来ます。CTextDrawBase::SetGaijiメンバ関数で、外字とするスプライト（CSpriteChara）を渡し、そのナンバーnを指定します。</P>
+<P><FONT color="#00cc00">&lt;ReplaceString n&gt;</FONT> 文字列置換を行ないます。主人公の名前が可変になるような場合は、これで主人公の名前を埋めておきます。CTextDrawBase::SetRepStringメンバ関数で、置換する文字列を指定します。</P>
+<P><FONT size="+1">☆　条件分岐</FONT></P>
+<P><FONT color="#00cc00">&lt;if n&gt; &lt;else&gt; &lt;endif&gt;</FONT>で条件分岐が出来ます。ネスト可です。&lt;if
+n&gt;のnには、実際には数字が入ります。この条件判定は、プログラム側からif判定用のListenerを与えて行ないます。具体的には、</P>
+<P>// &lt;If n&gt;～&lt;Endif&gt;タグに対するリスナ<BR>
+class CScenarioIfListener {<BR>
+public:<BR>
+virtual bool Abstract_If(int nNo) = 0;<BR>
+// ⇒　これをオーバーライドして、nNoに対する真偽判定を返す関数を書く。<BR>
+virtual ~CScenarioIfListener() {}<BR>
+};</P>
+<P>というクラスがありますので、このクラスから派生させ、上記のAbstract_Ifをオーバーライドして、nNoに対する真偽判定を返すようにします。そして、そのクラスのインスタンス（のsmart_ptr）を、以下のCTextDrawのメンバ関数で設定します。</P>
+<P> // &lt;if n&gt; ～ &lt;endif&gt;用の条件判定Listenerを渡す<BR>
+void SetScenarioIfListener(smart_ptr&lt;CScenarioIfListener&gt;
+v);</P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　CTextDrawBaseメンバ関数</FONT></P>
+<P>CTextDrawBaseという基底クラスがあり、そこからCTextDrawDIB32(<A href="CDIB32.html">CDIB32</A>バージョン)と、CTextDrawPlane(<A href="CPlane.html">CPlane</A>バージョン)と、CTextDrawDIB32A(<A href="CDIB32.html">CDIB32</A>バージョンで、こちらはアンチエイリアスがほどこされる)の３つがあります。</P>
+<P>まずは、CTextDrawBaseのメンバ関数について説明します。描画に先立って、コンテクストを設定してやる必要があります。コンテクストとは、CTextDrawContextクラスのことなのですが、こいつは、フォントのディフォルトサイズ、ディフォルトフォント、文字の影の色指定、行間、改行幅、横幅等を持っています。これらを必要に応じて設定してやります。詳しくは、yaneTextDraw.hのclass
+CTextDrawContextの定義を見てください。</P>
+<P>そして、CTextDrawBaseのメンバですが、</P>
+<P><FONT color="#00cc00">// 描画コンテキストの設定と取得<BR>
+void SetContext(const CTextDrawContext&amp;
+context);<BR>
+CTextDrawContext* GetContext(void);</FONT></P>
+<P>描画コンテクストの設定と取得です。設定は、最初に一回すればＯＫです。</P>
+<P><FONT color="#00cc00">// テキスト位置を設定・取得する<BR>
+int GetTextOffset(void);<BR>
+LRESULT SetTextOffset(int nPos);</FONT></P>
+<P>GetTextOffsetは、現在表示中のテキスト位置を返します。これは、ファイルの何バイト目であるかを示しています。逆に、SetTextOffset関数で設定すれば、その場所まで<FONT color="#cc0000">先頭から空読み（解析しながら）</FONT>してポインタを進めます。つまり、途中から表示しても、正しいフォント・書式等で表示されます。</P>
+<P><FONT color="#00cc00">// 未知のタグを飛ばす(default:飛ばす) <BR>
+void SkipUnknownTag(bool bSkip);</FONT></P>
+<P><FONT color="#cc0000">&lt;</FONT>で始まる未知のタグは、<FONT color="#cc0000"> &gt;</FONT>まで飛ばす（画面に表示しない）設定。ディフォルトでは飛ばします。それだとエラーを検出できなくて困る場合は、この関数でfalseを設定してください。</P>
+<P><FONT color="#00cc00">// 描画コンテキストに基づいてテキストDIBの更新<BR>
+LRESULT UpdateText(bool bDraw=true); // &lt;HR&gt;まで</FONT></P>
+<P>設定されているコンテクストに基づいて、&lt;HR&gt;タグまでを描画したプレーン（CDIB32かCPlane）を生成します。bDraw==falseならば、DIBは生成しません。（RECTには正しい矩形情報が入ります）　もし、矩形情報も不要でカラ読みさせたいときは、</P>
+<P><FONT color="#00cc00">LRESULT UpdateTextFast(void); // &lt;HR&gt;まで</FONT></P>
+<P>を使います。</P>
+<P><FONT color="#00cc00">// Update後、以下の関数が有効になる<BR>
+CTextDrawContext* GetNextContext(void);</FONT><BR>
+<FONT color="#00cc00">void GoNextContext(void); // 次の段落へ<BR>
+VRECTS* GetRects(void);</FONT><BR>
+<FONT color="#00cc00">vector&lt;int&gt;* GetVData(void);<BR>
+vector&lt;LPSTR&gt;* GetTagList(void);<BR>
+LPSTR GetComment(void);</FONT></P>
+<P>UpdateText後、上の関数が有効になります。GetNextContextは、&lt;HR&gt;の時点でのテキストコンテキストを得ます。使うことは無いでしょう（笑）</P>
+<P>GoNextContextは、現在のコンテクストとして、&lt;HR&gt;の時点時点のコンテキストを代入します。つまり、&lt;HR&gt;のところまでコンテキストが進みます。よって、次にUpdateTextすると、次の段落（&lt;HR&gt;までを一つの段落とみなす）が表示されるわけです。</P>
+<P>GetRectsは、UpdateTextで描画した文字それぞれの矩形領域を返します。VRECTSは、typedef
+auto_vector_ptr&lt;RECT&gt; VRECTS;と定義あります。つまりは、RECTの配列です。UpdateTextするごとにひとたびクリアされ、その段落に存在していた文字の矩形位置を返します。これを使って、一文字ずつ描画することが出来ます。</P>
+<P>GetVDataは、vector&lt;int&gt; m_vData[16];のポインタが得られます。&lt;VDATA&gt;タグで埋めておいた隠しデータの保持されている配列です。</P>
+<P>GetTagListは、解析できなかったタグ（<FONT color="#cc0000">&lt;</FONT>で始まり<FONT color="#cc0000">&gt;</FONT>で終わるもの）へのポインタ(LPSTR。指す場所は、<FONT color="#cc0000">&lt;</FONT>の次の文字)のvectorを返します。これを見て、ユーザーが独自に設定しておいた隠しタグを解析できます。SkipUnknownTagでtrueが設定されていない場合は無効。<FONT color="#cc0000">（ディフォルトでtrueになっており、未知のタグはすべて表示されず、スキップされ、スキップした場所をGetTagListで返せるように用意します）</FONT>この関数は、</P>
+<P>　<FONT color="#990000">LPSTR lpsz = (*textdraw.GetTagList())[i]</FONT>;のようにして使います。ただし、取得した文字列へのポインタは、タグの終了位置が'\0'で終わっているわけではないので、注意が必要。この解析や文字列比較には<A href="CStringScanner.html">CStringScanner</A>を使うのが便利。この関数を使って、独自のタグを用意して、背景画像やＳＥの指定等を行なうと便利です。</P>
+<P>GetCommentは、&lt;!&gt;タグで埋めておいたコメント内容の文字列を取得できます。</P>
+<P><FONT color="#00cc00">virtual CPlaneBase* GetPlaneBase(void);</FONT></P>
+<P>テキストを描画するために生成されたプレーンを返す。この関数で取得して処理すれば、CTextDrawPlane,CTextDrawDIB32等、同じ扱いでプログラムが出来る。</P>
+<P><FONT size="+1">☆　禁則処理</FONT></P>
+<P><FONT color="#00cc00">void SetProhibitString(string sz)</FONT>; // &nbsp;禁則処理の有効化(ディフォルトで無効==empty)</P>
+<P>ここで禁則処理する文字列を設定しておくと、行頭禁則処理を自動的に行ないます。行頭禁則処理とは、ここで登録された文字（通例、句読点など）が行頭に出てこないようになります。行頭に出てこずに、前行の行末にその１文字が、追いやられます。原稿用紙で句読点を欄外に書くのと同じものだと考えていただければわかりやすいかと思います。このとき、Widthで設定していた幅を、その１文字分だけオーバーしたサーフェースが作成されます。（やや手抜きです）　禁則処理を行なうときは、その分だけ小さめに幅を設定しておいてください。また、二重禁則処理は行ないません。これは、行頭に禁則文字が二つ連続するケースです。（　。」など）　このようなものは、明示的に前行の適当な箇所で&lt;BR&gt;タグで改行してください。</P>
+<P><FONT size="+1">☆　 グレーカラー表示</FONT></P>
+<P><FONT color="#00cc00">bool* GetGrayColorFlag( )</FONT>; // グレーカラー表示は有効なのか？<BR>
+<FONT color="#00cc00">COLORREF* GetGrayColor( ); </FONT>// この色で表示する<BR>
+<FONT color="#00cc00">COLORREF* GetGrayColorBk( );</FONT> // 文字の影の色</P>
+<P>バックログ（さかのぼって、ひとつ前に表示した段落を表示する）等を表示するときは、バックログであることを明示するために色をグレーにしたいことがあります。そのための機能です。ディフォルトでは、無効になっています。この機能を有効にするには、</P>
+<P>　 * GetGrayColorFlag ( ) = true;</P>
+<P>とします。色は、COLORREF構造体で、</P>
+<P>　 * GetGrayColor ( ) = RGB(128,128,128);</P>
+<P>のようにして設定します。ディフォルトでは、GrayColor
+= RGB(128,128,128)で、GrayColorBk = CLR_INVALID（＝影なし）　です。</P>
+<P>これらのパラメータは、一度設定したら、再度設定するまで有効です。</P>
+<P><FONT size="+1">☆　 外字の使用</FONT></P>
+<P><FONT color="#00cc00">&lt;Gaiji n&gt;</FONT>　タグで指定されたユーザー定義外字を使うことが出来ます。SetGaiji／GetGaijiメンバ関数で、外字とするスプライト（<A href="CSpriteChara.html">CSpriteChara</A>）を設定／取得します。そのスプライトキャラナンバーnを指定します。スプライトアニメーションは出来ません。外字はsmart_ptr&lt;CSpriteChara&gt;として渡します。</P>
+<P><FONT size="+1">☆　 置換文字列の使用</FONT></P>
+<P><FONT color="#00cc00">&lt;ReplaceString n&gt;</FONT> 文字列置換を行ないます。主人公の名前が可変になるような場合は、これで主人公の名前を埋めておきます。SetRepString／GetRepStringメンバ関数で、置換する文字列を設定／取得します。置換文字列は、smart_ptr&lt;vector&lt;string&gt;
+&gt;として渡します。</P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　CTextDrawDIB32メンバ関数</FONT></P>
+<P>CDIB32* GetDIB();<BR>
+これは、UpdateText後に、更新されたCDIB32へのポインタを返します。</P>
+<P><FONT size="+1" color="#009900">☆　CTextDrawPlaneメンバ関数</FONT></P>
+<P>CPlane* GetPlane();<BR>
+これは、UpdateText後に、更新されたCPlaneへのポインタを返します。</P>
+<P><FONT size="+1" color="#009900">☆　CTextDrawDIB32</FONT><FONT size="+1" color="#cc0000">A</FONT><FONT size="+1" color="#cc0000"></FONT><FONT size="+1" color="#009900">メンバ関数</FONT>（CTextDrawDIB32のアンチェリ有りバージョン）</P>
+<P>CDIB32* GetDIB();<BR>
+これは、UpdateText後に、更新されたCDIB32へのポインタを返します。</P>
+<P><FONT size="+1" color="#009900">☆　CTextDrawDIB32</FONT><FONT size="+1" color="#cc0000">AＡ</FONT><FONT size="+1" color="#009900">メンバ関数</FONT>（CTextDrawDIB32の精細アンチェリ有りバージョン）</P>
+<P>CDIB32* GetDIB();<BR>
+これは、UpdateText後に、更新されたCDIB32へのポインタを返します。</P>
+<P><FONT color="#cc0000">注意点：CTextDrawDIB32とCTextDrawPlaneは、描画するときはBlt,BltFast等で良いのですが、CTextDrawDIB32Aと<FONT color="#cc0000">CTextDrawDIB32AA</FONT>で得られたDIBは、アンチェリのためにα情報を含むので、描画にはBlendBltFastAlphaを使ってください。</FONT></P>
+<P><FONT color="#cc0000">注意点２：何もメッセージがなくて、&lt;HR&gt;タグのみがある場合、1×1の空のDIB(Plane)が生成されます。このとき、GetRects(
+)-&gt;size( )は、0になっています。</FONT></P>
+<P>またCTextDrawDIB32Aは<A href="CTextDIB32.html">CTextDIB32</A>::UpdateTextAでアンチェリをかけます。<BR>
+またCTextDrawDIB32AAは<A href="CTextDIB32.html">CTextDIB32</A>::UpdateTextAAでアンチェリをかけます。</P>
+<P><FONT size="+1" color="#009900">☆　CTextDrawFastPlane</FONT></P>
+<P>上のDIB32版をCFastPlane版にしたものです。内容は同じなので割愛。</P>
+<HR>
+</BODY></HTML>

@@ -1,0 +1,22 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CFlagDebugger</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CFlagDebugger</FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>ゲーム等の実行時に配列の内容を視覚的に確認し、マウスでエディットするためのクラス。</P>
+<P><A href="CLayer.html#CHDCLayer">CHDCLayer</A>派生クラスなので、このクラスをnewした瞬間から有効になります。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P><FONT color="#009900">void SetMouse(CMouseEx*lp);</FONT></P>
+<P><A href="CMouse.html#CMouseEx">CMouseEx</A>のポインタを渡しておきます。呼び出し側で、毎フレームごとにCMouseEx::Flush(
+)が呼び出されていなければなりません。</P>
+<P><FONT color="#009900">void SetFlag(DWORD*lpdw,int nSize);</FONT></P>
+<P>エディットしたい配列の先頭アドレスと、その配列の要素数を設定します。</P>
+<P><BR>
+上記の２つの関数で初期化さえしておけば、あとは、CDIBDraw::OnDraw（CDirectDraw::OnDraw）のときにコールバックされます。</P>
+<P><FONT size="+1" color="#009900">☆　操作方法</FONT></P>
+<P>エディット画面の操作は、マウスのみです。左で決定。右で５１２要素次に送ります。○はゼロ、●は非ゼロ、☆は現在編集中の配列を示します。現在編集中の配列は、画面上部にビット表記（３２ビットなので３２個の○と●）で表現されています。編集は、この部分に対して、マウスの左クリックで直接ビットをＯＮ／ＯＦＦするか、下の＋１，＋１０，＋１００，－１，－１０，－１００を左クリックして、まとめて値を加減するかです。</P>
+<HR>
+</BODY></HTML>

@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Auxiliary/yaneMemory.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="CMemoryState"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CMemoryState</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">///	！！！ＤＡＮＧＥＲ！！！<BR>	///	－－－－このクラスは作りかけ－－－－<BR>	///	！！！！使わないでね！！！<BR><BR><BR>	１．現在newしているメモリのスナップショットを取得して、<BR>	メモリリークを検出するためのクラス。<BR><BR>	２．あるいは、自前の高速なnew /deleteを定義する。<BR><BR>	１．２．の両方に使える。<BR><BR>	yaneConfig.hでUSE_MEMORY_STATEをdefineしているときにのみ有効<BR><BR>	使い方１．<BR><BR>	このクラスを利用して、<BR><BR>	CTextOutputStreamFile dump;<BR>	dump.SetFileName("leaklog.txt");<BR>	CMemoryState s;<BR><BR>	s.BeginSnap();<BR><BR>	{<BR>		BYTE* lpabyLeak1 = new BYTE[100];<BR>		DWORD* lpabyLeak2 = new DWORD[100];<BR><BR>	}<BR>	s.EndSnap();<BR><BR>	s.Dump(&amp;dump);<BR><BR>	のようにすれば、この２箇所のメモリリークが存在することが検出できます。<BR><BR>	使い方２．<BR><BR>	CMemoryState s;<BR><BR>	s.BeginSnap(16,4096);	//	16バイトのブロックを4096個用意する<BR>	{<BR>		//	実処理をここに書く<BR><BR>		//	16バイト以下のnewが発生した場合、このクラスの確保している<BR>		//	エリアからブロック単位で優先して使用していく<BR><BR>	}<BR>	s.EndSnap();<BR>	s.Dump(&amp;dump);<BR>	//	割り当てられたブロックのうち未解放のエリアがあったならば<BR>	//	診断のために表示させることも出来る<BR><BR>	☆　この場合、BeginSnap～EndSnapの間でnewしてdeleteされていないような<BR>		インスタンスが有ってはいけません。<BR><BR>	⇒	s.BeginSnap(16,4096);	//	16バイトのブロックを4096個用意する<BR>	の部分を<BR>		s.BeginSnap(); // 16,4096);	//	16バイトのブロックを4096個用意する<BR>	というようにコメントアウトして、メモリリークを検出しておき、最後に<BR>	この高速版なnew/deleteに置き換えるという使いかたが結構いいかも．．<BR><BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> BeginSnap()</DIV>
+<DIV class="comment_block">スナップを開始する<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> BeginSnap(<SPAN class="reserved_word">int</SPAN> nBlockSize, <SPAN class="reserved_word">int</SPAN> nBlockNum)</DIV>
+<DIV class="comment_block">スナップを開始する<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> EndSnap()</DIV>
+<DIV class="comment_block">スナップを終了する<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT Dump()</DIV>
+<DIV class="comment_block">メモリリークの状況をIDumpContextに出力。<BR>リークがなければ、何も出力せずに0が返る<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CMemoryState()</DIV>
+<DIV class="public_member"> virtual ~CMemoryState()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">bool</SPAN> IsActive()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">void</SPAN> RegistCallBack(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="YTL!function_callback_h.html#function_callback" target=_self>function_callback</A>&gt;&amp; fn)</DIV>
+<DIV class="comment_block">このクラスがメモリのnew/deleteをオーバーロードしているときは<BR>このフラグがtrueになるので、そのときは、コールバックオブジェクトを<BR>仕掛けるなり、何なりする。<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">map&lt;LPVOID,size_t&gt; m_alpMemory</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">BYTE* m_lpaby</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">int</SPAN>* m_lpanEmptyBlock</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">int</SPAN> m_nBlockSize</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">int</SPAN> m_nBlockNum</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">int</SPAN> m_nMax</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="Auxiliary!yaneMemory_h.html#CMemoryState" target=_self>CMemoryState</A>* g_lpMemoryState</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="YTL!smart_vector_ptr_h.html#smart_vector_ptr" target=_self>smart_vector_ptr</A>&lt;<A class="class_link" href="YTL!function_callback_h.html#function_callback" target=_self>function_callback</A>&gt; m_afnCallBack</DIV>
+<DIV class="public_member"><A class="class_link" href="YTL!smart_vector_ptr_h.html#smart_vector_ptr" target=_self>smart_vector_ptr</A>&lt;<A class="class_link" href="YTL!function_callback_h.html#function_callback" target=_self>function_callback</A>&gt;* GetCallBack()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="Thread!yaneCriticalSection_h.html#CCriticalSection" target=_self>CCriticalSection</A> m_vCS</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> Release()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

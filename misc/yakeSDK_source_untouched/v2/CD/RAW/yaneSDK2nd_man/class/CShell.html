@@ -1,0 +1,23 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CShell</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CShell</FONT><A name="CTimeBase"></A> <FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>シェル関数を提供します。外部コマンドの実行等を行ないます。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P><FONT color="#009900">LRESULT Execute(string szExeName,bool bWait=false);
+//　ファイル実行</FONT></P>
+<P>外部コマンドを実行します。bWait==trueの場合は、そのコマンドの終了を待ちます。</P>
+<P><FONT color="#009900">LRESULT OpenFolder(string szPathName); //
+フォルダをexplorerで開く</FONT></P>
+<P>指定のフォルダを開きます。</P>
+<P><FONT color="#009900">LRESULT SetWallPaper(string szFileName);</FONT></P>
+<P>指定のファイルを壁紙にします。yanePack/yanePackExで圧縮されているファイルは不可です。</P>
+<P><FONT color="#009900">LRESULT CopyAndSetWallPaper(string szFileName);
+</FONT></P>
+<P>指定のファイルをWindowsフォルダにコピーし、それを壁紙にします。yanePack/yanePackExで圧縮されているファイルでも可能です。</P>
+<HR>
+</BODY></HTML>

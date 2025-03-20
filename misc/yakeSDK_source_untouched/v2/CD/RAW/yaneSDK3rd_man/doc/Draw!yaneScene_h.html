@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Draw/yaneScene.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="ISceneFactory"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">ISceneFactory</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">シーンの構築のためのparameterized factory<BR>	は、このクラスを派生させて、そこに登録する。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Draw!yaneScene_h.html#IScene" target=_self>IScene</A>&gt; CreateScene(<SPAN class="reserved_word">int</SPAN> nScene)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block">ナンバーnSceneのシーンクラスを生成して返す<BR></DIV>
+</DIV>
+<HR><BR>
+<A name="ISceneParam"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">ISceneParam</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">シーン間でキャッチボールするためのパラメータ基底クラス。<BR>	こいつを派生させて、キャッチボールすると良い。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> virtual ~ISceneParam()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="ISceneControl"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">ISceneControl</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">シーンのコントロールの基底クラス<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> JumpScene(<SPAN class="reserved_word">int</SPAN> eScene)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> CallScene(<SPAN class="reserved_word">int</SPAN> eScene)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> CallSceneFast(<SPAN class="reserved_word">int</SPAN> eScene)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> ReturnScene()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> ExitScene()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> PushScene(<SPAN class="reserved_word">int</SPAN> eScene)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> OnDraw(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Draw!yaneSurface_h.html#ISurface" target=_self>ISurface</A>&gt;&amp; lp)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> OnMove(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Draw!yaneSurface_h.html#ISurface" target=_self>ISurface</A>&gt;&amp; lp)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block">------ シーンの移動関連。次回のOnDrawタイミングで切り替わる。<BR>（次のOnDrawでは、このシーンの描画はされない）<BR>次に行くシーンを設定する<BR>シーンをコールする（ReturnSceneで、このクラスに戻ってくる）<BR>ただし、このクラスはいったんdeleteされる。<BR>シーンをコールする（ReturnSceneで、このクラスに戻ってくる）<BR>ただし、このクラスはdeleteされずに残る。<BR>そのシーンに移行するときに、OnCallSceneFastが呼び出される。<BR>CallScene/CallSceneFastで呼ばれたシーンに復帰する<BR>シーンを終了する<BR>--------------------------------------------------------------<BR>シーンをスタックに積む。<BR>(ReturnSceneしたときに、ここに積まれた順（スタックなので逆順）で<BR>シーンが呼び出される)<BR>PopSceneもできたら面白いかも知れないけど、<BR>それでは正しいシーン管理とは言えない気もする。(大域Jump禁止の論理)<BR>--------------------------------------------------------------<BR>--- 描画と移動は次の２つのフェーズに分解される↓<BR>オブジェクトの描画を行なう<BR>オブジェクトの移動を行う<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetSceneFactory(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Draw!yaneScene_h.html#ISceneFactory" target=_self>ISceneFactory</A>&gt;&amp; pv)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Draw!yaneScene_h.html#ISceneFactory" target=_self>ISceneFactory</A>&gt; GetSceneFactory()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsEnd()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">int</SPAN> GetSceneNo()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Draw!yaneScene_h.html#IScene" target=_self>IScene</A>&gt; GetScene()</DIV>
+<DIV class="public_member"> virtual ~ISceneControl()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CSceneControl"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CSceneControl</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">class IScene （シーンクラス）のためのコントローラー<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Draw!yaneScene_h.html#ISceneControl" target=_self>ISceneControl</A><BR>
+<SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Auxiliary!yaneSerialize_h.html#IArchive" target=_self>IArchive</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CSceneControl(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Draw!yaneScene_h.html#ISceneFactory" target=_self>ISceneFactory</A>&gt;&amp; pvSceneFactory)</DIV>
+<DIV class="public_member"> CSceneControl()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetSceneFactory(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Draw!yaneScene_h.html#ISceneFactory" target=_self>ISceneFactory</A>&gt;&amp; pv)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Draw!yaneScene_h.html#ISceneFactory" target=_self>ISceneFactory</A>&gt; GetSceneFactory()</DIV>
+<DIV class="comment_block">コンストラクタでは、ファクトリーを渡す<BR>		渡し損ねた場合は、SetSceneFactoryで渡す<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> JumpScene(<SPAN class="reserved_word">int</SPAN> nScene)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> CallScene(<SPAN class="reserved_word">int</SPAN> nScene)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> CallSceneFast(<SPAN class="reserved_word">int</SPAN> nScene)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> ReturnScene()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> ExitScene()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> PushScene(<SPAN class="reserved_word">int</SPAN> nScene)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> OnDraw(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Draw!yaneSurface_h.html#ISurface" target=_self>ISurface</A>&gt;&amp; lp)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> OnMove(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Draw!yaneSurface_h.html#ISurface" target=_self>ISurface</A>&gt;&amp; lp)</DIV>
+<DIV class="comment_block">---	以下の制御関数の意味はISceneと同じね<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsEnd()</DIV>
+<DIV class="comment_block">factoryを設定／取得できる。CScene派生クラス内から、<BR>smart_ptr&lt;IScene&gt; p =<BR>GetSceneControl()-&gt;GetSceneFactory()-&gt;CreateScene(CSCENE1);<BR>のようにしてもうひとつのシーンを生成してそのなかで子シーンを<BR>呼び出すことも出来る。<BR>----- property<BR>スタックに呼び出し元シーンが無い状態で<BR>ReturnSceneされるとこれがtrueになる<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">int</SPAN> GetSceneNo()</DIV>
+<DIV class="comment_block">現在のシーンナンバーを返す<BR>もし、IsEnd()==trueならば、-1<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Draw!yaneScene_h.html#IScene" target=_self>IScene</A>&gt; GetScene()</DIV>
+<DIV class="comment_block">現在のシーンを返す<BR>もし、IsEnd()==trueならば、NULLなsmart_ptrが戻る<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Draw!yaneScene_h.html#ISceneFactory" target=_self>ISceneFactory</A>&gt; m_pvSceneFactory</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> CreateScene(<SPAN class="reserved_word">int</SPAN> nScene)</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nMessage</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nNextScene</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="YTL!smart_vector_ptr_h.html#smart_vector_ptr" target=_self>smart_vector_ptr</A>&lt;CSceneInfo&gt; m_SceneInfoStack</DIV>
+<DIV class="protected_member"><A class="class_link" href="YTL!smart_vector_ptr_h.html#smart_vector_ptr" target=_self>smart_vector_ptr</A>&lt;CSceneInfo&gt;* GetSceneStack()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Draw!yaneScene_h.html#ISceneParam" target=_self>ISceneParam</A>&gt; GetParam()</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> SetParam(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Draw!yaneScene_h.html#ISceneParam" target=_self>ISceneParam</A>&gt;&amp; vParam)</DIV>
+<DIV class="comment_block">シーン間のデータのやりとりに使う。<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Serialize()</DIV>
+<DIV class="comment_block">ToDo:まってくれーー。時間なくて、まだ実装してないんよー。<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Draw!yaneScene_h.html#ISceneParam" target=_self>ISceneParam</A>&gt; m_vParam</DIV>
+<DIV class="comment_block">シーン間のちょっとしたデータのやりとりに使う。（と便利＾＾）<BR></DIV>
+</DIV>
+<HR><BR>
+<A name="CSceneInfo"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CSceneControl::CSceneInfo</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Draw!yaneScene_h.html#IScene" target=_self>IScene</A>&gt; m_lpScene</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">int</SPAN> m_nScene</DIV>
+<DIV class="public_member"> CSceneInfo()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="IScene"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">IScene</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">シーン基底クラス<BR><BR>シーン定義例<BR>enum SCENE {<BR>	SCENE1,			//	シーン１<BR>	SCENE2,			//	シーン２<BR>};<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Auxiliary!yaneSerialize_h.html#IArchive" target=_self>IArchive</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> OnDraw(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Draw!yaneSurface_h.html#ISurface" target=_self>ISurface</A>&gt;&amp; lp)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> OnMove(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Draw!yaneSurface_h.html#ISurface" target=_self>ISurface</A>&gt;&amp; lp)</DIV>
+<DIV class="comment_block">これは、ユーザーが必要に応じてオーバーライドすること<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> OnInit()</DIV>
+<DIV class="comment_block">初期化は、次の関数で行なう。（コンストラクタではouterが使えないため）<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> OnComeBack(<SPAN class="reserved_word">int</SPAN> nScene)</DIV>
+<DIV class="comment_block">CallScene/CallSceneFastで呼び出し、<BR>ReturnSceneで戻ってきたときに呼び出される<BR>nSceneには、どのシーンから戻ってきたかが入る。<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetSceneControl(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Draw!yaneScene_h.html#ISceneControl" target=_self>ISceneControl</A>&gt;&amp; lp)</DIV>
+<DIV class="public_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Draw!yaneScene_h.html#ISceneControl" target=_self>ISceneControl</A>&gt; GetSceneControl()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Serialize()</DIV>
+<DIV class="comment_block">シーンコントローラーの設定／取得<BR>--------------------------------------------------------------<BR>シリアライズが必要なクラスは、これをオーバーライドしておけば<BR>CSceneControlがシリアライズ機構を提供してくれる<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> IScene(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Draw!yaneScene_h.html#ISceneControl" target=_self>ISceneControl</A>&gt;&amp; lp)</DIV>
+<DIV class="public_member"> IScene()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> virtual ~IScene()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Draw!yaneScene_h.html#ISceneControl" target=_self>ISceneControl</A>&gt; m_lpSceneControl</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

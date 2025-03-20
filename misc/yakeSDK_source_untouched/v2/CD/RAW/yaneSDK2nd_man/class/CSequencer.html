@@ -1,0 +1,31 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CSequencer</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CSequencer</FONT><A name="CTimeBase"></A>　<FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>タイミングの制御用。時間に合わせたアニメーション等を実現するときに使うためのアシストクラス。<BR>
+ある範囲start≦x＜endに対して、値dataを対応づける関数Add，ある位置における値の対応を調べる関数Getから成る。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>LRESULT Add(int start,int end,int data);
+// 追加<BR>
+LRESULT Add(int start,int data); // 連続追加するときに使う。上のendは省略できるバージョン。<BR>
+LRESULT Del(int start,int end,int data);
+// 削除</P>
+<P>void Clear(void); // 全削除</P>
+<P>LRESULT Get(int pos,int&amp; data,int &amp;diff);<BR>
+// posの値に対応するデータについて問い合わせる。<BR>
+// 見つかったときにはdataにその値、diffにstartからの増量が入る。</P>
+<P><FONT size="+1" color="#009900">☆　使用例</FONT></P>
+<P>たとえば、アニメーション開始後、1000[ms]～2000[ms]の間は、１番のグラフィック、2000[ms]～3500[ms]の間は、２番のグラフィックを表示したいとすれば、</P>
+<P>　CSequencer seq;<BR>
+　seq.Add(1000,2000,1);<BR>
+　seq.Add(2000,3500,2);<BR>
+として、そのあとタイマー(CTimerを参照のこと)を見ながら</P>
+<P>　int nSceneNo = seq.Get(timer.Get() , data
+, diff ));</P>
+<P>とやれば、1000～2000[ms]の間は、１，2000～3500[ms]の間は２が返ってきます。</P>
+<HR>
+</BODY></HTML>

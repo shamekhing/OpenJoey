@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>クラスリファレンス</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+1">sample1.cpp</FONT></P>
+<P><FONT color="#ff0000">通常のアプリケーションならば、下のをコピーして、CApp::MainThreadの中身に、自分の望む処理を書けばＯＫでしょう。</FONT></P>
+<HR>
+<PRE>#include &quot;stdafx.h&quot;
+#include &quot;../yaneSDK/yaneSDK.h&quot;
+
+class CApp : public CAppFrame {
+    void MainThread(void) {                 //  これが実行される
+        CSound sound;                       //  サウンドバッファを用意
+        sound.Load(&quot;track15.mp3&quot;);          //  mp3を読み込み
+        sound.Play();                       //  読み込んだsoundを再生する
+        while(IsThreadValid()) {            //  これがValidの間、まわり続ける
+            Sleep(20);
+        }
+    }
+};
+
+
+//  これがmain windowのためのクラス。
+class CAppMainWindow : public CAppBase {    //  アプリケーションクラスから派生
+    virtual void MainThread(void){          //  これがワーカースレッド
+        CApp().Start();                     //  CApp app; app.Start();の意味ね
+    }
+};
+
+//  言わずと知れたWinMain
+int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,int nCmdShow)
+{
+    CAppInitializer::Init(hInstance,hPrevInstance,lpCmdLine,nCmdShow);  //  必ず書いてね
+    CAppMainWindow().Run();                 //  上で定義したメインのウィンドゥを作成
+    return 0;
+}</PRE>
+<HR>
+</BODY></HTML>

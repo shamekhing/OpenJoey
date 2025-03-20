@@ -1,0 +1,5 @@
+	CHoge* pHoge;					//	オブジェクトへのポインタ
+	LRESULT (CHoge::*pFunc)(int);	//	メンバ関数ポインタ
+
+	//	このようにすれば、その関数が呼び出せる！
+	pHoge->*pFunc(3);

@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Input/yaneVirtualKey.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="CVirtualKey"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CVirtualKey</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">統合キー入力クラス。CKeyBaseの派生クラスを利用して、<BR>	それらをひとまとめにして管理できる。<BR><BR>	たとえば、キーボードの↑キーと、テンキーの８キー、<BR>	ジョイスティックの↑入力を、一つの仮想キーとして登録することによって、<BR>	それらのどれか一つが入力されているかを、関数をひとつ呼び出すだけで<BR>	判定できるようになる。<BR><BR>	実際にclass CKey,class CKey2は、<BR>	このクラスの応用事例なので、そちらも参照すること。<BR><BR>	全体的な流れは、キーデバイスの登録→仮想キーの設定としておいて、<BR>	InputしたのちIsVKeyPress/IsVKeyPushで判定です。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Input!yaneKeyBase_h.html#IKeyBase" target=_self>IKeyBase</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CVirtualKey()</DIV>
+<DIV class="public_member"> virtual ~CVirtualKey()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> ClearKeyDevice()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> AddDevice()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> RemoveDevice()</DIV>
+<DIV class="public_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Input!yaneKeyBase_h.html#IKeyBase" target=_self>IKeyBase</A>&gt; GetDevice(<SPAN class="reserved_word">int</SPAN> n)</DIV>
+<DIV class="comment_block">キーデバイスの登録<BR>キーデバイスとは、CKeyBaseの派生クラスのインスタンス。<BR>		具体的にはCDirectInput,CMIDIInput,CJoyStickのインスタンスが<BR>		挙げられる。入力したいキーデバイスをまず登録する。<BR>		そしてInputを呼び出すことによって、それらのGetStateが呼び出される。<BR>	<BR>デバイスのクリア<BR>デバイスの追加<BR>デバイスの削除<BR>ｎ番目に登録したデバイスの取得<BR>この関数を使えばｎ番目（０から始まる）のAddDeviceしたデバイスを<BR>		取得できる。）<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> ClearKeyList()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> AddKey(<SPAN class="reserved_word">int</SPAN> vkey, <SPAN class="reserved_word">int</SPAN> nDeviceNo, <SPAN class="reserved_word">int</SPAN> key)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> RemoveKey(<SPAN class="reserved_word">int</SPAN> vkey, <SPAN class="reserved_word">int</SPAN> nDeviceNo, <SPAN class="reserved_word">int</SPAN> key)</DIV>
+<DIV class="comment_block">仮想キーの追加・削除<BR>仮想キーのリセット<BR>仮想キーの追加<BR>仮想キーの削除<BR>vkeyは、仮想キー番号。これは0～VIRTUAL_KEY_MAX-1<BR>		(現在88とdefineされている)番まで登録可能。<BR>		キーデバイスnDeviceNoは、GetDeviceで指定するナンバーと同じもの。<BR>		keyは、そのキーデバイスのkeyナンバー。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Input()</DIV>
+<DIV class="comment_block">----	overriden from IKeyBase	 ------<BR>　登録しておいたデバイスから読みこみ<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">typedef smart_vector_ptr&lt;CKeyInfo&gt;CVKeyList</DIV>
+<DIV class="protected_member">CVKeyList m_VKey[g_VIRTUAL_KEY_MAX]</DIV>
+<DIV class="comment_block">virtual bool	IsKeyPress(int vkey);		///	仮想キーを調べる<BR>virtual bool	IsKeyPush(int vkey);		///	仮想キーを調べる<BR>仮想キーのvkeyが押されているかどうかを調べる。<BR>	IsKeyPressのほうは、現在押されていればtrue。IsKeyPushは、<BR>	前回押されていなくて、今回押されていればtrue。<BR><BR>virtual BYTE*	GetKeyData() const;<BR>取得したキー情報(BYTE m_byKeyBuffer[256])へのポインタを得る)<BR>直接ポインタを得てぐりぐりする人のために＾＾；<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="YTL!smart_vector_ptr_h.html#smart_vector_ptr" target=_self>smart_vector_ptr</A>&lt;<A class="class_link" href="Input!yaneKeyBase_h.html#IKeyBase" target=_self>IKeyBase</A>&gt; m_alpDevice</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CKeyInfo"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CVirtualKey::CKeyInfo</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">int</SPAN> m_nDeviceNo</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">int</SPAN> m_nKey</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

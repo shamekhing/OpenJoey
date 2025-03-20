@@ -1,0 +1,33 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CAppFrame</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CAppFrame</FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>アプリケーションの中核となるクラスです。</P>
+<P>アプリケーションとは、アプリケーションクラス(CAppBaseの派生クラス)のことです。<BR>
+アプリケーションクラスは、一つのウィンドゥと１つのメッセージポンプ、１つのワーカースレッドを保有します。<BR>
+このワーカースレッドのなかから呼び出すのがCAppFrameというわけです。</P>
+<P><FONT size="+1" color="#009900">☆　使いかた</FONT></P>
+<P>まず、ユーザーは、CAppFrameを派生し、そこにメンバとして自分の使いたいコンポーネントをメンバとして持たせます。</P>
+<P>次に、</P>
+<P>virtual void MainThread(void) = 0;<BR>
+　この関数をオーバーライドします。これが、実行されます。</P>
+<P>void Start(void);<BR>
+　これを呼び出すと、ある初期化が行なわれた後に、上記のMainThreadが呼び出されます。</P>
+<P>bool IsThreadValid(void)const;<BR>
+　MainThreadのなかでは、この関数がtrueの間、まわり続けるようにします。（ただし、これがtrueであっても強制的に抜けても構いません）</P>
+<P>void InvalidateThread(void);<BR>
+　この関数を実行すると、IsThreadValidがfalseを返すようになります。<A href="CAppManager.html">CAppManager</A>::GetMyFrameと絡めて、外部からこのフレームスレッドに停止要求を出すのに使うと便利です。</P>
+<P>CAppBase* GetMyApp(void)const;<BR>
+　この関数を呼び出すことで、自分の属するアプリケーションクラスの取得が出来ます。（ほとんど使う必要はないはずですが）</P>
+<P>void MesSleep(int nTime); // メッセージを処理しながらまわる<BR>
+　Windowsメッセージ処理をしないと、IntervalTimerでのコールバックがされないので、WindowMessage処理を行ないながらSleepする関数です。<BR>
+　nTime[ms]の間、Sleepします。また、少なくとも、nTime[ms]は経過するまでは、この関数から抜けません。<BR>
+　<A href="CVolumeFader.html">CVolumeFader</A>でフェードさせるときなどに呼び出すと効果的かも知れません。</P>
+<P><FONT size="+1" color="#009900">☆　このクラスのインスタンスの取得</FONT></P>
+<P>コンストラクタで<A href="CAppManager.html">CAppManager</A>に登録してあるので、同一プロセスならばどこからでもCAppManager::GetMyFrameで取得することが出来ます。必要に応じて、こいつをダウンキャストして使います。</P>
+<HR>
+</BODY></HTML>

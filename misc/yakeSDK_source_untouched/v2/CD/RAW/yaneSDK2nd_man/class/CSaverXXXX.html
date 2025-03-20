@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML lang="ja"><HEAD>
+<meta http-equiv="Content-type" content="text/html; charset=SHIFT-JIS">
+<TITLE>スクリーンセーバーの作り方</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">スクリーンセーバーの作り方</font></P>
+<HR>
+<p>
+　<a href="./CAppBase.html#CAppBase">CAppBase</a> を <a href="./CSaverBase.html#CSaverBase">CSaverBase</a> に、<a href="./CDIBDraw.html#CDIBDraw">CDIBDraw</a> を <a href="./CSaverDraw.html#CSaverDraw">CSaverDraw</a> にすることでいつも通りの感覚でプログラムを記述すればスクリーンセーバーを作れます。<br>
+　スクリーンセーバーは拡張子が scr で XXXXX.scr というファイル名の場合、XXXXX がスクリーンセーバーの名前になります。
+WinNT 系（含む2000）では、文字列リソース「IDS_DESCRIPTIOIN」（1）に設定された文字列がスクリーンセーバー名に置き換えられます。「IDS_DESCRIPTIOIN」が指定されない場合は Win9x 系と同様です。<br>
+　出来上がったスクリーンセーバーは Windows(WinNT系 では WinNT) ディレクトリか System(WinNT系 では System32) ディレクトリにおくと、自動認識されて、「画面のプロパティ」に追加されます<br>
+　多重起動の判定に <b>CSingleApp を用いないでください</b>。「画面のプロパティ」において、プレビューボタンが押されたとき、プレビューのインスタンスが消滅する前に、テスト実行されるため、CSingleApp ではこの瞬間に多重起動と見なされ、終了してしまいます。<br>
+　そこで、ウィンドウのキャプションを元に同じキャプションのウィンドウが無いかどうかを調べて、多重起動を判定します。<br>
+　後はいつも通りプログラムを書くだけでOKです。<br>
+　マウスなどの動きを検出すると、IsThreadValid 関数が false を返すようになります。<br>
+　内部で強制的に実行ファイルのあるフォルダをカレントディレクトリにするので注意してください。
+</p>
+
+<p>☆　サンプル</p>
+<pre><code>class CApp : public CAppFrame {
+public:
+	CSaverDraw*	GetDraw(void)	{ return& m_Draw;  }
+protected:
+	//	こいつがメインね
+	void	MainThread(void);			//	これが実行される
+	CSaverDraw	m_Draw;
+};
+
+//	これがmain windowのためのクラス。
+class CAppMainWindow : public CSaverBase {		//	アプリケーションクラスから派生
+	virtual void MainThread(void){		//	これがワーカースレッド
+		if (IsMain() || IsPreview()) {	//
+			CApp().Start();		//	CApp app; app.Start();の意味ね
+		}
+	}
+};
+
+//	言わずと知れたWinMain
+int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,int nCmdShow)
+{
+	CAppInitializer::Init(hInstance,hPrevInstance,lpCmdLine,nCmdShow);	//	必ず書いてね
+	//	多重起動のチェックは内部で自動的に行われる^^;
+	CAppMainWindow().Run();	//	実行
+	return 0;
+}
+
+
+void	CApp::MainThread(void) {
+	GetDraw()->SetDisplay(false, 640, 480);		//	640x480 に描画しているものとする
+
+	while (IsThreadValid()) {				//	マウスなどの動きを検出すると、IsThreadValid 関数が false を返すようになります。
+		//	ここに描画処理をかく
+		GetDraw()->OnDraw()			//	640x480 で無い場合、自動的に拡大縮小される
+	}
+}
+</code></pre>

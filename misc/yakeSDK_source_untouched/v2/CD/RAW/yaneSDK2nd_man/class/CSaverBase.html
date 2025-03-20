@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML lang="ja"><HEAD>
+<meta http-equiv="Content-type" content="text/html; charset=SHIFT-JIS">
+<TITLE>class CSaverBase, CSaverHelper</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CSaverBase</FONT><A name="CSaverBase"></A> <FONT color="#ff0000">【コンポーネント】</FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P><a href="./CAppBase.html#CAppBase">CAppBase</a> 派生クラスです。OnPreCreate の引数が増えていますので注意してください。CSaverBase 内の実装、下の用例を参考にしてください。</P>
+<p>スクリーンセーバーの終了判定、複数起動の判定はこのクラスで行います。下の用例を参考にしてください。</p>
+<p>マウスなどの動きを検出すると、IsThreadValid 関数が false を返すようになります。</p>
+
+<P><BR>
+</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<p>	int		GetMode   (void) { return m_nMode; }<br>
+	bool	IsPreview (void) { return m_nMode == modePreview;	}<br>
+	bool	IsMain    (void) { return m_nMode == modeMain;		}<br>
+	bool	IsConfig  (void) { return m_nMode == modeConfig;	}<br>
+	bool	IsPassword(void) { return m_nMode == modePassword;	}<br>
+<br>
+動作モードをかえします。<br>
+時間が経過して自動的に起動する場合、「画面のプロパティ」の「プレビュー」が押された場合は modeMain、「画面のプロパティ」ダイアログの子ウィンドウとしてプレビュー表示するため、起動された場合は modePreview、「画面のプロパティ」の「設定」が押された場合は modeConfig、パスワードの変更の場合 modePassword がかえります</P>
+
+<p>	CSaverHelper*	GetHelper(void)<br>
+<br>
+CSaverHelper へのポインタを得ます。<br>
+</p>
+<p>	HWND			GetParent(void)<br>
+<br>
+現在の親ウィンドウとなるべきウィンドウハンドルを返します。プレビューの場合はこのウィンドウの子ウィンドウになります。<br>
+</p>
+
+<P><FONT size="+1" color="#009900">☆　用例</FONT></P>
+<pre><code>class CApp : public CAppFrame {
+public:
+	CSaverDraw*	GetDraw(void)	{ return& m_Draw;  }
+protected:
+	//	こいつがメインね
+	void	MainThread(void);			//	これが実行される
+	CSaverDraw	m_Draw;
+};
+
+//	これがmain windowのためのクラス。
+class CAppMainWindow : public CSaverBase {		//	アプリケーションクラスから派生
+	virtual void MainThread(void){		//	これがワーカースレッド
+		if (IsMain() || IsPreview()) {	//
+			CApp().Start();		//	CApp app; app.Start();の意味ね
+		}
+	}
+	//	OnPreCreate の定義例。ディフォルトのものをコピーしてきた
+	LRESULT OnPreCreate(CWindowOption& opt, HWND& hParent) {
+		opt.classname   = "yaneScreenSaver";
+		//	キャプションで二重起動をチェックするので必ずモード毎に異なったキャプションを指定してください。
+		switch (GetMode()) { 
+		case modeMain:	  {
+			opt.caption     = "yaneScreenSaver";
+			opt.style       = WS_POPUP | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE;
+			hParent = NULL;
+			break;
+				  }
+		case modePreview: {
+			opt.caption     = "yaneScreenSaver Preview";
+			opt.style       = WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE;
+			hParent = m_vHelper.GetParent();
+			break;
+				  }
+		case modePassword:{
+			opt.caption     = "yaneScreenSaver Password";
+			opt.style       = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
+			hParent = NULL;
+			break;
+				  }
+		case modeConfig:  {
+			opt.caption     = "yaneScreenSaver Config";
+			opt.style       = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
+			hParent = NULL;
+			break;
+				  }
+		}
+		m_vHelper.GetSize(opt.size_x, opt.size_y);	
+		return 0;
+	}
+};
+
+//	言わずと知れたWinMain
+int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,int nCmdShow)
+{
+	CAppInitializer::Init(hInstance,hPrevInstance,lpCmdLine,nCmdShow);	//	必ず書いてね
+	//	多重起動のチェックは内部で自動的にする^^;
+	CAppMainWindow().Run();	//	実行
+	return 0;
+}
+
+
+void	CApp::MainThread(void) {
+	GetDraw()->SetDisplay(false, 640, 480);		//	640x480 に描画しているものとする
+
+	while (IsThreadValid()) {
+		//	ここに処理をかく
+		GetDraw()->OnDraw()			//	640x480 で無い場合自動的に拡大縮小される
+	}
+}
+</code></pre>
+
+<HR>
+<P><FONT size="+2">class CSaverHelper</FONT><A name="CSaverHelper"></A><FONT color="#ff0000">【コンポーネント】</FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>内部で使用しているクラスです。引数判定、実際の描画先情報の取得を行います。</P>
+
+<P><BR>
+</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<p>	void	GetSize(int&width, int&height) { width = m_nWidth; height = m_nHeight; }<br>
+<br>
+現在の描画先の大きさを返します。
+</p>
+<p>	int		GetMode   (void) { return m_nMode; }<br>
+	bool	IsPreview (void) { return m_nMode == modePreview;	}<br>
+	bool	IsMain    (void) { return m_nMode == modeMain;		}<br>
+	bool	IsConfig  (void) { return m_nMode == modeConfig;	}<br>
+	bool	IsPassword(void) { return m_nMode == modePassword;	}<br>
+<br>
+動作モードをかえします。<br>
+時間が経過して自動的に起動する場合、「画面のプロパティ」の「プレビュー」が押された場合は modeMain、「画面のプロパティ」ダイアログの子ウィンドウとしてプレビュー表示するため、起動された場合は modePreview、「画面のプロパティ」の「設定」が押された場合は modeConfig、パスワードの変更の場合 modePassword がかえります</P>
+<p>
+</p>
+<p>	HWND	GetParent (void) { return m_hParent; }<br>
+<br>
+親ウィンドウを返します。プレビューの場合、プレビューの親、設定で起動の場合は「画面のプロパティ」のウィンドウハンドルを返します。
+</p>
+<p>	LRESULT Init(void);<br>
+<br>
+引数を処理して動作モードを決定します。<br>
+また、アプリケーションのパスがカレントディレクトリになっていないことがあるので、矯正します。
+</P>
+
+</BODY></HTML>

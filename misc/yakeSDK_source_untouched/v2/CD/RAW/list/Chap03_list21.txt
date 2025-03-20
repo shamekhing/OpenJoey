@@ -1,0 +1,64 @@
+class IWinHook {
+/**
+	ウィンドゥメッセージをフックするのに利用します。
+	メッセージをフックしたいクラスは、このクラスから派生して、この関数
+
+	virtual LRESULT WndProc(HWND,UINT,WPARAM,LPARAM) = 0; 
+
+	をオーバーライドします。この関数はメッセージを処理した場合、
+	非0を返すようにコーディングします。
+
+	class CWinHookList も参照してください。
+*/
+public:
+	virtual	LRESULT	WndProc(HWND,UINT,WPARAM,LPARAM) = 0;
+	virtual ~IWinHook(){}
+};
+
+class IWinHookList {
+public:
+	virtual void	Add(IWinHook*)=0;		//	自分自身をフックに加える
+	virtual void	Del(IWinHook*)=0;		//	自分自身をフックから外す
+	virtual void	Clear()=0;				//	すべてをクリアする
+
+	//	メッセージのDispatcher
+	virtual LRESULT Dispatch(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam,WNDPROC pWndProc=NULL)=0;
+};
+
+class CWinHookList : public IWinHookList {
+/**
+	ウィンドゥメッセージをフックするのに利用します。
+	CWinHookから派生されたクラスのポインタを保持し、管理しています。
+
+	１つのウィンドゥクラスに対して１つのCWinHookListが対応します。
+	マルチスレッド対応です。
+
+	メッセージの配信には、Windowクラスから、これを呼び出します。
+	そうすると、自分の保持しているCWinHookのWndProcに委譲していきます。
+	委譲順序は、必ずAddした順番であり、WndProcが非0を返すものに出会うまで
+	WndProcを呼び出しつづけます。管理しているすべてのCWinHookのWndProcを
+	呼び出した場合は、ディフォルトの処理関数として::DefWindowProcを
+	呼び出します。
+
+	CAppBaseはメッセージポンプは別スレッドなので、Hookを開始した次の瞬間から、
+	WMメッセージが飛んでくるので、初期化が終了していないタイミングで
+	WMメッセージを処理しないように十分注意してください。
+
+	メッセージポンプを別スレッドで行なう場合、Hookを開始した次の瞬間から、
+	WMメッセージが飛んでくるので、初期化が終了していないタイミングで
+	WMメッセージを処理しないように十分注意してください。
+
+*/
+public:
+	virtual void	Add(IWinHook*);		//	自分自身をフックに加える
+	virtual void	Del(IWinHook*);		//	自分自身をフックから外す
+	virtual void	Clear();			//	すべてをクリアする
+
+	//	メッセージのDispatcher
+	virtual LRESULT Dispatch(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam,WNDPROC pWndProc=NULL);
+
+protected:
+	list<IWinHook*>		m_HookPtrList;	//	フックリスト
+	CCriticalSection	m_oCriticalSection;
+	CCriticalSection*	GetCriticalSection() { return& m_oCriticalSection;}
+};

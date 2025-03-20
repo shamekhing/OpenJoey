@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CLayerBase </TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CLayerBase </FONT><FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P><A href="CDirectDraw.html">CDirectDraw</A>使用時に、CDirectDraw::OnDrawでの描画時にコールバックされる基底クラス。<BR>
+CLayerBaseのコンストラクタが生成された順番でコールバックされることが保証される。<BR>
+<A href="CDIBDraw.html">CDIBDraw</A>,<A href="CFastDraw.html">CFastDraw</A>でも同様に使える。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>CLayerBaseからCLayer,CHDCLayer,CAfterLayerは派生される。</P>
+<P>レイヤコールバック<BR>
+<FONT color="#009900">virtual void OnDraw(CDirectDraw*);<BR>
+virtual void OnDraw(CDIBDraw*);<BR>
+<FONT color="#009900">virtual void OnDraw(CFastDraw*);</FONT></FONT></P>
+<P>を呼び出して欲しいクラスは、CLayerから派生させ、このOnDrawをオーバーライドして使う。<BR>
+CLayerのコンストラクタは自動的にフックを開始して、OnDrawがコールバックされるようになるので注意。</P>
+<P>CDirectDrawからコールバックされるときは、OnDraw(CDirectDraw*)、CDIBDrawからコールバックされるときはOnDraw(CDIBDraw*)、CFastDrawからコールバックされるときは、OnDraw(CFastDraw*)をオーバーライドして使う。</P>
+<P><BR>
+</P>
+<P>HDCレイヤコールバック<BR>
+<FONT color="#009900">virtual void OnDraw(HDC);<BR>
+</FONT>を呼び出して欲しいクラスは、CHDCLayerから派生させ、このOnDrawをオーバーロードして使う。<BR>
+CHDCLayerのコンストラクタは自動的にフックを開始して、OnDrawがコールバックされるようになるので注意。</P>
+<P>アフターレイヤコールバック<BR>
+<FONT color="#009900">virtual void OnDraw(CDirectDraw*);<BR>
+<FONT color="#009900">virtual void OnDraw(CDIBDraw*);<BR>
+<FONT color="#009900"><FONT color="#009900">virtual void OnDraw(CFastDraw*);<BR>
+</FONT></FONT><BR>
+</FONT></FONT>を呼び出して欲しいクラスは、CAfterLayerから派生させ、このOnDrawをオーバーロードして使う。<BR>
+これは、レイヤコールバック、HDCレイヤコールバックよりも後に呼び出されることが保証される。<BR>
+マウスレイヤなど特権的なレイヤはこれを使う。CAfterLayerのコンストラクタは自動的にフックを開始して、OnDrawがコールバックされるようになるので注意。</P>
+<P><BR>
+CDirectDraw*、CDIBDraw*、CFastDrawのSecondaryも、CPlaneBase*にアップキャストできるので、CDirectDraw,CDIBDrawの両方に対応したレイヤを簡単に作成できます。OnDraw(CDirectDraw*)もOnDraw(CDIBDraw*)も、OnDraw(CFastDraw*)もディフォルトでは、InnerOnDraw(CPlaneBase*)へ委譲するようにしてあるので、両方に対応したレイヤを作成するには、このInnerOnDrawをオーバーライドしたクラスを作れば良いのです。(<A href="CMouseLayer.html">CMouseLayer</A>がそうなっています)</P>
+<HR>
+<P><FONT size="+2">class CLayerList</FONT></P>
+<P>これは、CLayerBaseのポインタを管理するのに使う。<BR>
+仕組みはCWinHookListと同じなので、省略。</P>
+<P>つまりは、CWinHook：CWinHookList：CWindowの関係とCLayerBase：CLayerList：CDirectDrawとの関係は同じということ。</P>
+<HR>
+</BODY></HTML>

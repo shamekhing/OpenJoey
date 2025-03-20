@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<meta http-equiv="Content-type" content="text/html; charset=SHIFT-JIS">
+<TITLE>クラスリファレンス</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+1">sample2.cpp</FONT></P>
+<P><FONT color="#ff0000">sample1のCApp::MainThreadにディレクトリの検索を行なって、マッチしたものをデバッグウィンドゥに出力する処理を書いたもの。</FONT></P>
+<HR>
+<PRE>#include &quot;stdafx.h&quot;
+#include &quot;../yaneSDK/yaneSDK.h&quot;
+
+class CApp : public CAppFrame {
+	void MainThread(void) {					//	これが実行される
+	   CDebugWindow dbg;					// デバッグウィンドゥ
+	   dbg.Run();							// デバッグウィンドゥを起動
+
+	   //　ディレクトリの検索
+	   CDir dir;
+	   dir.SetFindFile(&quot;*.obj&quot;);
+	   dir.SetPath(&quot;D:\\myproject\\projectU\\開発プロジェクト&quot;);
+
+	   string str;
+	   while (dir.FindFile(str)==0){
+		  dbg.Out(str);					   // 検索されたファイルをデバッグウィンドゥに表示
+	   }
+
+	   while(IsThreadValid()) {			   //  これがValidの間、まわり続ける
+		  ::Sleep(20);
+	   }
+	}
+};
+
+
+//	これがmain windowのためのクラス。
+class CAppMainWindow : public CAppBase {	//	アプリケーションクラスから派生
+	virtual void MainThread(void){			//	これがワーカースレッド
+		CApp().Start();						//	CApp app; app.Start();の意味ね
+	}
+};
+
+//	言わずと知れたWinMain
+int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,int nCmdShow)
+{
+	CAppInitializer::Init(hInstance,hPrevInstance,lpCmdLine,nCmdShow);	//	必ず書いてね
+	CAppMainWindow().Run();					//	上で定義したメインのウィンドゥを作成
+	return 0;
+}</PRE>
+<HR>
+</BODY></HTML>

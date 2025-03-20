@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Draw/yaneFastDraw.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="CFastDraw"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastDraw</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Window!yaneWinHook_h.html#IWinHook" target=_self>IWinHook</A><BR>
+<SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="AppFrame!yaneAppDraw_h.html#IAppDraw" target=_self>IAppDraw</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">int</SPAN> GetType()</DIV>
+<DIV class="comment_block">---	IAppDrawのメンバ<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT SetDisplay(<SPAN class="reserved_word">bool</SPAN> bFullScr=false, <SPAN class="reserved_word">int</SPAN> nSizeX=0, <SPAN class="reserved_word">int</SPAN> nSizeY=0, <SPAN class="reserved_word">int</SPAN> nColorDepth=0)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> GetDisplay(<SPAN class="reserved_word">bool</SPAN>&amp;bFullScr,<SPAN class="reserved_word">int</SPAN> &amp; nSizeX, <SPAN class="reserved_word">int</SPAN> &amp; nSizeY, <SPAN class="reserved_word">int</SPAN> &amp; nColorDepth)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> GetSize(<SPAN class="reserved_word">int</SPAN> &amp; nSizeX, <SPAN class="reserved_word">int</SPAN> &amp; nSizeY)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> IsFullScreen()</DIV>
+<DIV class="comment_block">///////////////////////////////////////<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> BeginChangeDisplay()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> TestDisplayMode(<SPAN class="reserved_word">int</SPAN> nSX, <SPAN class="reserved_word">int</SPAN> nSY, <SPAN class="reserved_word">bool</SPAN> bFullScr=false, <SPAN class="reserved_word">int</SPAN> nColor=0)</DIV>
+<DIV class="public_member">LRESULT EndChangeDisplay()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> UseDibSectionIn256(<SPAN class="reserved_word">bool</SPAN> bEnable)</DIV>
+<DIV class="comment_block">///////////////////////////////////////<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="Draw!yaneFastPlane_h.html#CFastPlane" target=_self>CFastPlane</A>* GetPrimary()</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneFastPlane_h.html#CFastPlane" target=_self>CFastPlane</A>* GetSecondary256()</DIV>
+<DIV class="comment_block">///////////////////////////////////////<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="Draw!yaneFastPlane_h.html#CFastPlane" target=_self>CFastPlane</A>* GetSecondary()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> OnDraw(RECT* lpRect=NULL, <SPAN class="reserved_word">bool</SPAN> bLayerCallBack=true)</DIV>
+<DIV class="comment_block">///////////////////////////////////////<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetOffset(<SPAN class="reserved_word">int</SPAN> ox, <SPAN class="reserved_word">int</SPAN> oy)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetBrightness(<SPAN class="reserved_word">int</SPAN> nBright)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="Draw!yaneLayer_h.html#ILayerList" target=_self>ILayerList</A>* GetLayerList()</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneLayer_h.html#ILayerList" target=_self>ILayerList</A>* GetAfterLayerList()</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneLayer_h.html#ILayerList" target=_self>ILayerList</A>* GetHDCLayerList()</DIV>
+<DIV class="comment_block">///////////////////////////////////////<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">int</SPAN> GetBpp()</DIV>
+<DIV class="comment_block">///////////////////////////////////////<BR>----	おまけ<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LPDIRECTDRAW GetDDraw()</DIV>
+<DIV class="comment_block">これでDirectDrawPtrを取得する<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="YTL!list_chain_h.html#list_chain" target=_self>list_chain</A>&lt;<A class="class_link" href="Draw!yaneFastPlane_h.html#CFastPlane" target=_self>CFastPlane</A>&gt;* GetFastPlaneList()</DIV>
+<DIV class="comment_block">このクラスが管理しているサーフェースへのポインタを取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">int</SPAN> GetMenuHeight()</DIV>
+<DIV class="comment_block">///////////////////////////////////////<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CFastDraw()</DIV>
+<DIV class="public_member"> virtual ~CFastDraw()</DIV>
+<DIV class="comment_block">///////////////////////////////////////<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="Draw!yaneDirectDraw_h.html#CDirectDraw" target=_self>CDirectDraw</A> m_DirectDrawBase</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">LRESULT ChangeDisplay(<SPAN class="reserved_word">bool</SPAN> bFullScr)</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bFullScr</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nScreenXSize</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nScreenYSize</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nScreenColor</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bDisplayChanging</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bChangeDisplayMode</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nBrightness</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nSecondaryOffsetX</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nSecondaryOffsetY</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">HWND m_hWnd</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nMenu</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="Draw!yaneLayer_h.html#CLayerList" target=_self>CLayerList</A> m_LayerList</DIV>
+<DIV class="protected_member"><A class="class_link" href="Draw!yaneLayer_h.html#CLayerList" target=_self>CLayerList</A> m_AfterLayerList</DIV>
+<DIV class="protected_member"><A class="class_link" href="Draw!yaneLayer_h.html#CLayerList" target=_self>CLayerList</A> m_HDCLayerList</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> CheckSurfaceLost()</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bLostSurface</DIV>
+<DIV class="comment_block">///////////////////////////////////////<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> RealizeBrightness(<SPAN class="reserved_word">int</SPAN> nBrightness)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="YTL!list_chain_h.html#list_chain" target=_self>list_chain</A>&lt;<A class="class_link" href="Draw!yaneFastPlane_h.html#CFastPlane" target=_self>CFastPlane</A>&gt; m_listFastPlane</DIV>
+<DIV class="comment_block">////////////////////////////////////////////////////<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="Draw!yaneFastPlane_h.html#CFastPlane" target=_self>CFastPlane</A> m_Primary</DIV>
+<DIV class="protected_member"><A class="class_link" href="Draw!yaneFastPlane_h.html#CFastPlane" target=_self>CFastPlane</A> m_Secondary256</DIV>
+<DIV class="protected_member"><A class="class_link" href="Draw!yaneFastPlane_h.html#CFastPlane" target=_self>CFastPlane</A> m_Secondary</DIV>
+<DIV class="protected_member"><A class="class_link" href="Draw!yaneDirectDraw_h.html#CDirectDrawClipper" target=_self>CDirectDrawClipper</A> m_WindowClipper</DIV>
+<DIV class="comment_block">////////////////////////////////////////////////////<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="Draw!yaneFastDraw_h.html#CFastDraw" target=_self>CFastDraw</A>* GetThis()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> RestoreAll()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">LRESULT WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

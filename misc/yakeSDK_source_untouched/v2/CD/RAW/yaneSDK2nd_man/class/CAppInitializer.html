@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CAppInitializer</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CAppInitializer</FONT></P>
+
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>アプリケーションの全体的な初期化を行ないます。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>static void Init(HINSTANCE hInstance,HINSTANCE
+hPrevInstance,LPSTR lpCmdLine,int nCmdShow);</P>
+<P>　WinMainの直後に置いて、WinMainの引数をそのまま渡してください。</P>
+<P>static HINSTANCE GetInstance(void);<BR>
+static HINSTANCE GetPrevInstance(void);<BR>
+static LPSTR GetCmdLine(void);<BR>
+static int GetCmdShow(void);</P>
+<P>　Initで渡してあった各パラメータを取得する関数です。</P>
+<P><FONT size="+1" color="#009900">☆　Initメンバ関数で初期化する内容</FONT></P>
+<P>　　CFile::SetCurrentDir(); // 起動フォルダをカレントフォルダにする</P>
+<P><FONT size="+1" color="#009900">☆　特殊メンバ関数</FONT></P>
+<P>yaneuraoGameSDK2ndのクラスのなかで<FONT color="#ff0000">「コンポーネント」</FONT>と書かれているクラスは、以下のメンバ関数を呼び出していることがあります。もし他に流用する場合は、この部分を、そのフレームワークに合わせて変更してやればＯＫです。</P>
+<P>// 自分の属するアプリスレッドの保有しているウィンドゥに関連付ける。<BR>
+// （ウィンドゥメッセージがコールバックされるようになる）<BR>
+<FONT color="#009900">static void Hook(CWinHook*p);<BR>
+static void Unhook(CWinHook*p);</FONT></P>
+<P>　ウィンドゥメッセージをフックするために使います。ウィンドゥメッセージをフックしたいクラスは、CWinHookクラスから派生を行ない、フックしたいタイミングで、CAppInitializer::Hook(this);　します。そうすれば、その瞬間から、CWinHookのメンバである、</P>
+<P>　LRESULT WndProc(HWND,UINT,WPARAM,LPARAM)
+= 0; </P>
+<P>にウィンドゥメッセージのコールバックが開始されます。メッセージのフックを終了するには、CAppInitializer::Unhook(this);とします。</P>
+<P>詳しくは、<A href="CWinHook.html">CWinHook</A>クラスを参照してください。</P>
+<P>// 自分の属するアプリスレッドの保有するウィンドゥハンドルを返す<BR>
+<FONT color="#009900">static HWND GetHWnd(void);</FONT></P>
+<P>　これは、DirectSoundなど、自分の属するウィンドゥハンドルを要求するものが多々あるためです。窓が生成されていない場合は、返し値はNULLになります。</P>
+<P><FONT color="#009900">static bool IsFullScreen(void); </FONT></P>
+<P>　フルスクリーンモードであるかどうかを返します。CWindowクラスのg_bFullScreenを間接的に参照しています。</P>
+<HR>
+</BODY></HTML>

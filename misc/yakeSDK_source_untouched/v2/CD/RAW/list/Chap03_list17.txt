@@ -1,0 +1,39 @@
+//	static member..
+CAppInitializer* CAppInitializer::m_vObj;
+singleton<CAppCallbackList>	CAppInitializer::m_AppCallBackObj;
+
+//	WinMainからそのパラメータをそのまま渡してね。
+CAppInitializer::CAppInitializer(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,int nCmdShow){
+	//	パラメータをそのまま保存:p
+	m_hInstance		=	hInstance;
+	m_hPrevInstance	=	hPrevInstance;
+	m_lpCmdLine		=	lpCmdLine;
+	m_nCmdShow		=	nCmdShow;
+
+	m_vObj = this; // 外部からstaticにアクセスできるようにしておく
+	GetCallbackObj()->InitCallback();
+}
+
+CAppInitializer::~CAppInitializer(){
+	GetCallbackObj()->ExitCallback();
+}
+
+void	CAppCallbackList::InitCallback(){
+	//	RegistInitCallbackされた関数を順番に呼び出す
+
+	//	このときは、まだシングルスレッドなので
+	//	CriticalSectionを使用する必要は無い
+
+	//	コールバック予約されたやつを呼び出す
+	GetInitCallbackList()->for_each(function_callback::run);
+}
+
+void	CAppCallbackList::ExitCallback(){
+	//	RegistExitCallbackされた関数を順番に呼び出す
+
+	//	このときは、既にシングルスレッドなので
+	//	CriticalSectionを使用する必要は無い
+
+	//	コールバック予約されたやつを呼び出す
+	GetExitCallbackList()->for_each(function_callback::run);
+}

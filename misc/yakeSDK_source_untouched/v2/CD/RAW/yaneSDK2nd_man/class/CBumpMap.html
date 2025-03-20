@@ -1,0 +1,25 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CBumpMap</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CBumpMap</FONT><A name="CTimeBase"></A></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P><A href="CDIB32.html">CDIB32</A>でBumpMapを行なう関数CBumpMapFastBlt,CBumpMapBltのために使うためのクラスです。</P>
+<P>このクラスを使えば、うずまき、部分拡大、凸レンズ等、歪んだ転送が出来ます。</P>
+<P>BumpMapを定義する構造体は、以下のものを使います。</P>
+<P><FONT color="#009900">struct SBumpMapChip { // 変移量<BR>
+LONG x;<BR>
+LONG y;<BR>
+SBumpMapChip() { x = y = 0; }<BR>
+};</FONT></P>
+<P>この構造体で、転送元から転送先への歪み（変移量＝オフセット）を指定します。各ピクセルごとに、この歪みを指定するので、転送サイズ分のSBumpMapChip構造体が必要になります。この構造体を管理するクラスが、CBumpMapです。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>void Resize(int x,int y); // 変移量をリサイズ(Reset兼ねる)する<BR>
+void GetSize(int&amp;x,int&amp;y); // Resizeしたサイズを得る<BR>
+SBumpMapChip* GetTable(void); // 変移量の先頭ポインタを得る<BR>
+SBumpMapChip** GetStartTable(void); // bump
+tableの各ラインの先頭アドレステーブルを得る</P>
+<HR>
+</BODY></HTML>

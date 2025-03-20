@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML lang="ja"><HEAD>
+<meta http-equiv="Content-type" content="text/html; charset=SHIFT-JIS">
+<TITLE>class CSaverDraw</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CSaverDraw</FONT><A name="CSaverDraw"></A><FONT color="#ff0000">【コンポーネント】</FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>スクリーンセーバーを作る際に、プレビュー画面と通常実行時の違いを吸収するクラスです。現時点において、<b>解像度の変更はサポートしていません</b>。起動時の解像度と色数を利用します。CDIBDraw のサブセット的な位置づけになっています。</P>
+<P><a href="./CPlaneBase.html#CPlaneBase">CPlaneBase</a> 派生クラスです。基本的には <a href="./CDIBDraw.html#CDIBDraw">CDIBDraw</a> と同じ感覚で使用します。</P>
+<P><a href="./CSaverBase.html#CSaverBase">CSaverBase</a> も参照してください。セットで使用することを前提に作成しています。CAppBase を CSaverBase に、CDIBDraw を CSaverDraw にすることでいつも通りの感覚でプログラムを記述すればスクリーンセーバーを作れます。</P>
+<P>yaneConfig.h で #define USE_SAVER しています。この行を取り除けばコンパイルされません</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+
+<P>
+	int		GetMode   (void);	//	スクリーンセーバーのモードを返す<br>
+	bool	IsMain    (void);	//	通常起動されたかどうか<br>
+	bool	IsPreview (void);	//	プレビューのために起動されたかどうか<br>
+	bool	IsConfig  (void);	//	設定かどうか<br>
+	bool	IsPassword(void);	//	パスワードかどうか<br>
+<br>
+動作モードをかえします。<br>
+時間が経過して自動的に起動する場合、「画面のプロパティ」の「プレビュー」が押された場合は modeMain、「画面のプロパティ」ダイアログの子ウィンドウとしてプレビュー表示するため、起動された場合は modePreview、「画面のプロパティ」の「設定」が押された場合は modeConfig、パスワードの変更の場合 modePassword がかえります</P>
+<p>
+LRESULT	SetDisplay(bool bFullScr=false,int nSizeX=0,int nSizeY=0,int nColorDepth=0);<br>
+<br>
+CDIBDraw と異なり、フルスクリーン時と、ウィンドウモード時では動作をかえる予定です。現時点において、bFullScr、nColorDepth は無視され、ウィンドウモードのみ利用できます。<br>
+・ウィンドウモードの場合<br>
+　　仮想的なスクリーンを作成します。画面の大きさとの違いはOnDraw()で吸収されます。その時点で表示するべき大きさに自動拡大縮小されます。（通常起動ではフルスクリーン、プレビューではプレビューの小さな画面）自動拡大縮小しない設定をするには次の SetAutoSize 関数を使用します。<br>
+<br>
+・フルスクリーンモードの場合(<font color="#ff0000"><b>未実装</b></font>)<br>
+　　プレビューの場合、キャンセルされて、ウィンドウモードでの動作となります。この場合は↑と同じです<br>
+　　通常起動の場合、「仮想的なスクリーン」＝「実際の描画先の大きさ」となります。
+</p>
+<p>
+void	SetAutoSize(bool bAuto)<br>
+bool	IsAutoSize(void)<br>
+<br>
+仮想スクリーンのサイズと、実際の描画先の大きさが異なる場合、自動で拡大縮小するかどうかを 設定／返し ます。手動で大きさを合わせる場合は次の GetRealSize 関数を用いて実際の描画先の大きさを取得してください。
+</p>
+<p>
+void	GetRealSize(int&w, int&h)<br>
+<br>
+実際の描画先の大きさを返します。
+</p>
+</BODY></HTML>

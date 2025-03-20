@@ -1,0 +1,83 @@
+template<class T> class smart_list_ptr : public list<smart_ptr<T> > {
+public:
+	/// newしたポインタの所有権を移し、追加登録する構文
+	template <class S>
+	void	insert(S* ptr){
+		//	所有権を持ったsmart_ptrを生成し、
+		//	smart_ptr間のコピーで、所有権が移動する
+		smart_ptr<T> t(ptr);
+		list<smart_ptr<T> >::push_back(t);
+	}
+	template <class S>
+	void	insert(const smart_ptr<S>& s){
+		smart_ptr<T> t;
+		t.UpCast(s);	//	アップキャスト構文
+		list<smart_ptr<T> >::push_back(t);
+	}
+	void	insert(){
+		///	生成して追加する。
+		smart_ptr<T> t(new T);
+		list<smart_ptr<T> >::push_back(t);
+	}
+
+	/**
+		このチェインのすべてのメンバの関数を呼び出す（イテレータ抽象）
+		例)
+			GetList()->for_each(ISound::Play,5);
+			// これならば、全てのインスタンスに対して
+			Play(5)を呼び出したことになる
+	*/
+	template <class R>
+	void	for_each(R (T::*fn)()){
+		iterator it = begin();
+		while (it!=end()){ ((**it).*fn)(); it++; }
+	}
+	template <class R,class Arg1>
+	void	for_each(R (T::*fn)(Arg1),const Arg1& a1){
+		iterator it = begin();
+		while (it!=end()){ ((**it).*fn)(a1); it++; }
+	}
+
+		//		<B>		中略		</B>
+
+	/**
+		bool isValid() constというメンバを持つクラスに対して、
+		これがtrueが返ってくるインスタンスに対してのみ、
+		指定された関数を呼び出し、
+		非Validな奴は消していくイテレータ抽象
+	*/
+	template <class R>
+	void	for_each_valid(R (T::*fn)()){
+		iterator it = begin();
+		while (it!=end()){
+			if ((*it)->isValid()){
+				((**it).*fn)(); it++;
+			} else {
+				it = erase(it);
+			}
+		}
+	}
+	template <class R,class Arg1>
+	void	for_each_valid(R (T::*fn)(Arg1),const Arg1& a1){
+		iterator it = begin();
+		while (it!=end()){
+			if ((*it)->isValid()){
+				((**it).*fn)(a1); it++;
+			} else {
+				it = erase(it);
+			}
+		}
+	}
+	template <class R,class Arg1,class Arg2>
+	void	for_each_valid(R (T::*fn)(Arg1,Arg2),const Arg1& a1,const Arg2& a2){
+		iterator it = begin();
+		while (it!=end()){
+			if ((*it)->isValid()){
+				((**it).*fn)(a1,a2); it++;
+			} else {
+				it = erase(it);
+			}
+		}
+	}
+
+		//		<B>		以下略		</B>

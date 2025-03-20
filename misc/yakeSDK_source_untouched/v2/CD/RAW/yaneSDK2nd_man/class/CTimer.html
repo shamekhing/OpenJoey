@@ -1,0 +1,29 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>クラスリファレンス</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900"><A name="CTimer"></A>
+<P><A name="CTimer"><FONT size="+2">class CTimer</FONT></A></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>早い話が、独立タイマ。<BR>
+Reset()すると、タイマがリセットされ、それ以降、Get()を呼び出すと、前回、Reset()されたときからの経過時間（[ms]単位）が返ってくるようになる。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>void Reset(void);　　 // 時刻のリセット<BR>
+DWORD Get(void); 　// 時刻の取得<BR>
+void Set(DWORD); 　// 時刻の設定<BR>
+void Pause(void); 　　// 時刻の一時停止<BR>
+void Restart(void);　 // 時刻の一時停止解除</P>
+<P>static LRESULT PauseAll(void); 　// 全インスタンスのPause<BR>
+static LRESULT RestartAll(void); // 全インスタンスのPause解除</P>
+<HR>
+<P><A name="CTimerEx"><FONT size="+2">class CTimerＥｘ</FONT></A></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>ゲームでCTimerを使う場合、１フレームの間は、固定値が返ってきたほうが望ましい。</P>
+<P><A href="CMouse.html#CMouse">CMouse</A>に対する<A href="CMouse.html#CMouseEx">CMouseEx</A>と同じ関係である。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>void Flush(void);　 // 時刻を更新する。これをした瞬間の時刻値に基づいてGetで値が返るようになる。</P>
+<P><FONT size="+1">あとはCTimerと同じ。</FONT></P>
+<HR>
+</BODY></HTML>

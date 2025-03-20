@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Multimedia/yaneDirectMusic.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="CDirectMusic"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CDirectMusic</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">DirectMusicの初期化のためのクラス<BR>	class CMIDIOutputDM にて使用<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">bool</SPAN> CanUseDirectMusic()</DIV>
+<DIV class="comment_block">DirectMusicが使える環境なのかどうかを調べて返す<BR>		調べるのは最初の１回目の呼び出しのみなので何度呼び出しても良い。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="Auxiliary!yaneCOMBase_h.html#CCOMObject" target=_self>CCOMObject</A>&lt;IDirectMusicPerformance*&gt;* GetDirectMusicPerformance()</DIV>
+<DIV class="comment_block">コンストラクタで自動的にDirectMusicの初期化を試みるので、<BR>		以下の関数で、必要なものを取得すればそれでｏｋ。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="Auxiliary!yaneCOMBase_h.html#CCOMObject" target=_self>CCOMObject</A>&lt;IDirectMusicLoader*&gt;* GetDirectMusicLoader()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">int</SPAN> GetStatus()</DIV>
+<DIV class="comment_block">DirectInputの初期化状況について、リザルトを返す<BR>		0:ok(DirectX6以降)<BR>		1,2,3:failure(DirectX6が入ってない or<BR>			DirectMusic初期化まわりの失敗)<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CDirectMusic(<A class="class_link" href="Multimedia!yaneDirectSound_h.html#CDirectSound" target=_self>CDirectSound</A>* p=NULL)</DIV>
+<DIV class="comment_block">関連するDirectSoundオブジェクトを指定してやれば、<BR>		このDirectMusicは、そのDirectSoundのプライマリを利用して<BR>		再生することが出来る。これを指定しなければ、ディフォルトである<BR>		22kHzで再生することになる。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> virtual ~CDirectMusic()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">LPDIRECTSOUND m_pDirectSound</DIV>
+<DIV class="protected_member">LPDIRECTSOUND GetDirectSound()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="Auxiliary!yaneCOMBase_h.html#CCOMObject" target=_self>CCOMObject</A>&lt;IDirectMusicPerformance*&gt; m_vDirectMusicPerformance</DIV>
+<DIV class="protected_member">IDirectMusic* m_lpDMusic</DIV>
+<DIV class="protected_member"><A class="class_link" href="Auxiliary!yaneCOMBase_h.html#CCOMObject" target=_self>CCOMObject</A>&lt;IDirectMusicLoader*&gt; m_vDirectMusicLoader</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nStatus</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

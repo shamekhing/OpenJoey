@@ -1,0 +1,13 @@
+	// --- CTimer,CMsgDlg‚ÍyaneSDK2nd‚ÌƒNƒ‰ƒX
+	IReferenceClock *ppReferenceClock;
+	GetIDirectMusic( )->GetMasterClock(NULL,&ppReferenceClock);
+	REFERENCE_TIME time;
+
+	CTimer tt;
+	tt.Reset( );
+	for(int i=0;i<100000;i++){
+		ppReferenceClock->GetTime(&time);
+	}
+	CHAR buf[256];
+	::wsprintf(buf,"time = 0 ",tt.Get( ));
+	CMsgDlg( ).Out("Result",buf); 

@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Window/yaneHWndManager.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="IHWndManager"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">IHWndManager</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> HWND GetHWnd()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetHWnd(HWND hWnd)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"> virtual ~IHWndManager()</DIV>
+<DIV class="comment_block">そのスレッドに対応するHWNDの取得<BR>そのスレッドに対応するHWNDの設定<BR></DIV>
+</DIV>
+<HR><BR>
+<A name="CHWndManager"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CHWndManager</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">そのスレッドに対応するHWNDの設定、取得。<BR><BR>		CHWndManager::GetObj()-&gt;GetHWnd();<BR>	のようにして使います。<BR><BR>	窓ごとにスレッドは異なる設計にするはずなので、<BR>	スレッドIDから自分のスレッドの所属する窓のHWNDがわかるはずです。<BR><BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Window!yaneHWndManager_h.html#IHWndManager" target=_self>IHWndManager</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> HWND GetHWnd()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetHWnd(HWND hWnd)</DIV>
+<DIV class="comment_block">そのスレッドに対応するHWNDの取得<BR>		存在しないときはNULLが返る<BR>	<BR>そのスレッドに対応するHWNDの設定<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="Window!yaneHWndManager_h.html#CHWndManager" target=_self>CHWndManager</A>* GetObj()</DIV>
+<DIV class="comment_block">singletonなポインタの取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!singleton_h.html#singleton" target=_self>singleton</A>&lt;<A class="class_link" href="Window!yaneHWndManager_h.html#CHWndManager" target=_self>CHWndManager</A>&gt; m_vHWndManager</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="Thread!yaneThreadLocal_h.html#ThreadLocal" target=_self>ThreadLocal</A>&lt;HWND&gt; m_hWnd</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

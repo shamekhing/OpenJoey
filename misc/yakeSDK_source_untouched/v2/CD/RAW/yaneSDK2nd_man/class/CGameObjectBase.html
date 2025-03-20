@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CGameObjectBase</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CGameObjectBase</FONT>　<FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>ゲーム用のオブジェクト管理のために使います。このクラスを派生させて、そのクラスに<A href="CSprite.html">CSpriteEx</A>等を持たせて使います。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P><FONT color="#009900">virtual void OnPreDraw(void) {}<BR>
+virtual void OnDraw(void) {}<BR>
+virtual void OnMove(void) {}</FONT></P>
+<P>　これらは、必要に応じて、オーバーライドして使います。どう使うかは、ユーザー次第です。</P>
+<P><FONT color="#009900">virtual void Kill(void);</FONT></P>
+<P>　このオブジェクトの削除には、このKill関数を使います。次のガーベジフェイズでこのオブジェクトは削除されます。</P>
+<P><FONT color="#009900">bool IsValid(void);</FONT></P>
+<P>　このオブジェクトが有効であれば（削除させていなければ）trueが返ります。</P>
+<P>/////////////////////////////////////////////<BR>
+// まあ、ゲームオブジェクトとして、いるやろ的なメンバ関数</P>
+<P><FONT color="#009900">void SetPos(int x,int y); // 位置の設定<BR>
+void GetPos(int&amp;x,int&amp;y); // 位置の取得</FONT></P>
+<P>　ポジションの設定と取得。使いたければ使うと良い。</P>
+<P><FONT color="#009900">void SetID(int nID);</FONT><BR>
+<FONT color="#009900">int GetID(void)</FONT>;</P>
+<P>　IDの設定／取得。使いたければ使うと良い。ディフォルトは0。</P>
+<P>/////////////////////////////////////////////<BR>
+// property...<BR>
+// 解放レベル L1ならば1。<BR>
+// ReleaseAllでL1を解放したときL0,L1は解放されるがL2以上は解放されない<BR>
+<FONT color="#009900">virtual int GetReleaseLevel(void); // ディフォルトで0</FONT></P>
+<P>　解放レベルの設定。もし必要ならば、オーバーライドして、return
+1;のようにすれば良い。</P>
+<P>/////////////////////////////////////////////<BR>
+// 全インスタンスに関わる操作</P>
+<P><FONT color="#009900">static void OnPreDrawAll(void); // OnPreDraw<BR>
+static void OnDrawAll(void); // OnDraw<BR>
+static void OnMoveAll(void); // OnMove</FONT></P>
+<P>　～Allは、全インスタンスに対して、その関数を実行するためのものです。IsValid()==falseのものは呼び出されません。</P>
+<P><FONT color="#009900">static void KillAll(int nReleaseLevel); //
+このレベル以下のものをKillする</FONT></P>
+<P>　nReleaseLevel以下のものをすべてKillします。</P>
+<P><FONT color="#009900">static void Garbage(void); // !IsValid()なクラスを消す</FONT></P>
+<P>　Killされたオブジェクトは、IsValid()がfalseを返すようになります。これらのKillされたオブジェクトすべてをdeleteして行くのが、このGarbageです。通例、１描画ループに１回行ないます。</P>
+<HR>
+</BODY></HTML>

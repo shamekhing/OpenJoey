@@ -1,0 +1,17 @@
+class CMutexSection : public IMutexSection {
+/**
+		MutexによるLock～unlockです
+		class CCriticalSectionと同じ感覚で使えます
+*/
+public:
+	virtual void	Enter(const string& szMutexName);	///	MutexSectionに入る
+	virtual void	Leave();					///	MutexSectionから出る
+
+	/**
+		デストラクタではCMutexを解放するので、そのときに
+		自動的にMutexは解放される。
+	*/
+
+protected:
+	CMutex m_vMutex;
+};

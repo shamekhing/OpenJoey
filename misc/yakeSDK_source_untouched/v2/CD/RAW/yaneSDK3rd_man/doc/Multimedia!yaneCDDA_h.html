@@ -1,0 +1,171 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Multimedia/yaneCDDA.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="CDDAInfo"></A>
+<SPAN class="reserved_word">struct</SPAN>&nbsp;<SPAN class="class_name">CDDAInfo</SPAN>
+<HR>
+<DIV class="block_title">構造体の説明</DIV>
+<DIV class="comment_block">CDDAのトラック情報を格納するための構造体<BR>	class CCDDA で使います<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">DWORD m_dwSongLength</DIV>
+<DIV class="public_member">DWORD m_dwSongStart</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="ICDDA"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">ICDDA</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Open(<SPAN class="reserved_word">const</SPAN> string&amp; szDriveName="")&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Close()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Stop()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Pause()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Replay()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Play()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">int</SPAN> GetPlayTrack()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT PlayPrev(<SPAN class="reserved_word">bool</SPAN> bEndless=true)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT PlayNext(<SPAN class="reserved_word">bool</SPAN> bEndless=true)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Play()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Play()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetCurrentPos(DWORD &amp; dw)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT PlayPosToPos(DWORD,DWORD,<SPAN class="reserved_word">bool</SPAN> bReplay=false)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT PlayPosToTrack(DWORD dwPos, <SPAN class="reserved_word">bool</SPAN> bReplay=false)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT PlayDWToEnd(DWORD dwPos, <SPAN class="reserved_word">bool</SPAN> bReplay=false)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetStartPos(DWORD dw)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsPlay()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetLoopMode(<SPAN class="reserved_word">bool</SPAN> bLoop)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">int</SPAN> GetTrackMax()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Eject(<SPAN class="reserved_word">bool</SPAN> bEject)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsOpen()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT ConvertToMealTime(DWORD dwPos, <SPAN class="reserved_word">int</SPAN>&amp; nTrack)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT ConvertFromMealTime(DWORD&amp; dwPos, <SPAN class="reserved_word">int</SPAN> nTrack, <SPAN class="reserved_word">int</SPAN> nHour, <SPAN class="reserved_word">int</SPAN> nMin, <SPAN class="reserved_word">int</SPAN> nSec, <SPAN class="reserved_word">int</SPAN> nMS)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> vector &lt;CDDAInfo&gt;*GetTrackInfo()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> virtual ~ICDDA()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CCDDA"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CCDDA</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">CD再生のためのコンポーネント。<BR>	マルチドライブでのCD再生等もサポートしています。<BR><BR>	OpenせずともPlayで直接再生することが出来ます。<BR>	Openするメリットは、曲数・曲長さ情報<BR>	GetTrackInfo()　が更新されること。<BR><BR>	ＣＤを回転させてスタンバイするのでPlayを呼び出したあと<BR>	再生するの時間が１秒ほど短縮できることです。<BR><BR>	CCDDAのコンストラクタに先行してウィンドゥが完成している必要があるので、<BR>	class CAppFrame 内で使用するようにしてください。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Window!yaneWinHook_h.html#IWinHook" target=_self>IWinHook</A><BR>
+<SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Multimedia!yaneCDDA_h.html#ICDDA" target=_self>ICDDA</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT Open(<SPAN class="reserved_word">const</SPAN> string&amp; szDriveName="")</DIV>
+<DIV class="comment_block">CD初期化。呼び出すとCD回るよ:p<BR>ドライブ名の指定も出来る。例）Open("g"); // G Drive<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT Close()</DIV>
+<DIV class="comment_block">CD使用終了。CDの回転は止まる。<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT Stop()</DIV>
+<DIV class="public_member">LRESULT Pause()</DIV>
+<DIV class="public_member">LRESULT Replay()</DIV>
+<DIV class="comment_block">///////////////////////////////////////////////////////////////<BR>再生停止<BR>Pause<BR>Pauseでいったん停止させていたものを再開<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT Play()</DIV>
+<DIV class="comment_block">頭から再生<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">int</SPAN> GetPlayTrack()</DIV>
+<DIV class="comment_block">現在再生中のトラックを返す<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT PlayPrev(<SPAN class="reserved_word">bool</SPAN> bEndless=true)</DIV>
+<DIV class="public_member">LRESULT PlayNext(<SPAN class="reserved_word">bool</SPAN> bEndless=true)</DIV>
+<DIV class="comment_block">前のトラックを再生<BR>次のトラックを再生<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT Play()</DIV>
+<DIV class="public_member">LRESULT Play()</DIV>
+<DIV class="comment_block">トラック番号を選択して再生<BR>２トラック間の再生<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT GetCurrentPos(DWORD &amp; dw)</DIV>
+<DIV class="comment_block">現在の再生ポジションを得る[MSF:Multimedia Sound Format]<BR>	MSF形式とは、h:時間 m:分 s:秒 f:フレーム(セクタ)で表される形式です。<BR>	*.cdaでは、上位からf/s/m/hの順で、各１バイトで表現されてます。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT PlayPosToPos(DWORD,DWORD,<SPAN class="reserved_word">bool</SPAN> bReplay=false)</DIV>
+<DIV class="public_member">LRESULT PlayPosToTrack(DWORD dwPos, <SPAN class="reserved_word">bool</SPAN> bReplay=false)</DIV>
+<DIV class="public_member">LRESULT PlayDWToEnd(DWORD dwPos, <SPAN class="reserved_word">bool</SPAN> bReplay=false)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetStartPos(DWORD dw)</DIV>
+<DIV class="comment_block">２ポジション間の再生<BR>位置を指定して、そこからそのトラックのみを再生。<BR>位置を指定して、そこから終了トラックの最後まで再生<BR>上記３つのPlay関数で、bReplay==trueにするときは、<BR>		ループプレイのときに、次のSetStartPosで設定した場所に戻る<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> IsPlay()</DIV>
+<DIV class="comment_block">演奏中なのか？<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetLoopMode(<SPAN class="reserved_word">bool</SPAN> bLoop)</DIV>
+<DIV class="comment_block">ループで再生するか(default:false)<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">int</SPAN> GetTrackMax()</DIV>
+<DIV class="comment_block">曲数の取得(Openしていることが必要)<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT Eject(<SPAN class="reserved_word">bool</SPAN> bEject)</DIV>
+<DIV class="comment_block">CDのEjectを行なう。<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> IsOpen()</DIV>
+<DIV class="comment_block">CDをopenしているか<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT ConvertToMealTime(DWORD dwPos, <SPAN class="reserved_word">int</SPAN>&amp; nTrack)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT ConvertFromMealTime(DWORD&amp; dwPos, <SPAN class="reserved_word">int</SPAN> nTrack, <SPAN class="reserved_word">int</SPAN> nHour, <SPAN class="reserved_word">int</SPAN> nMin, <SPAN class="reserved_word">int</SPAN> nSec, <SPAN class="reserved_word">int</SPAN> nMS)</DIV>
+<DIV class="comment_block">class CSoundBase のConvertToMealTime/ConvertFromMealTimeと<BR>		同じ仕様のもの。ただし、ここではtrackを指定できること、<BR>		そしてポジションとして使われるのは、[ms]単位ではなく[MSF]で<BR>		あることが違う。<BR><BR>		CCDDA::GetCurrentPosで取得した値をそのままこの関数で変換したり、<BR>		トラック番号＋時分秒毛から変換した値をPlay(DWORD,DWORD)で、<BR>		そのままその位置から再生できる。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">vector &lt;CDDAInfo&gt;*GetTrackInfo()</DIV>
+<DIV class="comment_block">///////////////////////////////////////////////////////////////<BR>トラック情報の取得<BR>全曲長さは GetTrackInfo()[0].m_dwSongLength<BR>		GetTrackInfo()[1].m_dwSongLength<BR>			// 1トラック目の長さ<BR>		GetTrackInfo()[1].m_dwSongStart<BR>			// 1トラック目のスタートポジション[msf]<BR>		GetTrackInfo()-&gt;rbegin()-&gt;m_dwSongStart<BR>			//	最後のトラックの終了ポジション[msf]<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CCDDA()</DIV>
+<DIV class="public_member"> virtual ~CCDDA()</DIV>
+<DIV class="comment_block">///////////////////////////////////////////////////////////////<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">HWND m_hWnd</DIV>
+<DIV class="protected_member">UINT m_uDeviceID</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bOpen</DIV>
+<DIV class="comment_block">///////////////////////////////////////////////////////////////////////////<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bLoopPlay</DIV>
+<DIV class="protected_member">DWORD m_nStartPos</DIV>
+<DIV class="protected_member">DWORD m_nEndPos</DIV>
+<DIV class="protected_member">LRESULT LoopPlay()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">DWORD m_nPausePos</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_bPaused</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bNowPlay</DIV>
+<DIV class="protected_member">string m_szDriveName</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">vector &lt;CDDAInfo&gt;m_aTrackInfo</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">LONG ConvertToSecond(DWORD dwPos)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">LRESULT PlayDW2(DWORD,DWORD,<SPAN class="reserved_word">bool</SPAN> bReplay=false)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">LRESULT WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

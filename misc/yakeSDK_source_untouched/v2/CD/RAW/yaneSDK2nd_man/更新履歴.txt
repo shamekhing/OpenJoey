@@ -1,0 +1,936 @@
+
+yaneSDK2nd Finalの予定
+	・CFastPlaneのOnDrawの部分描画対応。WM_PAINTの処理完璧に。
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+								［更新履歴］
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+
+☆ version 1.61 Final Beta4（秀和システムプログラミング本に収録）'02/04/20
+☆ version 1.60 Final Beta3	'02/04/15
+
+	＜以降の更新内容は、ソースのlogフォルダのファイルを見ること＞
+
+☆ version 1.59 Final Beta2　'02/03/23
+
+'02/03/22	CRegionリソースリーク,CDirectMusicDMの初期化修正。
+'02/03/05	CFastPlane::RotateBlt実装。Morphのバグ修正。《嶋》
+'02/03/01	CRegionクラスCFastPlaneに対応。《れむ》
+'02/03/01	CSceneクラス以前のがコンパイルできなくなっていたので修正。《炎羅》
+
+☆ version 1.58 Final Beta(特別接待で使用) 　'02/02/28
+
+		《やねうらおメモ》
+
+			'01/09/28	待望の（？）２５６パレット処理。CPaletteクラス追加。
+			CDIBDraw::GetPaletteとCDIBDraw::RealizePaletteと追加。《れむ》
+			⇒これ、追加を反映させるか考え中
+			⇒まあいいかーとか思って、反映させない方向で（笑）
+
+		《残り課題》
+
+	実装中の機能
+	・PSD読み込み《炎羅》
+	⇒次バージョンで、Plug-In形式で用意
+
+	↓この数字は優先度
+	>	５．ネットワーク対応
+	⇒次バージョンで、Plug-In形式で用意
+	４．◎　ＢＭＳ読み込み系
+	⇒次バージョンで、Plug-In形式で用意
+
+	４．◎	３Ｄ描画対応に。
+	⇒これは次バージョンで対応できればするという方向で
+	３．◎　WindowsCE対応＾＾；
+	⇒これは４月ごろ制作開始
+
+	'02/02/15
+		とりあえず、yaneSDK2ndの開発は、このへんにして、
+		yaneSDK3rdのほうの開発を始めることにする（笑）
+
+'02/02/28	CSound、StopさせるときにVolumeをいったん0
+			に持っていきながら停止させる。
+'02/02/22	CFastPlane::Morph追加。《嶋》
+'02/01/30	知らん間に古いやつと入れ替わってた（笑）>サウンド関係
+'02/01/17	CBGMLoaderのフラグのバグ修正。《炎羅》
+
+
+☆ version 1.57 特別接待のためにシナリオクラス拡張などなど　'02/01/16
+
+'02/01/16	CScenarioViewのフレームスキップ失敗していたの修正。《炎羅》
+'02/01/13	CFastPlaneのフルスクリーン時のメニュー描画を可能にした
+			CMouseLayerをCFastPlaneのフルスクリーン時メニュー描画に対応
+'02/01/12	CScenarioView::Set/GetGameContextで、立ちキャラのreverseフラグが
+			保存されていなかったのを修正。《炎羅》
+			CTextDraw::２重禁則処理少しおかしかったの修正。
+			CScenarioViewのlayout定義に#mes_parts追加。《炎羅》
+'02/01/11	CScenarioDrawTransListener追加。
+'02/01/10	OggVorbis RC3に対応。《炎羅》
+			CScenarioView::SetStartPositionの関数名、脱字してたの修正。《炎羅》
+'02/01/09	CSoundもOggVorbis対応。《炎羅》
+'02/01/08	CFastPlane::FadeEffectをαサーフェースに対してもサポート。
+			CScene,CSceneTransiter,CScenarioDrawのOnDrawを
+			OnSimpleMove,OnSimpleDrawに分離。
+			CStreamSound関係のバグ修正。《炎羅》
+			CPlaneTransBlt用リスナ追加。
+'02/01/07	CDir::IsMatchの小さなbug修正。《kjt》
+			CStreamSoundのループ再生のフラグまわり変更《炎羅》
+			CFastPlane::BlendBltAB,BlendBltFastAB追加。
+			CFastPlaneにBltMask16追加。
+			CFastPlaneにBltFastMask16追加。
+
+☆ version 1.56 特別接待のためにシナリオクラス拡張などなど　'02/01/06
+
+'02/01/06	CThreadの終了処理、甘かったので修正。
+'02/01/05	CScenarioView，AutoPlayタグ、記述忘れていたのでマニュアルに追記。
+'02/01/04	CStreamSoundまわりの細かいbug-fix。《炎羅》
+			CFastPlane::BltFastWithoutAlpha/FlushAlpha追加。(CDIB32と同じ仕様)
+'02/01/03	CStringScanner::NumToStringZ追加。
+			CStringScanner::IsTokenで、トークンまでに存在する
+			スペース、タブ、改行は無視するように変更した。
+			CDbgでDebugWindowを生成したとき解放されてなかったの修正。
+			CFastPlane::Loadは、#notdefined#が渡されたときは
+			正常終了したとして帰る。
+			//	⇒CPlaneLoaderで、定義されていないファイルを読もうとして
+			//	Debug時にwarningが出ることに対する対策
+
+
+☆ version 1.55 時間が無くて実装してなかった機能を実装中．．　'02/01/02
+
+'02/01/02	OggVorbis対応。《炎羅》
+			CStreamSound関係のバグ大幅修正。《炎羅》
+'02/01/01	CAppBaseのスレッディング少し甘かったの修正。
+			CFastPlaneをマルチウィンドゥ対応。
+			CreateThreadを使用したときにCのランタイムを使うと
+			小さなメモリリークが気持ち悪かったので、_beginthreadに変更。
+			CFastDrawでm_bFullScrの初期化がコメントアウトされていたの修正。
+			CDirectDrawをマルチウィンドゥ対応。
+			CCOMBaseをスレッド単位で初期化する処理に変更。
+'01/12/31	CFastPlaneいじったときにCPlaneのリストア処理エンバグさせてたの
+			修正＾＾；(報告サンクス！＞土谷さん！)
+'01/12/07	CFastPlane::BlendBltFastAlphaで、
+			αプレーン⇒αプレーンへの(PhotoShop的）転送をサポート
+			《マスターますださんのアイデア》
+
+☆ version 1.54 minor-bug-fix中．．　'01/12/05
+
+'01/12/06	CDIB32::UpdateTextA,AAのパフォーマンス改善。（少しだけ＾＾；）
+'01/12/05	yaneConfig.hでDirectDraw,FastDrawを使わない設定にするとコンパイルが
+			通らなかったのを修正。《sohei》
+'01/12/04	CDIB32::UpdateTextA,AAで、空行に対して実行したときの処理修正。《あつ》
+			CFont::GetShadowOffset(int &nOx,int &nOy)追加。影のオフセットが固定に
+			なっていたのを修正。《あつ》
+			CFont::UpdateTextA,AAの、行送り量の誤差修正。《あつ》
+'01/12/01	CFPSTimer::ToBeSkip追加。
+			CFPSLayer::SetSkipFrameDraw追加。
+			CFastPlane::BltToAlphaでパラメータが範囲外のときの処理修正。《あきら》
+			同じくCDIB32::BltToAlphaもnSrcMin>255のときなど配列の
+			インデックスオーバーになっていたの修正。
+			CFastPlane::CreateSurfaceで、SetYGAUseで設定した値が
+			無視されていたのを修正。
+			CFastPlaneEffect::Bltで拡大縮小処理がおかしかったの修正。
+'01/11/30	CPlaneBase::GetID追加。
+'01/11/24	CGUINormalButtonListenerでサブクラスに委譲する前にフラグを
+			倒すように変更《あつ》
+'01/11/22	CPlaneBaseのところでデバッグ用のコードが残っていたの
+			修正。《ふぁじい》
+'01/11/21	CStreamSound(longsound)で先頭が二重に再生されるのを修正。《炎羅》
+'01/11/20	CStreamSound(longsound)の再生ポジションまわり修正。《炎羅》
+'01/11/20	CThread::InvalidateThreadで、同期オブジェクト倒してなかった＾＾；
+
+
+☆ version 1.53 やっとCFastPlane安定してきたか．．　'01/11/19
+
+'01/11/19	CThreadで、同期オブジェクトの投入。CThread::ThreadSleep。
+'01/11/19	マルチウィンドゥ時のスレッド処理の修正。《sohei》
+'01/11/19	CStreamSound::GetCurrentPos修正中。《炎羅》
+'01/11/18	CScenarioViewのプロンプト表示部分間違っていたの修正。《Kz》
+'01/11/17	CAppBase::IsThreadValidのWaitIfMinimizeのところ修正。《れむ》
+
+
+☆ version 1.52 CFastPlaneについて細かいbug-fix中．．　'01/11/16
+
+'01/11/17	CPlaneBaseのfactory、誤っていたのを修正。
+'01/11/16	CFastDraw,CDIBDraw,CDirectDraw,CSaverDrawの先頭で、
+			CTimer::timeBeginPeriodMinを呼び出すように変更。
+'01/11/16	CAppManager::GetDrawType()追加。
+'01/11/15	CMouseLayerが256色モードの時にCFastPlaneに対して
+			使えないbug-fix。
+'01/11/15	CWindow::InnerAdjustWindowのWS_POPUP時の処理修正。《sohei》
+
+
+☆ version 1.51 CFastPlaneについて細かいbug-fix中．．　'01/11/15
+
+'01/11/14	CFastPlane 256色モードでの抜きに失敗するの修正。
+'01/11/14	CFastPlane 256色モードでサイズ確保を誤っていたのを修正。
+'01/11/14	CFastPlaneまわりでCDirectDrawからコピペしてきたままになって
+			いた誤り修正。《TearDrop_Stone》
+'01/11/14	CFastPlaneでのCDIB32との転送拡張。
+
+
+☆ version 1.50 安定版としての正式公開　'01/11/13
+
+	・CFastDraw,CFastPlane改造。⇒コンパイルの注意事項をhtmlの
+	リファレンスにまとめました。
+
+
+☆ version 1.09 どんどん機能追加終了＾＾；　'01/11/12《非公開》
+
+'01/11/12	CFastPlaneにABGR8888追加。
+'01/11/11	CFastPlaneに定数倍飽和加算／減算を実装。
+'01/11/10	RGB565の飽和加算／減算をテーブル使用せずにする方法を発明。《さ～》
+'01/11/09	CMouse画面外での入力を改造．．
+			CFastDrawはフリップ実装せず。
+'01/10/31	CGraphicLoaderにbmpをHDCを経由せずに読み込む機能追加。
+			⇒やっぱりやめ。CDIB32,CFastPlaneのLoadのパフォーマンス改善。
+'01/10/30	CScenarioDrawBackLogManager::GoNext追加。《炎羅》
+'01/10/29	CDIBDraw,CSoheiSaverでプライマリが汚れていないときに
+			OnDrawでHDCを解放し忘れていたのを修正。
+'01/10/25	ILongSound::isplayバグってたの修正。《Kaine》
+			CPlaneでシステムメモリ上にとっていると、Restoreされないの修正。
+
+
+☆ version 1.08 どんどん機能追加開始＾＾；　'01/10/25（非公開）
+	//	WAFFLE販売『麻雀遊戯』（一般版）に使用。
+
+'01/10/24	CPlaneLoaderPre::SetColorKey(int,int,int)追加。《Kaine》
+			CTextDIB32::GetTextPos追加。
+'01/10/23	CDIB32::GetPlaneInfo追加。CPlaneBase::GetPixelAlpha追加。
+'01/10/21	CDIB32Effect::Bltのさまざまなbug-fix。
+			CFastPlane実装、ほぼ終了！○(≧∇≦)o
+'01/10/19	CFPSTimerの精度向上。
+'01/10/18	CSpriteChara::Loadで、指定したプレーンpの抜き色をRGBで指定する
+		#ColorKeyB追加。《Kaine》
+'01/10/17	CAppManager,CLayerにCFastDraw系の関数を追加。
+'01/10/16	CFastDraw,CFastPlane追加。
+'01/10/11	CDirectDrawSurfaceManager追加。
+'01/10/10	CMutexがリソースリークしているの修正。《ちょぴ》
+'01/10/09	yaneGTL(GraphicTemplateLibrary)追加。
+'01/10/08	CFile::MakeFullNameで\を/に変換するように。
+'01/10/01	CPlane拡張開始。（開始って、あーた、、）
+
+
+☆ version 1.07 どんどん機能追加開始＾＾；　'01/09/30（非公開）
+	//	PARADE販売『振り向いてCoolEyes』に使用。
+
+'01/10/01	CDIBitmap::GetHBITMAP追加。
+'01/09/28	待望の（？）２５６パレット処理。CPaletteクラス追加。
+			CDIBDraw::GetPaletteとCDIBDraw::RealizePaletteと追加。《れむ》
+'01/09/27	CSerializeに関数追加。vector<bool>のシリアライズ修正。《れむ》
+'01/09/15	CTextPlane,CTextDIB32で文字列が空のときにSurfaceが作られないの
+			１×１のSurfaceを作成するように仕様変更。《Lucifer》
+'01/09/11	CMovieが終了判定をしていないので、追加。《れむ》
+'01/09/07	CStringScanner::NumToStringで数字が0のときうまく変換して
+			いなかったの修正。
+'01/08/31	CScenarioDrawで、if～else～endifタグのBackLog記録のバグ修正。
+'01/08/30	BoundsCheckerで警告が出るのがうっとおしいので、
+			CreateDIBSectionの第１パラメータにNULLを渡すのをやめる。
+'01/08/29	CScenarioView::SetStartReadPositonがあるときに、
+			バックログが先頭で２重にとられるbug-fix。
+'01/08/22	CThreadのコンストラクタでm_bThreadValidも初期化することに。
+'01/08/21	CFile::SetPath,GetPath追加。
+			CLZSS::Encodeでサイズが8バイト以下のものを変換すると
+			落ちるの修正。
+'01/08/20	CStreamSound::Pauseバグってたの修正。《れむ》
+			CDIBDraw,CDirectDrawの画面解像度を変更したときに
+			画面がちらつくことがある（エンバグ）を修正。《れむ》
+'01/08/17	CScenarioIfListenerクラス追加。
+			CScenarioDraw::Set/GetIfListener追加。
+			CTextDraw::Set/GetIfListener追加。
+			<if n><else><endif>タグ追加。
+
+☆ version 1.06 minor bug-fix中＾＾；　'01/08/15　《一応、安定版》
+
+'01/08/15	マルチスレッド時のメッセージの処理がおかしいのを修正。
+			（Win95/Win98/NT4.0/Windows2000で動作確認）
+			⇒　bool CAppBase::IsThreadValid(void);
+			yaneWindow::CreateWindowのウィンドゥクラス名の処理追加。
+			CDebugWindowはIdleモードで動作するように変更。
+			Idleモードでの強制終了処理のために、
+			　void CAppBase::InvalidateThread(void)追加。
+			CDebugWindowを出しているときの×ボタンでウィンドゥを
+			　閉じるときの処理の高速化。
+			CDebugWindowに飛んでくる、Windowメッセージをきちんと
+			dispatch出来ていなかったのを修正。
+'01/08/14	CDebugWindowは、Idleモードで動作するように変更。
+'01/08/12	CDIBDraw、フルスクリーン時のダイアログ描画の背面がリペイント
+			されないのを修正。《れむ》
+'01/08/09	CStringScanner::NumToStr別バージョン用意
+			CStringMap::GetLongNum追加。
+			CVolumeFader::Set関数実装忘れ＾＾；　マニュアルに書き忘れ＾＾；
+
+☆ version 1.05 minor bug-fix中＾＾；　'01/08/07
+	//	CGIライブラリのために、さらにさらに、、クラス拡張中＾＾
+	⇒　何を思ったかyaneCGISDKを公開。
+
+'01/08/07	CFile::GetParentDir前のバージョンのがバグってたので修正。《sohei》
+			CShell::Executeで標準出力を吐くアプリを起動するとMS-DOS画面が
+			出るの修正。
+'01/08/06	CMutexSectionクラス追加。
+			CFile::ReadLine(string&)追加。
+			CFile::ReadLineのEOF判定、ひとつ遅かったのを修正。
+			CFileで、ファイル名を設定せずに渡すと落ちる関数の修正。
+			CFile::GetTemporaryFileName追加。
+			CFile::Save(string filename,vector<string>*vData)追加。
+			CFile::MakeFullName、CFile::SetCurrentDirが呼び出されていないと
+				正常に動作しないの修正。
+			CStringScanner::Replace()の第２引数、第３引数をLPCSTRに。
+'01/08/05	string to stringのCSerialize対応、連想記憶クラスCStringMap追加。
+			CFPSTimer::WaitFrame　常にSleepを使うように変更。
+			CFPSLayer、数字がぶれて表示されるの見苦しいので少し修正。
+			CStringScanner::Replace,CFile::Readの第一引数がemptyのときに
+			落ちるのを修正。
+'01/08/04	スクリーンセーバークラス追加。《sohei》
+			☆　その他、以下の箇所を修正　：《sohei》
+			CAppManager,CLayerにCSaverDraw関係追加。
+			CWindow::CreateSimpleWindow
+			yaneConfigにUSE_SAVER追加。
+			CIMEBase  IME95が消えなかったのを修正。
+'01/08/03	CMovie系のコンストラクタでのm_bVisible初期化忘れ修正。《ちょぴ》
+'01/08/02	CStringScanner::StringToNum,NumToString追加。
+			CSerialize::InnerSetStroing追加。
+'01/08/01	yaneSDK2ndからファイルぶっこ抜いてCGI SDK開発開始＾＾；
+
+
+☆ version 1.04 minor bug-fix中＾＾；　'01/08/01
+	//	Saga Planets 『恋愛CHU!』ファンディスクのアクセサリに使用
+
+'01/07/31	CAppBase::Runをvirtualに。
+'01/07/30	CWindow::InnerAdjustWindowでWS_POPUPがあればWS_CAPTIONを追加して
+			いる部分を削除。よって、ウィンドゥスタイル指定するときは、
+			WS_CAPTIONも忘れずに明示的に書いてちょ＾＾；
+			CSerialize::Store()追加。
+			CRandをCArchiveから派生。
+'01/07/29	CGUIButton::IsInは、オフセットの指定を無視するように変更。《sohei》
+			yaneConfig.hに、USE_DIRECTXオプション追加。《れむ》
+			CMIDIOutputDM::IsPlayのbug-fix。《れむ》
+			mtkn::ILongSound::Pause削除。stopに統合。
+			GetCurrentPos追加。細かいbug-fix。《れむ》
+			CFile::GetCurrentDir()が、ルートにあるファイルに対して正しく
+			ドライブ名が取得できない問題修正。《sohei》
+'01/07/28	CDIB32Effect::BltのLPRECT lpDstはLPSIZEに変更。《れむ》
+			また、このクリッピングがおかしいの修正中。《れむ》
+'01/07/27	終了後にタスクバーに白いタスクが残る現象を修正２．
+	 (VBのメーリングリスト等より)
+'01/07/26	終にタスクバーに白いタスクが残る現象を修正。
+	（http://www.microsoft.com/JAPAN/support/kb/articles/JP214/6/55.HTM）
+	（http://www02.so-net.ne.jp/~rando/delphi/how2ss/contents.html）
+
+
+☆ version 1.03 ここまで出来たのも、みなさんのおかげです＾＾　'01/07/25(非公開)
+	//	WAFFLE販売『麻雀遊戯』に使用。
+
+'01/07/25	CStringScanner::Replace追加。
+'01/07/24	CFile::Readで、yanePackExの一部の漢字ファイル名のファイルが
+			読み込めないのを修正。《TearDrop_Stone》
+'01/07/18	シリアライズのためにCSerialize,CArchive追加。
+			こんな抽象的なクラス、久しぶりに書いたゾ＾＾；
+			ついでに、CFile::Save/Load(string,vector<BYTE>*)を追加。
+			これで、シリアライズしたやつ、直接読み書きできる。
+'01/07/17	CScenarioView,CTextDrawに、選択タグ<Select>追加。
+'01/07/16	CTextDIB32でUpdateTextしたやつをBltNaturalで
+			正しく描画できないのを修正。
+'01/07/15	CScenarioView::OnDrawCallbackのエフェクトレイヤの後ろのほうの番号の
+			エフェクトがおかしたかったのを修正。《garu》
+'01/07/10	CBGMLoader::GetSoundをpublicに。《tomo》
+'01/07/09	CTextDrawで解析する<IndentForBraket -n>拡張,GetIndent追加。
+'01/07/08	CTextDrawで解析する<IndentForBraket>拡張
+'01/07/07	CFontのDeleteDCのタイミングおかしかったの修正。《TearDrop_Stone》
+'01/06/28	CGUISliderの位置指定するとドラッグ時におかしいbug-fix。
+
+
+☆ version 1.02 minor bug-fix	'01/06/15
+
+'01/06/11	CScenarioViewのバックログ機能強化。
+'01/06/10	CGUISlider追加。
+'01/06/09	CTextDraw拡張。(bottom,middle,topタグ追加)
+'01/06/08	CStringScanner::GetNumFromCsvで、「2,,3,,」のようなデータを
+			正しく取得できるように修正。《Kaine》
+'01/06/07	CFileにメモリイメージを仮想的にファイルとみなす機能追加。
+			(CFile::Read)
+'01/06/06	CScenarioView拡張。（途中表示する<SetReadPosition n>追加)
+'01/06/05	CTextDraw拡張。(文字置換タグ<ReplaceString n>追加)
+'01/06/04	CSpriteCharaのスプライト定義フォーマット拡張。
+'01/06/03	NT4.0でDirectInputの初期化ミスる（エンバグ）の修正。《遥佳》
+'01/06/02	CDIB32MaskMSBFF追加。
+'01/06/01	CScenarioView,CTextDraw拡張。
+			外字処理(SpriteCharaとして) <GAIJI n>タグ追加。
+'01/05/31	CInteriorCounterのWARNING間違っていたのを修正。《荻野》
+			smart_vector_ptr::insertバグってたのを修正。《荻野》
+
+《身内のごたごたに巻き込まれて、
+　　何もする気になれんかったので開発停滞してました＾＾；》
+
+
+☆ version 1.01 minor bug-fix	'01/05/19（非公開）
+'01/05/19	CGUIParts,CGUIButtonListener拡張。《Kaine》
+			CInteriorCounterのbug-fix。
+'01/05/08	::Get/PeekMessageは、HWNDをNULL指定で吸い出すように変更。
+			そうでないとWin98とか、一部の環境でメッセージ蓄積されよる＾＾；
+			⇒メッセージキューあふれて、落ちよる＾＾；；
+'01/05/07	CPlaneBase::SetColorKey(int r,int g,int b)追加。《Kaine》
+			CPlaneLoaderにもSetColorKey追加。《Kaine》
+'01/05/02	CDirectDraw/CDIBDraw::OnDrawで範囲指定できるように変更。《Kaine》
+			メニュー表示中にスクリーンオフセットがかかるとおかしかったの修正。《Kaine》
+'01/05/01	smart_ptrのコピーコンストラクタのタイプミス修正。《tic'K'toc》
+
+
+☆ version 1.00 正式公開版		'01/04/27（ついに！！ついに！！)
+
+'01/04/25	CMouseExボタンの押し上げに対応。
+'01/04/24	可変リージョンを持つWindowで、WS_CAPTIONのオプションが
+			ついていたのを修正。(CWindow)
+'01/04/23	CErrorLogクラスをyaneConfig.hで何もしないクラスに出来るように。《ちょぴ》
+'01/04/19	CCDDAクラス拡張。《Kaine》
+'01/04/19	トランジション中のシーン移動のため、CSceneTransiterに
+			StopTransit,RestartTransit追加。
+			トランジッターの保持プレーンを４つに拡張。
+'01/04/18	動画再生クラスCMovieクラス完成！《Kaine》
+
+
+☆ version 1.00β12				'01/04/19（Final β)
+'01/04/12	yaneConfig.h少し修正。《tic'K'toc》
+'01/04/10	CDIB32Sepia修正＾＾；
+'01/04/09	正式公開に向けてマニュアル鋭意執筆中Σ(＠ロ＠；
+
+
+☆ version 1.00β11				'01/04/09（非公開）
+	//	WAFFLE販売『蒼き大地』に使用。
+
+'01/04/08	BltNaturalでnFadeを指定したとき、CPlaneとCDIB32で減衰のしかたが
+			逆なのを修正。nFade==256のときの処理追加。
+			CFont::SetShadowOffset(int dx,int dy)追加。《マスターますだ》
+			CDIB32Effect::EffectColorKey追加。《ちょぴ》
+			漢字の１バイト目との比較は_ismbbleadに変更。(UNICODEを意識して＾＾；>MCBS)
+			CWindowのShowCursor修正。《れむ》
+			CDirectDraw/CDirectDraw で SetDisplay をデフォルト引数で
+			２度実行するとうまくいかないbug-fix。《れむ》
+			CDIB32Effect::Blt追加。《Kaine》
+'01/04/07	CFile::ToLowerで漢字がまじっているといけないbug-fix。《tic'K'toc》
+			CSoundBaseにヴォリューム設定/取得、カレントポジション取得／設定
+			～時分秒変換関数を追加。《Kaine》
+'01/04/06	CCDDAクラス拡張。《ちょぴ》
+			CAppFrameの一部のprotectedメンバをpublicに。
+			NELEMSマクロ追加。
+'01/04/05	CBGMLoaderのLoadフラグまわり怪しかったの修正。
+			CSELoaderのLoadフラグまわり怪しかったの修正。
+'01/04/04	フルスクリーン時にメニュー表示してマウスカーソルをそこに
+			持っていくとマウスカーソルが消えるのを修正。
+'01/04/04	CDIBDraw::GetMenuHeight追加。
+'01/03/29	DirectInputを使用して、JoyStickを16本対応＾＾ 《Kaine》
+'01/03/25	CTimerはtimeGetSystemTimeではなくtimeGetTimeを使うように変更。
+'01/03/17	CMouseで、IsPushRButton等はGuardTimeを反映させるようにした。
+
+
+☆ version 1.00β10 '01/03/17（Kaineさんのおかげで、だいぶ片付いたか＾＾）
+
+'01/03/16	CSELoader::PlayTのループ再生に、インターバル指定追加。
+'01/03/15	CScenarioEffect追加。
+			CRootCounterS追加。
+'01/03/14	CTextDrawの未知のタグ処理修正。
+'01/03/13	CLoadCacheにリスナ追加。（いまのところCPlaneLoaderのみ）
+'01/03/12	CGUIButtonListenerに仮想デストラクタ置くの忘れてた。
+'01/03/11	CBGMLoaderにIsLoopPlay追加。
+			CDIB32のGetSizeでの初期値を(0,0)が返るように。
+			yaneConfig.hにおいてUSE_DIB32をコメントアウトすると、
+			yaneGUIButton.cppでコンパイルエラーになるのを修正。《tic'K'toc》
+'01/03/10	CSceneControl::GetScene追加。
+			CScenarioViewいろいろ拡張。
+'01/03/09	CStringScanner::SkipSpace2追加。
+			CStringScanner::GetNumFromCsv追加。
+			CSceneでシーン間の調停にCSceneControl::GetSceneParam追加。
+			CScene、スタックまわりちょっといじる＾＾；
+'01/03/08	CScenarioView::SetStartLabel,CScenarioView::SetEndLabel,
+			SkipToLabelを追加。
+'01/03/07	CGUIButton、表示していきなり押されるのを防止。
+			CMouseEx::IsGuradTime追加。
+			CLoadCacheで読み込み失敗のときWARNINGでファイル名まで出るように。
+'01/03/06	C{Direct|DIB}Draw::TestDisplayModeを用いてウィンドウサイズを
+			変更した場合、GetDisplayで取った値が変化しないbug-fix。《Kaine》
+			CGUINormalButtonListener::SetTypeに+64追加。
+			CGUIButton::IsFocusing追加。
+			CPlaneBase::BltNaturalでnFade==256のときもうまくいくように変更。
+			CPlaneBase::GetBackup追加。
+'01/03/05	CAppBase::Close,OnPreClose追加。
+			CLoadCache::SetCanReloadAgain追加。
+
+
+☆ version 1.00β9b '01/03/05（minor bug-fixed version)
+
+'01/03/04	CDIB32Effect系functor
+				CDIB32SetAlpha,CDIB32SetRGBA追加。
+			CSceneTransiter追加。
+			CPlaneBase::CreateSurface追加。
+			CSceneControl::IsPrecedentScene,CScene::SetPrecedentScene追加。
+			CScene::OnComeBack追加。
+			CDIB32::SaveYGAに、非圧縮保存オプション追加。《Kaine》
+			CWindow::ChangeWindowStyleエンバグしてたの修正。《Kaine》
+'01/03/03	CVirtualKey::ResetKey追加。
+			CDirectDraw::BlendBltFastAlphaオーバーライドし忘れ修正。
+			CPlaneBase::BltNaturalPos追加。
+			CGUINormalButtonListener::Set/GetImageOffset追加。
+
+
+☆ version 1.00β9a '01/03/02（minor bug-fixed version)
+
+'01/03/02	CLoadCache::Setの２回目にメモリエラーが出るbug-fix。
+			CGUINormalButtonListener拡張⇒SetTypeに点滅モード追加。
+			CGUIButtonのSetListenerに返し値抜けてたの修正。
+			CGUIButton::IsIn()追加。
+			CMIDIOutputMMのplayのときに落ちるbug-fix《Kaine》
+			CMIDIOutputDMの再初期化のbug-fix《Kaine》
+'01/03/01	CSceneControl/CSceneFactory/CSceneクラス追加。
+			P5::BltFastWithoutAlphaの書き込み部分のbug-fix。《Kaine》
+			//	↑ちょぴさん情報サンクス！
+			フルスクリーンからウィンドゥモード切替時に窓のリサイズが
+			２度起こるのを修正。《Kaine》
+			CWindow::SetSize追加。
+'01/02/28	CDIB32でYGA画像に対するブレンドBlt(BlendBltFastAlpha)追加。《Kaine》
+			CPlaneBase::BltNaturalのフェード率指定を追加。
+
+
+☆ version 1.00β9	'01/02/28（なんか、やることどんどん増えてるぞ＾＾；）
+
+'01/02/27	CInteriorCounter追加。
+			CGUIParts追加。CButtonをCGUIButtonに改名。
+			CRootCounter::operator++追加。
+			CPlaneTransiter追加⇒作りかけ。
+			CScenarioView完成。
+'01/02/26	《Kaineさんが、開発スタッフに参加＾＾》
+			CTextDrawContext::GetTextPtrNow追加。
+			CTextDrawContext::SetNextContext追加。
+			CSELoader::PlayT（回数指定再生機能）追加。
+'01/02/25	CKeyの6にシフトキー追加。
+			CSELoader,CBGMLoader::IncStaleTime追加。(CLoadCacheのメンバ)
+			CSELoader/CBGMLoader::IsPlay追加。
+			CBGMLoaderのVolumeFaderはsmart_ptrに変更。
+			コンストラクタでVolumeFaderのsmart_ptrを得るように変更。
+'01/02/24	CRootCounter::IncSのStepがマイナスのときのバグ修正。
+			CTextDrawでGetRectsで取得する矩形が少しおかしいのを修正。
+			CTextDrawで禁則文字が続くとどこまでも改行されないのを修正。
+'01/02/23	CStringScanner::GetNextStr追加。
+			CPlaneBase::IsYGA追加。
+'01/02/22	CTextDrawにGrayColor表示関係追加。（バックログ表示用）
+			CMouseLayerはsmart_ptrを取るように変更。
+			CMouseLayerはYGA画像によるマウスカーソルも正しく描画できるように変更。
+'01/02/21	CPlane::DDColorMatchの256色時の動作修正。
+'01/02/20	smart_ptrのコピーコンストラクタで初期化を忘れてたのを修正。
+'01/02/19	new / delete を自前で用意する(yaneConfig.hで設定できる)
+'01/02/18	yaneConfig.hでDIB32を使わないオプションをつけたときに
+			CWindowでコンパイルエラーになるのを修正。
+			CScenarioView完成。マニュアルは長くなるので、ひと段落してから＾＾；
+'01/02/16	CMIDIOutput::SelectDeviceで値変更されたときに
+			動的に変更できるように変更。(しかしまだうまく動かない…）
+'01/02/15	MP3再生は、ID3v2タグ対応に。（Tagoshuさん、サンクス！）
+			(yaneAcm.cpp / mtknWaveMp3.cppを修正)
+
+
+☆ version 1.00β8	'01/02/14（忙しくてまだ正式公開でないの。ごめん＾＾；）
+
+'01/02/13	CPlaneBase::SetPlaneBaseFactory追加。
+'01/02/11	yaneMacro.hをYTLフォルダに移動。
+			smart_array::iterator追加。
+'01/02/10	CButtonクラス追加。
+'01/02/09	YTL/smart_ptr追加。YTL/smart_array追加。
+			YTL/smart_vector_ptr追加。
+'01/02/08	YTL/mediator追加。
+'01/02/04	CMIDIOutputMM廃止。
+'01/01/29	CPlaneEffectBltにnTransMode==3追加。
+'01/01/28	CPlaneBase::IsLoaded追加。CFont::SetText拡張。
+			辻褄合わせにCDIB32::ReleaseDC()追加。
+'01/01/27	CAppInitializer::GetHWndでNULLのときの処理追加。
+'01/01/26	CDirectDrawまわりで、256色モードの抜きがおかしかったのを修正。
+			(Thanks > JesterSeraさん)
+'01/01/25	CFile::MakeFullPathで、../の展開のバグおよび./の展開を追加。
+			(Thanks > 鈴希さん)
+'01/01/24	YTL/function_callbacker追加。
+'01/01/23	《i-modeの仕事と『蒼き大地』で死にそう＾＾；》
+
+
+☆ version 1.00β7	'01/01/22（正式公開まだかいな＾＾；）
+
+'01/01/19	CBGMLoaderに非ループ再生追加。
+			CLoadCacheのメンバ関数をvirtual化。
+'01/01/18	CTextDrawのサポートタグに<IndentForBracket>タグ追加。
+'01/01/17	CMouseEx::IsPushLButton,RButton追加。
+'01/01/16	CFile::Reset追加。CStringScanner::GetStr追加。
+'01/01/15	CLoadCacheクラスに、時間に対するキャッシュ機構を追加。
+			ファイルからの読み込み機構追加。
+'01/01/14	CPlaneBase::BltNatural追加。CDIB32::IsYGA,GetYGA追加。
+			CTextDrawは、BltNaturalを使えるように変更。
+'01/01/13	YTL::prototype_factoryのSetFactoryはauto_ptrExをとるように変更。
+'01/01/12	CDIB32Effect関連追加。
+			CDIB32/CPlane::FlushEffectの最上位バイト破壊をしないように変更。
+'01/01/11	CRootCounter::IsLapAroundI追加。
+'01/01/10	CDIB32::FlushAlpha。
+'01/01/09	CDIB32::BltWithoutAlpha/M,BltFastWithoutAlpha/M追加。
+'01/01/08	CScenarioViewクラス追加。
+'01/01/07	BCC++5.5対応のため少し改造。（したつもり＾＾；）
+	１．YTL\auto_array.h 43行
+	　　const T* は T* に代入できない。
+	２．yaneFindWindow.h、yaneFindWindow.cpp
+	　　EnumWndProc()が二つあるため、15行目(::EnumWindow)で
+	　　どちらのEnumWndProcか区別がつかない．
+	３．yaneDIB32.cpp
+	　	　TASMを使わなければならないので、変数名「dw」はまずい。
+	４．yaneDIB32.cpp
+	　　ラベルが重複している。
+		↑BCCがASMファイルの中にまで持っていってしまう＾＾；
+			これだけはどーしようもないような＾＾；
+			関数単位でファイル分割するとかしてね＾＾；
+'01/01/06	CTextDraw::GetPlaneBase追加。
+			CPlaneLoaderBasePre追加。
+			CPlaneEffectBltでBLTHLINEがエンバグしていたのを修正。
+			(BlindBlt5～8がバグっていた)
+		CSpriteExは、
+		void CSpriteEx::Blt(CPlaneBase* lpDib32,int x,int y);
+		等を追加。
+'01/01/05	CRootCounter::IncS(void),GetStep..追加;
+'01/01/04	CTextDrawBaseに簡易禁則処理追加。
+'01/01/03	CStreamSoundで相対フォルダ指定を行なうとき、
+			Open("/bgm/test.wav");は不可で、Open("./bgm/test.wav");
+			か、あるいはOpen("bgm/test.wav");と指定しないといけなかったのを修正。
+'01/01/02	CFont::GetSizeでGetTextExtentPointを使うのをやめて、
+			GetTextExtentPoint32を使うように変更。
+'00/01/01	CMapIOのbug fix。サンクス！＞れむさん
+'00/12/26	CRandにGet(int n)追加。
+'00/12/16	CDIB32でyga画像を読み込んだときはIsLoadで
+			trueが返らなかったのを修正。
+
+
+☆ version 1.00β6	'00/12/17（次こそ正式公開だね＾＾；）
+	//	WAFFLE販売『Happy ほたる荘』に使用
+
+'00/12/15	CDIB32::RotateBlt,RotateBltFastでSrcRect!=NULLのときの
+			表示がおかしいbug-fix。
+'00/12/14	chainのテンプレートが、VC++5でうまく展開されないので
+			VC++5用に書き直し＾＾；
+'00/12/13	フルスクリーンでメニューバーの下が乱れるのを修正。
+'00/12/12	CDIBDraw,CDirectDraw::SetDisplayの２度目の処理が
+			エンバグしていたのを修正。
+			《引越し騒ぎ＾＾；》
+'00/12/06	CRootCounter::SetReversing→GetReversingに関数名修正。
+			CDIB32で、m_hBitmapを初期化していなかったのを修正。
+'00/12/05	CTextDraw::UpdateTextFast(void)追加。
+'00/12/04	CWindow::IsMinimized追加。
+			*GetMyApp()->GetWaitIfMinimized() = true;
+'00/12/03	CFlagDebugger追加。
+'00/12/02	CSELoaderのPlayがループ再生になっていたのを修正。
+'00/12/01	CSpriteCharaがメモリリークしていたのを修正。
+			(CPlaneBaseにvirtualなデストラクタをplace holder
+			として用意していなかったのが原因)
+			SecondaryDIBがメモリリークしていたのを修正。
+			(auto_ptrExに、直接newしたメモリを代入していた）
+			その他、こまかいメモリリーク数箇所修正＾＾；
+'00/11/30	yaneMemory.cpp追加。（operator new,delete）
+'00/11/29	CFontで文字列が設定されていないと落ちるのを修正。
+
+
+☆ version 1.00β5	'00/11/28（もう少ししたら正式公開版？）
+
+'00/11/28	CTextDrawで文字が無く<HR>で終わっている場合、サイズ1×1のDIBを
+			生成するように変更。
+'00/11/27	CMIDIOutputMCIで、CloseしたときにDeviceIDをリセットし忘れ＾＾；
+'00/11/26	CDIB32にWARNING大量追加＾＾；
+'00/11/25	フルスクリーンでCDIBDrawを使っていて、ALT+TABで切り替えたときに
+			描画してしまうの修正。
+'00/11/24	YGS2kEx用interface追加。（作りかけ＾＾）
+'00/11/23	CMouseEx::SetXYしたあとFlushしなくともGetXYすればその座標が返るように。
+'00/11/22	CRand::Randomize追加。CWindowメニューがあるときのWindowRectの計算変更。
+			CAppManager::GetAppFrame等追加。CAppFrame::InvalidateThread追加。
+			CGraphicLoaderでY基準もLOGPIXELSXになってた。＾＾；さんくす！＞コオロギさん
+'00/11/21	CDIBDraw,CDirectDrawのBeginChangeDisplayまわりで小さなエンバグ^^;
+			CPlaneEffectBlt::BlendBlt1のnTransModeの解釈が0,1逆だった。
+'00/11/20	CDIBDraw::GetBppの実体定義忘れ。
+'00/11/19	CDIB32::GetHBITMAP追加。
+
+
+☆ version 1.00β4	'00/11/18（ここに来て大幅バージョンアップの様相＾＾；）
+
+'00/11/18	Mersenne Twister法による高精度乱数発生ルーチン追加。
+			CStringScanner::SkipTo2がbugってた＾＾；
+			CFileは1バイト多く確保して、最後のバイトは'\0'を保証する。
+			(そうしないとテキスト処理がしにくい)
+			CMouseDecorator,CMouseDecoratorManager追加。使いかたは秘密＾＾；
+'00/11/17	CPlaneEffectBltで、α値付きのCDIB32もトランジションできるように仕様変更。
+			CStringScanner::GetStr追加。
+			クラスリファレンスにマウスのサンプル追加。
+'00/11/16	CFont::SetBGColor/GetBGColor追加。
+'00/11/15	VC++5でコンパイルを通すためEnumWindow,SetTimerの型キャスト追加。
+			VC++5でコンパイルを通すためcpuidは、defineで定義した。これでVC++5でも
+			ServicePack3 + PlatformSDK + MediaSDK + DirectXSDKでコンパイルが通ります。
+'00/11/14	DirectMusicによるメモリ再生は、同じアドレスを指定するとキャッシュが
+			有効になってしまって次の曲が再生されないのでその対策(thanks > DEARNA)
+			(DirectMusic側のbug)
+'00/11/13	vectorEx追加。yaneMsgSRをvectorEx対応に変更。
+'00/11/12	《東京農工大にて講演会》
+'00/11/11	CRegionHook追加。これで変形ウィンドウ対応。
+			CSpriteEx::BltOnce実体忘れ＾＾；
+'00/11/10	CRootCounterをオートリバースカウンタ対応に。
+			CRegionクラス追加。
+'00/11/09	CDIB32::BltToAlpha追加。ユニバーサルトランジションが可能に。
+'00/11/08	CDIB32::FadeAlpha,FadeBltAlpha追加。
+
+
+☆ version 1.00β3	'00/11/06（これ完成したらWindowsから引退しよう＾＾；）
+
+'00/11/06	DirectMusic対応。CMIDIOutputDMクラス追加。
+			(使わないならばyaneConfig.hで無効にしてね)
+			CMIDIOutputMCI::Replayがうまく動いていなかったのをfix。
+			CFileで書き出しOpenに失敗した場合Writeで落ちるbug-fix。
+			(CD-ROM上で実行していて落ちたので気づいた＾＾；)
+'00/11/05	CTextDrawContextに文字間隔を指定するm_nHInterval追加。
+'00/11/04	CTextDrawにアンダーラインタグ、打ち消し線、イタリック体の追加。
+			CFont::SetUnderline,SetStrikeOut,SetItalic追加。
+			CTextDrawで<Font>タグのネストをサポート。
+			CTextDrawで未知のタグを保存しておき、CTextDraw::GetTagListで
+			取得できるようにした。
+			CTextDrawからCStringScannerを分離。
+			CSELoader::PlayL,PlayLN追加。
+'00/11/03	未知のタグを飛ばすCTextDraw::SkipUnknownTag追加。
+			ウィンドゥモードでのウィンドゥサイズ、下4ドットほど少なかったのを
+			修正＾＾； (CWindow::InnerAdjustWindow)
+'00/11/02	CDIB32::SetFillColorの実体書き忘れ＾＾；
+			CSELoader::SetLockInterval追加。
+			CTextDrawで解析するhtmlタグとして小文字・大文字対応化。
+			CTextDraw::UpdateTextAA追加。CTextDrawDIB32AA追加。
+'00/11/01	一部の環境でCTextDIB32のアンチェリがうまく行かないので、自前で
+			行なうように作り直すことにした。CFont系propety取得関数追加。
+'00/10/31	spriteのBlt系、ClipRectを指定できるようにした。
+
+
+☆ version 1.00β2	'00/10/30（かなりええ感じに仕上がってきたぞ＾＾）
+
+'00/10/30	CDIB32::Clear仕様変更。CDIB32::SetFillColor追加。
+			CTextDIB32で、SetFillColorでBG色を指定できるように変更。
+'00/10/29	アンチェリ文字対応版、CTextDrawDIB32A追加。
+			CFont::GetColor,GetBackColor追加。
+'00/10/28	CFont::SetWeight,CTextDIB32::UpdateTextA,auto_vector_ptr::insert追加。
+'00/10/27	↓ノベル用、文字表示ルーチン、CTextDrawDIB32,CTextDrawPlaneの２つを用意＾＾；
+'00/10/26	HTML風マークアップによるメッセージ表示クラスCTextDraw追加。
+'00/10/25	CJoyStickで16ボタン以上のときに正しく読め出せなかったのを修正。
+'00/10/24	CAppBaseで、複数インスタンス生成時のStopThreadの処理fix。
+			TiaDeenのCAudioMixer，バグだらけだったのですべて書き直した。
+'00/10/23	CAppIntervalTimer追加。CVolumeFaderを、そちらから派生するように変更。
+'00/10/20	auto_array::releaseの返し値間違えてた^^;
+'00/10/19	FullScreenでDIBDrawを使っているときはマウスカーソルを消さない。
+			（ソフトウェアマウスカーソルを使っていないならば）
+			CDIBDraw,CWindowをメニュー表示対応に。
+'00/10/18	αチャンネル系転送として
+			CDIB32::BltClearAlpha,BltFastClearAlpha,
+			CDIB32::BlendBltFastAlphaと、それぞれのミラー転送追加。
+			yaneConfig.h追加。CMIDIOutputMMはディフォルトで使用しないに。
+'00/10/17	yga（αチャンネル付可逆圧縮フォーマット）提唱／実装。
+			CDIB32::Loadをyga対応に。CDIB32::SaveYGAを追加。
+
+
+☆ version 1.00β1	'00/10/16（やっとβ版に突入．．）
+	//	WAFFLE販売『Happy ほたる荘』に使用が決定
+
+'00/10/16	CCellAutomatonクラス追加。
+			CDIB32::GetClipRect追加。
+			CDIB32::CBumpMapFastBlt追加。CBumpMapクラス追加。
+			CAppFrame::MesSleep追加。
+			CDIB32::CAddColorBltでbugってたのを修正。
+'00/10/15	CGraphicLoaderの関数すべてvirtualに。
+			YTLにPrototypeFactory,Factoryテンプレート追加。
+			CGraphicLoaderの生成をPrototypeFactory,Factoryテンプレートを
+			使うように変更。
+			CPlaneEffectBlt::BlendBlt1で抜き色無効にならなかったのを修正。
+'00/10/14	CDirectSound::AddRef,DelRef,GetCDirectSound追加。
+			CBGMLoaderをCSoundBaseで書き直す。CLoadCacheから派生。
+			CBGMLoader::UseStreamSoundを追加。
+'00/10/13	CStreamSound追加。Soundのストリーム再生対応（まつけんさんThanks!)
+'00/10/12	CMIDIOutputBase削除。CSoundBase追加。
+			CSound,CStreamSound,CMIDIOutputを統合。
+			CSoundBaseから派生させるので、CSound::IsPlayからconst属性削除。
+			precompileヘッダー追加。高速コンパイルオプション追加。
+'00/10/11	CFile::GetPureFileNameOfバグってた。フォルダの下に無いと空の文字列が返っていた。
+			(CBGMLoaderが余波を受けていた^^;)
+			CBGMLoader::GetCurrentPos追加。CMIDIOutput::GetCurrentPos追加。
+			CPlane::IsLoadedで、読み込み失敗してもtrueが返っていたのを修正。
+			(これのせいで読み込み失敗したDIRECTDRAWSURFACEまでduplicateされていた^^;)
+'00/10/10	CMouseExで座標をとれなかった^^;
+'00/10/09	templateのauto_ptrEx,auto_array、一部所有権の移動が間違ってたので修正。
+'00/10/08	templateで書き直したSwapマクロバグってた＾＾；恥ずかしい～。
+'00/10/07	CPlane::BlendBlt(CPlaneBaseのオーバーライドしたやつ)の
+			RGB並び順が逆になっていた＾＾；のを修正。
+
+
+☆ version 1.00α8	'00/10/05（最終α版）
+
+'00/10/06	CMapIOで一部HRESULTになっていたのをLRESULTに変更。
+			CDIB32::CBumpMapBlt追加。
+'00/10/05	CCellAutomaton追加。CDIB32::GetClipRect追加。
+			CBGMLoader::Pause,Replay追加。
+'00/10/04	CPlaneBaseにいろいろ追加。
+			DirectDrawを使わない描画のためのCDIBDrawクラス追加。
+			CAppManagerをCDIBDrawに対応。
+			CLayerをCDIBDraw対応に。CTextPlaneをCDIBDraw対応に。
+			CPlaneLoaderをテンプレートで書き直す。CDIB32Loader追加。
+			CSprite,CCharaLoader,CMapLayerをDIB32対応。
+			CMapLayerをCDIBDraw対応に。
+			I/Oデータのビデオカードで32bppモードでCPlaneのヌキ色が
+			うまくいかないことがあるのを修正。（ただしビデオカード側のbug）
+'00/10/03	CDIB32::RorateBlt(高速回転拡大縮小)追加。
+			CDIB32::MorphBltでクリッピング処理まわりがいろいろバグってたのを修正。
+			CPlane::InnerLoad,InnerCreateSurfaceをvirtualにした。
+			CDIB32::FadeEffect追加。
+			CDirectDraw::GetPrimary,GetSecondaryで汚しフラグ立てるように変更。
+			CDir::Reset追加。CDirectDrawを、CPlaneBaseから派生。
+
+
+☆ version 1.00α7	'00/10/02（次回こそ最終αバージョンにするぞ～＾＾；）
+
+'00/10/02	CPlaneで32bppのヌキ色を誤る場合があるので、
+			DDColorMatchの位置指定型でもRGBMaskを取ることにする。
+'00/10/01	CDIB32も、CPlaneに準拠して、Loadしたときに左上の色をカラーキーに
+			設定するように変更。
+'00/09/30	トランジション関数追加。thanks! > TearDrop_Stoneさん
+			CPlaneBase::MosaicEffect,FlushEffect追加。
+'00/09/28	YTLにauto_ptrEx追加。SWAP_INTマクロ削除。
+'00/09/27	YTL(YaneuraoTemplateLibrary)にauto_array,auto_vector_ptr追加。
+			set,vectorを使っている部分をauto_vector_ptrで、書き直す。
+'00/09/25	CVirtualKeyのCVirtualKeyの登録キー解放忘れ修正。
+'00/09/24	BCCでコンパイル出来るようにメンバオフセットを求めるインライン
+			アセンブラの構文を使っている部分を書き換え。
+'00/09/23	Windows98ではDIB32のビットマップ読み込み時の最上位バイトが不定に
+			なるのでそれをクリアするコード追加。
+'00/09/22	DirectX7のコンパイル環境でコンパイルするとDirectX6以前の環境では
+			サウンドが正しく再生されないのを修正。
+			（DSBUFFERDESC構造体のサイズが大きくなったのが原因）
+'00/09/21	CFontにSetQualityでANTIALIASED_QUALITY と NONANTIALIASED_QUALITYを
+			指定できるように追加。
+'00/09/20	questさんの提案でCSound::GetPos,SetPos,Play(DWORD)追加。
+
+
+☆ version 1.00α6	'00/09/19（今月中にβバージョン出せるかな？＾＾；）
+
+'00/09/19	CTextDIB32追加。CDIB32の変数一部、初期化忘れてた＾＾；
+			CDIB32::UseDIBSection修正。CFont::SetQualityにアンチェリ指定追加。
+			SPI使えなくなっていたのを修正。(文字置換し損ねてた)
+'00/09/18	CDIB32::ShadeOff追加。CDIB32::IsLoad追加。
+'00/09/17	CPlaneFadeBlt,CPlaneTransBltクラス仕様変更。
+			yaneSDKでやってたトランジション系関数、ほぼ移植完了。
+			CSinTable::Sinが位相間違ってたの修正。
+'00/09/16	CPlaneBaseクラス追加。CPlaneのBltR系がエンバグしてたの修正。
+			DIB32RGB,PlaneRGBに範囲外チェック機構を追加。
+			CMsgSender,CMsgReceiverクラス追加。
+'00/09/15	CFile::CreateTemporaryマニュアル書き忘れ＾＾；
+
+
+☆ version 1.00α5	'00/09/15（いつまでαバージョンなんや．．）
+
+'00/09/14	CAudioMixerで、仮想ボリュームコントローラーがあると
+			Closeで落ちるのを修正。(PC-9821の一部の機種)
+			CAudioMixerは、ステレオでないボリュームコントロールに
+			対する動作不都合があったのを修正。カイネさん、ありがと～。
+'00/09/13	CDIB32の縦が整数倍の拡大Bltがenbugしていたのをfix。
+'00/09/10	MCIでのMIDI再生ルーチン追加。CMIDIOutputMM,MCI等を追加。
+			CreateSurfaceはFillColorを黒に初期化。
+'00/09/09	CPlaneに、強烈なメモリチェックオプションを追加。
+'00/09/08	CBGMLoaderでサウンドカードが無いと落ちるbug-fix。
+'00/09/07	CKey3,CKey4追加。CVirtualKey::RemoveDevice修正。
+'00/09/06	CPlane::Blt系のSrcからのはみ出しWARNINGが間違ってたのを修正。
+'00/09/05	CIntervalTimer::IsTimer修正。CIntervalTimerにワンショットタイマ
+	によるインターバルタイマを追加。
+
+
+☆ version 1.00α4	'00/09/05（まだまだ、いろいろ大変だわね．．）
+	//	WAFFLE販売『Revolution』に使用
+
+'00/09/04	yanePackExのほうbugってたね＾＾；
+'00/09/03	CPlaneEffectBlt追加。
+'00/08/31	MMX用のCDIB32::Morphはbug有りの奴、消し忘れていたので削除。
+'00/08/30	モーフィング用専用クラスCMorpher追加。
+'00/08/29	CDIB32の画面は初期化(ゼロClear)されるように変更。
+'00/08/28	CDirectInput 厳しいマルチメディアタイマを仕掛けるとキーを放した情報を
+			取り逃がすことが発覚。→CMIDIOutputはMCIで再生するものが必要か．．。
+'00/08/27	CVirtualKeyがBCC4.0でコンパイル出来ないので変更。
+'00/08/26	Jpeg読み込みのときにサイズが微妙に小さいことがあるbug-fix。
+'00/08/25	CDIB32::GetColorKey追加。CIntervalTimerの仕様変更。
+
+
+☆ version 1.00α3	'00/08/24（そろそろ安定．．？）
+
+'00/08/24	CPlaneの参照カウント処理追加。
+'00/08/23	CBGMLoader,CLoadCacheいじり倒し＾＾
+'00/08/22	CFindWindowでWindows95で存在しないAPI呼び出していたのを修正。Thanks > Tom
+			CDIB32::Morphに統合。
+'00/08/21	CPlaneの拡縮,CDIB32の拡縮bug-fix。
+'00/08/20	CIntervalTimerでdelay指定が厳しすぎてCPU負荷がかかりすぎていたのを修正。
+			きついマルチメディアタイマーを走らせるとDirectInputが狂うようで...
+			(DirectInput側の仕様のようだ...)
+			(その他、CVolumeFader,CMIDIOutputに影響)
+			CMIDIOutputを複数、インスタンスを生成しても使えるように修正。
+'00/08/19	CShell::SetWallPaper追加。CMIDILoader追加。CBGMLoader追加。
+'00/08/18	CLineParserの連続GetStr時の誤動作修正。
+'00/08/17	CDIB32モーフィング機能追加。フルスクリーンでのCPlane::FillColorのbug-fix。
+'00/08/16	CDIB32に各ラインの先頭アドレステーブル追加。
+'00/08/15	CVirtualKey::GetDevice追加。
+'00/08/14	CMapLayerのバミ位置ずれるbug-fix。
+'00/08/13	起動直後にKey入力がLOSTしていることがあるのを修正。
+
+
+☆ version 1.00α2	'00/08/10（とりあえず公開＾＾）
+
+'00/08/09	DIB32の拡縮全修正完了。CMouseEx追加。
+'00/08/08	CPlaneの拡縮全修正完了。
+'00/08/07	CShell追加。DIB32完成ようやくまともに使える。
+'00/08/06	CFindWindow追加。CDirectDrawにSecondaryDIBを組み入れ＆デバッグ。
+'00/08/05	マルチスレッドは何かとやらしいので中止。TRACEマクロ追加。
+'00/08/04	CDIB32仕様さらに変更。CGameObjectBase追加。
+'00/08/03	CSELoader追加。CDIB32仕様大幅変更。
+'00/08/02	MorphBlt完成。CPlaneLoader追加。
+'00/08/01	CSprite仕様変更。CTextPlane仕様拡張。CMapLayer拡張。
+
+
+☆ version 1.00α１ -'00/07/31（内部関係者に適当に公開＾＾）
+
+//	「Revolution」の制作のため開発が停滞ぎみ:p
+
+'00/07/31	ColorKey修正。CDirectDraw::SetBrightness。CPlane::SwapPlane追加。
+'00/07/30	CScripteCompilerをyaneSDKから移植。ygs2k1.62を移植。
+'00/07/29	CMsgDlg追加。CSinTable追加。CWindow生成される窓サイズ直した。
+'00/07/28	CFPSLayer追加。CTextPlane追加。CTextLayer追加。
+'00/07/27	CLoadCache追加。CSoundLoader追加。CFont追加。
+'00/07/26	CSpriteLoader追加。
+'00/07/25	CSpriteBase分離。CMapLayer追加。CSpriteEx追加。
+'00/07/24	CDbg追加。
+'00/07/23	CTimerEx,CRootCounter追加。
+'00/07/22	CDIB32->CPlane,さ～さんに依頼していたものがほぼ完成。
+'00/07/21	CSprite,CSpriteChara完成。
+'00/07/20	CLayer,CHDCLayer,CAfterLayer,CMouseLayer完成。
+'00/07/19	CDirectDraw,CPlane完成。
+'00/07/08	マニュアルを全てhtml化。
+'00/07/01	DIB管理クラスCDIBitmap
+'00/06/20-	CDIB32作成。Special Thanks > TiaDeen ＆ さ～さん
+'00/05/16	JPEG読み込みに対応。Susie Plug-inに対応。
+
+//	「夜這いマニア」の制作のため開発が停止:p
+
+'00/04/01	WARNING(ASSERT機能)を入れて、堅牢なデバッグ環境にする。
+'00/03/12	CVolumeFader作成。これでCDの擬似的なフェードアウトも可能。
+'00/03/07	CSoundはMP3対応に。(acm使用)
+'00/03/06	CAudioMix作成。これで、CDの音量調整が可能に。
+'00/03/04	CSoundは圧縮WAVEファイル(WAVタグ付きMP3等)対応に。
+'00/03/03	CCriticalSection追加。CWinHook,CAppManagerクラスに導入。
+'00/03/02	CAppManager追加。マウス入力クラスCMouse追加。
+'00/03/01	CKey,CKey2を用意。これで簡単にキー入力が行なえる。
+'00/02/29	CSequencerクラス完成。
+			これでCD再生などと同期をとりながら画像を流すことも可能。
+'00/02/28	CDebugWindowを用意。これでデバッグもさくさく。
+'00/02/27	CCDDAはマルチドライブ指定に対応。複数ドライブ同時再生可能。
+'00/02/26	CGameFrameやSCENE管理なんてダサイのでやめる。
+'00/02/25	マルチスレッド、マルチウィンドゥの採用。
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+☆ version 2.00開発開始 '00/02/24
+
+	yaneurao Game SDK version 1.53から新たにソースを起こす。
+	自分の納得のいくものにするため全面的にリライトを決める。
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+

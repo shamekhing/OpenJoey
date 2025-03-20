@@ -1,0 +1,41 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Input/yaneDirectInput.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="CDirectInput"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CDirectInput</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">DirectInputの初期化のためのクラス<BR>	class CKeyInput , class CJoyStick にて使用<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LPDIRECTINPUT Get()</DIV>
+<DIV class="comment_block">コンストラクタで自動的にDirectInputの初期化を試みるので、<BR>		この関数で、IDirectInputを取得すればそれでｏｋ。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">int</SPAN> GetStatus()</DIV>
+<DIV class="comment_block">DirectInputの初期化状況について、リザルトを返す<BR>		0:ok(DirectX5以降) 1:ok(DirectX3以降)<BR>		2:ok(DirectX3 on NT4.0)<BR>		3,4,5:failure(DirectX3すら入ってない)<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CDirectInput()</DIV>
+<DIV class="public_member"> virtual ~CDirectInput()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member"><A class="class_link" href="Auxiliary!yaneCOMBase_h.html#CCOMObject" target=_self>CCOMObject</A>&lt;LPDIRECTINPUT&gt; m_vDirectInput</DIV>
+<DIV class="private_member"><A class="class_link" href="Auxiliary!yaneCOMBase_h.html#CCOMObject" target=_self>CCOMObject</A>&lt;LPDIRECTINPUT&gt;* GetDirectInput()</DIV>
+<DIV class="private_member"><A class="class_link" href="Auxiliary!yaneCOMBase_h.html#CLoadLibraryWrapper" target=_self>CLoadLibraryWrapper</A> m_vLoadLibraryWrapper</DIV>
+<DIV class="private_member"><A class="class_link" href="Auxiliary!yaneCOMBase_h.html#CLoadLibraryWrapper" target=_self>CLoadLibraryWrapper</A>* GetLib()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member">LPDIRECTINPUT m_lpDirectInput</DIV>
+<DIV class="private_member"><SPAN class="reserved_word">int</SPAN> m_nStatus</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

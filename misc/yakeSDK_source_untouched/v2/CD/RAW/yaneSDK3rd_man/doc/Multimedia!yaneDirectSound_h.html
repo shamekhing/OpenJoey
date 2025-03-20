@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Multimedia/yaneDirectSound.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="CDirectSound"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CDirectSound</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">DirectSoundの初期化のためのクラス<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CDirectSound()</DIV>
+<DIV class="public_member"> virtual ~CDirectSound()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">bool</SPAN> CanUseDirectSound()</DIV>
+<DIV class="comment_block">DirectSoundが使える環境なのかどうかを調べて返す<BR>		調べるのは最初の１回目の呼び出しのみなので何度呼び出しても良い。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LPDIRECTSOUND Get()</DIV>
+<DIV class="comment_block">DirectSoundObjectを取得する<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">int</SPAN> GetStatus()</DIV>
+<DIV class="comment_block">DirectSoundの初期化状況について、リザルトを返す<BR>		0: success<BR>		1: failure - サウンドカードが無かった<BR>		2: failure - 初期化が出来なかった<BR>		3: failure - 強調レベルが設定出来なかった<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT SetCooperativeLevel(DWORD dwLevel)</DIV>
+<DIV class="comment_block">DirectSoundの協調レベルを設定する<BR>		DSSCL_NORMAL <BR>		DSSCL_PRIORITY<BR>		DSSCL_EXCLUSIVE のいずれかを設定する<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="Auxiliary!yaneCOMBase_h.html#CCOMObject" target=_self>CCOMObject</A>&lt;LPDIRECTSOUND&gt;* GetObject()</DIV>
+<DIV class="protected_member"><A class="class_link" href="Auxiliary!yaneCOMBase_h.html#CCOMObject" target=_self>CCOMObject</A>&lt;LPDIRECTSOUND&gt; m_vDirectSound</DIV>
+<DIV class="protected_member">HWND m_hWnd</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nStatus</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

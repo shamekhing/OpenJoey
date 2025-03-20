@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CAppBase</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CAppBase</FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>アプリケーション基底クラス。このクラスは、一つの窓と、それのためのメッセージポンプ、ワーカースレッドの２つのスレッドを持つ。<FONT color="#ff0000">→マルチスレッド、うまく動かないのでシングルスレッドに修正。</FONT></P>
+<P>このクラスのインスタンスを複数作成することによって、マルチウィンドゥが実現できる。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>LRESULT Run(void); // 窓の作成（とメッセージループ
+for MainApp） </P>
+<P>　この関数を呼び出すことによって窓が生成され、メッセージポンプが走り、ワーカースレッド(virtual
+void MainThread(void)を実行する)を生成します。また、CAppBaseの第一インスタンスは自動的にメインウィンドゥとみなされ、それの終了をアプリ全体の終了と見なします。また、メインウィンドゥ以外の場合は、この関数から返ってきた時点で、窓の生成が完了していることは保証されます。</P>
+<P>HWND GetHWnd(void) const; &nbsp;// ウィンドゥハンドル取得<BR>
+CWindow*GetMyWindow(void); // ウィンドゥクラス取得</P>
+<P>bool IsMainApp(void) const; // これはメインアプリか？<BR>
+bool IsMessage(void) const; // メッセージループスレッドは生きているか</P>
+<P>bool IsThreadValid(void); // スレッドの正当性チェック（これを呼び出したときに、Windowsの通常のメッセージ処理も行なう）</P>
+<P>// スレッドのInvalidate。<BR>
+virtual void InvalidateThread(void); // overriden
+from CThread<BR>
+スレッド自体を無効にする。Idleモードで動作しているスレッドは、Windowメッセージが来ない限り、眠ったままなので、そういう場合には、強制的にWM_CLOSEを送ってやる必要がある。この関数は、そういう処理をする。たとえば、CDebugWindowは、通常、Idleモードで動作している。</P>
+<P>bool* GetWaitIfMinimized(void); // IsThreadValid呼び出し時に、ウィンドゥが最小化されていればそのまま待機するか？のboolフラグを取得する。使用例→　
+*GetWaitIfMinimized( ) = true;</P>
+<P>// Idleモード(default:false)にするのか<BR>
+bool* GetIdle(void);<BR>
+　フラグのポインタが返るので、Idleモードにするには、*GetIdle(
+) = true;のようにする。<BR>
+　Idleモードにすると、IsThreadValidでWindowメッセージを処理するときに、Windowメッセージがが存在しないときは、このスレッドは眠ったままになる。（ＣＰＵパワーを食わない）　Idleモードになっているスレッドを殺すには、このクラスのInvalidateThreadを呼び出すこと。</P>
+<P>// これ使うかな？<BR>
+static CAppBase* GetMainApp(void); // メインアプリへのポインタを返す<BR>
+static HWND GetMainWnd(void); // メインアプリの保有するウィンドゥハンドルを返す</P>
+<P><FONT size="+1" color="#009900">☆　継承するといいことあるかも（笑）protectedな関数の一覧</FONT></P>
+<P>// これが実行スレッドなので継承して、こいつを用意してね！<BR>
+// ウィンドゥ作成後(OnCreate()のあと)に呼び出されるの。<BR>
+<FONT color="#ff0000">virtual void MainThread(void);</FONT></P>
+<P>// その他も適宜オーバーライドしてねん<BR>
+virtual LRESULT OnInit(void) { return 0;
+} // 生成直後<BR>
+virtual LRESULT OnPreCreate(CWindowOption&amp;
+opt); // ウィンドゥ作成直前<BR>
+virtual LRESULT OnCreate(void) { return 0;
+} // ウィンドゥ作成直後<BR>
+virtual LRESULT OnDestroy(void) { return
+0; } // 終了直前</P>
+<P>virtual LRESULT OnPreClose(void) { return
+0; }<BR>
+// WM_CLOSE処理前に呼び出され、これを非0を返せばWM_CLOSEは実行されない<BR>
+// その状況下においてウィンドゥをCLOSEさせるためには、Closeを呼び出すこと</P>
+<P>// brief Window Message to override<BR>
+virtual void OnPaint(void) { }</P>
+<P>// OnPreCloseを処理せずに強制的にWM_CLOSEを実行する<BR>
+virtual void Close(void); </P>
+<P><FONT color="#990099" size="+1">☆　ウィンドゥが閉じられるときの処理を記述する</FONT></P>
+<P>WM_CLOSEが呼び出されると、OnPreCloseが呼び出されます。これが非0を返せば、WM_CLOSEは処理されません。（ウィンドゥは閉じられません）　そして、このときにそのウィンドゥを閉じるかどうかをユーザーに問い合わせるような処理をして、閉じられることが確定したら、CAppBase::Closeを呼び出します。そうすれば、ウィンドゥは閉じられます。(私のホームページにあるサンプル２３)</P>
+<HR>
+</BODY></HTML>

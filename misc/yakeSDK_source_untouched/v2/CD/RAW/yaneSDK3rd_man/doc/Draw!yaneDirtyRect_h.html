@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Draw/yaneDirtyRect.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="IDirtyRect"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">IDirtyRect</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Clear()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Refresh()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> AddRect(<SPAN class="reserved_word">int</SPAN> left, <SPAN class="reserved_word">int</SPAN> top, <SPAN class="reserved_word">int</SPAN> right, <SPAN class="reserved_word">int</SPAN> bottom)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> AddRectSize(<SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, <SPAN class="reserved_word">int</SPAN> sx, <SPAN class="reserved_word">int</SPAN> sy)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> AddRect(<SPAN class="reserved_word">const</SPAN> RECT&amp; rc)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">int</SPAN> GetRectNum()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> RECT* GetRect()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> virtual ~IDirtyRect()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CDirtyRect"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CDirtyRect</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">使いかた。<BR>		Clearでクリア。<BR>		AddRectなんとかで、矩形を加算していく<BR>		（描画ごとに幾度となく繰り返す）<BR>		そのとき、このクラスの内部で、最大更新矩形(dirty rect)と<BR>		なるように結合されていく。ただし、画面左上の少しと<BR>		右下の少しを更新しただけなのに画面全体が最大更新矩形(dirty rect)<BR>		として選択されてしまうのはまずいので、そのようなケースにそなえて<BR>		最大5つのdirty rectを持っても良いことにする。<BR><BR>		最後、Refreshを呼び出すことにより、重複する（あるいは完全に含まれる）<BR>		dirty rectを消去する。<BR><BR>		そして、GetRectNum,GetRectで、dirty rectの数と矩形が取得できる。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Draw!yaneDirtyRect_h.html#IDirtyRect" target=_self>IDirtyRect</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Clear()</DIV>
+<DIV class="comment_block">すべてをクリアする<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Refresh()</DIV>
+<DIV class="comment_block">リフレッシュする<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> AddRect(<SPAN class="reserved_word">int</SPAN> left, <SPAN class="reserved_word">int</SPAN> top, <SPAN class="reserved_word">int</SPAN> right, <SPAN class="reserved_word">int</SPAN> bottom)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> AddRectSize(<SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, <SPAN class="reserved_word">int</SPAN> sx, <SPAN class="reserved_word">int</SPAN> sy)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> AddRect(<SPAN class="reserved_word">const</SPAN> RECT&amp; rc)</DIV>
+<DIV class="comment_block">矩形の加算<BR>範囲指定タイプ<BR>座標＋大きさ指定タイプ<BR>矩形で加算<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">int</SPAN> GetRectNum()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> RECT* GetRect()</DIV>
+<DIV class="comment_block">結果の取得<BR>生成された矩形合計数(0:なし)<BR>生成された矩形へのポインタを取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CDirtyRect()</DIV>
+<DIV class="public_member"> virtual ~CDirtyRect()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">enum</SPAN>  <BR>{<BR>　　nRectSize = 5<BR>}</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">RECT m_arcRect[nRectSize+1]</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_anRectArea[nRectSize+1]</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nRectLast</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>AppFrame/yaneAppBase.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="IAppBase"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">IAppBase</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">アプリケーション基底クラスのインターフェース<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsThreadValid()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> InvalidateThread()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Window!yaneWindow_h.html#IWindow" target=_self>IWindow</A>* GetMyWindow()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> HWND GetHWnd()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Close()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Timer!yaneIntervalTimer_h.html#IIntervalTimer" target=_self>IIntervalTimer</A>* GetIntervalTimer()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="AppFrame!yaneAppBase_h.html#IAppBase" target=_self>IAppBase</A>* GetMainApp()</DIV>
+<DIV class="comment_block">これ使うかな？<BR>メインアプリへのポインタを返す<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> HWND GetMainWnd()</DIV>
+<DIV class="comment_block">メインアプリの保有するウィンドゥハンドルを返す<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> virtual ~IAppBase()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="AppFrame!yaneAppBase_h.html#IAppBase" target=_self>IAppBase</A>* m_lpMainApp</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CAppBase"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CAppBase</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">アプリケーション基底クラス<BR><BR>	アプリケーションは、こいつから派生させると良い。<BR><BR>	すなわち、CAppBase とは スレッド生成 + CWindow + メッセージポンプ<BR><BR>	このクラスのインスタンスを複数作成することによって、<BR>	マルチウィンドゥが実現できる。<BR><BR>	☆　ウィンドゥが閉じられるときの処理を記述するには<BR><BR>	WM_CLOSEが呼び出されると、OnPreCloseが呼び出されます。<BR>	これが非0を返せば、WM_CLOSEは処理されません。<BR>	（ウィンドゥは閉じられません）<BR>	そして、このときにそのウィンドゥを閉じるかどうかをユーザーに<BR>	問い合わせるような処理をして、閉じられることが確定したら、<BR>	IAppBase::Closeを呼び出します。そうすれば、ウィンドゥは閉じられます。<BR><BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Window!yaneWinHook_h.html#IWinHook" target=_self>IWinHook</A><BR>
+<SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Thread!yaneThread_h.html#CThread" target=_self>CThread</A><BR>
+<SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="AppFrame!yaneAppBase_h.html#IAppBase" target=_self>IAppBase</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Run()</DIV>
+<DIV class="comment_block">　	この関数を呼び出すことによって窓が生成され、メッセージポンプが走り、<BR>	ワーカースレッド(virtual void MainThread()を実行する)を生成します。<BR>	また、CAppBaseの第一インスタンスは自動的にメインウィンドゥとみなされ、<BR>	それの終了をアプリ全体の終了と見なします。<BR>	また、メインウィンドゥ以外の場合は、この関数から返ってきた時点で、<BR>	窓の生成が完了していることは保証されます。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> HWND GetHWnd()</DIV>
+<DIV class="comment_block">ウィンドゥハンドル取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Window!yaneWindow_h.html#IWindow" target=_self>IWindow</A>* GetMyWindow()</DIV>
+<DIV class="comment_block">ウィンドゥクラス取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> IsMainApp()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> IsMessage()</DIV>
+<DIV class="comment_block">メッセージループスレッドは生きているか<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsThreadValid()</DIV>
+<DIV class="comment_block">スレッドの正当性チェック overriden from CThread<BR>⇒　こいつのなかにメッセージループも書くと良い<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> InvalidateThread()</DIV>
+<DIV class="comment_block">スレッドのInvalidate。<BR>スレッド自体を無効にする。Idleモードで動作しているスレッドは、<BR>		Windowメッセージが来ない限り、眠ったままなので、そういう場合には、<BR>		強制的にWM_CLOSEを送ってやる必要がある。<BR>		この関数は、そういう処理をする。たとえば、CDebugWindowは、<BR>		通常、Idleモードで動作している。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">volatile</SPAN> <SPAN class="reserved_word">bool</SPAN>* GetWaitIfMinimized()</DIV>
+<DIV class="comment_block">ウィンドゥ最小化時に待機するか<BR>IsThreadValid呼び出し時に、ウィンドゥが最小化されていればそのまま<BR>		待機するか？のboolフラグを取得する。<BR>			使用例→　 *GetWaitIfMinimized( ) = true;<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">bool</SPAN>* GetIdle()</DIV>
+<DIV class="comment_block">Idleモード(default:false)にするのか<BR>フラグのポインタが返るので、Idleモードにするには、<BR>		*GetIdle( ) = true;のようにする。<BR>		Idleモードにすると、IsThreadValidでWindowメッセージを処理するときに、<BR>		Windowメッセージがが存在しないときは、このスレッドは眠ったままになる。<BR>		（ＣＰＵパワーを食わない）<BR>		Idleモードになっているスレッドを殺すには、<BR>		このクラスのInvalidateThreadを呼び出すこと。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Close()</DIV>
+<DIV class="comment_block">OnPreCloseを処理せずに強制的にWM_CLOSEを実行する<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CAppBase()</DIV>
+<DIV class="public_member"> virtual ~CAppBase()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> MainThread()</DIV>
+<DIV class="comment_block">///////////////////////////////////////////////////////////////////////<BR>継承するといいことあるかも（笑）関数の一覧<BR>これが実行スレッドなので継承して、こいつを用意してね！<BR>ウィンドゥ作成後(OnCreate()のあと)に呼び出されるの。<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT OnInit()</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT OnPreCreate(<A class="class_link" href="Window!yaneWindow_h.html#CWindowOption" target=_self>CWindowOption</A>&amp; opt)</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT OnCreate()</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT OnDestroy()</DIV>
+<DIV class="comment_block">生成直後<BR>ウィンドゥ作成直前<BR>ウィンドゥ作成直後<BR>終了直前<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT OnPreClose()</DIV>
+<DIV class="comment_block">WM_CLOSE処理前に呼び出され、これを非0を返せばWM_CLOSEは実行されない<BR>その状況下においてウィンドゥをCLOSEさせるためには、Closeを呼び出すこと<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> OnPaint()</DIV>
+<DIV class="comment_block">brief Window Message to override<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="Timer!yaneIntervalTimer_h.html#IIntervalTimer" target=_self>IIntervalTimer</A>* GetIntervalTimer()</DIV>
+<DIV class="comment_block">インターバルタイマの取得<BR>		IsThreadValidを呼び出したときに、このコールバックがかかる<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="Window!yaneWindow_h.html#CWindow" target=_self>CWindow</A> m_oWindow</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bMessage</DIV>
+<DIV class="comment_block">///////////////////////////////////////////////////////////////////////<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> ThreadProc()</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT WndProc()</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> InnerStopThread()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">volatile</SPAN> <SPAN class="reserved_word">bool</SPAN> m_bWaitIfMinimized</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bClose</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bIdle</DIV>
+<DIV class="protected_member">HACCEL m_hAccel</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="Timer!yaneIntervalTimer_h.html#CIntervalTimer" target=_self>CIntervalTimer</A> m_vIntervalTimer</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member"><SPAN class="reserved_word">static</SPAN> DWORD WINAPIRunPrepare(LPVOID lpVoid)</DIV>
+<DIV class="private_member">LRESULT RunThread()</DIV>
+<DIV class="private_member">LRESULT MessageLoop()</DIV>
+<DIV class="private_member"><SPAN class="reserved_word">volatile</SPAN> LONG m_nThreadStatus</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

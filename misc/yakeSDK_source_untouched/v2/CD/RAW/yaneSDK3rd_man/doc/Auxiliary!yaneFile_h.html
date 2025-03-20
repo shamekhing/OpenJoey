@@ -1,0 +1,185 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Auxiliary/yaneFile.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="IFile"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">IFile</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Open(<SPAN class="reserved_word">const</SPAN> string&amp; filename, <SPAN class="reserved_word">const</SPAN> string&amp; access)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Write()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Close()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> FILE* GetFilePtr()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Read(<SPAN class="reserved_word">const</SPAN> string&amp; filename)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">const</SPAN> string GetName()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> string GetPureFileName()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> string GetSuffix()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LPVOID GetMemory()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> DWORD GetSize()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT ReadLine(LPSTR buf, DWORD dwSize=256)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT ReadLine2(LPSTR buf, DWORD dwSize=512)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT ReadLine()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Reset()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT ReadData(BYTE*p,DWORD size)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Write(<SPAN class="reserved_word">const</SPAN> string&amp; filename, LPVOID mem, DWORD size)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT WriteBack(<SPAN class="reserved_word">const</SPAN> string&amp; filename)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Encode()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Delete(<SPAN class="reserved_word">const</SPAN> string&amp; filename)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT CreateTemporary()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Load(<SPAN class="reserved_word">const</SPAN> string&amp; filename)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Save(<SPAN class="reserved_word">const</SPAN> string&amp; filename)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Save(<SPAN class="reserved_word">const</SPAN> string&amp; filename)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"> virtual ~IFile()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFile"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFile</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">ファイルの入出力用のクラスです。<BR><BR>読み込みは、yanePack形式(ファイル結合による合体)、yanePackEx形式<BR>(LZSS法による圧縮),yanePackDx形式(サブフォルダ圧縮対応のyanePackEx)<BR>のファイルも対応しています。<BR><BR>書き込みは、残念ながら、yanePack/yanePackEx形式のファイルには書き込めません。<BR><BR>yanePack形式／yanePackEx形式／yanePackDx形式の仕様については後述します。<BR>yanePack形式／yanePackEx形式／yanePackDxのファイルを作るためには、別途、<BR>yanePack／yanePackEx／yanePackDxをご用意ください。<BR><BR><BR>yanePackの仕様(yaneuraoGameSDK1.00でサポートしていた形式／互換のため読み込めます)<BR><BR>☆　内容<BR><BR>yanePackは、複数ファイルを一つにまとめるためのものです。（圧縮はしません）<BR><BR>CFileの一括読み込み系の関数ならば、yanePack形式であることを意識せずに読み出しが可能です。<BR><BR> &lt;yanepack用構造体について&gt;<BR>// ファイルヘッダー "yanepack" 8バイト + 格納ファイル数がDWORDできて、<BR>// その後、以下のCFileInfoが格納ファイル数だけ来て、あとはデータです。<BR>struct CFileInfo {<BR>char filename[32];<BR>DWORD startpos; // seek pos(ファイル先頭からのオフセット)<BR>size_t filesize; 　　// file size（そのファイルのサイズ）<BR>};<BR><BR>ファイルの拡張子はdatにしてください。<BR>--------------------------------------------------------------------------------yanePackＥｘの仕様(yaneuraoGameSDK2ndでサポートする形式）<BR>--------------------------------------------------------------------------------☆　内容<BR>yanePackExは、複数ファイルを一つにまとめ、かつ圧縮するためのものです。圧縮にはLZSS法を用います（CLZSSクラスをそのまま利用します）<BR> &lt;yanepackEx用構造体について&gt;<BR>// ファイルヘッダー "yanepkEx" 8バイト + 格納ファイル数がDWORDできて、<BR>// その後、以下のCFileInfoが格納ファイル数だけ来て、あとはデータです。<BR>struct CFileInfo {<BR>char filename[32];<BR>DWORD startpos; // seek pos(ファイル先頭からのオフセット)<BR>size_t filesize; 　　// file size（そのファイルの圧縮サイズ）<BR>size_t packsize;　 // packsize（そのファイルの展開後のサイズ)<BR>// 非圧縮のファイルは、filesize==packsizeとなっています<BR>};<BR>ファイルの拡張子はdatにしてください。<BR>--------------------------------------------------------------------------------yanePackＤｘの仕様(yaneuraoGameSDK3rdでサポートする形式）<BR>--------------------------------------------------------------------------------☆　内容<BR>yanePackDxは、yanePackExのフォルダ対応版です。<BR> &lt;yanepackDx用構造体について&gt;<BR>// ファイルヘッダー "yanepkDx" 8バイト + 格納ファイル数がDWORDできて、<BR>// その後、以下のCFileInfoが格納ファイル数だけ来て、あとはデータです。<BR>struct CFileInfo {<BR>char filename[256];<BR>DWORD startpos; // seek pos(ファイル先頭からのオフセット)<BR>size_t filesize; 　　// file size（そのファイルの圧縮サイズ）<BR>size_t packsize;　 // packsize（そのファイルの展開後のサイズ)<BR>// 非圧縮のファイルは、filesize==packsizeとなっています<BR>};<BR>ファイルの拡張子はdatにしてください。<BR>ファイル名は、<BR>	"test\subfolder\sample.txt"<BR>のように、フォルダ付きで格納されていることがあります。<BR>よって、<BR>	CFile::Readは、<BR>		"test\subfolder\sample.txt"<BR>	というファイルが無ければ、次は<BR>		"test\subfolder.dat" のなかの"sample.txt"<BR>	それが無ければ<BR>		"test.dat"のなかの"subfolder\sample.txt"<BR>	というように、ルートディレクトリまで遡及して検索していきます。<BR><BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Auxiliary!yaneFile_h.html#IFile" target=_self>IFile</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Open(<SPAN class="reserved_word">const</SPAN> string&amp; filename, <SPAN class="reserved_word">const</SPAN> string&amp; access)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Write()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Close()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> FILE* GetFilePtr()</DIV>
+<DIV class="comment_block">ストリーム系ファイル操作<BR>Stream系Open<BR>Stream系Write<BR>Close<BR>Openでファイル名を指定し、オープンします。accessはアクセス指定子で、fopenで指定するものと同じです。Writeは、文字列を出力します（それしか有りません） Closeは、ファイルを閉じます。何かのときはGetFilePtrでオープンしているファイルのFILE*が得られるので、それを間接で書き込んで行くことは出来ます。逆にユーザー側でOpenしたFILE*をSetFilePtrを設定し、CFileのメンバ関数(と言ってもWriteとCloseぐらいしかありませんが)を使うことも出来ます。<BR><BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Read(<SPAN class="reserved_word">const</SPAN> string&amp; filename)</DIV>
+<DIV class="comment_block">一括読み込み系<BR>ファイル名は"c:\"とかのように:が含まれていなければ、起動ディレクトリ<BR>		(SetCurrentDirで設定されているディレクトリ)相対パスです。<BR>	<BR>一括読み込み系（yanepack系対応）<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">const</SPAN> string GetName()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> string GetPureFileName()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> string GetSuffix()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LPVOID GetMemory()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> DWORD GetSize()</DIV>
+<DIV class="comment_block">読み込んでいるファイル名を返す<BR>パス無しファイル名を取得<BR>読み込んでいるファイルの拡張子を返す<BR>読み込んでいるメモリを返す<BR>読み込んでいるファイルサイズを返す<BR>Readで読み込んだものを解放するには、Close()を呼び出すこと<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT ReadLine(LPSTR buf, DWORD dwSize=256)</DIV>
+<DIV class="comment_block">Readでオープンします。オープンした瞬間に、メモリに一括で読み込まれます。Readで読み込んだものを解放するには、Close()を呼び出します。Close()を呼び出すまで、GetMemoryで取得されるファイルの内容が格納されているメモリは有効です。<BR>	<BR>メモリに読み込んだファイルを一行ずつ読み出すルーチン<BR>バッファはdwSizeバイト用意しといてねん<BR>返し値 0: 正常終了	1: EOF	2:バッファあふれ<BR>3:ファイル読み込んでいない<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT ReadLine2(LPSTR buf, DWORD dwSize=512)</DIV>
+<DIV class="comment_block">バッファはdwSizeバイト用意しといてねん<BR>これは、シナリオファイル("..."が1メッセージ,終了文字"END"であるファイル)の読み込み用<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT ReadLine()</DIV>
+<DIV class="comment_block">こちらは、バッファは自前で用意しなくて良い。<BR>返し値 0: 正常終了 1:EOF   3:ファイル読み込んでない＾＾；<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Reset()</DIV>
+<DIV class="comment_block">上のReadLineでの読み込みポインタを先頭ポインタに戻す<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT ReadData(BYTE*p,DWORD size)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Write(<SPAN class="reserved_word">const</SPAN> string&amp; filename, LPVOID mem, DWORD size)</DIV>
+<DIV class="comment_block">一括書き込み系<BR>一気にファイルに書き込みます。圧縮ファイルには書き出せません。<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT WriteBack(<SPAN class="reserved_word">const</SPAN> string&amp; filename)</DIV>
+<DIV class="comment_block">ReadOpenしたものを書き戻します。圧縮ファイルには書き戻せません。<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Encode()</DIV>
+<DIV class="comment_block">とっさに暗号化（単なるニブル入れ替え）<BR>内部バッファをエンコードする<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Delete(<SPAN class="reserved_word">const</SPAN> string&amp; filename)</DIV>
+<DIV class="comment_block">ファイルの削除<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT CreateTemporary()</DIV>
+<DIV class="comment_block">必要ならばテンポラリファイルを作成し書き出す。（一括読み込み系のオープンが成功していることが前提）<BR>この関数が終了後は、CFileはファイルの中身は保有していない。ファイル名だけは持っているので、GetNameでファイル名の取得は可能。<BR>テンポラリファイルを作成する条件は、読み込んでいたファイルが圧縮ファイルであること。<BR>テンポラリファイルを作成した場合は、GetNameで返ってくるファイル名は、そのファイル名となる。テンポラリファイルは、Closeか、デストラクタで削除される。<BR><BR>つまり、メモリ上のファイルでは実行できないAPI(例：MCI関連等)に対し、一時ファイルを用意するのに使う。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Load(<SPAN class="reserved_word">const</SPAN> string&amp; filename)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Save(<SPAN class="reserved_word">const</SPAN> string&amp; filename)</DIV>
+<DIV class="comment_block">データの保存／読み込み(class CSerializeと併用すると良い)<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Save(<SPAN class="reserved_word">const</SPAN> string&amp; filename)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">void</SPAN> SetPathList(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;vector&lt;string&gt;&gt;&amp; aszPathList)</DIV>
+<DIV class="comment_block">-----------------------------------------------------<BR>☆　ファイルの探索pathを設定する<BR>ReadするときのPath設定<BR>でvListにかかれているパスへもファイルを見に行く。<BR>カレントフォルダからのパスが優先検索経路。<BR>パス名の最後尾には、'\'は不要。<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;vector&lt;string&gt;&gt; GetPathList()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> string GetCurrentDir()</DIV>
+<DIV class="comment_block">-----------------------------------------------------<BR>起動フォルダ検出系<BR>CFileが対象としているのは、CFileのメンバm_szCurrentDirectoryです。これは、GetCurrentDirかSetCurrentDirが呼び出されるまで初期化されません。起動直後のカレントフォルダをCFileの対象フォルダとしたいのであれば、起動直後にCFile::SetCurrentDir()を呼び出す必要があります。この関数は、現在のカレントフォルダをCFileのカレントフォルダに設定するからです。Windowsは、ダイアログ等を開いてフォルダ移動を行なうと、そこをカレントフォルダに設定してしまいますので、そうなってからGetCurrentDirを呼び出すと、CFileのメンバm_szCurrentDirectoryは、初期化されていないため、その瞬間、現在のカレントフォルダを取得しようとしますが、それは移動した先のフォルダであるため、起動フォルダ相対にはなりません。細かいことですが、気をつけてください。<BR><BR>class CFileInitializer が、class CAppInitializer の初期化コールバックにおいて<BR>SetCurrentDirするので、class CAppInitializer を用いているプログラムならば<BR>以上のことは、気にしなくて良い。<BR>	<BR>現在、CFileでカレントフォルダとして設定されているフォルダ名を取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">void</SPAN> SetCurrentDir()</DIV>
+<DIV class="comment_block">現在のカレントフォルダを、CFileのカレントフォルダにする<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">void</SPAN> SetCurrentDir(<SPAN class="reserved_word">const</SPAN> string&amp; dir)</DIV>
+<DIV class="comment_block">指定したパスをCFileのカレントフォルダにする。<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> LRESULT GetParentDir(string&amp; filename)</DIV>
+<DIV class="comment_block">例） "c:\test1\test2\test3.exe" -&gt; "c:\test1\test2\" -&gt; "c:\test1\" -&gt; "c:\" -&gt; "c:\"というように、一度呼び出すごとに一つずつ親フォルダになる。ネットワークドライブにも対応している。（以下の例）<BR><BR>	例<BR>	\\ -&gt; \\<BR>	\\aaa -&gt; \\aaa\<BR>	\\aaa\ -&gt; \\aaa\<BR>	\\aaa\bbb -&gt; \\aaa\<BR>	\\aaa\bbb\ -&gt; \\aaa\<BR>	\\aaa\bbb\ccc -&gt; \\aaa\bbb\<BR>	\\aaa\bbb\ccc\ -&gt; \\aaa\bbb\<BR>	\\aaa\bbb\ccc\ddd -&gt; \\aaa\bbb\ccc\<BR>	\\aaa\bbb\ccc\ddd\ -&gt; \\aaa\bbb\ccc\<BR>	\ -&gt; \<BR>	C: -&gt; C:\<BR>	C:\ -&gt; C:\<BR>	C:\aaa -&gt; C:\<BR>	C:\aaa\ -&gt; C:\<BR>	C:\aaa\bbb -&gt; C:\aaa\<BR>	C:\aaa\bbb\ -&gt; C:\aaa\<BR>	C:\aaa\bbb\ccc -&gt; C:\aaa\bbb\<BR>	C:\aaa\bbb\ccc\ -&gt; C:\aaa\bbb\<BR>	C:\aaa\bbb\ccc\ddd -&gt; C:\aaa\bbb\ccc\<BR>	C:\aaa\bbb\ccc\ddd\ -&gt; C:\aaa\bbb\ccc\<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> string MakeFullName(<SPAN class="reserved_word">const</SPAN> string&amp; filename)</DIV>
+<DIV class="comment_block">起動ディレクトリを補って完全パスを作る<BR>⇒　このとき、 / （スラッシュ）は、 \ （バックスラッシュ）へ変換するようになっています。（そうしないと、うまく動かないコーデック等が存在するため）　よって、何らかの読み込み関数を自作する場合は、かならず、このMakeFullNameを経由させたほうが無難と言えます。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> string GetWindowsDir()</DIV>
+<DIV class="comment_block">Windowsディレクトリの取得（終端は'\'）<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> string GetSuffixOf()</DIV>
+<DIV class="comment_block">ファイル関連文字列操作系<BR>ファイル名の拡張子取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> string GetPureFileNameOf()</DIV>
+<DIV class="comment_block">パス付きファイル名からファイル名部分のみを取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">void</SPAN> ToLower(string &amp; )</DIV>
+<DIV class="comment_block">小文字化する<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> LRESULT GetTemporaryFileName(string&amp; szFileName)</DIV>
+<DIV class="comment_block">テンポラリファイルを取得する<BR>この関数を実行した瞬間、ファイルが生成され、そのファイル名が返る<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">bool</SPAN> PathFileExists(<SPAN class="reserved_word">const</SPAN> string&amp; fullname)</DIV>
+<DIV class="comment_block">ファイル名は、内部的にMakeFullNameで完全パス付きのファイル名に変換されてから実行されます。MakeFullNameには、CFileのメンバm_szCurrentDirectoryが使われます。（上の対象フォルダ設定系の説明を読むこと）　最初の呼び出し段階で、このメンバ変数が初期化されていない場合は、現在のカレントディレクトリを取得し、それをm_szCurrentDirectoryにします。通常、この仕様で問題ないと思うのですが、ダイアログ等を使う場合はこの限りではありません。注意してください。<BR><BR>MakeFullNameでは、"../../test.wav"のような駆け上がりパスもサポートしています。Open等の関数でも、最初にこの関数を呼び出してパス補正をするので、このような駆け上がりパスが利用できます。<BR><BR>（一応、CAppInitializer::Init関数内でSetCurrentDir(void)を呼び出しているので問題ないと思いますが、CFileだけご自分のプログラムに流用されるときなどには気をつけてください）<BR><BR>また、ファイルを読み込んだときに内部的に確保されるメモリは、テキストファイルを読み込んだときに、最後は'\0'を保証するため、１バイト多めに確保して最後のバイトを'\0'にしています<BR><BR>☆　メモリイメージをCFileに読み込ませる<BR><BR>たとえば、ファイル名をもらい、それをCFileでReadで読み込むようなクラスを作るとき、メモリ上に配置されたイメージを指定したい場合などは、それ用の関数も用意しなくてはなりません。このような部分をCFileが少しでも吸収してくれれば良いと思ったので、メモリ上に配置したデータを、以下のようにして「！」で始まり、１６進数の文字列でメモリの先頭アドレスと、そのブロックのサイズをファイル名として指定してやれば<BR><BR>	LPCSTR lpsz = "これ表示できるかな？&lt;HR&gt;うまくいけば良いのだけど"<BR>	"そう簡単でもないか？&lt;HR&gt;いけてるいけてる．．&lt;HR&gt;";<BR>	::wsprintf(buf,"!%x,%x",lpsz,strlen(lpsz)+1);<BR><BR>CFileは、これをファイルと錯覚し、あたかもファイルであるかのように扱うことが出来ます。<BR><BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CFile()</DIV>
+<DIV class="public_member"> virtual ~CFile()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">LRESULT InnerRead(<SPAN class="reserved_word">const</SPAN> string&amp; filename)</DIV>
+<DIV class="protected_member">LRESULT InnerOpen(<SPAN class="reserved_word">const</SPAN> string&amp; filename, <SPAN class="reserved_word">const</SPAN> string&amp; access)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">FILE* m_lpFile</DIV>
+<DIV class="protected_member">LPVOID m_lpFileAdr</DIV>
+<DIV class="protected_member">DWORD m_dwFileSize</DIV>
+<DIV class="protected_member">LPSTR m_lpFileMemPos</DIV>
+<DIV class="protected_member">string m_szFileName</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bEncode</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bTempFile</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bCompress</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bMemoryImage</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">static</SPAN> string m_szCurrentDirectory</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;vector&lt;string&gt;&gt; m_aszPathList</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFileInitializer"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFileInitializer</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="private_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="Auxiliary!yaneFile_h.html#CFileInitializer" target=_self>CFileInitializer</A> m_dummy</DIV>
+<DIV class="public_member"> CFileInitializer()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

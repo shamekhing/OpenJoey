@@ -1,0 +1,16 @@
+// ＮＴで動作させるので、バージョンはDirectX3だ！！
+#define DIRECTDRAW_VERSION	0x0300
+#define DIRECTSOUND_VERSION 0x0300
+//	↑DirectX7からDSBUFFERDESC構造体のサイズが大きくなっているのでその対策
+#define DIRECTINPUT_VERSION 0x0300
+#include <dinput.h>			// つかうんならヘッダ読んどくしー
+#pragma comment(lib,"dinput.lib")
+//	リンクしたくないけど、dinput.libのグローバル変数がキーデバイス取得に
+//	必要なので、仕方がない。なんでこんな設計になってるんかなー。
+//	BCC5.5ならば外して。
+
+#include <ddraw.h>			//	DirectDraw header
+#include <dsound.h>			//	DirectSound header
+#include <dinput.h>			//	DirectInput header
+#include <dmusicc.h>		//	DirectMusic header(directX6以降のSDKが必要)
+#include <dmusici.h>

@@ -1,0 +1,18 @@
+class CHogeMeirin {
+public:
+	void	func(int n){
+		//	このメンバ関数を別スレッドとして走らせたいとき！
+	}
+	void	Main(){
+		//	funcを別スレッドで起動
+		class CMyThread : public CThread , public mediator<CHogeMeirin> {
+		public:
+			CMyThread(CHogeMeirin*p) : mediator<CHogeMeirin>(p) {}
+			void ThreadProc() { outer.func(100); /* 仮に100 */ }
+		} mythread(this);
+		mythread.CreateThread();
+
+		//	この関数を抜けると↑のスレッドは終了するが、
+		//	それが嫌ならば、CMyThreadをnewして、smart_ptrで管理するなど．．
+	}
+};

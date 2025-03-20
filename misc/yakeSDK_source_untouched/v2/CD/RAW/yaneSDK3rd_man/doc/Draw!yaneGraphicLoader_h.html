@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Draw/yaneGraphicLoader.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="IGraphicLoader"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">IGraphicLoader</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT LoadPicture(<A class="class_link" href="Auxiliary!yaneFile_h.html#CFile" target=_self>CFile</A>&amp; file)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetSize(LONG&amp; x, LONG&amp; y)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Render(DWORD* p, LONG lPitch)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Render(HDC hdc)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT ReleasePicture()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetPalette(PALETTEENTRY pal[256])&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"> virtual ~IGraphicLoader()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!factory_permutation_h.html#factory_permutation_i" target=_self>factory_permutation_i</A>&lt;<A class="class_link" href="Draw!yaneGraphicLoader_h.html#IGraphicLoader" target=_self>IGraphicLoader</A>,<A class="class_link" href="Draw!yaneGraphicLoader_h.html#CGraphicLoader" target=_self>CGraphicLoader</A>&gt;* GetGraphicFactory()</DIV>
+<DIV class="private_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!factory_permutation_h.html#factory_permutation_i" target=_self>factory_permutation_i</A>&lt;<A class="class_link" href="Draw!yaneGraphicLoader_h.html#IGraphicLoader" target=_self>IGraphicLoader</A>,<A class="class_link" href="Draw!yaneGraphicLoader_h.html#CGraphicLoader" target=_self>CGraphicLoader</A>&gt; m_factory</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CGraphicLoader"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CGraphicLoader</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Draw!yaneGraphicLoader_h.html#IGraphicLoader" target=_self>IGraphicLoader</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT LoadPicture(<A class="class_link" href="Auxiliary!yaneFile_h.html#CFile" target=_self>CFile</A>&amp; file)</DIV>
+<DIV class="comment_block">これで読み込む返し値が0ならば成功<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetSize(LONG&amp; x, LONG&amp; y)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Render(DWORD* p, LONG lPitch)</DIV>
+<DIV class="comment_block">これで読み込んだ画像のサイズを取得<BR>CDIB32のサーフェースへのポインタを渡して、そこに描画してもらう<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Render(HDC hdc)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT ReleasePicture()</DIV>
+<DIV class="comment_block">hdcを渡して、そこに描画してもらう<BR>これで解放する<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetPalette(PALETTEENTRY pal[256])</DIV>
+<DIV class="comment_block">パレットの取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CGraphicLoader()</DIV>
+<DIV class="public_member"> virtual ~CGraphicLoader()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT LoadPictureByOwn(<A class="class_link" href="Auxiliary!yaneFile_h.html#CFile" target=_self>CFile</A>&amp; file)</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT LoadPictureByOLE(<A class="class_link" href="Auxiliary!yaneFile_h.html#CFile" target=_self>CFile</A>&amp; file)</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT LoadPictureBySPI(<A class="class_link" href="Auxiliary!yaneFile_h.html#CFile" target=_self>CFile</A>&amp; file)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">BITMAPFILEHEADER* m_lpBF</DIV>
+<DIV class="protected_member">BITMAPINFOHEADER* m_lpBI</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">void</SPAN>* m_lpBits</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">IPicture* m_lpiPicture</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">HMODULE m_hDLL</DIV>
+<DIV class="protected_member">SpiFuncIsSupported m_pIsSupported</DIV>
+<DIV class="protected_member">SpiFuncGetPictureInfo m_pGetPictureInfo</DIV>
+<DIV class="protected_member">SpiFuncGetPicture m_pGetPicture</DIV>
+<DIV class="protected_member"><A class="class_link" href="Auxiliary!yaneFile_h.html#CFile" target=_self>CFile</A>* m_lpFile</DIV>
+<DIV class="protected_member">HLOCAL m_hBm</DIV>
+<DIV class="protected_member">HLOCAL m_hBmInfo</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> FreeLocalMemory()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

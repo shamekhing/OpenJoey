@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CWindow </TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CWindow </FONT><FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>窓を生成するクラスです。このクラスのインスタンス一つが、窓一つに対応します。<BR>
+マルチウィンドゥのサポートはやや甘いです。（どうせフルスクリーンになるとDirectDrawを用いて描画している以上、どうしようも無いという話もある…）</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>// 窓を作る。親ウィンドウが存在するのならば最後のパラメータで指定すること<BR>
+LRESULT Create(CWindowOption&amp; opt,HWND
+lpParent=NULL);<BR>
+//　↑上の関数の機能限定版。窓を作る以外、何もしない。スクリーンセーバー等で使う。<BR>
+//　（普通、使うことが無いと思うので、詳しい解説は割愛）<BR>
+LRESULT CreateSimpleWindow(CWindowOption&amp;
+opt,HWND lpParent=NULL);</P>
+<P>このoptは、</P>
+<P>class CWindowOption {<BR>
+public:<BR>
+string caption; // キャプション<BR>
+string classname; // クラス名(captionと同じでも良い)<BR>
+int size_x; // 横方向のサイズ<BR>
+int size_y; // 縦方向のサイズ<BR>
+LONG style; // ウィンドゥスタイルの追加指定
+<BR>
+}</P>
+<P>です。</P>
+<P>HWND GetHWnd(void)const; // HWNDを返す<BR>
+LRESULT SetWindowPos(int x,int y); // ウィンドゥを移動<BR>
+void ChangeWindowStyle(void); // 現在のスクリーンモード用にWindowStyleを変更する<BR>
+bool IsFullScreen(void)const; // フルスクリーンモードであるのか？<BR>
+LRESULT Resize(int sx,int sy); // 窓のリサイズ（ただしフルスクリーンモードでのリサイズは非サポート）</P>
+<P>static void ChangeScreen(bool bFullScr);<BR>
+// 切り替えが発生した場合、この関数を呼び出したあと<BR>
+// それぞれのウィンドゥに関してChangeWindowStyleを呼び出さなくてはならない。<BR>
+// ただし、フルスクリーン時のマルチウィンドゥは非サポート</P>
+<P>void SetSize(int sx,int sy);<BR>
+// 窓のリサイズ（設定のみで実際に変更はしない）<BR>
+// なぜこんなものが必要になるかというと、Resize⇒ChangeWindowStyleと実行すると<BR>
+// ２回ウィンドゥサイズの変更を行なうことになって、そのモーションが見えて困るから。<BR>
+// SetSize　⇒　ChangeWindowStyleならば１回しかリサイズされない。</P>
+<P>DWORD m_dwFillColor; // 背景色</P>
+<P>volatile bool IsMinimized(void); // 現在ウィンドゥが最小化されているかを取得する。</P>
+<P>// ウィンドゥメッセージをフックするためのポインタリスト<BR>
+CWinHookList&amp; GetHookList(void); // メッセージのフックリストを与える<BR>
+void ClearAllHook(void); // フックリストをクリアする。</P>
+<P>static void GetScreenSize(int &amp;x,int
+&amp;y); // 現在の画面全体のサイズの取得</P>
+<P><FONT size="+1" color="#009900">☆　描画のために</FONT></P>
+<P>DirectDrawを使った描画を行なう場合、<A href="CDirectDraw.html">CDirectDraw</A>も参照してください。CDirectDrawを使っているときに画面サイズを変更する場合、CDirectDraw::ChangeDisplayModeを呼び出してください。</P>
+<HR>
+</BODY></HTML>

@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Auxiliary/yaneShell.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="CShell"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CShell</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT Execute(string szExeName, <SPAN class="reserved_word">bool</SPAN> bWait=false)</DIV>
+<DIV class="comment_block">外部コマンドを実行します。bWait==trueの場合は、そのコマンドの終了を待ちます。<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT OpenFolder(string szPathName)</DIV>
+<DIV class="comment_block">指定のフォルダを開きます。<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT SetWallPaper(string szFileName)</DIV>
+<DIV class="comment_block">指定のファイルを壁紙にします。yanePack/Ex/Dxで圧縮されている<BR>ファイルは不可です。<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT CopyAndSetWallPaper(string szFileName)</DIV>
+<DIV class="comment_block">指定のファイルをWindowsフォルダにコピーし、それを壁紙にします。<BR>yanePack/yanePackExで圧縮されているファイルでも可能です。<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">string getModuleMutexName()</DIV>
+<DIV class="comment_block">起動Exe名から多重起動防止用のMutex名に変換して返す<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">string getModuleName()</DIV>
+<DIV class="comment_block">起動モジュール名を返す(full path)<BR></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

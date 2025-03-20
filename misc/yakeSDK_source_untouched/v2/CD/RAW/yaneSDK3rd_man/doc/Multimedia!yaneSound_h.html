@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Multimedia/yaneSound.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="ISound"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">ISound</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">MIDI,WAVE再生クラスのインターフェース<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Open(<SPAN class="reserved_word">const</SPAN> string&amp; strFileName)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block">ファイルの読み込み<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Close()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block">ファイルを閉じる<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Play()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block">再生する<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Pause()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block">一時停止<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Replay()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block">一時停止していたものを再開<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Stop()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block">停止<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsPlay()</DIV>
+<DIV class="comment_block">再生中ならばtrue<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetLoopPlay(<SPAN class="reserved_word">bool</SPAN> bLoop)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block">ループ再生モードにする（終了後、先頭に戻って再生する）<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsLoopPlay()</DIV>
+<DIV class="comment_block">SetLoopPlayでループ再生モードに設定されているならばtrue<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetCurrentPos(LONG lPos)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LONG GetCurrentPos()</DIV>
+<DIV class="comment_block">現在の再生ポジションを設定／取得（[ms]単位）<BR>取得は、エラーのときはマイナスの値が返る<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LONG GetLength()</DIV>
+<DIV class="comment_block">曲の全体長さを取得する。([ms]単位)<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetVolume(LONG volume)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LONG GetVolume()</DIV>
+<DIV class="comment_block">ヴォリュームを設定／取得する。(DSBVOLUME_MIN～DSBVOLUME_MAXの間の値で<BR>		指定する。DSBVOLUME_MINを指定したときは、無音状態)　ただし、<BR>		すべてのデバイスで、この音量調整をサポートしているとは限らない。<BR>		たとえば、CMIDIOutputDMはサポートしているが、CMIDIOutputMCIは、<BR>		これをサポートしていない。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">int</SPAN> GetType()</DIV>
+<DIV class="comment_block">RTTIもどき。派生クラスのタイプを返す<BR>		0 : NullDevice<BR>		1 : CMIDIOutputMCI<BR>		2 : CMIDIOutputDM<BR>		3 : CWaveStaticSound<BR>		4 : CWaveStreamSound<BR>		5 : CWaveSound<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> string GetFileName()</DIV>
+<DIV class="comment_block">読み込んでいるファイル名を返す<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT ConvertToMealTime(LONG nPos)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT ConvertFromMealTime(LONG&amp;nPos,<SPAN class="reserved_word">int</SPAN> nHour, <SPAN class="reserved_word">int</SPAN> nMin, <SPAN class="reserved_word">int</SPAN> nSec, <SPAN class="reserved_word">int</SPAN> nMS)</DIV>
+<DIV class="comment_block">GetCurrentPosで得られたnPos [ms] を、(nHour,nMin,nSec,nMs)すなわち、<BR>		時分秒毛とを変換する。毛というのは、聞きなれない単位だと思いますが<BR>		1/1000（秒）==1[ms]です。前者は[ms]⇒時分秒毛，後者は、<BR>		時分秒毛⇒[ms]です。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> virtual ~ISound()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="ISoundRestorable"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">ISoundRestorable</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">Restoreが可能な事を示す class ISound 互換インターフェース<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Multimedia!yaneSound_h.html#ISound" target=_self>ISound</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Restore()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block">ファイルを再読み込み<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> virtual ~ISoundRestorable()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="IWaveSound"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">IWaveSound</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">WAVE再生クラスのインターフェース<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Multimedia!yaneSound_h.html#ISoundRestorable" target=_self>ISoundRestorable</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Restore()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block">ファイルを再読み込み<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> virtual ~IWaveSound()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CSoundNullDevice"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CSoundNullDevice</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">俗に言うNULL DEVICE<BR>	MIDIの付いていない環境では、これでをアップキャストして使えば良い<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Multimedia!yaneSound_h.html#ISound" target=_self>ISound</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Open(<SPAN class="reserved_word">const</SPAN> string&amp; sFileName)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Close()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Play()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Replay()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Stop()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Pause()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsPlay()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsLoopPlay()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetLoopPlay(<SPAN class="reserved_word">bool</SPAN> bLoop)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LONG GetCurrentPos()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetCurrentPos(LONG lPos)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LONG GetLength()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetVolume(LONG volume)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LONG GetVolume()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> string GetFileName()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">int</SPAN> GetType()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CSoundNullDevice()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bLoop</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CSound"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CSound</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">ISoundのproxy object<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Multimedia!yaneSound_h.html#ISound" target=_self>ISound</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Open(<SPAN class="reserved_word">const</SPAN> string&amp; pFileName)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Close()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Play()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Replay()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Stop()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Pause()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsPlay()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsLoopPlay()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetLoopPlay(<SPAN class="reserved_word">bool</SPAN> bLoop)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LONG GetCurrentPos()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LONG GetLength()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetCurrentPos(LONG lPos)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetVolume(LONG volume)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LONG GetVolume()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> string GetFileName()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">int</SPAN> GetType()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CSound::CSound()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SelectDevice(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSound_h.html#ISound" target=_self>ISound</A>&gt;&amp; p)</DIV>
+<DIV class="protected_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSound_h.html#ISound" target=_self>ISound</A>&gt; m_lpSound</DIV>
+<DIV class="protected_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSound_h.html#ISound" target=_self>ISound</A>&gt; GetSound()</DIV>
+<DIV class="comment_block">このクラス自体は、proxyパターンにより実装されているので<BR>		そのproxyオブジェクトを差し替える<BR>	<BR></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

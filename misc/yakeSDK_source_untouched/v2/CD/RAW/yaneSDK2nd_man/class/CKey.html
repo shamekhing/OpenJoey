@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>クラスリファレンス</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CKey,CKey2,CKey3,CKey4</FONT><A name="CTimeBase"></A>&nbsp;<FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>簡易キー入力クラス。<A href="CVirtualKey.html">CVirtualKey</A>より派生。</P>
+<P><A href="CKeyBase.html">CKeyBase</A>の派生クラスを利用して、<A href="CVirtualKey.html">CVirtualKey</A>で、それらをひとまとめにして管理している。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>CKey,CKey2,CKey3,CKey4は、キーデバイス登録済み、仮想キー設定済みのクラスです。キーの調査には、<A href="CVirtualKey.html">CVirtualKey</A>の</P>
+<P><FONT color="#009900">bool IsVKeyPress(int vkey); // 仮想キーを調べる<BR>
+bool IsVKeyPush(int vkey); // 仮想キーを調べる</FONT></P>
+<P>この２つの関数を使ってください。（入力は、Inputメンバ関数を使うこと）</P>
+<P><FONT size="+1" color="#009900">☆　CKeyの仮想キー割り当て</FONT></P>
+<P>０：ＥＳＣキー<BR>
+１：テンキー８，↑キー，ジョイスティック↑<BR>
+２：テンキー２，↓キー，ジョイスティック↓<BR>
+３：テンキー４，←キー，ジョイスティック←<BR>
+４：テンキー２，→キー，ジョイスティック→<BR>
+５：スペースキー，ジョイスティック　ボタン１<BR>
+６：テンキーEnter,リターンキー，左シフト，右シフト。ジョイスティック　ボタン２</P>
+<P><FONT size="+1" color="#009900">☆　CKey2の仮想キー割り当て</FONT></P>
+<P>０：ＥＳＣキー<BR>
+１：テンキー８，↑キー，ジョイスティック↑<BR>
+２：テンキー２，↓キー，ジョイスティック↓<BR>
+３：テンキー４，←キー，ジョイスティック←<BR>
+４：テンキー２，→キー，ジョイスティック→<BR>
+５：スペースキー，Ｚキー，ジョイスティック　ボタン１<BR>
+６：テンキーEnter,リターンキー，Ｘキー，ジョイスティック　ボタン２<BR>
+７：Ｃキー，ジョイスティック　ボタン３<BR>
+８：Ａキー，ジョイスティック　ボタン４<BR>
+９：Ｓキー，ジョイスティック　ボタン５<BR>
+１０：Ｄキー，ジョイスティック　ボタン６</P>
+<P><FONT size="+1" color="#009900">☆　CKey3,4の仮想キー割り当て</FONT></P>
+<P>CKey3は、CKeyからジョイスティックの割り当てを除いたものです。<BR>
+CKey4は、CKey2からジョイスティックの割り当てを除いたものです。</P>
+</BODY></HTML>

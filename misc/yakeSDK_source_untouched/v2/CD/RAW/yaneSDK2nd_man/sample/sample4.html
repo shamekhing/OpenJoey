@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>クラスリファレンス</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+1">sample4.cpp</FONT></P>
+
+<HR>
+<PRE>#include &quot;stdafx.h&quot;
+#include &quot;../../yaneSDK/yaneSDK.h&quot;
+
+class CApp : public CAppFrame {
+
+    CDirectDraw m_Draw;
+    CDirectDraw* GetDraw(void) { return&amp; m_Draw; }
+
+    void MainThread(void) {                 //  これが実行される
+
+        GetDraw()-&gt;SetDisplay(false);       //  Windowモード
+        GetDraw()-&gt;CreateSecondaryDIB();    //  SecondaryとしてDIBを生成
+
+        CDIB32 dib;
+        dib.Load(&quot;aru1ss.jpg&quot;);
+
+        CFPSTimer t;        //  FPS調整用
+        t.SetFPS(30);
+
+        CFPSLayer fps(&amp;t);  //  FPS値の描画
+
+        CTextLayer tl;
+        tl.GetFont()-&gt;SetSize(30);
+        tl.GetFont()-&gt;SetText(&quot;スペースキーを押してね！&quot;);
+        tl.GetFont()-&gt;SetColor(RGB(0,80,128));
+        tl.SetPos(150,440);
+
+        CKey key;           //  キー入力
+
+        int nScene = 0,nPhase = 0;
+        while(IsThreadValid()) {                //  これがValidの間、まわり続ける
+            key.Input();
+            if (key.IsVKeyPress(0)) break;      //  ESCで終了
+            if (key.IsVKeyPush(5)) {
+                //  スペースキーが押されたらシーン変更
+                nScene = (nScene+1)%9;
+                nPhase = 0;
+                CHAR szBuf[256];
+                wsprintf(szBuf,&quot;Scene == %d&quot;,nScene);
+                tl.GetFont()-&gt;SetText(szBuf);
+            }
+
+            switch (nScene) {
+            case 0:
+                //  背景のクリア
+                GetDraw()-&gt;GetSecondaryDIB()-&gt;Clear();
+                GetDraw()-&gt;GetSecondaryDIB()-&gt;BltFast(&amp;dib,100,0);
+                break;
+            case 1:
+                GetDraw()-&gt;GetSecondaryDIB()-&gt;BlendBltFast(&amp;dib,100,-nPhase*2,0xa0a0a0,0x404040);
+                break;
+            case 2:
+                GetDraw()-&gt;GetSecondaryDIB()-&gt;BltFast(&amp;dib,100,0);
+                GetDraw()-&gt;GetSecondaryDIB()-&gt;BlendBltFast(&amp;dib,100,-nPhase*2,0xa0a0a0,DIB32RGB(nPhase,nPhase/2,nPhase));
+                break;
+            case 3: {
+                GetDraw()-&gt;GetSecondaryDIB()-&gt;BltFast(&amp;dib,100,0);
+                GetDraw()-&gt;GetSecondaryDIB()-&gt;AddColorFast(DIB32RGB(nPhase,nPhase,nPhase));
+                    } break;
+            case 4: {
+                GetDraw()-&gt;GetSecondaryDIB()-&gt;BltFast(&amp;dib,100,0);
+                SIZE size;
+                size.cx = 1000;
+                size.cy = 1000;
+                GetDraw()-&gt;GetSecondaryDIB()-&gt;BlendBltFast(&amp;dib,0,-nPhase*5,0xa0a0a0,0x404040,NULL,&amp;size);
+                break;
+                    }
+            case 5: {
+                GetDraw()-&gt;GetSecondaryDIB()-&gt;BltFast(&amp;dib,100,0);
+                SIZE size;
+                size.cx = 2000;
+                size.cy = 4000;
+                GetDraw()-&gt;GetSecondaryDIB()-&gt;BlendBltFast(&amp;dib,-1000,-nPhase*8,0xa0a0a0,0x404040,NULL,&amp;size);
+                break;
+                    }
+            case 6:
+                GetDraw()-&gt;GetSecondaryDIB()-&gt;BltFast(&amp;dib,100,0);
+                GetDraw()-&gt;GetSecondaryDIB()-&gt;SubColorFast(DIB32RGB(nPhase,nPhase,nPhase));
+                break;
+            case 7:
+                GetDraw()-&gt;GetSecondaryDIB()-&gt;BltFast(&amp;dib,100,0);
+                GetDraw()-&gt;GetSecondaryDIB()-&gt;SubColorFast(DIB32RGB(0,nPhase,nPhase/2));
+                break;
+            case 8: {
+                POINT point[4];
+                point[0].x = nPhase;        point[0].y = nPhase*2;
+                point[1].x = 400;           point[1].y = 0;
+                point[2].x = 0;             point[2].y = 600;
+                point[3].x = 400-nPhase/2;  point[3].y = 600-nPhase;
+                RECT rect;
+                ::SetRect(&amp;rect,0,0,640,480);
+                GetDraw()-&gt;GetSecondaryDIB()-&gt;MorphBltFast(&amp;dib,point,&amp;rect);
+                    } break;
+            }
+            nPhase = (nPhase+1)&amp;255;
+
+            GetDraw()-&gt;OnDrawDIB();
+            t.WaitFrame();
+        }
+    }
+};
+
+//  これがmain windowのためのクラス。
+class CAppMainWindow : public CAppBase {    //  アプリケーションクラスから派生
+    virtual void MainThread(void){          //  これがワーカースレッド
+        CApp().Start();                     //  CApp app; app.Start();の意味ね
+    }
+};
+
+//  言わずと知れたWinMain
+int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,int nCmdShow)
+{
+    CAppInitializer::Init(hInstance,hPrevInstance,lpCmdLine,nCmdShow);  //  必ず書いてね
+    CSingleApp sapp;
+    if (sapp.IsValid()) {
+        CAppMainWindow().Run();                 //  上で定義したメインのウィンドゥを作成
+    }
+    return 0;
+}</PRE>
+<HR>
+</BODY></HTML>

@@ -1,0 +1,1268 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Draw/yaneGTL.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="CFastPlaneBlendTable"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneBlendTable</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> BYTE abyMulTable[256*256]</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">static</SPAN> BYTE abyMulTable2[256*256]</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">static</SPAN> WORD awdMulTableRGB565[65536*16]</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">static</SPAN> WORD awdMulTableRGB555[65536*16]</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> BYTE abyConvertTable555[32768]</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">void</SPAN> InitTable()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">void</SPAN> OnChangePalette()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneBytePal"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneBytePal</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">BYTE GetR()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetR(BYTE r)</DIV>
+<DIV class="public_member">BYTE GetG()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetG(BYTE g)</DIV>
+<DIV class="public_member">BYTE GetB()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetB(BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">BYTE GetA()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetA(BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetRGB(BYTE r, BYTE g, BYTE b)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetRGB(BYTE rgb)</DIV>
+<DIV class="public_member">BYTE GetRGB()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> Clear()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneBytePal" target=_self>CFastPlaneBytePal</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneBytePal" target=_self>CFastPlaneBytePal</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneBytePal" target=_self>CFastPlaneBytePal</A> &amp; src)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneBytePal" target=_self>CFastPlaneBytePal</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB555" target=_self>CFastPlaneRGB555</A> &amp; src)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneBytePal" target=_self>CFastPlaneBytePal</A>&amp; operator*=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneBytePal" target=_self>CFastPlaneBytePal</A>&amp; operator*=(BYTE alpha)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneBytePal" target=_self>CFastPlaneBytePal</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> X &amp; src, BYTE alpha)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneBytePal" target=_self>CFastPlaneBytePal</A>&amp; operator+=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneBytePal" target=_self>CFastPlaneBytePal</A>&amp; add(BYTE r, BYTE g, BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneBytePal" target=_self>CFastPlaneBytePal</A>&amp; operator-=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneBytePal" target=_self>CFastPlaneBytePal</A>&amp; sub(BYTE r, BYTE g, BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member">BYTE _rgb</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneRGB555"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneRGB555</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">BYTE GetR()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetR(BYTE r)</DIV>
+<DIV class="public_member">BYTE GetG()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetG(BYTE g)</DIV>
+<DIV class="public_member">BYTE GetB()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetB(BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">BYTE GetA()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetA(BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetRGB(BYTE r, BYTE g, BYTE b)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetRGB(WORD rgb)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">WORD GetRGB()</DIV>
+<DIV class="public_member">DWORD GetRGB_DWORD()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> Clear()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB555" target=_self>CFastPlaneRGB555</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB555" target=_self>CFastPlaneRGB555</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB555" target=_self>CFastPlaneRGB555</A> &amp; src)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB555" target=_self>CFastPlaneRGB555</A>&amp; operator*=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB555" target=_self>CFastPlaneRGB555</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> X &amp; src, BYTE alpha)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB555" target=_self>CFastPlaneRGB555</A>&amp; operator*=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4555" target=_self>CFastPlaneARGB4555</A> &amp; src)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB555" target=_self>CFastPlaneRGB555</A>&amp; operator*=(BYTE alpha)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB555" target=_self>CFastPlaneRGB555</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4555" target=_self>CFastPlaneARGB4555</A> &amp; src, BYTE alpha)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB555" target=_self>CFastPlaneRGB555</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB555" target=_self>CFastPlaneRGB555</A> &amp; src, BYTE alpha)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB555" target=_self>CFastPlaneRGB555</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4555" target=_self>CFastPlaneARGB4555</A> &amp; src, BYTE srcalpha, BYTE dstalpha)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB555" target=_self>CFastPlaneRGB555</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB555" target=_self>CFastPlaneRGB555</A> &amp; src, BYTE srcalpha, BYTE dstalpha)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB555" target=_self>CFastPlaneRGB555</A>&amp; operator+=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB555" target=_self>CFastPlaneRGB555</A>&amp; operator+=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB555" target=_self>CFastPlaneRGB555</A>&amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB555" target=_self>CFastPlaneRGB555</A>&amp; add(BYTE r, BYTE g, BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB555" target=_self>CFastPlaneRGB555</A>&amp; operator-=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB555" target=_self>CFastPlaneRGB555</A>&amp; operator-=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB555" target=_self>CFastPlaneRGB555</A>&amp; src)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB555" target=_self>CFastPlaneRGB555</A>&amp; sub(BYTE r, BYTE g, BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB555" target=_self>CFastPlaneRGB555</A>&amp; operator+=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4555" target=_self>CFastPlaneARGB4555</A>&amp; src)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB555" target=_self>CFastPlaneRGB555</A>&amp; operator-=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4555" target=_self>CFastPlaneARGB4555</A>&amp; src)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member">WORD _rgb</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneRGB565"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneRGB565</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">BYTE GetR()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetR(BYTE r)</DIV>
+<DIV class="public_member">BYTE GetG()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetG(BYTE g)</DIV>
+<DIV class="public_member">BYTE GetB()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetB(BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">BYTE GetA()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetA(BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetRGB(BYTE r, BYTE g, BYTE b)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetRGB(WORD rgb)</DIV>
+<DIV class="public_member">WORD GetRGB()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">DWORD GetRGB_DWORD()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> Clear()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB565" target=_self>CFastPlaneRGB565</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB565" target=_self>CFastPlaneRGB565</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB565" target=_self>CFastPlaneRGB565</A> &amp; src)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB565" target=_self>CFastPlaneRGB565</A>&amp; operator*=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB565" target=_self>CFastPlaneRGB565</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> X &amp; src, BYTE alpha)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB565" target=_self>CFastPlaneRGB565</A>&amp; operator*=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4565" target=_self>CFastPlaneARGB4565</A> &amp; src)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB565" target=_self>CFastPlaneRGB565</A>&amp; operator*=(BYTE alpha)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB565" target=_self>CFastPlaneRGB565</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4565" target=_self>CFastPlaneARGB4565</A> &amp; src, BYTE alpha)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB565" target=_self>CFastPlaneRGB565</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB565" target=_self>CFastPlaneRGB565</A> &amp; src, BYTE alpha)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB565" target=_self>CFastPlaneRGB565</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4565" target=_self>CFastPlaneARGB4565</A> &amp; src, BYTE srcalpha, BYTE dstalpha)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB565" target=_self>CFastPlaneRGB565</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB565" target=_self>CFastPlaneRGB565</A> &amp; src, BYTE srcalpha, BYTE dstalpha)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB565" target=_self>CFastPlaneRGB565</A>&amp; operator+=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB565" target=_self>CFastPlaneRGB565</A>&amp; operator+=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB565" target=_self>CFastPlaneRGB565</A>&amp; src)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB565" target=_self>CFastPlaneRGB565</A>&amp; add(BYTE r, BYTE g, BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB565" target=_self>CFastPlaneRGB565</A>&amp; operator-=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB565" target=_self>CFastPlaneRGB565</A>&amp; operator-=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB565" target=_self>CFastPlaneRGB565</A>&amp; src)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB565" target=_self>CFastPlaneRGB565</A>&amp; sub(BYTE r, BYTE g, BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB565" target=_self>CFastPlaneRGB565</A>&amp; operator+=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4565" target=_self>CFastPlaneARGB4565</A>&amp; src)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB565" target=_self>CFastPlaneRGB565</A>&amp; operator-=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4565" target=_self>CFastPlaneARGB4565</A>&amp; src)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member">WORD _rgb</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneARGB4565"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneARGB4565</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">BYTE GetR()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetR(BYTE r)</DIV>
+<DIV class="public_member">BYTE GetG()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetG(BYTE g)</DIV>
+<DIV class="public_member">BYTE GetB()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetB(BYTE b)</DIV>
+<DIV class="public_member">BYTE GetA()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetA(BYTE a)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetRGB(BYTE r, BYTE g, BYTE b)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetRGB(WORD rgb)</DIV>
+<DIV class="public_member">WORD GetRGB()</DIV>
+<DIV class="public_member">DWORD GetRGBA()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> Clear()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4565" target=_self>CFastPlaneARGB4565</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4565" target=_self>CFastPlaneARGB4565</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4565" target=_self>CFastPlaneARGB4565</A> &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4565" target=_self>CFastPlaneARGB4565</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB565" target=_self>CFastPlaneRGB565</A> &amp; src)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4565" target=_self>CFastPlaneARGB4565</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB8888" target=_self>CFastPlaneARGB8888</A> &amp; src)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4565" target=_self>CFastPlaneARGB4565</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneABGR8888" target=_self>CFastPlaneABGR8888</A> &amp; src)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4565" target=_self>CFastPlaneARGB4565</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4555" target=_self>CFastPlaneARGB4555</A> &amp; src)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4565" target=_self>CFastPlaneARGB4565</A>&amp; CopyWithoutAlpha(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4565" target=_self>CFastPlaneARGB4565</A> &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4565" target=_self>CFastPlaneARGB4565</A>&amp; FlushAlpha(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4565" target=_self>CFastPlaneARGB4565</A> &amp; src)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4565" target=_self>CFastPlaneARGB4565</A>&amp; operator*=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4565" target=_self>CFastPlaneARGB4565</A>&amp; operator*=(BYTE alpha)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4565" target=_self>CFastPlaneARGB4565</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> X &amp; src, BYTE alpha)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4565" target=_self>CFastPlaneARGB4565</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> X &amp; src, BYTE srcalpha, BYTE dstalpha)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4565" target=_self>CFastPlaneARGB4565</A>&amp; MulAlphaToAlpha()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4565" target=_self>CFastPlaneARGB4565</A>&amp; operator+=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4565" target=_self>CFastPlaneARGB4565</A>&amp; add(BYTE r, BYTE g, BYTE b)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4565" target=_self>CFastPlaneARGB4565</A>&amp; operator-=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4565" target=_self>CFastPlaneARGB4565</A>&amp; sub(BYTE r, BYTE g, BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">WORD _rgb</DIV>
+<DIV class="public_member">BYTE _a</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneARGB4555"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneARGB4555</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">BYTE GetR()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetR(BYTE r)</DIV>
+<DIV class="public_member">BYTE GetG()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetG(BYTE g)</DIV>
+<DIV class="public_member">BYTE GetB()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetB(BYTE b)</DIV>
+<DIV class="public_member">BYTE GetA()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetA(BYTE a)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetRGB(BYTE r, BYTE g, BYTE b)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetRGB(WORD rgb)</DIV>
+<DIV class="public_member">WORD GetRGB()</DIV>
+<DIV class="public_member">DWORD GetRGBA()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> Clear()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4555" target=_self>CFastPlaneARGB4555</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4555" target=_self>CFastPlaneARGB4555</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4555" target=_self>CFastPlaneARGB4555</A> &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4555" target=_self>CFastPlaneARGB4555</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB555" target=_self>CFastPlaneRGB555</A> &amp; src)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4555" target=_self>CFastPlaneARGB4555</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB8888" target=_self>CFastPlaneARGB8888</A> &amp; src)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4555" target=_self>CFastPlaneARGB4555</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneABGR8888" target=_self>CFastPlaneABGR8888</A> &amp; src)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4555" target=_self>CFastPlaneARGB4555</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4565" target=_self>CFastPlaneARGB4565</A> &amp; src)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4555" target=_self>CFastPlaneARGB4555</A>&amp; CopyWithoutAlpha(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4555" target=_self>CFastPlaneARGB4555</A> &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4555" target=_self>CFastPlaneARGB4555</A>&amp; FlushAlpha(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4555" target=_self>CFastPlaneARGB4555</A> &amp; src)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4555" target=_self>CFastPlaneARGB4555</A>&amp; operator*=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4555" target=_self>CFastPlaneARGB4555</A>&amp; operator*=(BYTE alpha)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4555" target=_self>CFastPlaneARGB4555</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> X &amp; src, BYTE alpha)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4555" target=_self>CFastPlaneARGB4555</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> X &amp; src, BYTE srcalpha, BYTE dstalpha)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4555" target=_self>CFastPlaneARGB4555</A>&amp; MulAlphaToAlpha()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4555" target=_self>CFastPlaneARGB4555</A>&amp; operator+=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4555" target=_self>CFastPlaneARGB4555</A>&amp; add(BYTE r, BYTE g, BYTE b)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4555" target=_self>CFastPlaneARGB4555</A>&amp; operator-=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4555" target=_self>CFastPlaneARGB4555</A>&amp; sub(BYTE r, BYTE g, BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">WORD _rgb</DIV>
+<DIV class="public_member">BYTE _a</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneRGB888"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneRGB888</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">BYTE GetR()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetR(BYTE r)</DIV>
+<DIV class="public_member">BYTE GetG()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetG(BYTE g)</DIV>
+<DIV class="public_member">BYTE GetB()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetB(BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">BYTE GetA()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetA(BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetRGB(BYTE r, BYTE g, BYTE b)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetRGB(DWORD rgb)</DIV>
+<DIV class="public_member">DWORD GetRGB()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> Clear()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB888" target=_self>CFastPlaneRGB888</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB888" target=_self>CFastPlaneRGB888</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB888" target=_self>CFastPlaneRGB888</A> &amp; src)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB888" target=_self>CFastPlaneRGB888</A>&amp; operator*=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB888" target=_self>CFastPlaneRGB888</A>&amp; operator*=(BYTE alpha)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB888" target=_self>CFastPlaneRGB888</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> X &amp; src, BYTE alpha)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB888" target=_self>CFastPlaneRGB888</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> X &amp; src, BYTE srcalpha, BYTE dstalpha)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB888" target=_self>CFastPlaneRGB888</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB888" target=_self>CFastPlaneRGB888</A> &amp; src, BYTE alpha)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB888" target=_self>CFastPlaneRGB888</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB888" target=_self>CFastPlaneRGB888</A> &amp; src, BYTE srcalpha, BYTE dstalpha)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB888" target=_self>CFastPlaneRGB888</A>&amp; operator+=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB888" target=_self>CFastPlaneRGB888</A>&amp; operator+=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB888" target=_self>CFastPlaneRGB888</A>&amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB888" target=_self>CFastPlaneRGB888</A>&amp; add(BYTE r, BYTE g, BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB888" target=_self>CFastPlaneRGB888</A>&amp; operator-=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB888" target=_self>CFastPlaneRGB888</A>&amp; operator-=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB888" target=_self>CFastPlaneRGB888</A>&amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB888" target=_self>CFastPlaneRGB888</A>&amp; sub(BYTE r, BYTE g, BYTE b)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB888" target=_self>CFastPlaneRGB888</A>&amp; operator+=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB8888" target=_self>CFastPlaneARGB8888</A>&amp; src)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB888" target=_self>CFastPlaneRGB888</A>&amp; operator-=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB8888" target=_self>CFastPlaneARGB8888</A>&amp; src)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member">BYTE _b,_g,_r</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneBGR888"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneBGR888</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">BYTE GetR()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetR(BYTE r)</DIV>
+<DIV class="public_member">BYTE GetG()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetG(BYTE g)</DIV>
+<DIV class="public_member">BYTE GetB()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetB(BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">BYTE GetA()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetA(BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetRGB(BYTE r, BYTE g, BYTE b)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetRGB(DWORD rgb)</DIV>
+<DIV class="public_member">DWORD GetRGB()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> Clear()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneBGR888" target=_self>CFastPlaneBGR888</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneBGR888" target=_self>CFastPlaneBGR888</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneBGR888" target=_self>CFastPlaneBGR888</A> &amp; src)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneBGR888" target=_self>CFastPlaneBGR888</A>&amp; operator*=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneBGR888" target=_self>CFastPlaneBGR888</A>&amp; operator*=(BYTE alpha)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneBGR888" target=_self>CFastPlaneBGR888</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> X &amp; src, BYTE alpha)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneBGR888" target=_self>CFastPlaneBGR888</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> X &amp; src, BYTE srcalpha, BYTE dstalpha)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneBGR888" target=_self>CFastPlaneBGR888</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneBGR888" target=_self>CFastPlaneBGR888</A> &amp; src, BYTE alpha)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneBGR888" target=_self>CFastPlaneBGR888</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneBGR888" target=_self>CFastPlaneBGR888</A> &amp; src, BYTE srcalpha, BYTE dstalpha)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneBGR888" target=_self>CFastPlaneBGR888</A>&amp; operator+=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneBGR888" target=_self>CFastPlaneBGR888</A>&amp; operator+=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneBGR888" target=_self>CFastPlaneBGR888</A>&amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneBGR888" target=_self>CFastPlaneBGR888</A>&amp; add(BYTE r, BYTE g, BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneBGR888" target=_self>CFastPlaneBGR888</A>&amp; operator-=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneBGR888" target=_self>CFastPlaneBGR888</A>&amp; operator-=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneBGR888" target=_self>CFastPlaneBGR888</A>&amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneBGR888" target=_self>CFastPlaneBGR888</A>&amp; sub(BYTE r, BYTE g, BYTE b)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneBGR888" target=_self>CFastPlaneBGR888</A>&amp; operator+=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneABGR8888" target=_self>CFastPlaneABGR8888</A>&amp; src)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneBGR888" target=_self>CFastPlaneBGR888</A>&amp; operator-=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneABGR8888" target=_self>CFastPlaneABGR8888</A>&amp; src)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member">BYTE _r,_g,_b</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneXRGB8888"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneXRGB8888</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">BYTE GetR()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetR(BYTE r)</DIV>
+<DIV class="public_member">BYTE GetG()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetG(BYTE g)</DIV>
+<DIV class="public_member">BYTE GetB()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetB(BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">BYTE GetA()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetRGB(BYTE r, BYTE g, BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetRGB(DWORD rgb)</DIV>
+<DIV class="public_member">DWORD GetRGB()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> Clear()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXRGB8888" target=_self>CFastPlaneXRGB8888</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXRGB8888" target=_self>CFastPlaneXRGB8888</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXRGB8888" target=_self>CFastPlaneXRGB8888</A> &amp; src)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXRGB8888" target=_self>CFastPlaneXRGB8888</A>&amp; operator*=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXRGB8888" target=_self>CFastPlaneXRGB8888</A>&amp; operator*=(BYTE alpha)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXRGB8888" target=_self>CFastPlaneXRGB8888</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> X &amp; src, BYTE alpha)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXRGB8888" target=_self>CFastPlaneXRGB8888</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> X &amp; src, BYTE srcalpha, BYTE dstalpha)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXRGB8888" target=_self>CFastPlaneXRGB8888</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXRGB8888" target=_self>CFastPlaneXRGB8888</A> &amp; src, BYTE alpha)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXRGB8888" target=_self>CFastPlaneXRGB8888</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXRGB8888" target=_self>CFastPlaneXRGB8888</A> &amp; src, BYTE srcalpha, BYTE dstalpha)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXRGB8888" target=_self>CFastPlaneXRGB8888</A>&amp; operator+=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXRGB8888" target=_self>CFastPlaneXRGB8888</A>&amp; operator+=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXRGB8888" target=_self>CFastPlaneXRGB8888</A>&amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXRGB8888" target=_self>CFastPlaneXRGB8888</A>&amp; add(BYTE r, BYTE g, BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXRGB8888" target=_self>CFastPlaneXRGB8888</A>&amp; operator-=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXRGB8888" target=_self>CFastPlaneXRGB8888</A>&amp; operator-=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXRGB8888" target=_self>CFastPlaneXRGB8888</A>&amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXRGB8888" target=_self>CFastPlaneXRGB8888</A>&amp; sub(BYTE r, BYTE g, BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXRGB8888" target=_self>CFastPlaneXRGB8888</A>&amp; operator+=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB8888" target=_self>CFastPlaneARGB8888</A>&amp; src)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXRGB8888" target=_self>CFastPlaneXRGB8888</A>&amp; operator-=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB8888" target=_self>CFastPlaneARGB8888</A>&amp; src)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member">BYTE _b,_g,_r,_dummy</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneXBGR8888"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneXBGR8888</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">BYTE GetR()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetR(BYTE r)</DIV>
+<DIV class="public_member">BYTE GetG()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetG(BYTE g)</DIV>
+<DIV class="public_member">BYTE GetB()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetB(BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">BYTE GetA()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetRGB(BYTE r, BYTE g, BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetRGB(DWORD rgb)</DIV>
+<DIV class="public_member">DWORD GetRGB()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> Clear()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXBGR8888" target=_self>CFastPlaneXBGR8888</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXBGR8888" target=_self>CFastPlaneXBGR8888</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXBGR8888" target=_self>CFastPlaneXBGR8888</A> &amp; src)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXBGR8888" target=_self>CFastPlaneXBGR8888</A>&amp; operator*=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXBGR8888" target=_self>CFastPlaneXBGR8888</A>&amp; operator*=(BYTE alpha)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXBGR8888" target=_self>CFastPlaneXBGR8888</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> X &amp; src, BYTE alpha)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXBGR8888" target=_self>CFastPlaneXBGR8888</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> X &amp; src, BYTE srcalpha, BYTE dstalpha)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXBGR8888" target=_self>CFastPlaneXBGR8888</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXBGR8888" target=_self>CFastPlaneXBGR8888</A> &amp; src, BYTE alpha)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXBGR8888" target=_self>CFastPlaneXBGR8888</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXBGR8888" target=_self>CFastPlaneXBGR8888</A> &amp; src, BYTE srcalpha, BYTE dstalpha)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXBGR8888" target=_self>CFastPlaneXBGR8888</A>&amp; operator+=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXBGR8888" target=_self>CFastPlaneXBGR8888</A>&amp; operator+=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXBGR8888" target=_self>CFastPlaneXBGR8888</A>&amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXBGR8888" target=_self>CFastPlaneXBGR8888</A>&amp; add(BYTE r, BYTE g, BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXBGR8888" target=_self>CFastPlaneXBGR8888</A>&amp; operator-=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXBGR8888" target=_self>CFastPlaneXBGR8888</A>&amp; operator-=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXBGR8888" target=_self>CFastPlaneXBGR8888</A>&amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXBGR8888" target=_self>CFastPlaneXBGR8888</A>&amp; sub(BYTE r, BYTE g, BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXBGR8888" target=_self>CFastPlaneXBGR8888</A>&amp; operator+=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneABGR8888" target=_self>CFastPlaneABGR8888</A>&amp; src)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneXBGR8888" target=_self>CFastPlaneXBGR8888</A>&amp; operator-=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneABGR8888" target=_self>CFastPlaneABGR8888</A>&amp; src)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member">BYTE _r,_g,_b,_dummy</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneARGB8888"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneARGB8888</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">BYTE GetR()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetR(BYTE r)</DIV>
+<DIV class="public_member">BYTE GetG()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetG(BYTE g)</DIV>
+<DIV class="public_member">BYTE GetB()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetB(BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetRGB(BYTE r, BYTE g, BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetRGB(DWORD rgb)</DIV>
+<DIV class="public_member">DWORD GetRGB()</DIV>
+<DIV class="public_member">DWORD GetRGBA()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">BYTE GetA()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetA(BYTE a)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> Clear()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB8888" target=_self>CFastPlaneARGB8888</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB8888" target=_self>CFastPlaneARGB8888</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB8888" target=_self>CFastPlaneARGB8888</A> &amp; src)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB8888" target=_self>CFastPlaneARGB8888</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4565" target=_self>CFastPlaneARGB4565</A> &amp; src)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB8888" target=_self>CFastPlaneARGB8888</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4555" target=_self>CFastPlaneARGB4555</A> &amp; src)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB8888" target=_self>CFastPlaneARGB8888</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneABGR8888" target=_self>CFastPlaneABGR8888</A> &amp; src)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB8888" target=_self>CFastPlaneARGB8888</A>&amp; CopyWithoutAlpha(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB8888" target=_self>CFastPlaneARGB8888</A> &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB8888" target=_self>CFastPlaneARGB8888</A>&amp; FlushAlpha(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB8888" target=_self>CFastPlaneARGB8888</A> &amp; src)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB8888" target=_self>CFastPlaneARGB8888</A>&amp; operator*=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB8888" target=_self>CFastPlaneARGB8888</A>&amp; operator*=(BYTE alpha)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB8888" target=_self>CFastPlaneARGB8888</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> X &amp; src, BYTE alpha)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB8888" target=_self>CFastPlaneARGB8888</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> X &amp; src, BYTE srcalpha, BYTE dstalpha)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB8888" target=_self>CFastPlaneARGB8888</A>&amp; MulAlphaToAlpha()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB8888" target=_self>CFastPlaneARGB8888</A>&amp; operator+=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB8888" target=_self>CFastPlaneARGB8888</A>&amp; add(BYTE r, BYTE g, BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB8888" target=_self>CFastPlaneARGB8888</A>&amp; operator-=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB8888" target=_self>CFastPlaneARGB8888</A>&amp; sub(BYTE r, BYTE g, BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member">BYTE _b,_g,_r,_a</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneABGR8888"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneABGR8888</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">BYTE GetR()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetR(BYTE r)</DIV>
+<DIV class="public_member">BYTE GetG()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetG(BYTE g)</DIV>
+<DIV class="public_member">BYTE GetB()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetB(BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetRGB(BYTE r, BYTE g, BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetRGB(DWORD rgb)</DIV>
+<DIV class="public_member">DWORD GetRGB()</DIV>
+<DIV class="public_member">DWORD GetRGBA()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">BYTE GetA()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetA(BYTE a)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> Clear()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneABGR8888" target=_self>CFastPlaneABGR8888</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneABGR8888" target=_self>CFastPlaneABGR8888</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneABGR8888" target=_self>CFastPlaneABGR8888</A> &amp; src)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneABGR8888" target=_self>CFastPlaneABGR8888</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4565" target=_self>CFastPlaneARGB4565</A> &amp; src)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneABGR8888" target=_self>CFastPlaneABGR8888</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB4555" target=_self>CFastPlaneARGB4555</A> &amp; src)</DIV>
+<DIV class="public_member">inline <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneABGR8888" target=_self>CFastPlaneABGR8888</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneARGB8888" target=_self>CFastPlaneARGB8888</A> &amp; src)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneABGR8888" target=_self>CFastPlaneABGR8888</A>&amp; CopyWithoutAlpha(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneABGR8888" target=_self>CFastPlaneABGR8888</A> &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneABGR8888" target=_self>CFastPlaneABGR8888</A>&amp; FlushAlpha(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneABGR8888" target=_self>CFastPlaneABGR8888</A> &amp; src)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneABGR8888" target=_self>CFastPlaneABGR8888</A>&amp; operator*=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneABGR8888" target=_self>CFastPlaneABGR8888</A>&amp; operator*=(BYTE alpha)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneABGR8888" target=_self>CFastPlaneABGR8888</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> X &amp; src, BYTE alpha)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneABGR8888" target=_self>CFastPlaneABGR8888</A>&amp; dmul(<SPAN class="reserved_word">const</SPAN> X &amp; src, BYTE srcalpha, BYTE dstalpha)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneABGR8888" target=_self>CFastPlaneABGR8888</A>&amp; MulAlphaToAlpha()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneABGR8888" target=_self>CFastPlaneABGR8888</A>&amp; operator+=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneABGR8888" target=_self>CFastPlaneABGR8888</A>&amp; add(BYTE r, BYTE g, BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> X</SPAN>&gt;<BR><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneABGR8888" target=_self>CFastPlaneABGR8888</A>&amp; operator-=(<SPAN class="reserved_word">const</SPAN> X &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneABGR8888" target=_self>CFastPlaneABGR8888</A>&amp; sub(BYTE r, BYTE g, BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member">BYTE _r,_g,_b,_a</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneRGB565565"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneRGB565565</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetRGB(DWORD rgb)</DIV>
+<DIV class="public_member">DWORD GetRGB()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetRGBWORD(WORD rgb)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">BYTE GetR()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetR(BYTE r)</DIV>
+<DIV class="public_member">BYTE GetG()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetG(BYTE g)</DIV>
+<DIV class="public_member">BYTE GetB()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetB(BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB565565" target=_self>CFastPlaneRGB565565</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB565565" target=_self>CFastPlaneRGB565565</A> &amp; src)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB565565" target=_self>CFastPlaneRGB565565</A>&amp; operator+=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB565565" target=_self>CFastPlaneRGB565565</A>&amp; src)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB565565" target=_self>CFastPlaneRGB565565</A>&amp; operator-=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB565565" target=_self>CFastPlaneRGB565565</A>&amp; src)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB565565" target=_self>CFastPlaneRGB565565</A>&amp; operator*=(BYTE alpha)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member">DWORD _rgbrgb</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneRGB555555"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneRGB555555</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetRGB(DWORD rgb)</DIV>
+<DIV class="public_member">DWORD GetRGB()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetRGBWORD(WORD rgb)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">BYTE GetR()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetR(BYTE r)</DIV>
+<DIV class="public_member">BYTE GetG()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetG(BYTE g)</DIV>
+<DIV class="public_member">BYTE GetB()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetB(BYTE b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB555555" target=_self>CFastPlaneRGB555555</A>&amp; operator=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB555555" target=_self>CFastPlaneRGB555555</A> &amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB555555" target=_self>CFastPlaneRGB555555</A>&amp; operator+=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB555555" target=_self>CFastPlaneRGB555555</A>&amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB555555" target=_self>CFastPlaneRGB555555</A>&amp; operator-=(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB555555" target=_self>CFastPlaneRGB555555</A>&amp; src)</DIV>
+<DIV class="public_member"><A class="class_link" href="Draw!yaneGTL_h.html#CFastPlaneRGB555555" target=_self>CFastPlaneRGB555555</A>&amp; operator*=(BYTE alpha)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member">DWORD _rgbrgb</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneCopySrc"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneCopySrc</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> _DST,&nbsp;<SPAN class="reserved_word">class</SPAN> _SRC</SPAN>&gt;<BR>inline <SPAN class="reserved_word">void</SPAN> operator()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneCopyAdd"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneCopyAdd</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> _DST,&nbsp;<SPAN class="reserved_word">class</SPAN> _SRC</SPAN>&gt;<BR>inline <SPAN class="reserved_word">void</SPAN> operator()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneCopySub"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneCopySub</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> _DST,&nbsp;<SPAN class="reserved_word">class</SPAN> _SRC</SPAN>&gt;<BR>inline <SPAN class="reserved_word">void</SPAN> operator()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneCopyMul"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneCopyMul</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> _DST,&nbsp;<SPAN class="reserved_word">class</SPAN> _SRC</SPAN>&gt;<BR>inline <SPAN class="reserved_word">void</SPAN> operator()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneCopyMulAlphaToAlpha"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneCopyMulAlphaToAlpha</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> _DST,&nbsp;<SPAN class="reserved_word">class</SPAN> _SRC</SPAN>&gt;<BR>inline <SPAN class="reserved_word">void</SPAN> operator()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneCopyDiv"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneCopyDiv</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> _DST,&nbsp;<SPAN class="reserved_word">class</SPAN> _SRC</SPAN>&gt;<BR>inline <SPAN class="reserved_word">void</SPAN> operator()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneCopyMulAlpha"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneCopyMulAlpha</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CFastPlaneCopyMulAlpha(BYTE alpha)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> _DST,&nbsp;<SPAN class="reserved_word">class</SPAN> _SRC</SPAN>&gt;<BR>inline <SPAN class="reserved_word">void</SPAN> operator()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member"><SPAN class="reserved_word">const</SPAN> BYTE _alpha</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneCopyMulAlphaAB"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneCopyMulAlphaAB</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CFastPlaneCopyMulAlphaAB(BYTE srcalpha, BYTE dstalpha)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> _DST,&nbsp;<SPAN class="reserved_word">class</SPAN> _SRC</SPAN>&gt;<BR>inline <SPAN class="reserved_word">void</SPAN> operator()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member">BYTE _srcalpha</DIV>
+<DIV class="private_member">BYTE _dstalpha</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneCopyAddMulConst"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneCopyAddMulConst</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">\ CFastPlaneCopyAddMulConst(BYTE alpha)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> _DST,&nbsp;<SPAN class="reserved_word">class</SPAN> _SRC</SPAN>&gt;<BR>inline <SPAN class="reserved_word">void</SPAN> operator()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member">BYTE _alpha</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneCopyAddMulConstSrcColorKey"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;_TYPE</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneCopyAddMulConstSrcColorKey</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CFastPlaneCopyAddMulConstSrcColorKey(_TYPE rgb, BYTE alpha)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> _DST,&nbsp;<SPAN class="reserved_word">class</SPAN> _SRC</SPAN>&gt;<BR>inline <SPAN class="reserved_word">void</SPAN> operator()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member">BYTE _alpha</DIV>
+<DIV class="private_member">_TYPE _colorkey</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneCopySubMulConst"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneCopySubMulConst</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CFastPlaneCopySubMulConst(BYTE alpha)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> _DST,&nbsp;<SPAN class="reserved_word">class</SPAN> _SRC</SPAN>&gt;<BR>inline <SPAN class="reserved_word">void</SPAN> operator()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member">BYTE _alpha</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneCopySubMulConstSrcColorKey"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;_TYPE</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneCopySubMulConstSrcColorKey</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CFastPlaneCopySubMulConstSrcColorKey(_TYPE rgb, BYTE alpha)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> _DST,&nbsp;<SPAN class="reserved_word">class</SPAN> _SRC</SPAN>&gt;<BR>inline <SPAN class="reserved_word">void</SPAN> operator()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member">BYTE _alpha</DIV>
+<DIV class="private_member">_TYPE _colorkey</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneFillColor"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;_DST</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneFillColor</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CFastPlaneFillColor(<SPAN class="reserved_word">const</SPAN> _DST fill)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">inline <SPAN class="reserved_word">void</SPAN> operator()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member">_DST _fill</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneClearAlpha"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneClearAlpha</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> _DST</SPAN>&gt;<BR>inline <SPAN class="reserved_word">void</SPAN> operator()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneFlush"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneFlush</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> _DST,&nbsp;<SPAN class="reserved_word">class</SPAN> _SRC</SPAN>&gt;<BR>inline <SPAN class="reserved_word">void</SPAN> operator()</DIV>
+<DIV class="public_member">inline <SPAN class="reserved_word">void</SPAN> operator()</DIV>
+<DIV class="public_member">inline <SPAN class="reserved_word">void</SPAN> operator()</DIV>
+<DIV class="public_member">inline <SPAN class="reserved_word">void</SPAN> operator()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneCopySrcColorKey"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;_TYPE</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneCopySrcColorKey</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CFastPlaneCopySrcColorKey(_TYPE rgb)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> _DST,&nbsp;<SPAN class="reserved_word">class</SPAN> _SRC</SPAN>&gt;<BR>inline <SPAN class="reserved_word">void</SPAN> operator()</DIV>
+<DIV class="private_member">_TYPE _colorkey</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneCopySrcColorKeyDouble"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;_TYPE</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneCopySrcColorKeyDouble</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CFastPlaneCopySrcColorKeyDouble(_TYPE rgb)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> _DST,&nbsp;<SPAN class="reserved_word">class</SPAN> _SRC</SPAN>&gt;<BR>inline <SPAN class="reserved_word">void</SPAN> operator()</DIV>
+<DIV class="private_member">_TYPE _colorkey</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneBlendSrcColorKey"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;_TYPE</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneBlendSrcColorKey</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CFastPlaneBlendSrcColorKey(<SPAN class="reserved_word">const</SPAN> _TYPE dw)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> _DST,&nbsp;<SPAN class="reserved_word">class</SPAN> _SRC</SPAN>&gt;<BR>inline <SPAN class="reserved_word">void</SPAN> operator()</DIV>
+<DIV class="private_member">_TYPE _colorkey</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneBlendMulAlphaSrcColorKey"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;_TYPE</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneBlendMulAlphaSrcColorKey</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CFastPlaneBlendMulAlphaSrcColorKey(<SPAN class="reserved_word">const</SPAN> _TYPE dw, <SPAN class="reserved_word">const</SPAN> BYTE byRate)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> _DST,&nbsp;<SPAN class="reserved_word">class</SPAN> _SRC</SPAN>&gt;<BR>inline <SPAN class="reserved_word">void</SPAN> operator()</DIV>
+<DIV class="private_member"><SPAN class="reserved_word">const</SPAN> _TYPE _colorkey</DIV>
+<DIV class="private_member"><SPAN class="reserved_word">const</SPAN> BYTE _nRate</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneBlendMulAlphaSrcColorKeyAB"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;_TYPE</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneBlendMulAlphaSrcColorKeyAB</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CFastPlaneBlendMulAlphaSrcColorKeyAB(_TYPE dw, BYTE bySrcRate, BYTE byDstRate)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> _DST,&nbsp;<SPAN class="reserved_word">class</SPAN> _SRC</SPAN>&gt;<BR>inline <SPAN class="reserved_word">void</SPAN> operator()</DIV>
+<DIV class="private_member">_TYPE _colorkey</DIV>
+<DIV class="private_member">BYTE _nSrcRate</DIV>
+<DIV class="private_member">BYTE _nDstRate</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneCopyAddSrcColorKey"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;_TYPE</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneCopyAddSrcColorKey</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CFastPlaneCopyAddSrcColorKey(<SPAN class="reserved_word">const</SPAN> _TYPE dw)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> _DST,&nbsp;<SPAN class="reserved_word">class</SPAN> _SRC</SPAN>&gt;<BR>inline <SPAN class="reserved_word">void</SPAN> operator()</DIV>
+<DIV class="private_member">_TYPE _colorkey</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneCopySubSrcColorKey"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;_TYPE</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneCopySubSrcColorKey</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CFastPlaneCopySubSrcColorKey(<SPAN class="reserved_word">const</SPAN> _TYPE dw)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> _DST,&nbsp;<SPAN class="reserved_word">class</SPAN> _SRC</SPAN>&gt;<BR>inline <SPAN class="reserved_word">void</SPAN> operator()</DIV>
+<DIV class="private_member">_TYPE _colorkey</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneBltToAlpha"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneBltToAlpha</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CFastPlaneBltToAlpha(<SPAN class="reserved_word">int</SPAN> nSrcMin, <SPAN class="reserved_word">int</SPAN> nSrcMax, <SPAN class="reserved_word">int</SPAN> nDstMin, <SPAN class="reserved_word">int</SPAN> nDstMax)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> _DST,&nbsp;<SPAN class="reserved_word">class</SPAN> _SRC</SPAN>&gt;<BR>inline <SPAN class="reserved_word">void</SPAN> operator()</DIV>
+<DIV class="private_member">BYTE _abyTable[256]</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneConstAdd"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;_TYPE</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneConstAdd</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CFastPlaneConstAdd(COLORREF rgb)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> _DST</SPAN>&gt;<BR>inline <SPAN class="reserved_word">void</SPAN> operator()</DIV>
+<DIV class="public_member">_TYPE _rgb</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneConstSub"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;_TYPE</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneConstSub</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CFastPlaneConstSub(COLORREF rgb)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> _DST</SPAN>&gt;<BR>inline <SPAN class="reserved_word">void</SPAN> operator()</DIV>
+<DIV class="public_member">_TYPE _rgb</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneConstMul"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneConstMul</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CFastPlaneConstMul(BYTE nRate)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> _DST</SPAN>&gt;<BR>inline <SPAN class="reserved_word">void</SPAN> operator()</DIV>
+<DIV class="public_member">BYTE _nRate</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneCopyWithoutAlpha"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneCopyWithoutAlpha</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> _DST,&nbsp;<SPAN class="reserved_word">class</SPAN> _SRC</SPAN>&gt;<BR>inline <SPAN class="reserved_word">void</SPAN> operator()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneFlushAlpha"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneFlushAlpha</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> _DST,&nbsp;<SPAN class="reserved_word">class</SPAN> _SRC</SPAN>&gt;<BR>inline <SPAN class="reserved_word">void</SPAN> operator()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneCopySrcMask16dmul"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneCopySrcMask16dmul</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CFastPlaneCopySrcMask16dmul()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> _DST,&nbsp;<SPAN class="reserved_word">class</SPAN> _SRC</SPAN>&gt;<BR>inline <SPAN class="reserved_word">void</SPAN> operator()</DIV>
+<DIV class="public_member">BYTE *_abyAlphaTable</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneCopySrcColorKeyMask16dmul"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;_TYPE</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneCopySrcColorKeyMask16dmul</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CFastPlaneCopySrcColorKeyMask16dmul(_TYPE rgb, BYTE * abyAlphaTable)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> _DST,&nbsp;<SPAN class="reserved_word">class</SPAN> _SRC</SPAN>&gt;<BR>inline <SPAN class="reserved_word">void</SPAN> operator()</DIV>
+<DIV class="private_member">_TYPE _colorkey</DIV>
+<DIV class="private_member">BYTE *_abyAlphaTable</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneEffect"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneEffect</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> SrcClass,&nbsp;<SPAN class="reserved_word">class</SPAN> EffectFunctor</SPAN>&gt;<BR><SPAN class="reserved_word">static</SPAN> LRESULT Effect(SrcClass _src, <A class="class_link" href="Draw!yaneSurface_h.html#CSurfaceInfo" target=_self>CSurfaceInfo</A>* pInfo, EffectFunctor f, LPRECT lpRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> SrcClass</SPAN>&gt;<BR><SPAN class="reserved_word">static</SPAN> LRESULT EffectMosaic(SrcClass _src, <A class="class_link" href="Draw!yaneSurface_h.html#CSurfaceInfo" target=_self>CSurfaceInfo</A>* pInfo, <SPAN class="reserved_word">int</SPAN> nMosaicLevel, LPRECT lpRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> SrcClass,&nbsp;<SPAN class="reserved_word">class</SPAN> DstClass,&nbsp;<SPAN class="reserved_word">class</SPAN> BltFunctor</SPAN>&gt;<BR><SPAN class="reserved_word">static</SPAN> LRESULT Blt(SrcClass _src, <A class="class_link" href="Draw!yaneSurface_h.html#CSurfaceInfo" target=_self>CSurfaceInfo</A>* lpSrcInfo, DstClass _dst, <A class="class_link" href="Draw!yaneSurface_h.html#CSurfaceInfo" target=_self>CSurfaceInfo</A>* lpDstInfo, BltFunctor f, <A class="class_link" href="Draw!yaneSurface_h.html#CBltInfo" target=_self>CSurfaceInfo::CBltInfo</A>* pInfo)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> SrcClass,&nbsp;<SPAN class="reserved_word">class</SPAN> SrcClass2,&nbsp;<SPAN class="reserved_word">class</SPAN> EffectFunctor,&nbsp;<SPAN class="reserved_word">class</SPAN> EffectFunctor2</SPAN>&gt;<BR><SPAN class="reserved_word">static</SPAN> LRESULT EffectDouble(SrcClass _src, <A class="class_link" href="Draw!yaneSurface_h.html#CSurfaceInfo" target=_self>CSurfaceInfo</A>* pInfo, SrcClass2 _src2, EffectFunctor f, EffectFunctor2 f2, LPRECT lpRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> SrcClass,&nbsp;<SPAN class="reserved_word">class</SPAN> DstClass,&nbsp;<SPAN class="reserved_word">class</SPAN> SrcClass2,&nbsp;<SPAN class="reserved_word">class</SPAN> DstClass2,&nbsp;<SPAN class="reserved_word">class</SPAN> BltFunctor,&nbsp;<SPAN class="reserved_word">class</SPAN> BltFunctor2</SPAN>&gt;<BR><SPAN class="reserved_word">static</SPAN> LRESULT BltDouble(SrcClass _src, <A class="class_link" href="Draw!yaneSurface_h.html#CSurfaceInfo" target=_self>CSurfaceInfo</A>* lpSrcInfo, DstClass _dst, <A class="class_link" href="Draw!yaneSurface_h.html#CSurfaceInfo" target=_self>CSurfaceInfo</A>* lpDstInfo, SrcClass2 _src2, DstClass2 _dst2, BltFunctor f, BltFunctor2 f2, <A class="class_link" href="Draw!yaneSurface_h.html#CBltInfo" target=_self>CSurfaceInfo::CBltInfo</A>* pInfo)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> SrcClass,&nbsp;<SPAN class="reserved_word">class</SPAN> DstClass,&nbsp;<SPAN class="reserved_word">class</SPAN> BltFunctor</SPAN>&gt;<BR><SPAN class="reserved_word">static</SPAN> LRESULT Morph(SrcClass _src, <A class="class_link" href="Draw!yaneSurface_h.html#CSurfaceInfo" target=_self>CSurfaceInfo</A>* lpSrcInfo, DstClass _dst, <A class="class_link" href="Draw!yaneSurface_h.html#CSurfaceInfo" target=_self>CSurfaceInfo</A>* lpDstInfo, BltFunctor f, LPPOINT lpSrcPoint, LPPOINT lpDstPoint, LPRECT lpClipRect=NULL, <SPAN class="reserved_word">bool</SPAN> bContinual=false, <SPAN class="reserved_word">int</SPAN> nAngle=4)</DIV>
+<DIV class="comment_block">////////////////////////////////////////////////////////////////////<BR>////////////////////////////////////////////////////////////////////<BR>////////////////////////////////////////////////////////////////////<BR>////////////////////////////////////////////////////////////////////<BR>////////////////////////////////////////////////////////////////////<BR>////////////////////////////////////////////////////////////////////<BR>////////////////////////////////////////////////////////////////////<BR>////////////////////////////////////////////////////////////////////<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> SrcClass,&nbsp;<SPAN class="reserved_word">class</SPAN> DstClass,&nbsp;<SPAN class="reserved_word">class</SPAN> BltFunctor</SPAN>&gt;<BR><SPAN class="reserved_word">static</SPAN> LRESULT BltSrcXY(SrcClass _src, <A class="class_link" href="Draw!yaneSurface_h.html#CSurfaceInfo" target=_self>CSurfaceInfo</A>* lpSrcInfo, DstClass _dst, <A class="class_link" href="Draw!yaneSurface_h.html#CSurfaceInfo" target=_self>CSurfaceInfo</A>* lpDstInfo, BltFunctor f, <SPAN class="reserved_word">int</SPAN> x, <SPAN class="reserved_word">int</SPAN> y, LPRECT lpSrcRect=NULL, LPSIZE lpDstSize=NULL, LPRECT lpClipRect=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">static</SPAN> LRESULT Clipping(<A class="class_link" href="Draw!yaneSurface_h.html#CSurfaceInfo" target=_self>CSurfaceInfo</A>*lpDstInfo,<A class="class_link" href="Draw!yaneSurface_h.html#CSurfaceInfo" target=_self>CSurfaceInfo</A>*lpSrcInfo,<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="Draw!yaneSurface_h.html#CBltInfo" target=_self>CSurfaceInfo::CBltInfo</A>* pInfo, CFastPlaneEffectClipper* lpClipper)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFastPlaneEffectClipper"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFastPlaneEffect::CFastPlaneEffectClipper</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> bActualSize</DIV>
+<DIV class="public_member">RECT rcSrcRect</DIV>
+<DIV class="public_member">RECT rcDstRect</DIV>
+<DIV class="public_member">RECT rcClipRect</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">int</SPAN> nInitialX</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">int</SPAN> nStepX</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">int</SPAN> nCmpX</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">int</SPAN> nStepsX</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">int</SPAN> nInitialY</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">int</SPAN> nStepY</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">int</SPAN> nCmpY</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">int</SPAN> nStepsY</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

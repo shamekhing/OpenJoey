@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>クラスリファレンス</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><A name="CMouse"><FONT size="+2">class CMouse</FONT></A><FONT color="#ff0000">　【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>マウスのリアルタイム状態取得用のクラスです。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P><FONT color="#009900">LRESULT GetXY(int &amp;x,int &amp;y)const;
+// マウスポジションを得る（クライアント座標系にて）<BR>
+LRESULT SetXY(int x,int y); // マウスを指定のポジションに移動（クライアント座標系にて）<BR>
+bool RButton(void)const; // 右ボタン状態を得る<BR>
+bool LButton(void)const; // 左ボタン状態を得る<BR>
+LRESULT GetInfo(int &amp;x,int &amp;y,int
+&amp;b)const; // マウスポジションとボタン状態を返す(b:右ボタン押下ならば1,左ボタン押下ならば2)</FONT></P>
+<P><FONT color="#009900">void GetButton(bool&amp;bL,bool&amp;bR);
+// 前回のGetButtonから押されたか？<BR>
+void ResetButton(void); 　　　　　　// ↑ボタン状態リセット</FONT></P>
+<P><FONT color="#009900">virtual void SetOutScreenInput(bool bEnable);<BR>
+</FONT>// 押したまま、マウスを画面外にやったとき、どうなるのか？<BR>
+// true == ボタンは押したままだと見なされる<BR>
+// false == ボタンは離されたものと見なされる<BR>
+// defaultではfalse</P>
+<P><FONT size="+1" color="#009900">☆　注意</FONT></P>
+<P>先行してウィンドゥが完成している必要があるので、CAppFrame内で使用するようにしてください。</P>
+<HR>
+<P><A name="CMouseEx"><FONT size="+2">class CMouseEx</FONT></A><A name="CTimeBase"></A>　<FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT color="#009900" size="+1">☆　内容</FONT></P>
+<P>ゲームでCMouseを使う場合、１フレームの間は、固定値が返ってきたほうが望ましい。</P>
+<P><A href="CTimer.html#CTimer">CTimer</A>に対する<A href="CTimer.html#CTimerEx">CTimerEx</A>の関係と同じである。</P>
+<P><FONT color="#009900" size="+1">☆　メンバ関数</FONT></P>
+<P><FONT color="#009900">LRESULT Flush(void);　 // マウスの座標、ボタン状態を更新する。これをした瞬間の状態に基づいて各メンバ関数で値が返るようになる。</FONT></P>
+<P><FONT size="+1">あとはCMouseと同じ。</FONT>ただし、</P>
+<P><FONT color="#009900">void GetButton(bool&amp;bL,bool&amp;bR);</FONT><FONT color="#009900"><BR>
+bool IsPushRButton(void)const;　//　右ボタン<BR>
+bool IsPushLButton(void)const;　//　左ボタン</FONT></P>
+<P>は、前回のGetButtonからボタンが押されたか、ではなく、前回のFlushしたときからボタンが新たに押されたかを返す。</P>
+<P>ただし、<BR>
+<FONT color="#009900">LRESULT SetXY(int x,int y);</FONT><BR>
+で座標を移動させた場合、FlushしなくともGetXYすればその座標が返る。</P>
+<P><FONT color="#009900">void GetUpButton(bool&amp;bL,bool&amp;bR);</FONT><FONT color="#009900"><BR>
+bool IsPushUpRButton(void)const;　//　右ボタン<BR>
+bool IsPushUpLButton(void)const;　//　左ボタン</FONT></P>
+<P>は、GetButton系と同じく、前回のFlushしたときからボタンが新たに<FONT color="#cc0000">押し上げられたか</FONT>を返す。</P>
+<P>// ガードタイム中かどうかを返す<BR>
+<FONT color="#009900">bool IsGuardTime(void)const;</FONT><BR>
+// ガードタイムを設定する<BR>
+<FONT color="#009900">void SetGuardTime(int nTime);</FONT></P>
+<P>ガードタイムとは、<A href="CScene.html">シーン管理</A>をしていたりするとき、ボタンが押されて、次のシーンに移動して、次のシーンでいきなりボタンが押されたと判定されてしまうことを防止するために、一定時間「入力が無い」と嘘を返すための機構です。SetGuardTimeで設定した数だけFlushメンバ関数を呼び出すまでは、GetButton/IsPushRButton/IsPushLButtonではすべてボタンは押されていないと返ります。</P>
+<HR>
+</BODY></HTML>

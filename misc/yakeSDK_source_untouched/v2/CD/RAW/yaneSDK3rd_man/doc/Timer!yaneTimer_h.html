@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Timer/yaneTimer.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="CTimeGetTimeWrapper"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CTimeGetTimeWrapper</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">早い話がtimeGetTimeのwrapper<BR><BR>	timeGetTimeが使えない状況に置いては、<BR>	GetTickCountを使うように設定する<BR><BR>	このコンストラクタ～デストラクタで<BR>	timeBeginPeriodMinとtimeEndPeriodMinを<BR>	呼び出している<BR>	<BR>	このオブジェクトはref_createrで用いる。<BR>	(singletonでも良かったのだが..)<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">DWORD GetTime()</DIV>
+<DIV class="comment_block">生のタイマの取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CTimeGetTimeWrapper()</DIV>
+<DIV class="public_member"> virtual ~CTimeGetTimeWrapper()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!ref_creater_h.html#ref_creater" target=_self>ref_creater</A>&lt;<A class="class_link" href="Timer!yaneTimer_h.html#CTimeGetTimeWrapper" target=_self>CTimeGetTimeWrapper</A>&gt;* GetRefObj()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bUseTGT</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nRef</DIV>
+<DIV class="protected_member">TIMECAPS m_dwTimeCaps</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!ref_creater_h.html#ref_creater" target=_self>ref_creater</A>&lt;<A class="class_link" href="Timer!yaneTimer_h.html#CTimeGetTimeWrapper" target=_self>CTimeGetTimeWrapper</A>&gt; m_vTimeGetTime</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="ITimer"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">ITimer</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Reset()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> DWORD Get()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Set()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Pause()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Restart()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"> virtual ~ITimer()</DIV>
+<DIV class="comment_block">現在の時刻を０に<BR>現在の時刻の取得<BR>現在の時刻の設定<BR>Pause機能<BR>Pause解除<BR></DIV>
+</DIV>
+<HR><BR>
+<A name="CTimer"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CTimer</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">早い話が、独立タイマ。<BR>	Reset()すると、タイマがリセットされ、それ以降、Get()を呼び出すと、<BR>	前回、Reset()されたときからの経過時間（[ms]単位）が返ってくるようになる。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Timer!yaneTimer_h.html#ITimer" target=_self>ITimer</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Reset()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> DWORD Get()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Set()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Pause()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Restart()</DIV>
+<DIV class="comment_block">現在の時刻を０に<BR>現在の時刻の取得<BR>現在の時刻の設定<BR>Pause機能<BR>Pause解除<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CTimer()</DIV>
+<DIV class="public_member"> virtual ~CTimer()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">DWORD m_dwOffsetTime</DIV>
+<DIV class="protected_member">DWORD m_dwPauseTime</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_bPaused</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!ref_creater_h.html#ref_creater" target=_self>ref_creater</A>&lt;<A class="class_link" href="Timer!yaneTimer_h.html#CTimeGetTimeWrapper" target=_self>CTimeGetTimeWrapper</A>&gt;* GetRefObj()</DIV>
+<DIV class="private_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="Timer!yaneTimer_h.html#CTimeGetTimeWrapper" target=_self>CTimeGetTimeWrapper</A>* GetObj()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFixTimer"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFixTimer</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">ゲームで class CTimer を使う場合、<BR>	１フレームの間は、固定値が返ってきたほうが望ましい。<BR><BR>	class CMouse に対する class CMouseEx と同じ関係である。<BR>	Flush関数の説明を読むこと。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Timer!yaneTimer_h.html#ITimer" target=_self>ITimer</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Reset()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> DWORD Get()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Set()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Pause()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Restart()</DIV>
+<DIV class="comment_block">現在の時刻を０に<BR>現在の時刻の取得<BR>現在の時刻の設定<BR>Pause機能<BR>Pause解除<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Flush()</DIV>
+<DIV class="comment_block">時刻を更新する。<BR>		これをした瞬間の時刻値に基づいてGetで値が返るようになる。<BR>		以降、再度この関数を呼び出すまで、Flushと同じ値が返る<BR>		この関数以外は、class CTimer と同じ<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CFixTimer()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="Timer!yaneTimer_h.html#CTimer" target=_self>CTimer</A> m_vTimer</DIV>
+<DIV class="protected_member">DWORD m_dwTimeGetTime</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="Timer!yaneTimer_h.html#CTimer" target=_self>CTimer</A>* GetTimer()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

@@ -1,0 +1,41 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CSoundBase</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CSoundBase</FONT><A name="CTimeBase"></A>　<FONT color="#ff0000">【抽象クラス<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P><A href="CSound.html">CSound</A>,<A href="CStreamSound.html">CStreamSound</A>,<A href="CMIDIOutput.html">CMIDIOutput系</A>の共通基底クラスです。WAVE,MIDI再生を統合化するのに役立ちます。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>virtual LRESULT Open(LPCTSTR pFileName) =
+0;<BR>
+virtual LRESULT Close(void) = 0;<BR>
+virtual LRESULT Play(void) = 0;<BR>
+virtual LRESULT Replay(void) = 0;<BR>
+virtual LRESULT Stop(void) = 0;<BR>
+virtual LRESULT Pause(void) = 0;<BR>
+virtual bool IsPlay(void) = 0;<BR>
+virtual bool IsLoopPlay(void) = 0;<BR>
+virtual LRESULT SetLoopMode(bool bLoop) =
+0;<BR>
+virtual LONG GetCurrentPos(void) = 0;</P>
+<P>メンバの意味は、<A href="CMIDIOutput.html">CMIDIOutput系</A>と同じなので、そちらを見てください。</P>
+<P>virtual LONG GetCurrentPos(void) = 0; //
+[ms]単位で返る。エラーのときはマイナスの値が返る。<BR>
+virtual LRESULT SetCurrentPos(LONG lPos)
+= 0; // [ms]</P>
+<P>現在の再生ポジションを取得／設定する。</P>
+<P>virtual LONG GetLength(void) = 0; // 曲長を得る
+[ms]</P>
+<P>曲の全体長さを取得する。([ms]単位)</P>
+<P>virtual LRESULT SetVolume(LONG volume)=0;
+// このチャンネルに対するヴォリューム<BR>
+virtual LONG GetVolume(void)=0; // 取得は、特定チャンネルに対してしかできない...</P>
+<P>ヴォリュームを設定する。(DSBVOLUME_MIN～DSBVOLUME_MAXの間の値で指定する。DSBVOLUME_MINを指定したときは、無音状態)　ただし、すべてのデバイスで、この音量調整をサポートしているとは限らない。たとえば、CMIDIOutputDMはサポートしているが、CMIDIOutputMCIは、これをサポートしていない。</P>
+<P>virtual LRESULT ConvertToMealTime(LONG nPos,int&amp;nHour,int&amp;nMin,int&amp;nSec,int&amp;nMS);<BR>
+virtual LRESULT ConvertFromMealTime(LONG&amp;nPos,int
+nHour,int nMin,int nSec,int nMS);</P>
+<P>GetCurrentPosで得られたnPos [ms] を、(nHour,nMin,nSec,nMs)すなわち、時分秒毛とを変換する。毛というのは、聞きなれない単位だと思いますが1/1000（秒）==1[ms]です。前者は[ms]⇒時分秒毛，後者は、時分秒毛⇒[ms]です。</P>
+<HR>
+</BODY></HTML>

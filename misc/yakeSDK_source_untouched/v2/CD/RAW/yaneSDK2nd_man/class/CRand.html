@@ -1,0 +1,24 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CRand</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CRand</FONT><A name="CTimeBase"></A> <FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>Mersenne Twister法による高精度の乱数発生ルーチンです。<BR>
+2^19937-1という天文学的な大きさの周期性を持った乱数を高速に生成します。</P>
+<P><A href="CSerialize.html#CArchive">CArchive</A>派生クラスなので、任意のタイミングで乱数の種をそのまま保存しておき、同じ系列の乱数を再度発生させることも出来ます。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P><FONT color="#009900">void SetSeed(DWORD dwSeed);<BR>
+</FONT>乱数の種を設定します。設定された種に従って、乱数は生成されていきます。必ず一度は呼び出す必要があります。呼び出さないときは、SetSeed(4357);が一番最初の乱数取得のときに実行されます。</P>
+<P><FONT color="#009900">DWORD Get(void);<BR>
+<FONT color="#009900">DWORD Get(int n);<BR>
+</FONT></FONT>乱数の取得。前者はDWORD全域の乱数を取得。後者は、0～n-1までの乱数を取得。</P>
+<P><FONT color="#009900">CRand(void);<BR>
+CRand(DWORD dwSeed);<BR>
+</FONT>コンストラクタは、２種類あり、パラメータ無しのほうは、乱数の初期化を行ないません。パラメータ有りのほうは、乱数の種を引数として取り、それに基づいた乱数を生成します。（内部的にSetSeedを行なうということです。よって、SetSeedをこのあと行なう必要はありません）　前回と同じ乱数系列を再現したい場合などにこれを使います。</P>
+<P><FONT color="#009900">void Randomize(void);</FONT><BR>
+乱数の種として、現在時刻を与えます。要するに、再現性の無い乱数が出来ます。SetSeed(GetTickCount())とやっているので、SetSeedを呼び出す必要はありません。</P>
+<HR>
+</BODY></HTML>

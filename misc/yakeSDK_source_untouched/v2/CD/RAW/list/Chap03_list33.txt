@@ -1,0 +1,81 @@
+class CRootCounter : public ICounter {
+/**
+	初期値(nStart)・終了値(nEnd)、そして必要ならば増加値(nStep)を設定します。
+	そのあと、Inc関数を実行すると、1ずつ増えます。(nStepが設定されていれば、
+	その数だけ増えます)　そして、加算した結果、nEnd以上になると自動的に
+	nStartに戻ります。(nEndにはなりません)
+
+	Reset関数は、カウンタ値を初期値nStartに戻します。
+	あるいは、SetInit関数でReset後の初期値が設定されていれば、その値にします。
+
+	また、int型との相互変換が可能ですので、あたかもint型の変数であるかのように
+	使えます。
+
+	例）
+	CRootCounter r;
+	r.Set ( 0, 256 , -5 );
+	// nStart == 0 , nEnd == 256というようにカウンタを設定する
+	r = 128;
+
+	この状態で、r++; を５回実行すると５回目で r == 129になる。r--;
+	を５回実行すると５回目で r == 127になる。
+
+	また、nStart≦nEndでなくて良いのです。
+	つまり、加算( Inc / ++ )では、nEnd方向へインクリメントします。
+	減算( Dec / -- )では、nStart方向へインクリメントします。
+
+	また、Stepがマイナスである場合は、
+	その絶対値回数のIncメンバ関数の呼び出しによって、1だけnEnd方向に進みます。
+*/
+public:
+	///	nStepは一回の増分の絶対値。マイナスは1/nStepの意味
+	///	nStart≦nEndでなくて良い
+	void	Set(int nStart,int nEnd,int nStep=1)
+		{ m_nStart=nStart; m_nEnd=nEnd; m_nStep=nStep; Reset(); }
+	void	SetStep(int nStep) { m_nStep = nStep; }
+	void	SetStart(int nStart) { m_nStart = nStart; }
+	void	SetEnd(int nEnd) { m_nEnd = nEnd; }
+
+	///	取得
+	int		GetStep() const { return m_nStep; }
+	int		GetStart() const { return m_nStart; }
+	int		GetEnd() const { return m_nEnd; }
+
+	///	カウンタのリセット
+	void	Reset() { m_nRootCount= m_nStart; m_nRate=0; }
+
+	///	property..
+	virtual bool	IsBegin() const { return m_nRootCount == m_nStart; }
+	virtual bool	IsEnd() const { return m_nRootCount == m_nEnd; }
+
+	CRootCounter();
+	CRootCounter(int nEnd);
+	CRootCounter(int nStart,int nEnd,int nStep=1);
+
+	//	intとの相互変換
+	operator int () const { return m_nRootCount; }
+	const int operator = (int n) { m_nRootCount = n; return n; }
+	int		Get () const { return m_nRootCount; }
+
+	//	カウンタのインクリメント(終端まで達すると、そこで停止する)
+	void	Inc() { inc(true); }
+	void	Dec() { inc(false); }
+	//	加算（＝End方向へインクリメント）／減算（＝Start方向へのインクリメント）
+	CRootCounter& operator++()
+		{ Inc(); return (*this); }
+	CRootCounter operator++(int)
+		{ CRootCounter _Tmp = *this; Inc(); return (_Tmp); }
+	CRootCounter& operator--()
+		{ Dec(); return (*this); }
+	CRootCounter operator--(int)
+		{ CRootCounter _Tmp = *this; Dec(); return (_Tmp); }
+
+protected:
+	void	inc(bool bAdd=true);
+
+	int		m_nRootCount;
+	int		m_nStart;
+	int		m_nEnd;
+	int		m_nStep;
+	int		m_nRate;	//	nStep<0のときは、ｎ回のInc()で+1される
+};

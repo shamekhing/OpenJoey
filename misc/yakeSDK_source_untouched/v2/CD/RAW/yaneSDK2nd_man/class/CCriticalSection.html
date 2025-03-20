@@ -1,0 +1,17 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CCriticalSection</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CCriticalSection</FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>スレッド間の排他を制御します。あるスレッドでEnter関数を呼び出したあと、Leave関数を呼び出すまでの間は、クリティカルセクションとなります。<BR>
+クリティカルセクションを、同時に２つ以上のスレッドが実行することは出来ません。（詳しくは、マルチスレッド関係の文献を参照すること）</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>void Enter(void); // CriticalSectionに入る<BR>
+void Leave(void); // CriticalSectionから出る</P>
+<P><FONT size="+1" color="#009900">☆　注意点</FONT></P>
+<P>CCriticalSectionのインスタンスは、グローバルスコープに置くか、staticなメンバ変数にするかしてください。</P>
+<HR>
+</BODY></HTML>

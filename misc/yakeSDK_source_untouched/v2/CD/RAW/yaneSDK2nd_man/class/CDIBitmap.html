@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CDIBitmap</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CDIBitmap</FONT></P>
+
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>DIB(Device Independent Bitmap：デバイスに依存しないビットマップ)を管理します。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>LRESULT Load(string BitmapFileName,int nBpp=24);<BR>
+LRESULT Save(string BitmapFileName,LPRECT
+lpRect=NULL);</P>
+<P>　Loadはファイルからサーフェースに読み込む。Saveはサーフェースをファイルに書き込みます。<BR>
+　読み込みはCGraphicLoaderクラスを使用するので、BMP,GIF,JPEG,SPI等の利用が可能になります。<BR>
+　nBppを指定すると、そのbpp(bits per pixel)で読み込みます。<BR>
+　書き込みは24bppのビットマップになります。lpRectはファイルに保存したいサーフェースの矩形領域を指定します。指定がなければ全域になります。</P>
+<P>LRESULT Load(HDC hDC,LPRECT lpRect,int nBpp=24);</P>
+<P>　hDCのある矩形領域lpRectをこのCDIBitmapに読み込む。このあと、Saveすることによって、ビットマップに保存してやることが出来る。つまりHDCさえ獲得できれば、この関数とSaveでビットマップに保存することが出来る。</P>
+<P>　nBppを指定すると、そのbpp(bits per pixel)で読み込みます。</P>
+<P>LRESULT CreateSurface(int nSizeX,int nSizeY,int
+nBpp=24);</P>
+<P>　サーフェースを指定サイズ、指定のBPP(BitParPixel)で作成します。<BR>
+　Loadしたときには自動的にサーフェースが作成されます。</P>
+<P>BYTE* GetPtr(void);</P>
+<P>　Load/CreateSurfaceで確保されたイメージへのポインタが得られます。(CreateDIBSectionで得られたもの)<BR>
+　DIBなので、イメージの各ラインの先頭は、DWORDでアラインされているので注意が必要。天地はしていません。</P>
+<P>LRESULT Release(void);</P>
+<P>　サーフェースを解放します。デストラクタで解放されるので、明示的に指定する必要はありません。</P>
+<P>HDC GetDC(void);<BR>
+HBITMAP GetHBITMAP(void);</P>
+<P>　HDC、HBITMAPを返します。UseDIBSection(true)としておいた場合は（defaultではfalse）、LoadBitmap/CreateSurface以降、いつでもHDC,HBITMAPの取得は可能です。これを用いてピクセル操作をすると良いです。</P>
+<P>　例）<BR>
+　　::SetPixel(dib.GetDC(),0,0,RGB(100,200,150));
+// (0,0)の座標にRGB(100,200,150)の点を打つ</P>
+<P>　参照→　::GetPixel,COLORREF,GetRValue,GetGValue,GetBValue</P>
+<P>LRESULT GetSize(LONG&amp; x,LONG&amp; y);</P>
+<P>　サーフェースのサイズを取得します。</P><HR>
+</BODY></HTML>

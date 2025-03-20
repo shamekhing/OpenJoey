@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>クラスリファレンス</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">template &lt;class T&gt; class smart_vector_ptr</FONT><A name="CTimeBase"></A>　<FONT color="#ff0000">【テンプレート<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P><A href="smart_ptr.html">smart_ptr</A>のvectorです。smart_ptrはJavaなどで実装されているスマートポインタで、デストラクトされるときに自分しか所有権を持っていなければ、そのオブジェクトを自動的に解放します。これのvectorなので、<FONT color="#cc0000">管理しなければならないオブジェクトの数が動的に変化していく場合に対応できます。</FONT>動的に変化しない場合は、<A href="smart_array.html">smart_array</A>を使います。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P><A href="smart_ptr.html">smart_ptr</A>のvectorです。vectorはSTLのものです。あらたに追加された関数は、次のものだけです。</P>
+<P><FONT color="#009900">void insert(T* pt){<BR>
+　// 所有権を持ったsmart_ptrの生成し、<BR>
+　// smart_ptr間のコピーが発生し、所有権が移動する<BR>
+　vector&lt;smart_ptr&lt;T&gt; &gt;::push_back(smart_ptr&lt;T&gt;(pt));<BR>
+}</FONT></P>
+<P><FONT color="#cc0000">↑newしたポインタをvectorの最後に追加登録し、所有権を持たせる構文ですね。</FONT></P>
+<P>void insert(smart_ptr&lt;T&gt; t){<BR>
+<FONT color="#00cc00">// 所有権の移動を伴うauto_ptrExの追加登録。<BR>
+</FONT>vector&lt;smart_ptr&lt;T&gt; &gt;::push_back(t);<BR>
+}</P>
+<P>void insert( ){<BR>
+<FONT color="#00cc00">// あらたに生成して追加する。<BR>
+</FONT>vector&lt;smart_ptr&lt;T&gt; &gt;::push_back(smart_ptr&lt;T&gt;(new
+T));<BR>
+}</P>
+<P><FONT size="+1" color="#009900">☆　使いかた</FONT></P>
+<P><FONT color="#cc0000">すべてのオブジェクトを解放するには、vector::clear(
+)を呼びます。</FONT>これによりsmart_ptrのインスタンスが解放されるので、smart_ptrが管理しているオブジェクトの所有権があるときは、smart_ptrのデストラクタによってオブジェクトが自動的に解放されます。</P>
+
+<P><FONT color="#cc0000">配列を事前に確保するには、vector::resize(
+)を呼びます。</FONT>smart_ptrはそのコンストラクタによってNULLに初期化されるので、こうやってサイズ変更を行なっても安全です。</P>
+<P><FONT color="#cc0000">オブジェクトを生成するには、smart_ptr::Add(
+)を呼びます。</FONT>具体的には、<BR>
+<FONT color="#009900">　m_lpObject[123].Add(); 　　　　　　　　　　　　//
+123番目のオブジェクトを生成する</FONT><BR>
+<FONT color="#009900">　m_lpObject[123].Add(new COBject(x,y,z));
+// 123番目のオブジェクトを生成する</FONT></P>
+<P><FONT color="#cc0000">生成したオブジェクトを、最後に追加するには、auto_vector_ptr::insert(
+)を呼びます。</FONT>具体的には、<BR>
+<FONT color="#009900">　CObject* lp = new COBject;<BR>
+　lp-&gt;Init(x,y,z);<BR>
+　m_lpObject.insert(lp); // オブジェクトを追加する</FONT></P>
+<P>だとか、<BR>
+　smart_ptr&lt;CObject&gt; lp(new CObject);<BR>
+　lp-&gt;Init(x,y,z);<BR>
+　m_lpObject.insert(lp); // オブジェクトを追加する。所有権が移動するので、このあとlpがスコープアウトしても大丈夫！</P>
+<P>また、クラスTのコンストラクタに引数が不要なのであれば、<FONT color="#cc0000">inertで引数を省略すれば、</FONT>自動的にクラスTをnewして<FONT color="#cc0000">生成されたオブジェクトを、最後に追加します。</FONT></P>
+<HR>
+</BODY></HTML>

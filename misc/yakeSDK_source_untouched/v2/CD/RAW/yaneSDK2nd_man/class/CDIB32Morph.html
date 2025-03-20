@@ -1,0 +1,26 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CDIB32Morph</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CDIB32Morph</FONT></P>
+
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>　モーフィングの手助けを行ないます。モーフィングとは、ソース１の画像からソース２の画像へ、なめらかに変形する画像エフェクト技術のことです。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>void SetDiv(int nSizeX,int nSizeY,int nXDiv,int
+nYDiv);</P>
+<P>　モーフィングを行なう領域のサイズと、その分割数(10,10ぐらいで良い)を決めます。Calcを呼び出す前に呼び出してください。</P>
+<P>void Set(int nSrcX1,int nSrcY1,int nSrcX2,int
+nSrcY2);</P>
+<P>　ソース１とソース２の対応点集合を与える。この関数を何度呼び出しても構わない。</P>
+<P>void Release(void);</P>
+<P>　Setした対応点集合を破棄する。</P>
+<P>void Calc(void); // 計算するのだ＾＾</P>
+<P>　実際に、どの点がどの点に対応するのかを計算する。少し時間がかかる（それでも1/10秒とかの単位だが）ので、モーフィング中には呼ばない設計にしてください。</P>
+<P>void OnDraw(CDIB32* lpSecondary,CDIB32* lpSrc1,CDIB32*
+lpSrc2,CDIB32 *lpTemporary,int nPhase);</P>
+<P>　実際にモーフィングさせるるlpSrc1からlpSrc2へモーフィング。nPhaseは0-256(0ならばlpSrc1の画像、256ならばlpSrc2の画像。1から255ならば、その中間の画像),lpTemporaryはSecondaryと同サイズ確保してください。</P>
+<HR>
+</BODY></HTML>

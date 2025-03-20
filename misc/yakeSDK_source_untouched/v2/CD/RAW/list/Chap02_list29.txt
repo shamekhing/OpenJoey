@@ -1,0 +1,4 @@
+template <class T>
+class Derive : public Base {
+	virtual int GetTypeInfo() const { return *reinterpret_cast<int*>(this); }
+};

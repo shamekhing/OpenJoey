@@ -1,0 +1,37 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>ｙａｎｅＳＤＫ２ｎｄ　利用の手引き</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">プリコンパイル済みヘッダーの利用について</FONT></P>
+<HR>
+<P>コンパイル時間の大半は、数千行もあるwindows.hの読み込みにあります。そこで、プリコンパイルヘッダーを使うわけですが、これが自動設定ではうまく機能してくれません。まつけんさんによると、</P>
+<TABLE bgcolor="#ffffff">
+  <TBODY>
+    <TR>
+      <TD><FONT color="#000000">主にインクルードするファイルをstdafx.hにまとめてしまい、<BR>
+      </FONT><FONT color="#cc0000">１．全てのcppファイルからstdafx.hを最初にインクルードするようにする。<BR>
+      ２．そして、stdafx.h以外のヘッダファイルから、stdafx.hにかかれたインクルードファイルを取り除く<BR>
+      </FONT><FONT color="#000000">また、#include &quot;stdafx.h&quot;とだけ書いたstdafx.cppも用意する。(注：これはyaneSDK2ndのなかに用意されています。<BR>
+      他の階層にstdafx.hが存在する場合でも、#include
+      &quot;../yaneSDK2nd/stdafx.h&quot;とかではなく、単に#include
+      &quot;stdafx.h&quot;<BR>
+      と書いてください)<BR>
+      <BR>
+      </FONT>VC++でプロジェクトを開き、stdafx.cppをプロジェクトに追加。<BR>
+      <FONT color="#cc0000">３．プロジェクト-&gt;設定 -&gt;C/C++ -&gt;プリコンパイル済みヘッダーで、プリコンパイルヘッダーファイル(pch)を使用<BR>
+      を選び「このヘッダーまで」の欄にstdafx.hと入力。</FONT>（設定→C/C++のメニューが出ないときは、左のツリービューの<BR>
+      一番上、プロジェクトのルート階層のところをクリックして選択してください）<BR>
+      <BR>
+      <FONT color="#cc0000">４．左のツリービューからstdafx.cppを選択し、これにはプリコンパイルヘッダーファイル(pch)の作成を選ぶ。<BR>
+      同じく「このヘッダーまで」の欄にstdafx.hと入力。<BR>
+      <BR>
+      </FONT>これで終了。あとはビルドして、早さを実感してみやう。</TD>
+    </TR>
+  </TBODY>
+</TABLE>
+<P>とのことです。これに従い、私も、stdafx.h,stdafx.cppというファイルを用意し、すべてのファイルからはこちらを読み込むようにしました。よって、上に書かれているように、プリコンパイルヘッダーファイルを使用するように設定してください。</P>
+<P>また、yaneSDKのバージョンが上がって差し替えるときには、プリコンパイル済みヘッダーをコンパイルしなおさないといけないので、必ず<FONT color="#cc0000">リビルド</FONT>するようにしてください。</P>
+<P>また、上記の１．２．は自分でプログラムを書いていくときに重要になりますんで、注意してください。</P>
+<HR>
+</BODY></HTML>

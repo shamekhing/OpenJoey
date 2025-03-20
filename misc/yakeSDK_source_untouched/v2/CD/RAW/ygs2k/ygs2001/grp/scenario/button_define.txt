@@ -1,0 +1,18 @@
+//	ボタンファイルはここに番号順に登録する
+//	閉じるボタン
+grp/scenario/b2.yga
+grp/scenario/b2d.yga
+未定義
+未定義
+//	巻き戻しボタン
+grp/scenario/b1.yga
+grp/scenario/b1d.yga
+grp/scenario/b1.yga
+grp/scenario/b1d.yga
+//	進めるボタン
+grp/scenario/b3.yga
+grp/scenario/b3d.yga
+grp/scenario/b3.yga
+grp/scenario/b3d.yga
+//　ユーザーからの入力状態であることを示す待ちプロンプト
+grp/scenario/nextline.yga

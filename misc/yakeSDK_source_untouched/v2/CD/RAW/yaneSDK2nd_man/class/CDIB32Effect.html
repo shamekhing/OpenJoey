@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>クラスリファレンス</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CDIB32Ｅｆｆｅｃｔ</FONT></P>
+
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>エフェクトの手助けをします。functorで実装しています。</P>
+<P>別の方法としては、<A href="../etc/GTL.html">GTL(yaneGTL.h)</A>を使用する方法もあります。今後は、そちらのほうを強力にサポートするつもりなので、そちらの使用も検討してみてください。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P> // そのプレーンに対するEffectをかける関数<BR>
+<FONT color="#009900">template &lt;class EffectFunctor&gt;<BR>
+static LRESULT Effect(CDIB32*lpSrcDIB,EffectFunctor
+f,LPRECT lpRect=NULL);</FONT></P>
+<P>見ての通りです。lpSrcDIBはエフェクトを掛けるDIB32,EffectFunctorは、エフェクトの種類。lpRectはエフェクトを掛ける矩形です。</P>
+<P>エフェクトの種類は、functorで実装されています。使うには、<BR>
+　　CDIB32Effect::Effect(lpSrc,CDIB32Flush(
+));<BR>
+のようにしてfunctorを渡して使います。STLを使っていないとこのfunctorはピンと来ないかも知れませんが、CDIB32Flushのあとの<FONT color="#cc0000">( )</FONT>は、コンストラクタを呼び出す構文で、ここではテンポラリオブジェクトを作って渡しています。まあ、何も考えずにエフェクトfunctorのクラス名に
+<FONT color="#cc0000">( )</FONT> をつけて呼び出せばＯＫです。</P>
+<P>// ---- 転送のときになんやかやする関数<BR>
+<FONT color="#009900">template &lt;class BltFunctor&gt;<BR>
+static LRESULT Blt(CDIB32*lpDstDIB,CDIB32*lpSrcDIB,BltFunctor
+f,int x,int y,LPRECT lpSrcRect=NULL,LPSIZE
+lpDstSize=NULL,LPRECT lpClipRect=NULL);</FONT></P>
+<P>これは、あるDIBから別のDIBに転送するときに、エフェクトを掛けるfunctorを指定できます。パラメータはCDIB32::Bltとかと同じなのでわかると思います。(x,y)は転送先の左上の座標。lpSrcRectは、転送元矩形。NULLならば、全域。lpDstSizeは、転送先のサイズ。NULLならば拡大縮小なし。lpClipRectは、クリッピングする転送先矩形。NULLならば、クリッピングなし。(CDIB32::Blt等と同じ)</P>
+<P>ジオメトリック変換（拡大縮小）しながら、エフェクトをかけれて非常に便利です。functorなのでインラインで展開されるので、それなりに高速ですし。</P>
+<P>// ---- 抜き色に対してfunctorを適用する<BR>
+<FONT color="#009900">template &lt;class EffectFunctor&gt;<BR>
+static void EffectColorKey(CDIB32*lpSrcDIB,EffectFunctor
+f);</FONT></P>
+<P>これは、CDIB32の保持するColorKey（抜き色）に対して、functorを適用します。なぜこのようなものが必要になるかというと、たとえば、画面全体に対して、セピア調になるようなfunctorを適用すると、画像上でヌキのつもりの色までセピア調に変位してしまい、正常な転送が出来なくなるので、ColorKeyに対しても同じfunctorを適用し、なんとかそれを切り抜けようとするものです。だけど、うまくいかないことも多々有ります＾＾；</P>
+<P><FONT size="+1" color="#009900">☆　エフェクト用のfunctor</FONT></P>
+<P>functorとは、operator ( ) を定義したクラスのことを言います。ここで用意しているfunctorは、以下のものです。</P>
+<P>CDIB32CpySrcToDst　：　コピーするだけ<BR>
+CDIB32Flush　　　　　　：　RGBを反転させる<BR>
+CDIB32BlueToAlpha 　：　青をAlphaに持って行く<BR>
+CDIB32GreenToAlpha ：　緑をAlphaに持って行く<BR>
+CDIB32RedToAlpha　　：　赤をAlphaに持って行く<BR>
+CDIB32BrightnessToAlpha：　明るさをAlphaに持って行く（
+これにより、いわゆるstencil luminanceが実現できる）<BR>
+CDIB32StrictBrightnessToAlpha：　正確な明るさをAlphaに持って行く（上のものより遅い）<BR>
+CDIB32BrightnessToRGB　　　　：　明るさをgray
+scaleに持って行く<BR>
+CDIB32StrictBrightnessToRGB ： 正確な明るさを計算しgray
+scaleに持って行く（上のものより遅い）<BR>
+CDIB32BlueToRGB　　：　青からgray scaleに持って行く<BR>
+CDIB32GreenToRGB　：　緑からgray scaleに持って行く<BR>
+CDIB32RedToRGB 　　：　赤からgray scaleに持って行く<BR>
+CDIB32SetAlpha　　　 ：　Alphaを特定の値にする。<BR>
+CDIB32SetRGBA　　　：　RGBAを特定の値にする。<BR>
+CDIB32Sepia　　　　　 ：　Sepia調にする。<BR>
+CDIB32MaskMSBFF　：　指定された色（抜き色等を指定する）でなければ、最上位をffにする（非YGA画像を擬似的にYGA画像へ変換するのに使います）</P>
+<P>このうち、CDIB32Sepiaの場合などは、このfunctorのコンストラクタでパラメータを渡してやります。int
+nLevel,DWORD dwRGBを渡すのですが、nLevelは、0～256の数値で、0を指定した場合は、元画像と変化なし。256を指定した場合、単色（色はdwRGBで指定されたもの)になります。その間の数値は、その中間の表現になります。徐々に画像をセピア調にしたいときとかにも使えます。yaneSDK2ndのサンプル２０とかも参考にしてください。</P>
+<HR>
+</BODY></HTML>

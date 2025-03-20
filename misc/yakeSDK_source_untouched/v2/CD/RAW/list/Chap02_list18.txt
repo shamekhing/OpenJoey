@@ -1,0 +1,8 @@
+	{
+		smart_array<A> a;
+		{
+			smart_array<B> b(new B[10]);
+
+			a.UpCast(b);		//	a = b;
+		}		//	ここで、bはライフタイムを終える
+	}	//	ここで、aのライフタイムを終える

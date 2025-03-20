@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Auxiliary/yaneDir.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="CDir"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CDir</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetFindFile(<SPAN class="reserved_word">const</SPAN> string&amp; file)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetPath(<SPAN class="reserved_word">const</SPAN> string&amp; file)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> EnableSubdir(<SPAN class="reserved_word">bool</SPAN> b)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> EnablePackFile(<SPAN class="reserved_word">bool</SPAN> b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT FindFile(string&amp; file)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">bool</SPAN> IsMatch(LPCSTR it1, LPCSTR it2)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> Reset()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> EnableDirListup(<SPAN class="reserved_word">bool</SPAN> b)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> IsDir()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> IsFileExist(<SPAN class="reserved_word">const</SPAN> string&amp; file)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">DWORD CheckDrive()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> IsExistDrive(<SPAN class="reserved_word">int</SPAN> n)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CDir()</DIV>
+<DIV class="public_member"> virtual ~CDir()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> CloseFindFile()</DIV>
+<DIV class="protected_member">string m_file</DIV>
+<DIV class="protected_member">string m_path</DIV>
+<DIV class="protected_member">HANDLE m_handle</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bSubDir</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bPackFile</DIV>
+<DIV class="protected_member"><A class="class_link" href="Auxiliary!yaneDir_h.html#CDir" target=_self>CDir</A>* m_lpDir</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bAllFile</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bDir</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">HANDLE m_hPackFile</DIV>
+<DIV class="protected_member">DWORD m_dwFileNum</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bPackFileEx</DIV>
+<DIV class="protected_member">string m_PackName</DIV>
+<DIV class="protected_member">DWORD m_dwDrive</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

@@ -163,6 +163,7 @@ void CApp::MainThread() {
 
 LRESULT CApp::OnPreClose() {
     m_bWindowClosing = true;
+	this->GetMyApp()->Close();
     // Return 1 to prevent immediate close
     return 1;
 }
@@ -202,7 +203,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
         CSingleApp sapp;
         if (sapp.IsValid()) {
-            CThreadManager::CreateThread(new CAppMainWindow);
+            CThreadManager::CreateThread(new CAppMainWindow());
+
             // Create the main window defined above
 			// CThreadManager::CreateThread(new CAppMainWindow);
 			// Writing multiple lines will create multiple windows

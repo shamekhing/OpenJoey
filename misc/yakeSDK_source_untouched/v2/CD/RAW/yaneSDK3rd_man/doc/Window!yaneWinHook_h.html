@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Window/yaneWinHook.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="IWinHook"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">IWinHook</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">ウィンドゥメッセージをフックするのに利用します。<BR>	メッセージをフックしたいクラスは、このクラスから派生して、この関数<BR><BR>	virtual LRESULT WndProc(HWND,UINT,WPARAM,LPARAM) = 0; <BR><BR>	をオーバーライドします。この関数はメッセージを処理した場合、<BR>	非0を返すようにコーディングします。<BR><BR>	class CWinHookList も参照してください。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT WndProc()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"> virtual ~IWinHook()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="IWinHookList"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">IWinHookList</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Add()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Del()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Clear()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Dispatch(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, WNDPROC pWndProc=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CWinHookList"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CWinHookList</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">ウィンドゥメッセージをフックするのに利用します。<BR>	CWinHookから派生されたクラスのポインタを保持し、管理しています。<BR><BR>	１つのウィンドゥクラスに対して１つのCWinHookListが対応します。<BR>	マルチスレッド対応です。<BR><BR>	メッセージの配信には、Windowクラスから、これを呼び出します。<BR>	そうすると、自分の保持しているCWinHookのWndProcに委譲していきます。<BR>	委譲順序は、必ずAddした順番であり、WndProcが非0を返すものに出会うまで<BR>	WndProcを呼び出しつづけます。管理しているすべてのCWinHookのWndProcを<BR>	呼び出した場合は、ディフォルトの処理関数として::DefWindowProcを<BR>	呼び出します。<BR><BR>	CAppBaseはメッセージポンプは別スレッドなので、Hookを開始した次の瞬間から、<BR>	WMメッセージが飛んでくるので、初期化が終了していないタイミングで<BR>	WMメッセージを処理しないように十分注意してください。<BR><BR>	メッセージポンプを別スレッドで行なう場合、Hookを開始した次の瞬間から、<BR>	WMメッセージが飛んでくるので、初期化が終了していないタイミングで<BR>	WMメッセージを処理しないように十分注意してください。<BR><BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Window!yaneWinHook_h.html#IWinHookList" target=_self>IWinHookList</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Add()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Del()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Clear()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Dispatch(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, WNDPROC pWndProc=NULL)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">list&lt;<A class="class_link" href="Window!yaneWinHook_h.html#IWinHook" target=_self>IWinHook</A>*&gt; m_HookPtrList</DIV>
+<DIV class="protected_member"><A class="class_link" href="Thread!yaneCriticalSection_h.html#CCriticalSection" target=_self>CCriticalSection</A> m_oCriticalSection</DIV>
+<DIV class="protected_member"><A class="class_link" href="Thread!yaneCriticalSection_h.html#CCriticalSection" target=_self>CCriticalSection</A>* GetCriticalSection()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

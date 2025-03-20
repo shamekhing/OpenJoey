@@ -1,0 +1,20 @@
+class ICounter {
+/**
+		カウンタ用の基底クラス
+*/
+public:
+	///		intとの親和性
+	virtual operator int () const=0;
+	virtual const int operator = (int n)=0;
+
+	///		加減算
+	virtual void	Inc()=0;
+	virtual void	Dec()=0;
+
+	///		初期位置か？
+	virtual bool IsBegin() const = 0;
+	///		終端に達したのか？
+	virtual bool IsEnd() const = 0;
+
+	virtual ~ICounter(){}
+};

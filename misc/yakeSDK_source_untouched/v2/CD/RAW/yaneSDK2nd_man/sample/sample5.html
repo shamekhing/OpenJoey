@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=SHIFT_JIS">
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>クラスリファレンス</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+1">sample5</FONT></P>
+<P>マウスの位置、ボタン情報を表示するサンプルです。プログラムがある程度、大きくなってきたら、.hと.cpp（ヘッダーと定義部）とを分けるようにしましょう。</P>
+<HR>
+<P><FONT size="+1">sample5.h</FONT></P>
+<TABLE bgcolor="#ffffff">
+  <TBODY>
+    <TR>
+      <TD>
+      <PRE>#ifndef __CApp_h__
+#define __CApp_h__
+
+#include &quot;../../yaneSDK/yaneSDK.h&quot;
+
+class CApp : public CAppFrame {
+public:
+
+        CDIBDraw*       GetDraw(void)   { return&amp; m_Draw; }
+        CKey*           GetKey(void)    { return&amp; m_Key;  }
+        CMouse*         GetMouse(void)  { return&amp; m_Mouse; }
+
+protected:
+        //      こいつがメインね
+        void MainThread(void);            //  これが実行される
+
+        CDIBDraw        m_Draw;
+        CKey            m_Key;
+        CMouse          m_Mouse;
+};
+
+#endif</PRE>
+      </TD>
+    </TR>
+  </TBODY>
+</TABLE>
+<P><FONT size="+1">sample5.cpp</FONT></P>
+<TABLE bgcolor="#ffffff">
+  <TBODY>
+    <TR>
+      <TD>
+      <PRE>#include &quot;stdafx.h&quot;
+#include &quot;CApp.h&quot;
+
+void    CApp::MainThread(void) {                                 //      これが実行される
+
+        GetDraw()-&gt;SetDisplay(false);                           //      Windowモード
+
+        CFPSTimer t;
+        t.SetFPS(30);
+
+        CTextLayer text;
+        text.GetFont()-&gt;SetSize(20);
+
+        while (IsThreadValid()){
+                GetKey()-&gt;Input();
+                if (GetKey()-&gt;IsVKeyPress(0)) break; // ESCでbreak
+                GetDraw()-&gt;Clear();
+                CHAR buf[256];
+                int x,y,b;
+                GetMouse()-&gt;GetInfo(x,y,b);
+                ::wsprintf(buf,&quot;Mouse Position (%d %d) : %d &quot;,x,y,b);
+                text.GetFont()-&gt;SetText(buf);
+                GetDraw()-&gt;OnDraw();
+                t.WaitFrame();
+        }
+
+}
+
+//      これがmain windowのためのクラス。
+class CAppMainWindow : public CAppBase {        //      アプリケーションクラスから派生
+        virtual void MainThread(void){                  //      これがワーカースレッド
+                CApp().Start();                                         //      CApp app; app.Start();の意味ね
+        }
+};
+
+//      言わずと知れたWinMain
+int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,int nCmdShow)
+{
+        CAppInitializer::Init(hInstance,hPrevInstance,lpCmdLine,nCmdShow);      //      必ず書いてね
+        CSingleApp sapp;
+        if (sapp.IsValid()) {
+                CAppMainWindow().Run();                                 //      上で定義したメインのウィンドゥを作成
+        }
+        return 0;
+}</PRE>
+      </TD>
+    </TR>
+  </TBODY>
+</TABLE>
+<HR>
+</BODY></HTML>

@@ -1,0 +1,32 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CMutex</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CMutex</FONT><A name="CTimeBase"></A>　<FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>Mutexクラスです。ＯＳレベルで１つしか存在しない相互排他を目的とします。２重起動の防止などに使います。<BR>
+２重起動防止は、<A href="CSingleApp.html">CSingleApp</A>も参照すること。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P><FONT color="#009900">LRESULT Open(string szMutexName);</FONT></P>
+<P>　szMutexNameは、ミューテックス名（任意につけて良い）</P>
+<P>　返し値は<BR>
+<FONT color="#000000">　0 : 他に同名のものは存在しない→所有権獲得成功！<BR>
+　1 : 他に同名のものが存在する。(error)</FONT></P>
+<P><FONT color="#009900">void Wait(void); // 所有権が獲得できるまで待つ</FONT></P>
+<P>　Openで１が返ってきているときに呼び出して、所有権が獲得できるのを待つ。</P>
+<P><FONT color="#009900">void Release(void); // Mutexを解放する</FONT></P>
+<P>　デストラクタも自動的にこのReleaseを呼び出すので、明示的に呼び出す必要は無い。</P>
+<HR>
+<P><FONT size="+2">class CMutexSection</FONT><A name="CTimeBase"></A>　<FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>MutexによるLock～unlockです。<A href="CCriticalSection.html">CCriticalSection</A>と同じ感覚で使えます。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>void Enter(string szMutexName); // MutexSectionに入る<BR>
+void Leave(); // MutexSectionから出る</P>
+<P>// デストラクタではCMutexを解放するので、そのときに<BR>
+// 自動的にMutexは解放される。</P>
+<HR>
+</BODY></HTML>

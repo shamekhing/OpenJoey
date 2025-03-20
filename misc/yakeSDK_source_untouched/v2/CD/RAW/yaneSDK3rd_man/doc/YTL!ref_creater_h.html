@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>YTL/ref_creater.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="ref_creater"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;T</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">ref_creater</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">参照カウント付きオブジェクト<BR><BR>		class CSoundManager {<BR>		ref_creater&lt;CDirectSound&gt; m_vCreater;<BR>		public:<BR>		ref_creater&lt;CDirectSound&gt;* GetCreater() { return &amp;m_vCreater;}<BR>		//	以下略<BR>		};<BR><BR>		１．<BR>		GetCreater()-&gt;inc_ref();<BR>		//	使う前に参照カウント加算<BR><BR>		２．<BR>		CDirectSound* p = GetCreater()-&gt;get();<BR>		//	インスタンスの取得<BR><BR>		３．<BR>		GetCreater()-&gt;dec_ref();<BR>		//	使い終わったら参照カウント減算<BR>		（このとき自動的にオブジェクトは解放される）<BR><BR>	</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> inc_ref()</DIV>
+<DIV class="comment_block">参照カウントの加算<BR>最初に加算したときに、オブジェクトが生成される<BR>オブジェクトが生成されたのならばtrue<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> dec_ref()</DIV>
+<DIV class="comment_block">参照カウントの減算<BR>０になったときに、オブジェクトが解体される<BR>オブジェクトが解体されたのならばtrue<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">T* get()</DIV>
+<DIV class="comment_block">オブジェクトTの取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> Release()</DIV>
+<DIV class="comment_block">オブジェクトの強制解体<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> T* CreateInstance()</DIV>
+<DIV class="comment_block">AddRefのときにオブジェクト生成する部分は<BR>オーバーライドできる<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> ref_creater()</DIV>
+<DIV class="public_member"> virtual ~ref_creater()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">T* p</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> nRef</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="ref_creater_and_mediator"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;T,&nbsp;class&nbsp;S</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">ref_creater_and_mediator</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">class ref_creater のローカライズ版<BR><BR>	T のコンストラクタでS*を渡して、それをmediatorとして<BR>	使いたいクラスのために使う<BR><BR>	例:<BR>	ref_creater_and_mediator&lt;CDirectSound,ISoundManager&gt;	m_vDirectSound;<BR>	//	DirectSoundは必要になったときにのみ生成される<BR>	とやっておけば、<BR>		m_vDirectSound.inc_ref()<BR>	と外部から生成を要求されたときに、<BR>		new CDirectSound(pSoundManager);<BR>	と、このオブジェクトの生成時に渡しておいたS*を<BR>	コンストラクタに指定して生成する。<BR><BR>	inc_refするまでに<BR>		mediator::SetOutClassすれば、<BR>	m_vDirectSound.inc_ref()<BR>	でオブジェクトが生成されるとき、このSetOutClassで設定した<BR>	ポインタがコンストラクタに渡ります。<BR><BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!ref_creater_h.html#ref_creater" target=_self>ref_creater</A>&lt;T&gt;<BR>
+<SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!mediator_h.html#mediator" target=_self>mediator</A>&lt;S&gt;<BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> ref_creater_and_mediator()</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> T* CreateInstance()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

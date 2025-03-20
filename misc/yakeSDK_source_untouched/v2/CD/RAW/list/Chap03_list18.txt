@@ -1,0 +1,12 @@
+//	CFileのグローバル初期化子
+class CFileInitializer {
+	static CFileInitializer m_dummy;
+			// ↑こいつが初期化してくれる
+public:
+	CFileInitializer(){
+		smart_ptr<function_callback> p(
+			function_callback_v::Create(CFile::SetCurrentDir));
+		//	登録しておけば起動時にCFile::SetCurrentDirをコールバックしてくれる
+		CAppInitializer::RegistInitCallback(p);
+	}
+};

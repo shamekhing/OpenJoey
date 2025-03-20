@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CMIDILoader</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CMIDILoader</FONT><A name="CTimeBase"></A><FONT color="#ff0000"> 【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>MIDIサウンド(<A href="CMIDIOutput.html">CMIDIOutput</A>)の読み込み管理を行ないます。サウンドを番号で管理できます。読み込んでいるサウンドは２度読みしません。事前に読み込んでおくことも出来ます。擬似キャッシュのような働きをします。アプリケーションクラスのメンバとして持たせると便利です。<A href="CLoadCache.html">CLoadCache</A>から派生させています。参考にしてください。</P>
+<P>また、これのプレーンバージョン<A href="CPlaneLoader.html">CPlaneLoader</A>についても参考にしてください。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>まず、読み込むサウンドの定義ファイル名と解放レベルの設定のための構造体。</P>
+<P>struct SLOAD_CACHE&nbsp;{<BR>
+LPSTR lpszFilename; // CMIDIOutputで読み込むファイル名<BR>
+int nReleaseLevel;　　// 解放レベル<BR>
+};</P>
+<P>void Set(SLOAD_CACHE*); // 全サウンド定義ファイルの設定<BR>
+LRESULT Load(int nNo,int ReleaseLevel=-1);
+// 読み込み<BR>
+void Release(int nNo); // 解放<BR>
+void ReleaseAll(int nReleaseLevel); // 全解放<BR>
+void ReleaseAll(int nStart,int nEnd,int nReleaseLevel=INT_MAX);//
+全解放<BR>
+CMIDIOutput* GetMIDI(int nNo); // サウンドの取得</P>
+<P>Setで定義ファイルリストを食わせて、Loadでその番号のサウンドを読み込み、必要に応じてGetMIDIして<A href="CSound.html">CMIDIOutput</A>を取得。Releaseはナンバー指定での解放。ReleaseAllは、そのリリースレベル以下のものだけ解放。</P>
+<P>また、GetMIDIをした場合、そのサウンドを読み込んでいなければ、自動的にLoadする。よって、Loadは明示的に指定する必要はない。ただし、事前に読み込んでおかないと、読み込みのタイムラグが必要になるので、その場合だけは事前にLoadすると良い。</P>
+<P><FONT size="+1" color="#009900">☆　例</FONT></P>
+<P>SLOAD_CACHE&nbsp;SSOUND_LOADER_DEFINE[] =
+{<BR>
+&quot;snd/se01.mid&quot;, 1, // 0:main<BR>
+&quot;snd/se02.mid&quot;, 1, // 1:溜め<BR>
+&quot;snd/se03.mid&quot;, 1, // 2:ash bomb<BR>
+NULL // これが終端<BR>
+};</P>
+<P>CMIDILoader sl;<BR>
+sl.Set(SSOUND_LOADER_DEFINE);</P>
+<P>sl.GetMIDI(0)-&gt;Play();</P>
+<HR>
+</BODY></HTML>

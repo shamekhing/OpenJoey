@@ -1,0 +1,404 @@
+/*
+	smart_ptr	: an intelligent pointer
+		reprogrammed & desinged by yaneurao(M.Isozaki) '02/02/28
+*/
+
+#ifndef __YTLSmartPtr_h__
+#define __YTLSmartPtr_h__
+
+#include "ref_deleter.h"
+#include "exceptions.h"
+
+class smart_ptr_base {
+/*
+	スマートポインタはすべてのこの型に変換できる
+	他の言語に渡すときに、このポインタに変換すれば
+	このデストラクタによって、元のオブジェクトを削除することが出来る
+*/
+public:
+
+	virtual ~smart_ptr_base(){}
+};
+
+template<class T> class smart_ptr : public smart_ptr_base {
+/**
+	a real smart pointer
+	スマートポインタクラス（非配列／配列統合版）
+
+	（参照カウントを持っていて、どこからも参照されなくなったときに
+	自動的にオブジェクトを解体するような賢いポインタ）
+
+	使い方：
+			smart_ptr<CHoge> s1(new CHoge);
+
+		というようにすれば、あとは、
+
+			smart_ptr<CHoge> s2;
+			s2 = s1;
+
+		というようなコピー等をやっても、最後に残ったスマートポインタさんが
+		責任を持ってオブジェクトを解体してくれる！
+
+		☆　配列オブジェクトも可能：
+
+			smart_ptr<CHoge> s1;
+			s1.AddArray(10);
+			//	↑CHoge* s1 = new CHoge[10]; の意味に近い
+
+			//	CHogeDerivedはCHoge派生クラス
+			s1.AddArray(new CHogeDerived[10],10);
+			も可。
+
+		☆　配列ポインタの正しいアップキャスト等も可能。
+
+		また、コンストラクタはexplicitで定義されているので、
+			void function(smart_array<CHoge> av);
+		というような関数の呼び出しで、普通のポインタを渡したいときは、
+		所有権無しのスマートポインタを生成して渡すこと！
+
+		つまり、
+			function(smart_array<CHoge>(pHoge,false));
+		とやって、コンストラクタの第２パラメータをfalseにして呼び出す。
+
+*/
+public:
+
+	///	他のポインタ（非配列オブジェクト）を取るコンストラクタ
+	template <class S>
+	explicit smart_ptr(S *_P,bool bOwner = true) :
+	m_lpObj(NULL) , m_lpRefObj(NULL) , m_nIndex(0)
+	/**
+		_Pは、オブジェクトを渡します。
+		bOwnerは、この配列スマートポインタに発令オブジェクトを
+			自動削除して欲しいときにtrueにします。defaultではtrue。
+	*/
+	{
+		if (_P!=NULL) { Init(_P,bOwner,1); }
+			//	Sが仮想クラスであることは無い．．はず
+	}
+
+	///	ディフォルトコンストラクタ
+	smart_ptr() :	m_lpObj(NULL) , m_lpRefObj(NULL) , m_nIndex(0) {}
+
+	//	コピーコンストラクタ
+	smart_ptr(const smart_ptr& s){
+		inc_ref(s);
+	}
+
+	smart_ptr& operator = (const smart_ptr& s){
+		if (this != &s) { dec_ref(); inc_ref(s); }
+		return *this;
+	}
+
+	~smart_ptr() { dec_ref(); }
+
+	///	ポインタのふりをするための仕掛け
+	T& operator*() const  {return *get(); }
+	T* operator->() const {return get();  }
+
+	/// 要素へのアクセス
+	T& operator [] (int n) { return *get(n); }
+
+	/**
+		ポリモーフィックな配列オブジェクトを取得する
+		範囲外への要素へのアクセス時には、
+		CIndexOutOfBoundsException例外が送出される
+		NULLポインタに対するアクセスはCNullPointerException例外
+		スマートポインタがNULLかどうかはisNullでチェックするので
+		こういう仕様で良い
+	*/
+	T* get(int n=0) const
+#ifdef USE_EXCEPTION
+		throw(CIndexOutOfBoundsException,CNullPointerException)
+#endif
+	{
+#ifdef USE_EXCEPTION
+		//	このポインタがNullのときはNullポインタの取得（コピーも禁止されることになるが、それで良い）
+		if (m_lpObj == NULL) {
+			throw CNullPointerException();
+		}
+		if (((ULONG)n+m_nIndex) >= size()) {
+			//	範囲外チェックを行なう
+			throw CIndexOutOfBoundsException();
+		}
+#endif
+
+		return (T*)((BYTE*)m_lpObj + (n+m_nIndex)*get_obj_size());
+	}
+
+	///	get()のアクセス違反なポインタでも例外が発生しないバージョン
+	T* getPointer(int n=0) const
+	{
+		if (m_lpObj==NULL) return NULL;
+		return (T*)((BYTE*)m_lpObj + (n+m_nIndex)*get_obj_size());
+	}
+
+	/**
+		以下のメソッドで取得できるsmart_ptrは、
+		参照カウント等も共有しているので、こいつが解放されない限り
+		配列オブジェクトも解放されない
+	*/
+	///	配列オブジェクトのある要素へのスマートポインタを取得する
+	smart_ptr<T> get_smart_ptr(int n=0) const {
+		smart_ptr<T> _Tmp = *this;
+		_Tmp += n;	//	このindexを加算
+		return _Tmp;
+	}
+	///	配列オブジェクトの先頭要素へのスマートポインタを取得する
+	smart_ptr<T> begin() const {
+		return get_smart_ptr();
+	}
+	///	配列の最後の要素へのスマートポインタを取得する
+	smart_ptr<T> end() const {
+		smart_ptr<T> _Tmp = *this;
+		if (m_lpRefObj!=NULL){
+			_Tmp.m_nIndex = m_lpRefObj->get_size() -1; // 最後の要素
+		}
+		return _Tmp;
+	}
+	///	このポインタが配列の範囲外を指しているかをチェックする
+	bool	isEnd() const {
+		return (m_lpObj == NULL) || (((ULONG)m_nIndex) >= size());
+	}
+
+	void	Add(){
+	///	所有権を持ったインスタンスの追加生成構文
+		dec_ref();				//	前のやつ解放
+		Init(new T,true,1);		//	遅延生成
+	}
+	template <class S>
+	void	Add(S*_P){				//	ポリモーフィックな型でも可
+		dec_ref();				//	前のやつ解放
+		if (_P!=NULL) {
+			Init(_P,true,1);
+		}
+	}
+	//	↑この２つの関数を１つにまとめると
+	//	new Tの部分で、T が抽象クラスだとコンパイルエラーになる。
+
+	template <class S>
+	void	Add(S*_P,ref_object*ref){
+	/**
+		解体手段を規定したポインタを渡す
+		（その後、このスマートポインタは所有権を持つ）
+
+		例)	smart_ptr<CHoge> pHoge;
+			pHoge.Add(new CHoge,new my_ref_object);
+	*/
+		dec_ref();
+		if (_P!=NULL){
+			Init(_P,true,1,ref);
+		}
+	}
+
+	///	所有権の無いポインタの設定
+	template <class S>
+	void	Set(S*_P){			//	ポリモーフィックな型でも可
+		dec_ref();				//	前のやつ解放
+		if (_P!=NULL) {
+			Init(_P,false,1);
+		}
+	}
+
+	///	所有権を持った配列インスタンスの追加生成構文
+	void	AddArray(int n){
+		dec_ref();
+		if (n==0) return ; // なんでやねん．．
+		Init(new T[n],true,n);
+	}
+
+	///	所有権を持った配列インスタンスの追加生成構文
+	template <class S>
+	void	AddArray(S* p,int n=INT_MAX){
+		dec_ref();
+		Init(p,true,n);
+	}
+
+	///	所有権を持たない配列インスタンスの追加構文
+	template <class S>
+	void	SetArray(S* p,int n=INT_MAX){
+		dec_ref();
+		Init(p,false,n);
+	}
+
+	template <class S>
+	void	AddArray(S*_P,int n,ref_object*ref){
+	/**
+		解体手段を規定した配列ポインタを渡す
+		（その後、このスマートポインタは所有権を持つ）
+
+		例)	smart_ptr<CHoge> pHoge;
+			pHoge.Add(new CHoge[10],new my_ref_object);
+	*/
+		dec_ref();
+		Init(_P,true,n,ref);
+	}
+
+	template <class RelateType>
+	smart_ptr<T>&	UpCast(const smart_ptr<RelateType>& s){
+	///	明示的アップキャスト構文
+	/**	ただし、同じ実体であるsmart_ptr間でアップキャストしてはいけない
+		すなわち、
+			smart_ptr<CHoge> p;
+			p.Upcast(p); // これはやってはいけない
+	*/
+		if ((void*)this != (void*)&s) {
+		//	↑型が違うかも知れないのでこの程度のチェックしか出来ない
+			dec_ref();
+
+			//	以下はinc_ref(s)と等価
+			m_lpObj		= s.getObj();
+			//	これはキャストを含むのでアップキャストできなければ
+			//	コンパイルエラーになる
+			m_nIndex	= *(const_cast<smart_ptr<RelateType>*>(&s))->getIndex();
+			m_lpRefObj	= s.getRefObj();
+			if (m_lpRefObj!=NULL) m_lpRefObj->inc_ref();
+		}
+		return *this;
+	}
+
+	bool	unique() const {
+	///	オブジェクトを参照しているのが唯一か？
+		return count()==1;
+	}
+	int		count()	const {
+	///	オブジェクトの参照数を返す
+		return m_lpRefObj!=NULL?m_lpRefObj->get_ref():0;
+	}
+
+	int		get_obj_size() const {
+	//	オブジェクトひとつの要素のサイズを返す（内部実装用）
+		return m_lpRefObj!=NULL?m_lpRefObj->get_obj_size():0;
+	}
+
+	bool	isNull() const {
+	///	指しているオブジェクトはNULLか？
+		return m_lpObj==NULL;
+	}
+
+	int		size() const {
+	///	配列オブジェクトならば、最大数を返す
+	///	非配列オブジェクトならば、1が返る
+		if (m_lpRefObj==NULL) return 0;
+		return m_lpRefObj->get_size();
+	}
+	void	set_size(int nSize) {
+	///	↑で取得できるサイズを変更する
+		if (m_lpRefObj==NULL) return 0;
+		return m_lpRefObj->set_size(nSize);
+	}
+
+	///	解体子オブジェクトへのポインタを返す（内部実装用）
+	ref_object* getRefObj() const { return m_lpRefObj; }
+	///	オブジェクトの実装（内部実装用）
+	T* getObj() const { return m_lpObj; }
+
+	void	Delete() {	dec_ref(); }
+	///	このオブジェクトを解体する（ただし、他のスマートポインタから参照
+	///	されていれば、実際にdeleteまでは出来ない）
+
+	///	スマートポインタの加減算
+	void dec() { m_nIndex--; }
+	void inc() { m_nIndex++; }
+
+	///	indexの取得(iterator的に使用しているとき)／内部実装用
+	int* getIndex() { return &m_nIndex; }
+
+	///	加減算のためのオペレータ
+	smart_ptr<T>& operator++() { inc(); return (*this); }
+	smart_ptr<T> operator++(int)
+		{ smart_ptr<T> _Tmp = *this; inc(); return (_Tmp); }
+	smart_ptr<T>& operator--() { dec(); return (*this); }
+	smart_ptr<T> operator--(int)
+		{ smart_ptr<T> _Tmp = *this; dec(); return (_Tmp); }
+	smart_ptr<T>& operator+=(int _N)
+		{ m_nIndex += _N; return (*this); }
+	smart_ptr<T>& operator-=(int _N)
+		{ m_nIndex -= _N; return (*this); }
+	smart_ptr<T> operator+(int _N) const
+		{smart_ptr<T> _Tmp = *this; return (_Tmp += _N); }
+	smart_ptr<T> operator-(int _N) const
+		{smart_ptr<T> _Tmp = *this; return (_Tmp -= _N); }
+
+	///	比較のためのオペレータ
+	bool operator==(const smart_ptr<T> & _X) const
+		{return (getPointer() == _X.getPointer()); }
+	bool operator!=(const smart_ptr<T>& _X) const
+		{return (!(*this == _X)); }
+	bool operator<(const smart_ptr<T>& _X) const
+		{return (getPointer() < _X.getPointer()); }
+	bool operator>(const smart_ptr<T>& _X) const
+		{return (_X < *this); }
+	bool operator<=(const smart_ptr<T>& _X) const
+		{return (!(_X < *this)); }
+	bool operator>=(const smart_ptr<T>& _X) const
+		{return (!(*this < _X)); }
+
+protected:
+
+	//	初期化補助関数
+	template <class S>
+	void	Init(S *s,bool bOwner,int nSize,ref_object*ref=NULL){
+		//	引数は、
+		//	１．オブジェクトのクラス　２．このオブジェクトの所有権
+		//	３．このオブジェクトの数
+		if (m_lpRefObj!=NULL) delete m_lpRefObj;
+		m_nIndex = 0;
+		m_lpObj = s;
+		//	↑ここで、コンパイルエラーが出るのは、
+		//	smart_ptrのコンストラクタの引数に指定している型が
+		//	このスマートポインタで指定している型の派生クラス等で無いのが原因
+
+		if (nSize==0) return ; // なんで？？
+#ifdef USE_EXCEPTION
+		if (!bOwner && ref!=NULL){
+			//	Ownerで無いのに解体オブジェクトを渡しているとはどういうこっちゃ？
+			throw CSyntaxException("所有権が無いのに解体オブジェクトが指定されている");
+		}
+#endif
+		/*	//	Owner権が無ければ、どうせオブジェクトは削除されない
+			//	(⇒ref_deleter::dec_ref)
+		if (!bOwner) {
+			m_lpRefObj = new null_ref_object;
+			//	所有権が無いので解体も何もしないオブジェクト
+		} else
+		*/	
+		if (ref!=NULL) {
+			m_lpRefObj = ref;
+		} else if (nSize==1) {
+			m_lpRefObj = new nonarray_ref_object<S>(s);
+		} else {
+			m_lpRefObj = new array_ref_object<S>(s);
+		}
+		m_lpRefObj->set_ref(1);
+		m_lpRefObj->set_owner(bOwner);
+		//	オーナーで無いのであれば決して解体されないようにしておく
+		m_lpRefObj->set_obj_size(sizeof(S));
+		m_lpRefObj->set_size(nSize);
+	}
+
+	//	参照カウントの増減
+	void	inc_ref(const smart_ptr<T>& s) {
+		m_lpObj		= s.m_lpObj;
+		m_nIndex	= s.m_nIndex;
+		m_lpRefObj	= s.m_lpRefObj;
+		if (m_lpRefObj!=NULL) m_lpRefObj->inc_ref();
+	}
+	void	dec_ref() {
+		if (m_lpRefObj!=NULL){
+			if (m_lpRefObj->dec_ref()){
+				//	オブジェクトは解体子経由で削除する
+				delete m_lpRefObj;
+			}
+			m_lpRefObj = NULL;
+			m_lpObj = NULL;
+		}
+	}
+
+	T*		m_lpObj;			//	実オブジェクト
+	int		m_nIndex;			//	このsmart_ptrが、このオブジェクトの
+								//	何番目の要素を指しているか
+	ref_object* m_lpRefObj;		// 解体用オブジェクト
+};
+
+#endif

@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CLoadCache</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CLoadCache</FONT><A name="CTimeBase"></A><FONT color="#ff0000"> 【抽象クラス<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>擬似キャッシュのような働きをします。<A href="CSpriteLoader.html">CSpriteLoader</A>や<A href="CSoundLoader.html">CSoundLoader</A>，<A href="CSELoader.html">CSELoader</A>，<A href="CPlaneLoader.html">CPlaneLoader</A>などは、これから派生させています。使用方法等については、そちらも見てください。</P>
+<P><FONT size="+1" color="#009900">☆　このクラスの用い方</FONT></P>
+<P><FONT color="#009900">// ひとつの要素に読み込み／解放<BR>
+virtual LRESULT InnerLoad(int) = 0;<BR>
+virtual LRESULT InnerRelease(int) = 0;<BR>
+// m_nMax分だけ配列を確保／解放<BR>
+virtual void InnerCreate(void) = 0;<BR>
+virtual void InnerDelete(void) = 0;</FONT></P>
+<P>まず、このクラスから派生させ、この４つの関数をオーバーライドします。<BR>
+あとは派生先のクラスのコンストラクタでInnerCreateで使っているメンバ変数を初期化して、デストラクタで、必ずInnerDeleteを呼び出します。</P>
+<P>実装については、<A href="CSpriteLoader.html">CSpriteLoader</A>や<A href="CSoundLoader.html">CSoundLoader</A>，<A href="CPlaneLoader.html">CPlaneLoader</A>,<A href="CMIDILoader.html">CMIDILoader</A>もご覧ください。</P>
+<P><FONT color="#009900">int GetMax(void);</FONT></P>
+<P>Setで設定した、ファイル名リストの要素数を返します。<A href="CBGMLoader.html">CBGMLoader</A>が参考になると思います。</P>
+<P><FONT color="#009900">// 古くなったものを解放する<BR>
+virtual void ReleaseStaleAll(int nReleaseTime=INT_MAX);<BR>
+virtual void ReleaseStaleAll(int nStart,int
+nEnd,int nReleaseTime=0);<BR>
+virtual void IncStaleTime(void); // 時間を経過させる<BR>
+// nReleaseTimeより以前に読み込んだものは解放する</FONT></P>
+<P>時間に対して、自動リリースするための仕組み。毎フレームIncStaleTimeを呼び出す。ReleaseStaleAllを呼び出せば、一定回数IncStaleTimeを呼び出されたものだけReleaseされる。このクラスの派生先のメンバ関数である、GetPlane,GetSound等を使用すれば、IncStaleTimeでインクリメントしている内部カウンタは０にリセットされる。</P>
+<P>要するに、<BR>
+　１．毎フレームIncStaleTimeを呼び出す。<BR>
+　２．毎フレームReleaseStaleAll( 60 );　を呼び出す。（これならば、６０フレーム使用しなかったものがReleaseされる）</P>
+<P><FONT color="#009900">// property..</FONT><BR>
+virtual void SetLoadCacheListener(smart_ptr&lt;CLoadCacheListener&gt;
+v);<BR>
+virtual smart_ptr&lt;CLoadCacheListener&gt;
+GetLoadCacheListener( );</P>
+<P><A href="#CLoadCacheListener">リスナクラス</A>CLoadCacheListenerの受け渡しを行ないます。</P>
+<P><FONT size="+1" color="#990099">☆　注意点</FONT></P>
+<P><FONT color="#009900">void Set(SLOAD_CACHE*); // 定義ファイル（ファイル名リスト）の設定</FONT></P>
+<P>で設定するSLOAD_CACHE*のポイント先は、このクラスのメンバにはコピーしていないので、このクラスの使用終了まで解放しないようにしてください。</P>
+<P><FONT color="#009900">LRESULT Set(string filename); // 定義ファイルの読み込み</FONT></P>
+<P>「ファイル名リストを書いた定義ファイル」を読み込み、ファイルリストとして定義します。<BR>
+「ファイル名リストを書いた定義ファイル」には、ファイル名を各行に書いておきます。ダブルスラッシュ（　//
+）で始まる行はコメント行として無視されます。</P>
+<P>// ２度読みの禁止(default:true == ２度読み可能)<BR>
+<FONT color="#009900">virtual void SetCanReloadAgain(bool b);</FONT></P>
+<P>Set(string filename)で定義ファイルの２度読みを禁止します。CLoadCache派生クラスをsmart_ptrとして、クラス間の受け渡しを行なうときに、渡した先のクラスでLoadされたくないときなどは、このメンバ関数をfalseで呼び出しておきます。</P>
+<HR>
+<P><FONT size="+2"><A name="CLoadCacheListener">class CLoadCacheListener</A></FONT><A name="CTimeBase"></A><FONT color="#ff0000"> 【インターフェースクラス<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P>// 読み込み時のコールバック。必要ならばnNoを変更できる(<A href="CPlaneLoader.html">CPlaneLoader</A>で有効)<BR>
+virtual void OnLoad(int &amp;nNo) { }</P>
+<P>読み込みファイルを他のファイルへと置換する。</P>
+<HR>
+</BODY></HTML>

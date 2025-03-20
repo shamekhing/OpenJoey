@@ -1,0 +1,26 @@
+	int nTimer[10]; // タイマ識別子テーブル
+	int nNow;		// 現在の分解能
+	MMRESULT timeBeginPeriod(UINT n){
+		if (n==0) return TIMERR_NOCANDO;
+		if (n>=10) return TIMERR_NOERROR;
+		nTimer[n]++;		//	参照カウントのインクリメント
+		for(int i=1;i<10;i++){
+			if (nTimer[i]!=0) {
+				nNow = i;	//	現在の分解能は、テーブルのなかで最小のもの
+				break;
+			}
+		}
+		return TIMERR_NOERROR;
+	}
+	MMRESULT timeEndPeriod(UINT n){
+		if (n==0) return TIMERR_NOCANDO;
+		if (n>=10) return TIMERR_NOERROR;
+		if (nTimer[n]!=0) nTimer[n]--;		//	参照カウントのデクリメント
+		for(int i=1;i<10;i++){
+			if (nTimer[i]!=0) {
+				nNow = i;	//	現在の分解能は、テーブルのなかで最小のもの
+				break;
+			}
+		}
+		return TIMERR_NOERROR;
+	}

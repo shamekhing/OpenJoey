@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>クラスリファレンス</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">使うと便利なマクロ集</FONT><A name="WARNING"></A>(YTL/yaneMacro.hで定義されています)</P>
+<HR>
+<P><FONT size="+2">WARNINGマクロ</FONT><A name="WARNING"></A></P>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>デバッグ用の診断マクロです。C言語のASSERTに近いものです。</P>
+<P><FONT size="+1" color="#009900">☆　使用例</FONT></P>
+<P>　　WARNING(lp==NULL,&quot;lp==NULLだ！！&quot;);</P>
+<P>のようにしておけば、デバッグビルドだとそこで停止します。</P>
+<P>（故意にメモリエラーを出すコードが含まれているので、そのままデバッグモードに入ることが出来ます）</P>
+<HR>
+<P><FONT size="+2">ZEROマクロ</FONT><A name="WARNING"></A></P>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>ある領域をゼロで埋めるためのマクロです。</P>
+<P><FONT size="+1" color="#009900">☆　使用例</FONT></P>
+<P>　　int x[100];<BR>
+　　ZERO(x); // これで、xの要素すべてが0でクリアされます。</P>
+<HR>
+<P><FONT size="+2">DELETE_SAFEマクロ</FONT><A name="WARNING"></A></P>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>ポインタが非NULLならばdeleteを掛けます。その後、ポインタにはNULLが代入されます。</P>
+<P><FONT color="#cc0000">// ↑これ使わずにauto_ptrを使いましょうね＾＾；
+</FONT></P>
+<P><FONT size="+1" color="#009900">☆　使用例</FONT></P>
+<P>　　DELETE_SAFE(m_lpBox);</P>
+
+<HR>
+<P><FONT size="+2">DELETEPTR_SAFEマクロ</FONT><A name="WARNING"></A></P>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>配列へのポインタが非NULLならばdeleteを掛けます。その後、ポインタにはNULLが代入されます。</P>
+<P><FONT color="#cc0000">// ↑これ使わずにauto_array(&quot;YTL/auto_array.h&quot;のなかにある)を使いましょうね＾＾；
+</FONT></P>
+<P><FONT size="+1" color="#009900">☆　使用例</FONT></P>
+<P>　　DELETEPTR_SAFE(m_lpaBox);</P>
+<HR>
+<P><FONT size="+2">ｅｆマクロ</FONT><A name="WARNING"></A></P>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>else ifの簡略表現です。</P>
+<P><FONT size="+1" color="#009900">☆　使用例</FONT></P>
+<P>　　if (x&gt;=10) { ... }<BR>
+　　ef (x=&lt;0) { ... }</P>
+<HR>
+<P><FONT size="+2">TRACE　マクロ</FONT></P>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>トレース用のマクロ:ファイル名とラインナンバーをError.logに出力する</P>
+<HR>
+<P><FONT size="+2">NELEMS(array) 　マクロ</FONT></P>
+<P>⇒　(sizeof(array) / sizeof(array[0]))</P>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>配列の要素数を返すマクロ( Number of Elements)　これを使えば、マジックナンバーを少し減らすことが出来る＾＾；　カーニハンの「プログラミング作法」で紹介されていたもの。</P>
+<HR>
+</BODY></HTML>

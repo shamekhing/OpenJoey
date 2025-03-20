@@ -1,0 +1,37 @@
+class CMutex : public IMutex {
+/**
+	Mutexクラスです。ＯＳレベルで１つしか存在しない相互排他を目的とします。
+	２重起動の防止などに使います。
+	２重起動防止は、class CSingleApp も参照すること。
+
+	他スレッドとの相互排他ならば class CCriticalSection を用いること。
+	そちらのほうが処理は断然軽いです。
+
+*/
+public:
+	virtual LRESULT Open(const string& szMutexName);
+	/**
+	　szMutexNameは、ミューテックス名（任意につけて良い）
+
+	　返し値は
+	　0 : 他に同名のものは存在しない→所有権獲得成功！
+	　1 : 他に同名のものが存在する。(error)⇒このあとWaitで待つと良い
+	*/
+
+	virtual void Wait();
+	/**
+		Openで１が返ってきているときに呼び出して、
+		所有権が獲得できるのを待つ。
+	*/
+	virtual void Release();
+	/**
+		Mutexを解放する
+		デストラクタも自動的にこのReleaseを呼び出すので、
+		すぐに解体するならば、明示的に呼び出す必要は無い。
+	*/
+
+	CMutex();
+	virtual ~CMutex();
+protected:
+	HANDLE	m_hMutex; // Mutex ハンドル 
+};

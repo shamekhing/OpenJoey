@@ -1,0 +1,11 @@
+CFixTimer::CFixTimer() { m_dwTimeGetTime = 0; }
+
+void	CFixTimer::Reset() { GetTimer()->Reset(); }
+DWORD	CFixTimer::Get(){ return m_dwTimeGetTime; }
+void	CFixTimer::Set(DWORD dw) { GetTimer()->Set(dw); }
+void	CFixTimer::Pause() { GetTimer()->Pause(); }
+void	CFixTimer::Restart(){ GetTimer()->Restart(); }
+
+void	CFixTimer::Flush(){
+	m_dwTimeGetTime = GetTimer()->Get();
+}

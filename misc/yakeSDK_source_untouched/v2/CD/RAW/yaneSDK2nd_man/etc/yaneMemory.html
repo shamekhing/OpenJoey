@@ -1,0 +1,18 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>クラスリファレンス</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">yaneMemory.cpp</FONT>　　operator new, delete</P>
+<HR><P><FONT size="+1" color="#009900">☆　内容１</FONT></P>
+<P>newで確保したのちにdeleteで解放されていないプログラムの箇所を特定するのに使います。<BR>
+operator new,deleteをオーバーロードして、ログを出力します。</P>
+<P><A href="config.html">config</A>でUSE_MEMORY_CHECKが有効になっていなくてはなりません。</P>
+<P>実際の使いかたについては、yaneMemory.cppの説明を読んでください。<BR>
+<A href="http://www.sun-inet.or.jp/~yaneurao/">やねうらおのホームページ</A>「スーパープログラマーへの道　第D3回」も参考にしてください。</P>
+<P><FONT size="+1" color="#009900">☆　内容２</FONT></P>
+<P>もう一つのほうは、小さなメモリブロックのために事前に確保しておいたメモリチャンクを渡してやることで高速化を計ろうというものです。</P>
+<P><A href="config.html">config</A>でUSE_YANE_NEWDELETEが有効になっていなくてはなりません。<BR>
+<A href="http://www.sun-inet.or.jp/~yaneurao/">やねうらおのホームページ</A>「スーパープログラマーへの道　第D7回」も参考にしてください。</P>
+<HR>
+</BODY></HTML>

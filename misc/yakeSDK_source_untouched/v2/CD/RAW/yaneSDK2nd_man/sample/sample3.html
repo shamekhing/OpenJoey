@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>クラスリファレンス</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+1">sample3.cpp</FONT></P>
+
+<HR>
+<PRE>#include &quot;stdafx.h&quot;
+#include &quot;../yaneSDK/yaneSDK.h&quot;
+
+//      メインアプリケーションクラス
+class CApp : public CAppFrame {
+public:
+        //      フレームワーク内の各デバイスの外部からの取得
+        CDirectDraw*    GetDraw(void)           { return&amp; m_draw; }
+        CKey2*          GetKey(void)            { return&amp; m_key; }
+        CMouse*         GetMouse(void)          { return&amp; m_mouse; }
+        CMouseLayer*    GetMouseLayer(void)     { return&amp; m_mouselayer; }
+        CFPSTimer*      GetFPSTimer(void)       { return&amp; m_fpstime; }
+
+protected:
+        CDirectDraw     m_draw;         //      DirectDraw描画
+        CFPSTimer       m_fpstime;      //      FPS制御
+        CKey2           m_key;          //      汎用キー入力
+        CMouseLayer     m_mouselayer;   //      ソフトウェアマウスカーソル
+        CPlane          m_mouseplane;   //      マウスカーソル用プレーン
+        CMouse          m_mouse;        //      マウス入力
+
+        void    MainThread(void);
+        void    OnSelect(int nSelect);
+};
+
+///////////////////////////////////////////////////////////////////////////////
+//      アプリケーションの初期化
+
+void    CApp::MainThread(void) {                                        //      これが実行される
+        m_draw.SetDisplay(false);       //      ウィンドゥモード
+        m_fpstime.SetFPS(30);           //      FPSを30に
+
+        //      ソフトウェアマウスカーソル
+        m_mouseplane.Load(&quot;sozai/cursor.bmp&quot;);
+        m_mouselayer.SetPlane(&amp;m_mouseplane);
+
+        CPlane planeBG;
+        planeBG.Load(&quot;sozai/BG.bmp&quot;);
+        CPlane planeTai[2];
+        planeTai[0].Load(&quot;sozai/tai_sel.bmp&quot;);
+        planeTai[1].Load(&quot;sozai/tai_un.bmp&quot;);
+        CPlane planeMovie[2];
+        planeMovie[0].Load(&quot;sozai/movie_sel.bmp&quot;);
+        planeMovie[1].Load(&quot;sozai/movie_un.bmp&quot;);
+        CPlane planeAkari[2];
+        planeAkari[1].Load(&quot;sozai/akari1.bmp&quot;);
+        planeAkari[0].Load(&quot;sozai/akari2.bmp&quot;);
+
+        CSound sound;
+        sound.Load(&quot;sozai/SE01.wav&quot;);
+        CSound soundSel;
+        soundSel.Load(&quot;sozai/SE04.wav&quot;);
+
+        int nSelect = 0;        //      0 or 1
+        int     nB = 0;
+
+        while(IsThreadValid()) {                        //      これがValidの間、まわり続ける
+                m_key.Input();
+                if (m_key.IsVKeyPush(0)) break;
+                if (m_key.IsVKeyPush(1) || m_key.IsVKeyPush(2)){
+                        nSelect = (nSelect+1) &amp; 1;
+                        int ax,ay;
+                        switch (nSelect) {
+                        case 0 : ax = 190+150; ay = 303; break;
+                        case 1 : ax = 190+150; ay = 383; break;
+                        }
+                        m_mouse.SetXY(ax,ay);
+                        nB = 0; // reset blink count
+                        sound.Play();
+                }
+                int mx,my;
+                m_mouse.GetXY(mx,my);
+                if (mx &gt;= 190 &amp;&amp; mx &lt;500){
+                        if (my &gt;= 308-15 &amp;&amp; my &lt; 308+15   &amp;&amp; nSelect!=0) {
+                                nSelect = 0;
+                                nB = 0; // reset blink count
+                                sound.Play();
+                        } ef (my &gt;= 383-15 &amp;&amp; my &lt; 383+15 &amp;&amp; nSelect!=1) {
+                                nSelect = 1;
+                                nB = 0; // reset blink count
+                                sound.Play();
+                        }
+                }
+
+                if (m_mouse.LButton() || m_mouse.RButton() || m_key.IsVKeyPush(5)){
+                        soundSel.Play();
+                        while(soundSel.IsPlay());
+                        OnSelect(nSelect);
+                        break;  //      終わりちん
+                }
+
+                //      画像素材
+                m_draw.BltFast(&amp;planeBG,0,0);
+                m_draw.Blt(&amp;planeTai  [nSelect==0?0:1],234,298);
+                m_draw.Blt(&amp;planeMovie[nSelect==1?0:1],234,377);
+                //      明かり素材
+                int ax,ay,nbr;
+                switch (nSelect) {
+                case 0 : ax = 190; ay = 303; break;
+                case 1 : ax = 190; ay = 383; break;
+                }
+                m_draw.Blt(&amp;planeAkari[1],ax,ay);
+                if (nB &lt;= 256) nbr = nB; else nbr = 512-nB;
+                nB+=8; if (nB&gt;512) nB = 0;
+                m_draw.BlendBlt(&amp;planeAkari[0],ax,ay,nbr,nbr,nbr,256-nbr,256-nbr,256-nbr);
+
+                m_draw.OnDraw();
+                m_fpstime.WaitFrame();
+        }
+
+}
+
+void    CApp::OnSelect(int nSelect){
+        switch (nSelect) {
+        case 0: {
+                CShell shell;
+                shell.Execute(&quot;setup.exe&quot;);
+                        }
+                break;
+        case 1: {
+                CShell shell;
+                string dir;
+                dir = CFile::GetCurrentDir();
+                dir += &quot;movie&quot;;
+                shell.OpenFolder(dir);
+                        }
+                break;
+        };
+}
+
+///////////////////////////////////////////////////////////////////////////////////
+//      以下はメインクラス
+///////////////////////////////////////////////////////////////////////////////////
+
+//      これがmain windowのためのクラス。
+class CAppMainWindow : public CAppBase {        //      アプリケーションクラスから派生
+        virtual void MainThread(void){                  //      これがワーカースレッド
+                CApp().Start();                                         //      CApp app; app.Start();の意味ね
+        }
+        //      キャプション変更しとかんとどやされる＾＾
+        LRESULT OnPreCreate(CWindowOption&amp; opt){
+                opt.caption             = &quot;Revolution 店頭デモ AutoRun&quot;;
+                opt.classname   = &quot;YANEAPPLICATION&quot;;
+                opt.size_x              = 640;
+                opt.size_y              = 480;
+                opt.style               = WS_SYSMENU | WS_CAPTION | WS_MINIMIZEBOX;
+                return 0;
+        }
+};
+
+//      言わずと知れたWinMain
+int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,int nCmdShow)
+{
+        CAppInitializer::Init(hInstance,hPrevInstance,lpCmdLine,nCmdShow);      //      必ず書いてね
+        CSingleApp sapp;
+        if (sapp.IsValid()) {
+                CAppMainWindow().Run();                                 //      上で定義したメインのウィンドゥを作成
+        }
+        return 0;
+}</PRE>
+<HR>
+</BODY></HTML>

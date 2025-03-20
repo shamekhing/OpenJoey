@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Input/yaneKeyBase.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="IKeyBase"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">IKeyBase</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">キー入力のための基底クラス。<BR>	DirectInput,JoyStick,MIDI Input等の入力系に対して<BR>	共通のインターフェースを与えるために使う。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Input()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block">状態取得（これを実行した瞬間、キーのリアルタイム情報を取得する）<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsKeyPress(<SPAN class="reserved_word">int</SPAN> key)</DIV>
+<DIV class="comment_block">以下の３つの関数で、キー判定を行なう。<BR>		GetKeyStateによって得られた情報を調べて返すだけなので、<BR>		GetKeyStateを忘れないように注意。<BR>	<BR>あるキーが現在押されているか<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsKeyPush(<SPAN class="reserved_word">int</SPAN> key)</DIV>
+<DIV class="comment_block">あるキーが前回のGetKeyStateのときから押されたか）<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> BYTE* GetKeyData()</DIV>
+<DIV class="comment_block">取得したキー情報(BYTE m_byKeyBuffer[256])へのポインタを得る)<BR>直接ポインタを得てぐりぐりする人のために＾＾；<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> IKeyBase()</DIV>
+<DIV class="public_member"> virtual ~IKeyBase()</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Reset()</DIV>
+<DIV class="comment_block">バッファの中身をクリアする。JoyStickのボタン数を変更したときなど<BR>		押されたままの状態で残るのを防止する<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> FlipKeyBuffer(<SPAN class="reserved_word">int</SPAN>&amp; var)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nKeyBufNo</DIV>
+<DIV class="protected_member">BYTE m_byKeyBuffer[2][256]</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

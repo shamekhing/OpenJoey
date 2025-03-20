@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>クラスリファレンス</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">template &lt;class T&gt; class auto_ptrEx</FONT><A name="CTimeBase"></A>　<FONT color="#ff0000">【テンプレート<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>auto_ptrの拡張バージョンです。所有権インジケーターを持つ、ポインタで、デストラクトされるときに所有権を持っていれば、そのオブジェクトを自動的に解放します。これを使えば、ポインタ管理は飛躍的に楽になります。配列バージョンが必要なときは、<A href="auto_array.html">auto_array</A>、また、動的に増えていくときは<A href="auto_vector_ptr.html">auto_vector_ptr</A>を使います。</P>
+<P><FONT size="+1" color="#009900">☆　使いかた</FONT></P>
+<P><FONT color="#009900">　auto_ptrEx&lt;CObject&gt; m_lpObject;</FONT></P>
+<P>と宣言したとします。引数なしならば、生成段階でNULLポインタであることは保証されます。そのあと、インスタンスを生成して、それをauto_ptrExで管理したくなったならば、</P>
+<P><FONT color="#009900">　m_lpObject.Add(new CObject(x,y));</FONT></P>
+<P>とやり、生成したオブジェクトをAddします。<FONT color="#cc0000">Addを使うとそのオブジェクトに対して所有権を持ちます。</FONT>CObjectのコンストラクタが引数無しならば、Addで明示的にnewしなくてもＯＫです。すなわち、m_lpObject.Add(new
+CObject);は、</P>
+<P><FONT color="#009900">　m_lpObject.Add();</FONT></P>
+<P>と等価です。このAddは、内部的にはnewしているだけなので、T
+が抽象クラスのときにこの関数を呼び出すとテンプレート展開されるときにnewできずにコンパイルエラーになるのでその場合も、明示的にAddします。</P>
+<P>あるいは、auto_ptrの生成と同時にオブジェクトを生成することも出来ます。</P>
+<P><FONT color="#009900">　auto_ptrEx&lt;CObject&gt; lpObject(new
+CObject);</FONT></P>
+<P>このコンストラクタは、explicit指定があるので、暗黙の変換にはこのコンストラクタは適用されません。</P>
+<P>オーナーであるかを返す関数<BR>
+<FONT color="#009900">　bool IsOwner();</FONT><BR>
+オーナー権の設定<BR>
+<FONT color="#009900">　void SetOwner(bool b);</FONT></P>
+<P>auto_ptrExは、T型のポインタと互換なので、T型のポインタに暗黙で変換します。<BR>
+<FONT color="#009900">　operator T* () const;<BR>
+　T&amp; operator*() const;<BR>
+　T* operator-&gt;() const;</FONT></P>
+<P>明示的に、ポインタを取得できます。</P>
+<P><FONT color="#009900">　T* get() const;</FONT><BR>
+<FONT color="#009900">　T* release() const</FONT>;<BR>
+<FONT color="#009900">　void Delete();</FONT></P>
+<P>ただし、get()では、<FONT color="#cc0000">所有権は移動しません。</FONT>release()でT*を取得したときは、<FONT color="#cc0000">所有権は破棄されます。ポイント先はNULLになります。（しかしオブジェクトは解放されません）</FONT> Delete()は、<FONT color="#cc0000">所有権の破棄とオブジェクトの解放（ただし解放は所有権を持っているときのみ）を同時に行ないます。</FONT></P>
+<P><FONT color="#009900">　auto_ptrEx(const auto_ptrEx&lt;T&gt;&amp;
+_Y);</FONT></P>
+<P>auto_ptrExを引数に渡してコンストラクトできます。この場合、<FONT color="#cc0000">所有権は</FONT>引数で渡したauto_ptrExから、このオブジェクトに<FONT color="#cc0000">移動します。</FONT></P>
+<P>代入オペレータは、</P>
+<P><FONT color="#009900">　auto_ptrEx&lt;T&gt;&amp; operator=(const
+auto_ptrEx&lt;T&gt;&amp; _Y);<BR>
+　auto_ptrEx&lt;T&gt;&amp; operator=(const
+T* _P);</FONT></P>
+<P>前者の表記は、auto_ptrExからの代入なので、右辺のauto_ptrExに所有権があった場合、所有権は移動します。左辺のauto_ptrExに所有権が有る場合は、そのオブジェクトを解放してから代入します。<FONT color="#cc0000" size="+1">後者の表記は、生のポインタからの代入なので、このauto_ptrExは所有権は持ちません。</FONT></P>
+<P>また、代入時に左辺と右辺で指しているオブジェクトが同じ実体である場合は、所有権の移動のみが行なわれます。もし右辺のauto_ptrExに所有権が無ければ所有権の移動も発生しません。</P>
+<HR>
+</BODY></HTML>

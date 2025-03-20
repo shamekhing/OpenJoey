@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CMovie</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CMovie</FONT><A name="CMovie"></A>　<FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>ムービー再生のクラスです。DirectShowを用いて実装されているため、DirectX6.1以降が必要になります。また、DirectShowが無い環境でも、AVIファイルだけは再生可能です。</P>
+<P>このクラスを使用するには<a href="../etc/config.html">yaneConfig.h</a>でUSE_DirectDrawとUSE_DIB32が定義されている必要が有ります。</P>
+<P><a href="CSoundBase.html">CSoundBase</a>から派生しているので、サウンド同様に扱えます。
+ムービーは基本的に<a href="CLayer.html">CLayer</a>として使いますが、<a href="CPlane.html">CPlane</a>,<a href="CDIB32.html">CDIB32</a>を取り出して表示することも出来ます。</P>
+<P><BR>
+</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P><FONT color="#009900">LRESULT Open(LPCTSTR pFileName);<BR></FONT>
+<P>ムービーファイルをオープンします。<BR>
+失敗すると非０を返します。
+</P>
+<P><FONT color="#009900">LRESULT Play(void); // 再生<BR>
+LRESULT Stop(void); // 停止<BR>
+bool IsPlay(void); 　　　// 再生中ならtrue<BR>
+LRESULT Pause(void); // 再生のpause<BR>
+LRESULT Replay(void); // pauseで止めていた再生を再開。</FONT></P>
+
+<P>再生することで、映像は自動的に更新され、音声は自動的にストリーミング再生されます。</P>
+
+<FONT color="#009900">bool IsVideo(void);</FONT> // ムービーに映像が有るかどうか。<br>
+<FONT color="#009900">bool IsAudio(void);</FONT> // ムービーに音声が有るかどうか。<br>
+
+<P><FONT color="#009900">void SetPos(int x,int y);<BR>
+bool* GetVisible(void); // defalt:false</FONT></P>
+<P>*GetVisible() = true とする事で、CLayerとして扱うことが出来ます。SetPosで指定した位置に表示されます。</P>
+以下はCLayerとして扱う場合の画像に対する操作です。<BR>
+<P><FONT color="#009900">void	SetSurfaceSize(int w,int h,bool bAjust);// default:bAjust = false<BR>
+bool*	GetAspect(void); // default:false<BR>
+bool*	GetCenter(void); // default:false</FONT></P>
+<P>
+SetSurfaceSizeは画像レイヤーのサイズを幅w,高さhにします。bAjust=trueの時は画像のサイズを調節します。falseの場合は幅w,高さhの矩形でクリッピングされます。</P>
+
+<P>以下の二つの設定はbAjust=trueの時のみ有効です。</P>
+*GetAspect()=trueで、リサイズ時にアスペクト比を維持します。<BR>
+*GetCenter()=trueで、アスペクト比を維持した事によりウィンドウの周りに隙間が出来ます。そこに対してセンタリングして表示を行います。
+<P><FONT color="#009900">
+CPlane*	GetPlane(void);<BR>
+CDIB32*	GetDIB(void);</FONT></P>
+<P>何の操作も加わっていない画像が返ります。上記の画像サイズの調節は行われていません。画像サイズはムービーのフルサイズになります。</P>
+
+<P>CMovieDS（DirectShowを用いた再生）はDierctDrawSurfaceが必須なためCDIBDrawを用いた場合、CPlane→CDIB32への転送を行います。そのため、パフォーマンスの低下は免れません。</P>
+<P>CMovieAVIでは内部的に使うサーフェスが選択できます。<a href="../etc/config.html">yaneConfig.h</a>でUSE_MovieAVI_DirectDrawかUSE_MovieAVI_DIB32のどちらかが選択できます。適切な方を選べば、多少パフォーマンスが改善される可能性が有ります。
+</P>
+
+<P>これら二つのクラスはCMovieの生成時にDirectShowの有無を判別して適切な方を生成します。
+</P>
+
+<P><FONT size="+1" color="#009900">☆　用例 </FONT></P>
+CMovie movie;<br>
+movie.SetSurfaceSize(400,300,true);<br>
+movie.SetPos(0,0);<br>
+*movie.GetAspect() = true;<br>
+*movie.GetCenter() = true;<br>
+movie.Play();<br>
+<P>とする事で、画像サイズを元映像のアスペクト比を考慮して400x300収まる様にリサイズし、余白に対してセンタリングを行うレイヤーとなります。</P>
+
+<HR>
+</BODY></HTML>

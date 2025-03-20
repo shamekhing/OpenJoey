@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CAppManager</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CAppManager</FONT></P>
+
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>アプリケーションマネージャです。マルチスレッド時に、自分の属するアプリケーションクラス(CAppBase*)か、DirectDraw描画クラス（CDirectDraw*）を得るのに使います。</P>
+<P>自分のスレッドＩＤから、アプリケーションクラスを特定します。<BR>
+アプリケーションクラスは、１つの窓と、２つのスレッドから構成されています。</P>
+<P>static void Add(CAppBase*); // CAppBaseの登録<BR>
+static void Del(CAppBase*); // CAppBaseの削除</P>
+<P>static void Add(CAppFrame*); // CAppFrameの登録<BR>
+static void Del(CAppFrame*); // CAppFrameの削除</P>
+<P>static void Add(CDirectDraw*); // CDirectDrawの登録<BR>
+static void Del(CDirectDraw*); // CDirectDrawの削除</P>
+<P>static void Add(CDIBDraw*); // CDIBDrawの登録<BR>
+static void Del(CDIBDraw*); // CDIBDrawの削除</P>
+<P>static void Add(CFastDraw*); // CFastDrawの登録<BR>
+static void Del(CFastDraw*); // CFastDrawの削除</P>
+<P><A href="CAppBase.html">CAppBase</A>,<A href="CDirectDraw.html">CDirectDraw</A>,<A href="CDIBDraw.html">CDIBDraw</A>,<A href="CFastDraw.html">CFastDraw</A>クラス内で、Add(this);のように使います。これにより、自分の現在のプロセスＩＤと、CAppBase*を対にして登録できます。</P>
+<P>static CAppBase* GetMyApp(void);</P>
+<P>これは、現在のプロセスIDから、登録リストのなかを調べ、CAppBase*を返します。存在しなかった場合はNULLが返ります。</P>
+<P>static CAppFrame* GetMyFrame(void);</P>
+<P>これは、現在のプロセスIDから、登録リストのなかを調べ、CAppFrame*を返します。存在しなかった場合はNULLが返ります。</P>
+<P>static CDirectDraw* GetMyDirectDraw(void);
+</P>
+<P>これは、現在のプロセスIDから、登録リストのなかを調べ、CDirectDraw*を返します。存在しなかった場合はNULLが返ります。</P>
+<P>static CDIBDraw* GetMyDIBDraw(void);</P>
+<P>これは、現在のプロセスIDから、登録リストのなかを調べ、CDIBDraw*を返します。存在しなかった場合はNULLが返ります。</P>
+<P>static CFastDraw* GetMyFastDraw(void);</P>
+<P>これは、現在のプロセスIDから、登録リストのなかを調べ、CFastDraw*を返します。存在しなかった場合はNULLが返ります。</P>
+<P>static bool IsDirectDraw(void); </P>
+<P>これは、現在のプロセスIDから、登録リストのなかを調べ、CDirectDraw*があれば、true,CDIBDraw*があればfalse、どちらでも無い場合はWARNINGマクロが仕掛けてあります。この関数は互換性のために残してあります。GetDrawTypeを使用してください。</P>
+<P>static int GetDrawType( ) const;<BR>
+0:不明　1:CDirectDraw　2:CDIBDraw　3:CFastDraw　4:CSaverDraw<BR>
+<A href="CPlaneBase.html">CPlaneBase</A>::CreatePlaneでは、この関数によって、ユーザーがどちらを使っているのか自動判別しています。</P>
+<P>static int GetAppInstanceNum(void);</P>
+<P>登録されているアプリケーションクラスのインスタンス数</P>
+<P>static void StopAllThread(void);</P>
+<P>すべてのスレッドに停止信号を送り、すべてのスレッドが終了するのを待つ。メインスレッド（メインウィンドゥを保有するアプリケーションクラスに属するスレッド）から呼び出すこと。</P>
+<HR>
+</BODY></HTML>

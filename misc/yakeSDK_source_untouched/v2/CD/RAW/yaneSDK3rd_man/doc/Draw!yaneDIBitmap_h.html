@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Draw/yaneDIBitmap.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="IDIBitmap"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">IDIBitmap</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Load(<SPAN class="reserved_word">const</SPAN> string&amp; szFileName, <SPAN class="reserved_word">int</SPAN> nBpp=24)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Load(HDC hDC, LPRECT lpRect, <SPAN class="reserved_word">int</SPAN> nBpp=24)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Save(<SPAN class="reserved_word">const</SPAN> string&amp; szFileName, LPRECT lpRect=NULL)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT CreateSurface(<SPAN class="reserved_word">int</SPAN> nSizeX, <SPAN class="reserved_word">int</SPAN> nSizeY, <SPAN class="reserved_word">int</SPAN> nBpp=24)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Release()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> HDC GetDC()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> HBITMAP GetHBITMAP()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetSize(LONG&amp; x, LONG&amp; y)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> BYTE* GetPtr()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> virtual ~IDIBitmap()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CDIBitmap"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CDIBitmap</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">DIB(Device Independent Bitmap：デバイスに依存しないビットマップ)を<BR>	管理します。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Draw!yaneDIBitmap_h.html#IDIBitmap" target=_self>IDIBitmap</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Load(<SPAN class="reserved_word">const</SPAN> string&amp; szFileName, <SPAN class="reserved_word">int</SPAN> nBpp=24)</DIV>
+<DIV class="comment_block">画像の読み込み<BR>Loadはファイルからサーフェースに読み込む。<BR>		Saveはサーフェースをファイルに書き込みます。<BR>　		読み込みはCGraphicLoaderクラスを使用するので、<BR>		BMP,GIF,JPEG,SPI等の利用が可能になります。<BR>		nBppを指定すると、そのbpp(bits per pixel)で読み込みます。<BR>		書き込みは24bppのビットマップになります。<BR>		lpRectはファイルに保存したいサーフェースの矩形領域を指定します。<BR>		指定がなければ全域になります。<BR><BR>		使用例）<BR>	　　::SetPixel(dib.GetDC(),0,0,RGB(100,200,150));<BR>			// (0,0)の座標にRGB(100,200,150)の点を打つ<BR><BR>		参照→　::GetPixel,COLORREF,GetRValue,GetGValue,GetBValue<BR><BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Load(HDC hDC, LPRECT lpRect, <SPAN class="reserved_word">int</SPAN> nBpp=24)</DIV>
+<DIV class="comment_block">hDCで指定される、ある矩形領域lpRectをこのCDIBitmapに読み込む。<BR>		このあと、Saveすることによって、ビットマップに保存してやることが<BR>		出来る。つまりHDCさえ獲得できれば、この関数とSaveでビットマップに<BR>		保存することが出来る。<BR>		nBppを指定すると、そのbpp(bits per pixel)でサーフェースを作成して<BR>		読み込みます。速度は遅いです。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Save(<SPAN class="reserved_word">const</SPAN> string&amp; szFileName, LPRECT lpRect=NULL)</DIV>
+<DIV class="comment_block">サーフェースのファイルへの保存<BR>		指定した矩形を保存します。lpRect==NULLならば、サーフェース全域。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT CreateSurface(<SPAN class="reserved_word">int</SPAN> nSizeX, <SPAN class="reserved_word">int</SPAN> nSizeY, <SPAN class="reserved_word">int</SPAN> nBpp=24)</DIV>
+<DIV class="comment_block">サーフェースを指定サイズ、指定のBPP(BitParPixel)で作成します。<BR>　		Loadしたときには自動的にサーフェースが作成されます。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Release()</DIV>
+<DIV class="comment_block">サーフェースを解放します。デストラクタで解放されるので、<BR>		明示的に指定する必要はありません。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> HDC GetDC()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> HBITMAP GetHBITMAP()</DIV>
+<DIV class="comment_block">HDC、HBITMAPを返します。UseDIBSection(true)としておいた場合は<BR>		（defaultではfalse）、LoadBitmap/CreateSurface以降、いつでも<BR>		HDC,HBITMAPの取得は可能です。<BR>		これを用いてピクセル操作をすると良いです。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetSize(LONG&amp; x, LONG&amp; y)</DIV>
+<DIV class="comment_block">サーフェースのサイズを取得します。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> BYTE* GetPtr()</DIV>
+<DIV class="comment_block">Load/CreateSurfaceで確保されたイメージへのポインタが得られます。<BR>		(CreateDIBSectionで得られたもの)<BR>		DIBなので、イメージの各ラインの先頭は、DWORDでアラインされているので<BR>		注意が必要。ただし上下は転置していません。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CDIBitmap()</DIV>
+<DIV class="public_member"> virtual ~CDIBitmap()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">DWORD m_lpdwSrc</DIV>
+<DIV class="protected_member">LONG m_nSizeX</DIV>
+<DIV class="protected_member">LONG m_nSizeY</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nBpp</DIV>
+<DIV class="protected_member">HBITMAP m_hBitmap</DIV>
+<DIV class="protected_member">HDC m_hDC</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

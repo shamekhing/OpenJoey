@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>YTL/ref_callback_deleter.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="nonarray_callback_ref_object"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;T</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">nonarray_callback_ref_object</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">非配列オブジェクトをdeleteするためのテンプレート<BR>		解体時（解体後）にコールバックもしてくれる<BR>		class ref_object class function_callback も参照のこと<BR><BR>		//	使用例<BR>		smart_ptr&lt;CSound&gt; s;<BR>		CSound* sound = new CSound;<BR>		smart_ptr&lt;function_callback&gt;<BR>			func(function_callback_v::Create(&amp;test));<BR>		s.Add(sound,new nonarray_callback_ref_object&lt;CSound&gt;(sound,func));<BR>		↑このsmart_ptr&lt;CSound&gt;は、解体時（解体後）にtest関数が呼び出される<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!ref_deleter_h.html#ref_object" target=_self>ref_object</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> nonarray_callback_ref_object(T* p, <SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="YTL!function_callback_h.html#function_callback" target=_self>function_callback</A>&gt;&amp; func)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> delete_instance()</DIV>
+<DIV class="private_member">T* m_p</DIV>
+<DIV class="private_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="YTL!function_callback_h.html#function_callback" target=_self>function_callback</A>&gt; m_func</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="array_callback_ref_object"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;T</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">array_callback_ref_object</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">任意の配列をdeleteするためのテンプレート<BR>		解体時（解体後）にコールバックもしてくれる<BR>		class ref_object class function_callback も参照のこと<BR><BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!ref_deleter_h.html#ref_object" target=_self>ref_object</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> array_callback_ref_object(T* pa, <SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="YTL!function_callback_h.html#function_callback" target=_self>function_callback</A>&gt;&amp; func)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> delete_instance()</DIV>
+<DIV class="private_member">T* m_pa</DIV>
+<DIV class="private_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="YTL!function_callback_h.html#function_callback" target=_self>function_callback</A>&gt; m_func</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

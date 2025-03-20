@@ -1,0 +1,17 @@
+	void MainThread() {
+		CFPSTimer t;		//	FPS調整用
+		t.SetFPS(30);		//	30fps
+		CMouse mouse;
+		while (IsThreadValid()){
+			//	１フレーム分の処理をここに書く
+			bool bL,bR;
+			mouse.GetButton(bL,bR);
+			int x,y;
+			mouse.GetXY(x,y);
+			CDbg().Out("Button 0,1240860  XY  4675680,-1",bL?1:0,bR?1:0,x,y);
+
+			//	ここで描画処理を行なう
+
+			t.WaitFrame();
+		}
+	}

@@ -1,0 +1,27 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>クラスリファレンス</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+3" color="#009900"><B>YGA</B></FONT><FONT size="+2">(Yaneurao Graphic format with Alpha channel)</FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>画像の可逆圧縮フォーマットです。αチャンネル（不透明度）を持ちます。<A href="../class/CDIB32.html">CDIB32</A>::LoadはYGAに対応しているので、拡張子がygaであれば、自動的に読み込めます。また、<A href="../class/CDIB32.html">CDIB32</A>::SaveYGAで、αチャンネル付きのDIBをファイルに書き出すことが出来ます。</P>
+<P><FONT size="+1" color="#009900">☆　フォーマット内容</FONT></P>
+<P>YGAデータ構造 := SYPGHeader + データ部</P>
+<P>struct SYPGHeader {<BR>
+DWORD dwIdentifier; 　　　　// 0x616779(&quot;yga&quot;)<BR>
+DWORD dwSizeX;　　　　　　 // 画像のXサイズ<BR>
+DWORD dwSizeY; 　　　　　　// 画像のYサイズ<BR>
+DWORD bCompress; 　　　　// lzss圧縮をするのか？<BR>
+DWORD dwOriginalSize; 　　// 元画像のデータサイズ<BR>
+DWORD dwCompressSize;　// 圧縮部のサイズ<BR>
+};</P>
+<P>データ部は、bCompressがtrueならば<A href="../class/CLZSS.html">CLZSS</A>::Encodeで圧縮されています。<BR>
+圧縮後のサイズのほうが元の画像データサイズより大きくなると圧縮は破棄しますので、このヘッダーにおいて、常にdwOriginalSize
+&gt; dwCompressSizeです。</P>
+<P>また、CDIB32::SaveYGAの最後の引数(bool)をfalseにすれば、非圧縮で保存することもできます。</P>
+<P>データは、1ピクセルがDWORD(32bit)で、下位バイトからB,G,R,α。αは0から255までの数字。<BR>
+αが0だと透明率が0なので、その部分は転送されない。255の部分は、フルで転送される。</P>
+<HR>
+</BODY></HTML>

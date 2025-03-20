@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CCDDA</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CCDDA</FONT>　<FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>CD再生のためのコンポーネント。マルチドライブでのCD再生等もサポートしています。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>LRESULT Open(string szDriveName=&quot;&quot;);//
+CD初期化。呼び出すとCD回るよ:p<BR>
+// ドライブ名の指定も出来る。例）Open(&quot;g&quot;);
+// G Drive</P>
+<P>LRESULT Close(void); // CD使用終了。CDの回転は止まる。</P>
+<P>LRESULT Stop(void); // 再生停止<BR>
+LRESULT Pause(void); // Pause<BR>
+LRESULT Replay(void); // Pauseでいったん停止させていたものを再開</P>
+<P>LRESULT Play(void); // 頭から再生<BR>
+LRESULT Play(int); // 曲番号を選択して再生<BR>
+LRESULT Play(int,int); // ２トラック間の再生<BR>
+LRESULT PlayDW(DWORD,DWORD,bool bReplay=false);
+// ２ポジション間の再生（）</P>
+<P>LRESULT GetCurrentPos(DWORD &amp;dw); //
+現在の再生ポジションを得る<BR>
+（返し値dwはマルチメディアフォーマット。上位・下位が転置するので注意）</P>
+<P>bool IsPlay(void) const; // 演奏中なのか？</P>
+<P>void SetLoopMode(bool bLoop); // ループで再生するか</P>
+<P>int GetSongMax(void) const; // 曲数の取得(Openしていることが必要)</P>
+<P>LRESULT Eject(bool bEject); // CDのEjectを行なう。</P>
+<P>bool IsOpen(void) const; // CDを開いているか。(Openを呼び出して成功していれば、この関数はtrueを返す)</P>
+<P>virtual LRESULT ConvertToMealTime(DWORD dwPos,int&amp;
+nTrack,int&amp;nHour,int&amp;nMin,int&amp;nSec,int&amp;nMS);<BR>
+virtual LRESULT ConvertFromMealTime(DWORD&amp;
+dwPos,int nTrack,int nHour,int nMin,int nSec,int
+nMS)</P>
+<P><A href="CSoundBase.html">CSoundBase</A>::ConvertToMealTime/ConvertFromMealTimeと同じ仕様のもの。ただし、ここではtrackを指定できること、そしてポジションとして使われるのは、[ms]単位ではなく、マルチメディアフォーマットであることが違う。CCDDA::GetCurrentPosで取得した値をそのままこの関数で変換したり、トラック番号＋時分秒毛から変換した値をPlay(DWORD,DWORD)で、そのままその位置から再生できる。</P>
+<P><FONT color="#009900">// メンバ変数</FONT></P>
+<P>int m_nSongMax; // 曲数<BR>
+DWORD m_dwSongLength[100]; // 曲の長さ（[0]は全曲の長さ)<BR>
+DWORD m_dwSongStart[100]; // 曲の開始ポジション</P>
+<P><FONT size="+1" color="#009900">☆　注意</FONT></P>
+<P>OpenせずともPlayで直接再生することが出来ます。Openするメリットは、曲数・曲長さ情報の取得(m_nSongMax,m_dwSongLength,m_dwSongStart)が出来ることと、ＣＤを回転させてスタンバイするのでPlayを呼び出したあと再生するの時間が１秒ほど短縮できることです。</P>
+
+<P>CCDDAのコンストラクタに先行してウィンドゥが完成している必要があるので、CAppFrame内で使用するようにしてください。</P>
+<HR>
+</BODY></HTML>

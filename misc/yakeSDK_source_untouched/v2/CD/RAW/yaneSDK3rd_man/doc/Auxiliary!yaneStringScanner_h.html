@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Auxiliary/yaneStringScanner.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="CStringScanner"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CStringScanner</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">文字列の解析のサポートをします。<BR>	class CTextDraw,class CScenarioView	で<BR>	実際に使っているので、その実装を見ると参考になるでしょう。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">bool</SPAN> IsToken(LPCSTR &amp; lp, LPCSTR lp2)</DIV>
+<DIV class="comment_block">トークンチェック<BR>一致後は、その分だけlpは前進する<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> LRESULT SkipTo(LPCSTR &amp; lp, LPCSTR lp2)</DIV>
+<DIV class="comment_block">指定トークンまで読み飛ばし<BR>一致後は、その分だけlpは前進する。'\0'に出くわしたら非0が返る<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> LRESULT SkipTo2(LPCSTR &amp; lp, LPCSTR lp2, LPSTR lp3)</DIV>
+<DIV class="comment_block">指定トークンまで読み飛ばし<BR>一致後は、その分だけlpは前進する。'\0'に出くわしたら非0が返る<BR>lp3(bufは呼び出し側で用意すること)には、スキップするまでの文字列が入る<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> LRESULT SkipSpace(LPCSTR &amp; lp)</DIV>
+<DIV class="comment_block">スペース、タブ、改行を切り詰める<BR>'\0'に出くわしたら非0が返る<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> LRESULT SkipSpace2(LPCSTR &amp; lp)</DIV>
+<DIV class="comment_block">スペース、タブ、改行、カンマを切り詰める<BR>'\0'に出くわしたら非0が返る<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> LRESULT GetStrNum(LPCSTR &amp; lp, <SPAN class="reserved_word">int</SPAN>&amp; nRate)</DIV>
+<DIV class="comment_block">"+1"という文字列ならばnRateには1が返る<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> LRESULT GetNum(LPCSTR &amp; lp, <SPAN class="reserved_word">int</SPAN>&amp; nVal)</DIV>
+<DIV class="comment_block">+1という文字列ならばnValには1が返る<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> LRESULT GetStrColor(LPCSTR &amp; lp, COLORREF&amp; m_nFontColor)</DIV>
+<DIV class="comment_block">"#ff0000"という文字列ならばRGB(255,0,0)が返る<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> string GetStr(LPCSTR &amp; lp, CHAR c)</DIV>
+<DIV class="comment_block">cに遭遇するところまでの文字列を返す<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> string GetStr(LPCSTR &amp; lp)</DIV>
+<DIV class="comment_block">スペース、タブ、改行に遭遇するまでの文字列を返す<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> string GetStrFileName(LPCSTR &amp; lp)</DIV>
+<DIV class="comment_block">タブ、改行に遭遇するまでの文字列を返す<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> string GetNextStr(LPCSTR &amp; lp)</DIV>
+<DIV class="comment_block">最初に遭遇したスペース、タブ、改行を無視し、そのあとスペース、タブ、<BR>改行に遭遇するまでの文字列を返す<BR>ただし、"　で始まっている場合は、再度"に遭遇するまでをその文字列として返す。<BR>（このとき" は自動的に取り除かれる）<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> LRESULT GetNumFromCsv(LPCSTR &amp; lp, <SPAN class="reserved_word">int</SPAN>&amp; nVal, <SPAN class="reserved_word">bool</SPAN> bSkip=false)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">static</SPAN> string GetStrFromCsv(LPCSTR &amp; lp)</DIV>
+<DIV class="comment_block">カンマ、スペースを無視しながら数値を読み込むのだ<BR>カンマ、スペースを無視しながら文字列を読み込むのだ。<BR>カンマ、スペースを無視しながら数値を読み込む。<BR>	CSVというのは、Microsoft Excelなどで出力できるカンマ区切りのテキスト形式。<BR>	bSkip == trueの場合、GetNumFromCsv/GetStrFromCsvをしたあとは必ず次の,は<BR>	無くなります。(bSkip==falseならば、無くなりません)<BR>	1,2,3で一回Getすると2,3になります。<BR>	,,2,3ならば、エラーが返し値として返り、次の,が無くなり、,2,3となります。<BR><BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">void</SPAN> Replace(string&amp; buf, LPCSTR pSrc, LPCSTR pDst, <SPAN class="reserved_word">bool</SPAN> bCaseSensitive=true)</DIV>
+<DIV class="comment_block">string中に含まれるpSrcと一致する部分をpDstに置換する<BR>日本語（マルチバイト文字）対応。bCaseSensitive==trueのときは、<BR>アルファベットの大文字小文字を区別する。<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> LRESULT StringToNum(string s, LONGLONG&amp; l)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">void</SPAN> NumToString(LONGLONG l, string&amp; s)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">static</SPAN> string NumToString(LONGLONG l)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">void</SPAN> NumToStringZ(LONGLONG l, string&amp; s, <SPAN class="reserved_word">int</SPAN> n)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">static</SPAN> string NumToStringZ(LONGLONG l, <SPAN class="reserved_word">int</SPAN> n)</DIV>
+<DIV class="comment_block">数字と文字列の相互変換関数<BR>先頭のスペースは無視しない<BR></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Multimedia/yaneSoundFactory.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="ISoundFactory"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">ISoundFactory</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">class ISound 派生クラスのfactoryのインターフェース<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSound_h.html#ISound" target=_self>ISound</A>&gt; Create(<SPAN class="reserved_word">const</SPAN> string&amp; filename)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSound_h.html#ISound" target=_self>ISound</A>&gt; CreateSound()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSound_h.html#ISound" target=_self>ISound</A>&gt; CreateMIDI()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="YTL!list_chain_h.html#list_chain" target=_self>list_chain</A>&lt;<A class="class_link" href="Multimedia!yaneSound_h.html#ISound" target=_self>ISound</A>&gt;* GetSoundList()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> IncRefDirectSound()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> DecRefDirectSound()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Multimedia!yaneDirectSound_h.html#CDirectSound" target=_self>CDirectSound</A>* GetDirectSound()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> IncRefDirectMusic()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> DecRefDirectMusic()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Multimedia!yaneDirectMusic_h.html#CDirectMusic" target=_self>CDirectMusic</A>* GetDirectMusic()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> IncRefWaveOutput()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> DecRefWaveOutput()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="Multimedia!yaneWaveOutput_h.html#IWaveOutput" target=_self>IWaveOutput</A>* GetWaveOutput()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SelectMIDIFactory(<SPAN class="reserved_word">int</SPAN> nFirst, <SPAN class="reserved_word">int</SPAN> nSecond)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSoundParameter_h.html#CSoundParameter" target=_self>CSoundParameter</A>&gt; GetSoundParameter()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetSoundParameter(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSoundParameter_h.html#CSoundParameter" target=_self>CSoundParameter</A>&gt;&amp; p)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetStreamPlay(<SPAN class="reserved_word">bool</SPAN> b)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> IsStreamPlay()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> virtual ~ISoundFactory()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CSoundFactory"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CSoundFactory</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">class ISound 派生クラスのfactory<BR><BR>	[注意点]　生成されたISound派生クラスよりも先に、このクラスが解体されると<BR>	　　　　　例外が発生する。これらを同一クラスのメンバに持つ場合は、<BR>	　　　　　CSoundFactoryを先に宣言する必要がある。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Multimedia!yaneSoundFactory_h.html#ISoundFactory" target=_self>ISoundFactory</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSound_h.html#ISound" target=_self>ISound</A>&gt; CreateSound()</DIV>
+<DIV class="public_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSound_h.html#ISound" target=_self>ISound</A>&gt; CreateMIDI()</DIV>
+<DIV class="public_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSound_h.html#ISound" target=_self>ISound</A>&gt; Create(<SPAN class="reserved_word">const</SPAN> string&amp; filename)</DIV>
+<DIV class="comment_block">1.SoundBuffer（サウンド再生クラス）を生成する<BR>2.MIDI出力用のクラス(CMIDIOutputDMかCMIDIOutputMCI)を生成する<BR>3.拡張子に応じて、CreateSound,CreateMIDIを行う<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="YTL!list_chain_h.html#list_chain" target=_self>list_chain</A>&lt;<A class="class_link" href="Multimedia!yaneSound_h.html#ISound" target=_self>ISound</A>&gt;* GetSoundList()</DIV>
+<DIV class="comment_block">上記のfactoryで生成したインスタンスのlist_chainを獲得する<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSoundParameter_h.html#CSoundParameter" target=_self>CSoundParameter</A>&gt; GetSoundParameter()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetSoundParameter(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSoundParameter_h.html#CSoundParameter" target=_self>CSoundParameter</A>&gt;&amp; p)</DIV>
+<DIV class="comment_block">CSoundParameterの設定・取得<BR>		class ISoundStream 派生のプラグインクラスの指定と、<BR>		サウンドバッファのグローバルフォーカスの指定は、<BR>		こいつに対して行う<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> IncRefDirectSound()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> DecRefDirectSound()</DIV>
+<DIV class="public_member"><A class="class_link" href="Multimedia!yaneDirectSound_h.html#CDirectSound" target=_self>CDirectSound</A>* GetDirectSound()</DIV>
+<DIV class="comment_block">IncRefDirectSoundしたあとに、GetDirectSoundで<BR>		CDirectSound*を取得することが可能。<BR>		使い終わったらDecRefDirectSoundすべし。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> IncRefDirectMusic()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> DecRefDirectMusic()</DIV>
+<DIV class="public_member"><A class="class_link" href="Multimedia!yaneDirectMusic_h.html#CDirectMusic" target=_self>CDirectMusic</A>* GetDirectMusic()</DIV>
+<DIV class="comment_block">IncRefDirectSoundしたあとに、GetDirectMusicで<BR>		CDirectMusic*を取得することが可能。<BR>		使い終わったらDecRefDirectMusicすべし。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> IncRefWaveOutput()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">void</SPAN> DecRefWaveOutput()</DIV>
+<DIV class="public_member"><A class="class_link" href="Multimedia!yaneWaveOutput_h.html#IWaveOutput" target=_self>IWaveOutput</A>* GetWaveOutput()</DIV>
+<DIV class="comment_block">IncRefWaveOutputしたあとに、GetWaveOutputで<BR>		IWaveOutput*を取得することが可能。<BR>		使い終わったらDecRefWaveOutputすべし。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SelectMIDIFactory(<SPAN class="reserved_word">int</SPAN> nFirst, <SPAN class="reserved_word">int</SPAN> nSecond)</DIV>
+<DIV class="comment_block">MIDIの再生するfactoryを切り替える<BR>		　　nFirst　: 最初に選ばれるfactory<BR>		　　nSecond : nFirstが使用できないときに選ばれるfactory<BR>		値の意味は<BR>		　　0 : CSoundNullDevice(再生しない)<BR>		　　1 : CMIDIOutputMCI(MCIによる再生)<BR>		　　2 : CMIDIOutputDM (DirectMusicによる再生)<BR>		ディフォルトでは<BR>		　　nFirst == 2	, nSecond == 1<BR>		すなわち、DirectMusicによる再生が可能な環境ならば、それを用い、<BR>		それが不可な環境ならば、MCIによって再生する。<BR>		（サウンド再生が不可能な環境であれば、CreateMIDIでは<BR>		　CSoundNullDeviceのインスタンスが返る）<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetStreamPlay(<SPAN class="reserved_word">bool</SPAN> b)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> IsStreamPlay()</DIV>
+<DIV class="comment_block">ストリーム再生するかを設定・取得<BR>次回CreateSoundで生成されるISound派生クラスに反映される<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CSoundFactory()</DIV>
+<DIV class="public_member"> virtual ~CSoundFactory()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="YTL!ref_creater_h.html#ref_creater" target=_self>ref_creater</A>&lt;<A class="class_link" href="Multimedia!yaneDirectSound_h.html#CDirectSound" target=_self>CDirectSound</A>&gt; m_vDirectSound</DIV>
+<DIV class="protected_member"><A class="class_link" href="YTL!ref_creater_h.html#ref_creater_and_mediator" target=_self>ref_creater_and_mediator</A>&lt;<A class="class_link" href="Multimedia!yaneDirectMusic_h.html#CDirectMusic" target=_self>CDirectMusic</A>,<A class="class_link" href="Multimedia!yaneDirectSound_h.html#CDirectSound" target=_self>CDirectSound</A>&gt; m_vDirectMusic</DIV>
+<DIV class="protected_member"><A class="class_link" href="YTL!ref_creater_h.html#ref_creater_and_mediator" target=_self>ref_creater_and_mediator</A>&lt;<A class="class_link" href="Multimedia!yaneWaveOutput_h.html#CWaveOutputDirectSound" target=_self>CWaveOutputDirectSound</A>,<A class="class_link" href="Multimedia!yaneDirectSound_h.html#CDirectSound" target=_self>CDirectSound</A>&gt; m_vWaveOutputDS</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="YTL!list_chain_h.html#list_chain" target=_self>list_chain</A>&lt;<A class="class_link" href="Multimedia!yaneSound_h.html#ISound" target=_self>ISound</A>&gt; m_listSound</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nMIDIFactoryFirst</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nMIDIFactorySecond</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSound_h.html#ISound" target=_self>ISound</A>&gt; InnerCreate(<SPAN class="reserved_word">int</SPAN> nDevice)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSoundParameter_h.html#CSoundParameter" target=_self>CSoundParameter</A>&gt; m_pSoundParameter</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bStreamPlay</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member"><A class="class_link" href="Multimedia!yaneSoundFactory_h.html#CSoundFactory" target=_self>CSoundFactory</A>* GetMyClass()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member"><SPAN class="reserved_word">bool</SPAN> InnerDeleteChain(<A class="class_link" href="Multimedia!yaneSound_h.html#ISound" target=_self>ISound</A>* p)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member"><SPAN class="reserved_word">void</SPAN> InnerDeleteChainForWO(<A class="class_link" href="Multimedia!yaneSound_h.html#ISound" target=_self>ISound</A>* p)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member"><SPAN class="reserved_word">void</SPAN> InnerDeleteChainForDM(<A class="class_link" href="Multimedia!yaneSound_h.html#ISound" target=_self>ISound</A>* p)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

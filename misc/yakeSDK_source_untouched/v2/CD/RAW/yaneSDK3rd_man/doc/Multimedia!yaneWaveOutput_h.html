@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Multimedia/yaneWaveOutput.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="IWaveOutput"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">IWaveOutput</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">Wave出力を抽象化したクラス<BR>	class IWaveSound 派生クラスの管理<BR>	class ISoundBuffer と class ISoundStreamFactory の提供<BR>	を受け持つ<BR><BR>	[使用方法]<BR>	CWaveOutputDirectSound ds;　←IWaveOutput派生クラス<BR>	CWaveSound sound(&amp;ds);<BR>	sound.Play();<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> IWaveOutput()</DIV>
+<DIV class="public_member"> virtual ~IWaveOutput()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">int</SPAN> GetType()</DIV>
+<DIV class="comment_block">RTTIもどき。派生クラスのタイプを返す<BR>		0 : class CWaveNullOutput<BR>		1 : class CWaveOutputDirectSound<BR>		2 : かんがえちゅう<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSoundBuffer_h.html#ISoundBuffer" target=_self>ISoundBuffer</A>&gt; CreateBuffer()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block">class ISoundBuffer 派生クラスの生成<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSoundParameter_h.html#CSoundParameter" target=_self>CSoundParameter</A>&gt; GetSoundParameter()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetSoundParameter(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSoundParameter_h.html#CSoundParameter" target=_self>CSoundParameter</A>&gt;&amp; p)</DIV>
+<DIV class="comment_block">class CSoundParameter の設定・取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="YTL!list_chain_h.html#list_chain" target=_self>list_chain</A>&lt;<A class="class_link" href="Multimedia!yaneSound_h.html#IWaveSound" target=_self>IWaveSound</A>&gt;* GetSoundList()</DIV>
+<DIV class="comment_block">管理リストの取得<BR>class IWaveSound 派生クラスの全インスタンスに対しての操作はこれで行う<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT AddSound(<A class="class_link" href="Multimedia!yaneSound_h.html#IWaveSound" target=_self>IWaveSound</A>* p)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT DelSound(<A class="class_link" href="Multimedia!yaneSound_h.html#IWaveSound" target=_self>IWaveSound</A>* p)</DIV>
+<DIV class="comment_block">管理リストへの追加・削除<BR>class IWaveSound 派生クラスのコンストラクタ・デストラクタで呼び出されるので<BR>ユーザが明示的に呼び出す必要はない<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="YTL!list_chain_h.html#list_chain" target=_self>list_chain</A>&lt;<A class="class_link" href="Multimedia!yaneSound_h.html#IWaveSound" target=_self>IWaveSound</A>&gt; m_listSound</DIV>
+<DIV class="protected_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSoundParameter_h.html#CSoundParameter" target=_self>CSoundParameter</A>&gt; m_pSoundParameter</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CWaveNullOutput"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CWaveNullOutput</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">class IWaveOutput のNullDeviceクラス<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Multimedia!yaneWaveOutput_h.html#IWaveOutput" target=_self>IWaveOutput</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CWaveNullOutput()</DIV>
+<DIV class="public_member"> virtual ~CWaveNullOutput()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">int</SPAN> GetType()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSoundBuffer_h.html#ISoundBuffer" target=_self>ISoundBuffer</A>&gt; CreateBuffer()</DIV>
+<DIV class="comment_block">override from class IWaveOutput<BR></DIV>
+</DIV>
+<HR><BR>
+<A name="CWaveOutputDirectSound"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CWaveOutputDirectSound</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">DirectSoundに特化した class IWaveOutput 派生クラス<BR>	バッファのロスト時、管理している全ての class IWaveSound 派生クラスの<BR>	Restore関数を自動的に呼びだす<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Multimedia!yaneWaveOutput_h.html#IWaveOutput" target=_self>IWaveOutput</A><BR>
+<SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Window!yaneWinHook_h.html#IWinHook" target=_self>IWinHook</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CWaveOutputDirectSound(<A class="class_link" href="Multimedia!yaneDirectSound_h.html#CDirectSound" target=_self>CDirectSound</A>* p=NULL)</DIV>
+<DIV class="public_member"> virtual ~CWaveOutputDirectSound()</DIV>
+<DIV class="comment_block">CDirectSoundへのポインタを取る（p==NULLだと即落ちる）<BR>省略可能にしないとref_creater_and_mediatorのコンパイルが出来ない<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT ChangePrimaryFormat(<SPAN class="reserved_word">int</SPAN> nFrequency, <SPAN class="reserved_word">int</SPAN> nBit, <SPAN class="reserved_word">bool</SPAN> bStereo)</DIV>
+<DIV class="comment_block">プライマリサウンドバッファのフォーマットを変更する<BR>[in] nFrequency - 11kHz(0) or 22kHz(1) or 33kHz(2) or 44kHz(3)<BR>[in] nBit　　　 - 8bit(0) or 16bit(1)<BR>[in] bStereo　　- trueならステレオ<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSoundBuffer_h.html#ISoundBuffer" target=_self>ISoundBuffer</A>&gt; CreateSecondery()</DIV>
+<DIV class="comment_block">セカンダリサウンドバッファを生成する<BR>作成できなかったときはCNullSoundBufferを生成する<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">int</SPAN> GetType()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSoundBuffer_h.html#ISoundBuffer" target=_self>ISoundBuffer</A>&gt; CreateBuffer()</DIV>
+<DIV class="comment_block">override from class IWaveOutput<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">LRESULT WndProc(HWND hWnd, UINT uMsg, WPARAM wparam, LPARAM lparam)</DIV>
+<DIV class="protected_member"><A class="class_link" href="Multimedia!yaneDirectSound_h.html#CDirectSound" target=_self>CDirectSound</A>* m_pDirectSound</DIV>
+<DIV class="protected_member"><A class="class_link" href="Multimedia!yaneDirectSound_h.html#CDirectSound" target=_self>CDirectSound</A>* GetDirectSound()</DIV>
+<DIV class="protected_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSoundBuffer_h.html#ISoundBuffer" target=_self>ISoundBuffer</A>&gt; m_pPrimary</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nPrimaryType</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

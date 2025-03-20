@@ -1,0 +1,32 @@
+class CLoadLibraryWrapper {
+/**
+	LoadLibrary～ReleaseLibraryのwrapper
+*/
+public:
+	///	DLLのLoad
+	LRESULT Load(const string& libname) {
+		m_hDLL = LoadLibrary(libname.c_str());
+		return m_hDLL==NULL?1:0;
+	}
+
+	///	DLLのRelease
+	void Release(){
+		if (m_hDLL!=NULL){
+			::FreeLibrary(m_hDLL);
+			m_hDLL = NULL;
+		}
+	}
+
+	///	DLL内の関数アドレスの取得
+	void* GetProc(const string& funcname){
+		return ::GetProcAddress(m_hDLL,funcname.c_str());
+	}
+
+	///	読み込んだDLLのインスタンスを返す
+	HINSTANCE Get() const { return m_hDLL; }
+
+	CLoadLibraryWrapper() { m_hDLL = NULL; }
+	virtual ~CLoadLibraryWrapper() { Release(); }
+protected:
+	HINSTANCE m_hDLL;
+};

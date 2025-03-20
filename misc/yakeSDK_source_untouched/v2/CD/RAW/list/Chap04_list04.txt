@@ -1,0 +1,46 @@
+template <class T>
+class CCOMObject {
+/**
+	CoCreateInstance～ReleaseInstanceのwrapper
+	T はCOMオブジェクト
+*/
+public:
+	LRESULT CreateInstance(REFCLSID clsid,REFIID guid){
+		CCOMBase::inc_ref();
+		Release();	//	前のを消滅させる
+		if (FAILED(::CoCreateInstance(clsid,NULL,CLSCTX_INPROC_SERVER,
+			guid, (VOID**)&pObj))){
+			pObj = NULL;
+			CCOMBase::dec_ref();
+		}
+		//	CoCreateInstanceの関数の失敗と、pObjがNULLならば失敗とみなす
+		return pObj==NULL?1:0;
+	}
+	///	インスタンスを生成する
+
+	LRESULT Release(){
+		LRESULT lr = 0;
+		if (pObj!=NULL){
+			pObj->Release();
+			pObj = NULL;
+			lr = CCOMBase::dec_ref();
+		}
+		return lr;
+	}
+	///	インスタンスを解放する
+
+	T	get() const { return pObj; }
+	///	生成したオブジェクトを取得する
+
+	operator T* () const { return get(); }
+	///	暗黙変換子
+	T& operator*() const  {return *get(); }
+	T* operator->() const {return get(); }
+	///	-> 演算子も定義しておく
+
+	CCOMObject() : pObj(0) {}
+	virtual ~CCOMObject() { Release(); }
+
+protected:
+	T		pObj;	//	COMオブジェクト
+};

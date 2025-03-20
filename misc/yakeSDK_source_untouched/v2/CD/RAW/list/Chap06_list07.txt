@@ -1,0 +1,5 @@
+	DDSURFACEDESC dddesc = { sizeof(dddesc) };
+	// PixelFormatを得るのに、Lockする必要はないし、Millenium G400/450などは
+	// PrimaryをLockすることができない。
+	dddesc.ddsCaps.dwCaps = DDSD_PIXELFORMAT;
+	if(pSurface->GetSurfaceDesc( &dddesc )!=DD_OK){

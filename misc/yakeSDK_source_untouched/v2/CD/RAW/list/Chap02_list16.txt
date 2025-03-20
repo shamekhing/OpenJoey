@@ -1,0 +1,4 @@
+class function_callback {
+public:
+	virtual void run() = 0;
+};

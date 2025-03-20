@@ -1,0 +1,15 @@
+void	CMutexSection::Enter(const string& szMutexName){
+	//	MutexSection‚É“ü‚é
+	LRESULT lr = m_vMutex.Open(szMutexName);
+	if (lr==0) return ; // Šl“¾¬Œ÷I
+	if (lr==1) {
+		m_vMutex.Wait();	//	Š—LŒ ‚ğŠl“¾‚·‚é‚Ü‚Å‘Ò‚Â
+		return ;
+	}
+	return ;
+}
+
+void	CMutexSection::Leave(){
+	//	MutexSection‚©‚ço‚é
+	m_vMutex.Release();
+}

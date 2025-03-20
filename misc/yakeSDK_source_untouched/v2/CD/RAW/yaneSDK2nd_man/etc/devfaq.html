@@ -1,0 +1,177 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=x-sjis">
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<title>yaneSDK2nd</title>
+</head>
+
+<BODY bgcolor="#a6ee91">
+<HR>
+<P><FONT color="#009900" size="+1"><B><FONT size="+2">CKeyはJoyStickを認識させたくない環境を想定していますか？</FONT></B></FONT></P>
+<CENTER>
+<TABLE bgcolor="#ffffff" height="121">
+  <TBODY>
+    <TR>
+      <TD bgcolor="#ffffff" width="552" height="119">
+      <P>うちのJoyStickの場合なのですが、サイドワインダーフリースタイルプロとか言うパッドなのですが、傾きに反応するタイプなのです。普段は適当においてあるので、適当な傾きを持ってます。なので、そっちに方向キーが入りっぱなしになるのです。<BR>
+      ＃傾きと普通のパッドは切り替えられます。<BR>
+      そう言う環境だと、ジョイスティックを認識させたくないのです。ゲームによってon,off出来るのはまちまちです。最初からjoystickに対応してないゲームの方が多いですが、常に使用されると面倒な環境もあると言うことです。</P>
+      </TD>
+    </TR>
+  </TBODY>
+</TABLE>
+</CENTER>
+<P>ふーむ。なるほど～。そういう環境は想定してませんでした（笑）　まあ、ディフォルトでジョイスティック対応のソフトは珍しくないので、まあいいのかな～とか思いますが…。</P>
+<P>一応、CKey,CKey2のジョイスティックは扱わないバージョンCKey3,CKey4を追加しておきます。念のため、CVirtualKey::RemoveDeviceを、登録した仮想キーもきちんと削除するように修正しておきますので、よかったら使ってみてください。</P>
+<HR>
+<P><FONT color="#009900" size="+1"><B><FONT size="+2">ソフトウェアマウスカーソルはウィンドゥキャプションに重ねると消えるのですが？</FONT></B></FONT></P>
+<CENTER>
+<TABLE bgcolor="#ffffff">
+  <TBODY>
+    <TR>
+      <TD bgcolor="#ffffff" width="552" height="60">
+      <P>マウスカーソルが、アプリにフォーカスが無いときもShowCursorされてないので、真上にエクスプローラー等を重ねてもマウスカーソルが出ないです。あとタイトルバー上もカーソルが出ませんが、これは1stの時もそうでした。</P>
+      </TD>
+    </TR>
+  </TBODY>
+</TABLE>
+</CENTER>
+<P>エクスプローラーを真上に重ねれば、エクスプローラー側がactive
+windowのはずで、マウスカーソルの表示／非表示は、activeなwindowがイニシアチブを持つので、これで出ないはずはないのです。これで出ないのは、ＯＳ側のバグと思われます。ちなみにWindows2000では、ServicePack1を当てればなおったようです．．</P>
+<HR>
+<P><FONT color="#009900" size="+1"><B><FONT size="+2">ホームページのサンプルのプログラムがコンパイル出来ないのですが？</FONT></B></FONT></P>
+<CENTER>
+<TABLE bgcolor="#ffffff">
+  <TBODY>
+    <TR>
+      <TD bgcolor="#ffffff" width="552" height="30">
+      <P>やねさんのホームページにあった、test1～test8までのソースファイルがコンパイルできません。どうなっていますか？</P>
+      </TD>
+    </TR>
+  </TBODY>
+</TABLE>
+</CENTER>
+<P>コンパイル出来ないのは、プリコンパイル済みヘッダーの設定を行なっていないからです。.cppファイルの先頭に#include
+&quot;stdafx.h&quot;を追加して、プリコンパイル済みヘッダーの設定を行なわなければなりません。詳しくは、<A href="precompile.html">プリコンパイル済みヘッダの設定</A>をご覧ください。</P>
+<P>また、yaneMIDIOutputDM.hでdmusicc.hが無いというエラーが出るのは、DirectXのSDKが入っていないからで、yaneConfigでこのクラスを使えなくするか、DirectX7以降のSDKをインストールしてください。ちなみに、DirectXのSDKはインストール後、VisualStudioの環境設定で、インクルードパスとライブラリのリンクパスとして、そのインストール先のincludeフォルダ、libフォルダを指定するようにしなくてはなりません。また、そちらのlibパスを標準のlibパスより先に書いておかないと、先に見つかったdxguid.libが優先して使われてしまいますので、意味がありません。DirectX7のSDKのlibパスを先頭に持ってきておいてください。</P>
+<P>Visual C++5.0で、MP3関連の構造体等でコンパイルエラーが出るのは、MediaSDK+PlatformSDKが必要だからです。英マイクロソフトのサイトにはあったはず（日本語版があるのかどうかは知りません）なので、それを用意してください。</P>
+<HR>
+<P><FONT color="#009900" size="+1"><B><FONT size="+2">シーン管理をどうやっていいのかわかりません！</FONT></B></FONT></P>
+<CENTER>
+<TABLE bgcolor="#ffffff">
+  <TBODY>
+    <TR>
+      <TD bgcolor="#ffffff" width="552" height="30">
+      <P>yaneSDK1stにあったシーン管理はどうなってしまったんでしょうか？あれは、結構便利だと思っていたのですが…</P>
+      </TD>
+    </TR>
+  </TBODY>
+</TABLE>
+</CENTER>
+<P><A href="http://www.sun-inet.or.jp/~yaneurao/">私のホームページ</A>の天才ゲームプログラマ養成ギプスの第七章，第八章で書いています。そちらを参考にしてください。</P>
+<HR>
+<P><FONT color="#009900" size="+1"><B><FONT size="+2">ウィンドゥモードだと縦サイズが少し小さいようですが？</FONT></B></FONT></P>
+<CENTER>
+<TABLE bgcolor="#ffffff">
+  <TBODY>
+    <TR>
+      <TD bgcolor="#ffffff" width="552" height="30">
+      <P>ウィンドゥモードだと縦が４８０ドットに満たないのです。どうなっていますか？</P>
+      </TD>
+    </TR>
+  </TBODY>
+</TABLE>
+</CENTER>
+<P>ひょっとしてCAppBase::OnPreCreateでWindowスタイルを指定していますか？もし指定しているならば、<FONT color="#cc0000">WS_CAPTION | WS_MENU</FONT>を指定するようにしてください。</P>
+<HR>
+<P><FONT color="#009900" size="+1"><B><FONT size="+2">ＣＤＩＢＤｒａｗとＣＤｉｒｅｃｔＤｒａｗの違いについて教えてください。</FONT></B></FONT></P>
+<CENTER>
+<TABLE bgcolor="#ffffff">
+  <TBODY>
+    <TR>
+      <TD bgcolor="#ffffff" width="552" height="30">
+      <P>DirectDrawで描画を行う他にDIBで描画を行なうこともできるようですが、その違いがいまいちよく分かりません。今まではDIBなんて聞いたことがなかったもので･･。クラスリファレンスを読む限りではDIBの方はサーフェスのロストをしないとのことなのですが、毎フレーム全画面を書き換えるならば(STGなど)DirectDrawを使った方が速いが、フレームごとに共有できる部分が多いならば(AVGなど)DIBの方が効率がよい。という理解で間違いないでしょうか?</P>
+      </TD>
+    </TR>
+  </TBODY>
+</TABLE>
+</CENTER>
+<P>そうですね。あとDIBだと、システムメモリ上に存在するのでメモリに直に書き込みしてエフェクトかけると、１０倍ぐらい速度差が出ます。（DIBのほうが速いという意味です）　そこで、エフェクト系は、DIB用しか用意していません。逆に、単純な矩形転送は、DirectDrawのほうが有利です。PentiumMMX233程度で秒間60フレーム必要なゲームを作ろうとすれば、DirectDrawを使わないと到底その速度は出ないと思います。</P>
+<P>また、DirectDrawのほうは、画面のカラーモード(16色モード、256色モード、HIGH
+Color,Full Color,True Color)それぞれにおいてbpp(bits
+per pixel)が異なるので、サーフェースのメモリを直接いじる場合、それぞれの画面モードごとの処理ルーチンが必要になります。おまけに、HIGH
+Colorにしても、ビデオカードによってはRGBが5,5,5ビットと5,6,5ビットの２種類存在したりして、それぞれのルーチンを書くのが非常に困難です。（そもそも、持っていないビデオカード用のルーチンはデバッグしようが無いですし（笑））　さらに、Pentium用、MMX用、PentiumII用などと、専用に特化したルーチンまで用意するとなると、もう手に負えなくなってきます。おまけに、ビデオメモリ上に存在する場合、そのようにしてサーフェースを直接いじると、とても遅いのです。また、サーフェースは、画面モードをユーザーが変更すると、ロストしてしまいます。よって、必要ならばそれの復帰ルーチンも自前で書く必要があります。</P>
+<P>それに対し、DIBのほうは、32bpp固定なのでルーチンは１つ書けば十分です。(各CPU用のルーチンを用意するなら、その分だけ増えることになりますが）　おまけに、システムメモリ上にあるので、ビデオメモリ上にあるときほどは遅くないのです。サーフェースもロストすることはありえません。そんなわけで、エフェクト系は、DIBを使う！と決めたほうが良いでしょう。</P>
+<P>CDIBDrawとCDirectDrawの混在ですが、混在は出来ません（笑）　また、CDIB32とCPlane間のBlt関数（転送関数）は、用意していますが、これは::BitBltで行なうので場合によっては非常に遅いです。期待しないほうが良いでしょう。</P>
+<HR>
+<P><FONT color="#009900" size="+1"><B><FONT size="+2">ＣＤＩＢ３２の配列について。</FONT></B></FONT></P>
+<CENTER>
+<TABLE bgcolor="#ffffff">
+  <TBODY>
+    <TR>
+      <TD bgcolor="#ffffff" width="552" height="30">
+      <P>たとえば<BR>
+      CTextDIB32 text[10];<BR>
+      <BR>
+      と同じことをvectorを使ってやりたいのですが、<BR>
+      <BR>
+      vector&lt;CTextDIB32&gt; text;<BR>
+      text.resize(10);<BR>
+      <BR>
+      とやってもCDIB32がうまく生成されないようです。<BR>
+      なにかいい方法はありますでしょうか</P>
+      </TD>
+    </TR>
+  </TBODY>
+</TABLE>
+</CENTER>
+<P>vectorは、コピーコンストラクタの存在が前提になるので、こういう大きなオブジェクトをvectorにするのはどうかと思います。CDIB32のコピーコンストラクタを用意すれば済む問題でもないように思います。std::stringのようなオートポインタ風に資源を管理すれば良いのですが、そこまでする必要があるのか疑問です。</P>
+<P>そこで、こういうのは、YTLのなかのauto_vector_ptrを使うといいかと思います。つまりは、auto_ptrのvectorです。これならば、オブジェクトの（実体の）コピーは発生しません。</P>
+<HR>
+<P><FONT color="#009900" size="+1"><B><FONT size="+2">プリコンパイル済みヘッダーをもう一つ用意するには？</FONT></B></FONT></P>
+<CENTER>
+<TABLE bgcolor="#ffffff">
+  <TBODY>
+    <TR>
+      <TD bgcolor="#ffffff" width="552" height="30">
+      <P>yaneSDK2ndのほうで、stdafx.h（プリコンパイル済みヘッダー）を用意してあるわけですが、yaneSDK2nd全体のプリコンパイル済みヘッダーを別途、用意して、自分のプログラムはそれを利用したいのです。どうすれば良いでしょうか。</P>
+      </TD>
+    </TR>
+  </TBODY>
+</TABLE>
+</CENTER>
+<P>static libraryのプロジェクトを作成し、そこにyaneSDK2ndのファイルを入れて、いつもの方法でプリコンパイル済みヘッダの設定を行ないます。これで生成されるのは、libファイルですので、もう一つ自分のプログラムをコンパイルするためのプロジェクトを用意し、そちらに、上で生成されたlibファイルを「プロジェクト→プロジェクトをワークスペースへ挿入」で追加します。そのプロジェクト用のstdafx.hとstdafx.cppを独自に用意します。たとえば、以下のようにしておけば、良いでしょう。</P>
+<TABLE bgcolor="#ffffff">
+  <TBODY>
+    <TR>
+      <TD bgcolor="#ffffff" width="552" height="30">
+      <P>// stdafx.h<BR>
+      <FONT color="#cc0000">#include &quot;../yaneSDK/stdafx.h&quot;
+      // yaneSDK2nd側のstdafx.hを読み込む<BR>
+      #include &quot;../yaneSDK/yaneSDK.h&quot;
+      // yaneSDK2ndのヘッダを読み込む</FONT></P>
+      </TD>
+    </TR>
+  </TBODY>
+</TABLE>
+<P>そして、</P>
+<TABLE bgcolor="#ffffff">
+  <TBODY>
+    <TR>
+      <TD bgcolor="#ffffff" width="552" height="30">// stdafx.cpp
+      <P><FONT color="#cc0000">#include &quot;stdafx.h&quot;</FONT></P>
+      </TD>
+    </TR>
+  </TBODY>
+</TABLE>
+<P>として、いつも通り、このプリコンパイル済みヘッダの設定を行ないます。これで完了です。無事コンパイル出来るはずです。</P>
+<P>yaneSDK2ndのプロジェクトも同時に扱いたいならば、「プロジェクト→プロジェクトをワークスペースへ挿入」で、二つのプロジェクトが一体となったプロジェクトにしても構いません。</P>
+<HR>
+<P><FONT color="#009900" size="+1"><B><FONT size="+2">マルチスレッドのライブラリをリンクすべきですか？</FONT></B></FONT></P>
+<P>プロジェクトの設定⇒「C/C++」⇒「コード生成」で、「使用するランタイムライブラリ」は、マルチスレッド用のものを使用してください。yaneThread.cppで使用している_beginthreadは、マルチスレッド用のライブラリを使用しない状態だと使えません。</P>
+<HR>
+</BODY>            
+</html>            

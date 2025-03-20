@@ -1,0 +1,33 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CCellAutomaton</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CCellAutomaton</FONT><A name="CTimeBase"></A></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>セルオートマトンクラスです。</P>
+<P>セルオートマトンとは、ピクセル１つ１つが何らかの規則を持っていて、その規則に基づいて次の状態に移り変わっていくものです。<BR>
+たとえば、上にスクロールしながらぼかすならば、</P>
+<TABLE bgcolor="#ffffff">
+  <TBODY>
+    <TR>
+      <TD>＊□＊<BR>
+      ■＊■</TD>
+    </TR>
+  </TBODY>
+</TABLE>
+<P>□の次の瞬間のピクセル値(RGB)は、その左下と右下の２つ■のピクセル値(RGB)の加重平均で決まるとします。</P>
+<P>いろいろ応用は出来そうです。面白い画面効果が出来たら、やねうらおまでメールで教えてください＾＾</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P><A href="CDIB32.html">CDIB32</A>のポインタを取り、lpRectで指定された矩形に対して処理を行ないます。lpRect==NULLの場合は、プレーン全域となります。</P>
+<P><FONT color="#009900">static void UpFade(CDIB32* lpSrc,LPRECT lpRect=NULL);
+　　// 上に流れながらフェード<BR>
+static void DownFade(CDIB32* lpSrc,LPRECT
+lpRect=NULL); // 下に流れながらフェード<BR>
+static void LeftFade(CDIB32* lpSrc,LPRECT
+lpRect=NULL);　 // 左に流れながらフェード<BR>
+static void RightFade(CDIB32* lpSrc,LPRECT
+lpRect=NULL); // 右に流れながらフェード</FONT></P>
+<HR>
+</BODY></HTML>

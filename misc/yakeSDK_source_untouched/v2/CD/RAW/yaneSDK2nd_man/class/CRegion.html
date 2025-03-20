@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CRegion</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CRegion</FONT><A name="CTimeBase"></A></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P><A href="CDIB32.html">CDIB32</A>の保持している画像データから、リージョン(領域→HRGNとして与えられる)を生成します。これは、ウィンドゥを変形させたりするときに使います。このリージョンクラスを使って、変形ウィンドゥを作るには、<A href="CRegionHook.html">CRegionHook</A>が便利です。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P><FONT color="#00cc00">LRESULT Set(CDIB32* lpDIB32);</FONT></P>
+<P>&nbsp;bmp読み込み後のCDIB32*を渡して、そのサーフェースに設定されている<BR>
+&nbsp;colorkey(ヌキ色)の部分を抜いたリージョンを作成します。</P>
+<P><FONT color="#00cc00">LRESULT Load(const string szFileName,DWORD
+dwDIB32RGB=0);</FONT></P>
+<P>bmpファイルを読み込んで、そのdwDIB32RGBの色を抜いたリージョンを作成。</P>
+<P><FONT color="#00cc00">LRESULT Load(const string szFileName,int
+nPosX,int nPosY);</FONT></P>
+<P>bmpファイルを読み込んで、その(nPosX,nPosY)の座標の色を抜いたリージョンを作成。</P>
+<P><FONT color="#00cc00">void Release(void);</FONT></P>
+<P>リージョンを解放します。</P>
+<P><FONT color="#00cc00">HRGN GetHRGN(void);</FONT></P>
+<P>現在リージョン取得。SetかLoadのあと、有効になります。</P>
+<P><FONT color="#00cc00">// regionの加減<BR>
+CRegion&amp; operator + (const CRegion&amp;
+oSrc);<BR>
+CRegion&amp; operator - (const CRegion&amp;
+oSrc);</FONT></P>
+<P>見ての通り、他のCRegionクラスとの加減を行なうためのオペレータです。</P>
+<P><FONT size="+1" color="#cc0000">☆　注意</FONT></P>
+<P>これで、ウィンドゥのリージョンを変更するときは、メニュー無し（メニューリソースに&quot;IDR_MENU&quot;を含まない）で、CAPTION無し（CAppBase::OnCreateWindowのopt.styleにWS_CAPTIONを付けない）でなければなりません。</P>
+<CENTER>
+<TABLE border="1" bgcolor="#ffffff">
+  <TBODY>
+    <TR>
+      <TD> Win95と98ではリージョン関係の処理が大きく変わっている！<BR>
+      <BR>
+      98ではウィンドウに割り当てたリージョンのコピーが作成されるので<BR>
+      リージョンを::DeleteObjectしても大丈夫だが、95では作成されない。<BR>
+      ヘルプにはただ単に、作成されないと書いてある。<BR><BR>
+      窓のリージョンを変更するときには、ひとつ前のリージョンを残したまま、<BR>
+      新しいリージョンを適用し、そのあとひとつ前のリージョンを消す必要がある。</TD>
+    </TR>
+  </TBODY>
+</TABLE>
+</CENTER>
+<HR>
+</BODY></HTML>

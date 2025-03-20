@@ -1,0 +1,33 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>クラスリファレンス</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><A name="CDebugWindow"><FONT size="+2">class CDebugWindow</FONT></A>　<FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>エラーログの出力のためのウィンドゥクラス。CAppBaseから派生させたアプリクラスなので、Run()関数を呼び出し、窓を生成してから使うこと。また、CAppBaseから派生させているので、CAppFrame::MainThreadのなかで使うこと。</P>
+<P>デバッグのときの変数のウオッチ等に使うならば、<A href="#CDbg">CDbg</A>のほうを使うほうが便利。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>void&nbsp; Out(int); 　　// 数値の出力<BR>
+void&nbsp; Out(string); // 文字列の出力<BR>
+void&nbsp;__cdecl Out(LPSTR fmt, ... ); //
+printfの書式出力</P>
+<P>void Clear(void); 　//　デバッグウィンドウ
+に表示されている文字列の全クリア</P>
+<P><FONT size="+1" color="#009900">☆　使用例</FONT></P>
+<P>　CDebugWindow dbg;<BR>
+　dbg.Run();<BR>
+　dbg.Out(&quot;This may be a bug...&quot;);</P>
+<HR>
+<P><A name="CDbg"><FONT size="+2">class CDbg</FONT></A>　<FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>CDebugWindowを、ローカライズしたバージョン。CDebugWindowと同じメンバ関数を持つ。<BR>
+このクラスの場合、Run()は不要で、Outしたときに必要とあらば自動的にデバッグウィンドゥを開く。<BR>
+デバッグ用途には、これが便利。</P>
+<P><FONT size="+1" color="#009900">☆　使用例</FONT></P>
+<P>　CDbg dbg;<BR>
+　dbg.Out(&quot;x = %d&quot;,x);</P>
+<HR>
+</BODY></HTML>

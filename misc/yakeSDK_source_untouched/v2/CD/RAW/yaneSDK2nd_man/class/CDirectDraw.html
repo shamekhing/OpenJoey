@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CDirectDraw</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CDirectDraw</FONT><A name="CTimeBase"></A> <FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>DirectDrawの制御用。プライマリとセカンダリという二つのプレーン(<A href="CPlane.html">CPlane</A>)から成る。プライマリとは、ユーザーが見ている画面。セカンダリとは、裏画面。セカンダリはプライマリと同じサイズで、かつそれは窓のクライアントエリアと同じサイズである。</P>
+<P>このクラスは、主に解像度切り替え、そしてセカンダリへの描画を担う。</P>
+<P>DirectDrawを使った描画を行なう場合、ひとつのアプリケーションクラスは、一つの窓(＝１つのCWindowのインスタンス)と、１つのスレッド、そして、一つのCDirectDrawのインスタンスを持つ。DirectDrawによる描画を行なわず、DIBによる描画を行ないたいときは、このクラスは使わずに<A href="CDIBDraw.html">CDIBDraw</A>を使ってください。</P>
+<P>またこのクラスは<A href="CPlaneBase.html">CPlaneBase</A>派生クラスであり、セカンダリプレーンを表すCPlaneBaseとして使うことが出来ます。</P>
+<P><FONT size="+1" color="#009900"><FONT size="+1" color="#009900">☆　使用方法</FONT></FONT></P>
+<P>CPlaneの母体と成る部分なので、CPlaneのメンバ関数の使用に先駆けてCDirectDrawのインスタンスを生成する必要があります。また、CDirectDrawのインスタンス生成は窓の生成が完了していることが条件となります。（CAppFrameのなかで使うならば問題ありません）</P>
+<P>まず、画面解像度の設定を行ないます。これはSetDisplayで変更するか、BeginChangeDisplay～TestDisplayMode～EndChangeDisplayで変更するか二通りあります。後者のほうが少し手間はかかりますが融通は利きます。</P>
+<P>画面解像度の変更が終わった段階で、プライマリとセカンダリに対して転送が行なえるようになります。</P>
+<P>そのあとは、CPlaneをBlt系の関数でセカンダリに転送。OnDrawを呼び出してセカンダリからプライマリへ転送（これが実描画）を行ないます。</P>
+<P>詳しくはサンプルもご覧ください。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P><FONT color="#009900">LRESULT SetDisplay(bool bFullScr=false,int
+nSizeX=0,int nSizeY=0,int nColorDepth=0);
+// 画面解像度の設定(この関数を呼び出す前のディフォルトは640×480のウィンドゥモード。bFullScr==trueならば、640×480×16bppフルスクリーンモード)
+フルスクリーンモードでなければ、nColorDepthは意味を持たない。<BR>
+void GetDisplay(bool&amp;bFullScr,int &amp;nSizeX,int
+&amp;nSizeY,int &amp;nColorDepth); // 画面解像度の取得<BR>
+void GetSize(int &amp;nSizeX,int &amp;nSizeY);
+// GetDisplayのサイズだけ得られる版<BR>
+bool IsFullScreen(void); // フルスクリーンモードか？<BR>
+int GetBpp(void); // 現在のBppの取得</FONT></P>
+<P>nColorDepthはbpp(Bits Per Pixel)を指定します。8,16,24,32。<BR>
+フルスクリーンの場合、指定された解像度がビデオカードでサポートされているとは限りません。<BR>
+SetDisplayでnSizeX,nSizeYに0を指定した場合は、現状から変更されません。</P>
+<P><FONT color="#ff0000">640×480の16はたいていサポートされていると仮定して良いと思いますが、24,32はビデオカード依存。24は最近のビデオカードではサポートしていないものが多いです。32は、ノートパソコン等ではサポートしていないことが多いです。</FONT></P>
+<P><FONT color="#009900">LRESULT ChangeDisplay(void); // 現在のディスプレイモードを反映させる</FONT></P>
+<P>SetDisplayで設定した画面解像度を反映させます。</P>
+<P> // Begin～Endでディスプレイモードを変更する。<BR>
+<FONT color="#009900">void BeginChangeDisplay(void);<BR>
+void TestDisplayMode(int nSX,int nSY,bool
+bFullScr=false,int nColor=0);<BR>
+LRESULT EndChangeDisplay(void);</FONT></P>
+<P>画面解像度を切り替えます。<BR>
+<FONT color="#cc0000">例）<BR>
+　BeginChangeDisplay();<BR>
+　　TestDisplayMode(640,480,true,16); //
+フルスクリーンモード　16Bit Color<BR>
+　　TestDisplayMode(640,480,true,24); //
+フルスクリーンモード　24Bit Color<BR>
+　　TestDisplayMode(640,480,true,32); //
+フルスクリーンモード　32Bit Color<BR>
+　EndChangeDisplay()</FONT></P>
+<P>フルスクリーンモード16BitColorをトライして、ならなければ24Bit，それでもダメなら32Bitモード，それでもだめなら画面解像度の変更はなしです。</P>
+<P>// フリップは使うのか？<BR>
+void SetFlipUse(bool); // fullscreenでDirectDrawのFlipを使うか？(default
+== true)<BR>
+bool GetFlipUse(void); // 結果の取得<BR>
+void FlipToGDISurface(void); // GDISurfaceにフリップする</P>
+<P>SetFlipUseはフリップ（裏と表の２画面を用いて瞬時に画面切り替えすることによって画面のちらつきを無くす描画／フルスクリーン時のみ有効）の設定。画面解像度を切り替えるときにこの設定が参照される。その後、GetFlipUseでその設定を取得できる。FlipToGDISurfaceは、裏画面(GDIサーフェースではない面)が描画されていると、そこでダイアログを出すなどしても画面に出てこないのでユーザーが気づかない場合があります。それを解消するために、ユーザーに見えるほうのサーフェースに無理矢理切り替えるのがこの命令です。エラー表示を行なうダイアログの描画にぐらいしか使えないと思いますが。</P>
+<P><B><FONT color="#009999" size="+1">//　セカンダリＤＩＢを作る機能</FONT></B></P>
+<P><FONT color="#009900">LRESULT CreateSecondaryDIB(void);<BR>
+void ReleaseSecondaryDIB(void);<BR>
+CDIB32* GetSecondaryDIB(void);</FONT></P>
+<P>　CreateSecondaryDIBは、セカンダリプレーンとして、<A href="CPlane.html">CPlane</A>ではなく、<A href="CDIB32.html">CDIB32</A>で用意します。セカンダリDIBを使いたいときは、<U><FONT color="#ff0000">画面解像度の変更が終わったあと</FONT></U>で、この関数を呼び出します。</P>
+<P>　その後、GetSecondaryDIB()して、CDIB32*を取得して、それに対して描画します。</P>
+<P><FONT color="#009999"> virtual void OnDrawDIB(void); // SecondaryDIB-&gt;Primaryへの転送</FONT></P>
+<P>　セカンダリDIBからプライマリサーフェースへの転送は、OnDrawの代わりにこれを呼び出します。実際には、セカンダリDIBは、一度、セカンダリCPlaneに転送したのちに、プライマリCPlaneに転送されます。</P>
+<P>//////////////////////////////////////////<BR>
+// プライマリとセカンダリの取得<BR>
+<FONT color="#009900">CPlane* GetPrimary(void);<BR>
+CPlane* GetSecondary(void);</FONT></P>
+<P>直接プライマリプレーンとセカンダリプレーンを取得できます。</P>
+<P>　draw.GetSecondary()-&gt;Clear(); // セカンダリのクリア</P>
+<P>のように使います。</P>
+<P><FONT color="#009900">void Invalidate(void);</FONT> // Dirtyにする</P>
+<P>どこかから得たセカンダリのポインタで直接いじった場合はDirtyフラグ（画面の汚したかどうかのフラグ）が立たないのでOnDrawで描画されません。この関数で強制的にDirtyフラグを立てることが出来ます。GetPrimary,GetSecondaryは呼び出した瞬間にDirtyフラグが立つので、GetSecondaryを行なったあとに呼び出す必要はありません。</P>
+<P><FONT color="#009900">void CheckSurfaceLost(void); // サーフェースのロストチェック</FONT></P>
+<P>解像度切り替えに対し、必要に応じてプライマリとセカンダリを作りなおし、プレーンの復旧を行ないます。この関数は、内部的から自動的に呼び出されるため、明示的に呼び出す必要はありません。</P>
+<P>//////////////////////////////////////////<BR>
+// Secondaryプレーンへの転送系(基本的にCPlaneに委譲する)</P>
+<P><FONT color="#009900">LRESULT Blt(CPlane*lpSrc,int x,int y,LPRECT
+lpSrcRect=NULL,LPRECT lpClipDstRect=NULL);<BR>
+LRESULT BltFast(CPlane*lpSrc,int x,int y,LPRECT
+lpSrcRect=NULL,LPRECT lpClipDstRect=NULL);<BR>
+LRESULT BlendBlt(CPlane*lpSrc,int x,int y,int
+ar,int ag,int ab,int br,int bg,int bb,LPRECT
+lpSrcRect=NULL,LPRECT lpClipDstRect=NULL);<BR>
+</FONT><FONT color="#009900">LRESULT BlendBltFast(CPlane*lpSrc,int x,int
+y,int ar,int ag,int ab,int br,int bg,int
+bb,LPRECT lpSrcRect=NULL,LPRECT lpClipDstRect=NULL);<BR>
+</FONT><FONT color="#009900">LRESULT BltR(CPlane*lpSrc,int x,int y,LPRECT
+lpSrcRect=NULL,LPSIZE lpDstSize=NULL,LPRECT
+lpClipDstRect=NULL);<BR>
+LRESULT BltFastR(CPlane*lpSrc,int x,int y,LPRECT
+lpSrcRect=NULL,LPSIZE lpDstSize=NULL,LPRECT
+lpClipDstRect=NULL);<BR>
+LRESULT BlendBltR(CPlane*lpSrc,int x,int
+y,int ar,int ag,int ab,int br,int bg,int
+bb,LPRECT lpSrcRect=NULL,LPSIZE lpDstSize=NULL,LPRECT
+lpClipDstRect=NULL);</FONT><BR>
+<FONT color="#009900">LRESULT BlendBltFastR(CPlane*lpSrc,int x,int
+y,int ar,int ag,int ab,int br,int bg,int
+bb,LPRECT lpSrcRect=NULL,LPSIZE lpDstSize=NULL,LPRECT
+lpClipDstRect=NULL);</FONT></P>
+<P><FONT color="#009900">LRESULT Clear(LPRECT lpRect=NULL);</FONT></P>
+<P>使い方は、<A href="CPlane.html">CPlane</A>に同等のインターフェースを持ったものがありますので、そちらを参照してください。転送先が、セカンダリプレーンになるという点だけが違います。これらの関数で転送した場合、Dirtyフラグが立ちます。</P>
+<P><FONT color="#009900">LRESULT SetFillColor(COLORREF c); // Clearする色を指定する(Default==RGB(0,0,0))<BR>
+DWORD GetFillColor(void); // FillColorする色を取得(現在の画面bpp依存)</FONT></P>
+<P>セカンダリをClearする時の塗りカラーの設定と取得。取得した値はDirectDrawで使うためのもの。</P>
+<P>//////////////////////////////////////////<BR>
+// Secondary-&gt;Primaryプレーンの転送</P>
+<P><FONT color="#009900">virtual void OnDraw(void);</FONT></P>
+<P>セカンダリからプライマリに転送する。転送に際して、<A href="CLayer.html">レイヤ</A>(CLayer,CHDCLayer,CAfterLayer)もコールバックされる。</P>
+<P><FONT color="#009900">void SetOffset(int ox,int oy); // セカンダリの転送オフセット</FONT></P>
+<P>セカンダリからプライマリに転送するときのオフセット。画面を揺らすのに使う。もれた部分は、セカンダリにSetFillColorで設定した色になる。</P>
+<P><FONT color="#009900">void SetBrightness(int nBright); // フェード
+</FONT></P>
+<P>０～２５６（Max）の間で指定すると、OnDrawしたときにセカンダリ上でnBright/256に減衰が行なわれて転送される。</P>
+<P>//////////////////////////////////////////<BR>
+// レイヤの管理</P>
+<P>// Layerのリストを返す<BR>
+<FONT color="#009900">CLayerList* GetLayerList(void);<BR>
+CLayerList* GetAfterLayerList(void);<BR>
+CLayerList* GetHDCLayerList(void);</FONT></P>
+<P>OnDraw時にコールバックされる<A href="CLayer.html">レイヤ</A>のリストを得る。通常、明示的に使うことは無い。</P>
+<P>//////////////////////////////////////////<BR>
+// <A href="CSprite.html">CSprite</A>のDirectDrawへの描画</P>
+<P><FONT color="#009900">// 通常描画<BR>
+void Blt(CSprite*lpSprite,LPRECT lpClip=NULL);<BR>
+// (x,y)に描画<BR>
+void Blt(CSprite*lpSprite,int x,int y,LPRECT
+lpClip=NULL);<BR>
+// 通常描画(モーション進めず)<BR>
+void BltFix(CSprite*lpSprite,LPRECT lpClip=NULL);<BR>
+// (x,y)に描画(モーション進めず) <BR>
+void BltFix(CSprite*lpSprite,int x,int y,LPRECT
+lpClip=NULL);<BR>
+// (x,y)に描画(モーションは最後まで行ったならリセットせず)
+<BR>
+void BltOnce(CSprite*lpSprite,int x,int y,LPRECT
+lpClip=NULL);</FONT></P>
+<HR>
+</BODY></HTML>

@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Timer/yaneIntervalTimer.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="IIntervalTimer"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">IIntervalTimer</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> RegistCallBack(<SPAN class="reserved_word">void</SPAN>*pVoid,DWORD dwNext, DWORD dwInterval, <SPAN class="reserved_word">int</SPAN> nRepeat)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> DeleteCallBack()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> CallBack()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetTimer(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Timer!yaneTimer_h.html#ITimer" target=_self>ITimer</A>&gt;&amp; pTimer)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> virtual ~IIntervalTimer()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CIntervalTimer"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CIntervalTimer</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">インターバルタイマを統合的に管理するためのクラス<BR>		（ただし、手動式コールバックで使う）<BR>	コールバック自体は、class CAppBase が、IsThreadValidのなかで<BR>	行なってくれるので、CAppBaseの利用者は、明示的に行なう必要は無い<BR><BR>	使用例：<BR>	//	CAppFrame::MainThread内にて．．<BR>		//	コールバックの関数定義<BR>		smart_ptr&lt;function_callback&gt; fn(<BR>			function_callback_v::Create(&amp;CTest::Test,&amp;test)<BR>		);<BR>		//	コールバックの登録<BR>		GetMyApp()-&gt;GetIntervalTimer()-&gt;RegistCallBack(<BR>			&amp;test,	//	コールバック登録されているものを<BR>					//	削除するための識別子<BR>			3000,	//	3000ms後に一回目のコールバック<BR>			1000,	//	1000msごとに<BR>			10,		//	10回コールバック<BR>			fn<BR>		);<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Timer!yaneIntervalTimer_h.html#IIntervalTimer" target=_self>IIntervalTimer</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> RegistCallBack(<SPAN class="reserved_word">void</SPAN>*pVoid,DWORD dwNext, DWORD dwInterval, <SPAN class="reserved_word">int</SPAN> nRepeat)</DIV>
+<DIV class="comment_block">コールバックの登録を行なう。pVoidは、タイマ識別子であり、<BR>		ユーザーがそのクラスのthisポインタを渡しておけば、あとで、<BR>		これを識別子として用いて、登録したコールバックを削除することが出来る<BR><BR>		dwNext	は、１回目のコールバックは何ミリ秒後なのか。<BR>			その時刻がすぎたときに、コールバックがかけられる<BR><BR>		dwIntervalは、１回目以降のコールバックの間隔。<BR>			nRepeatが1のときは関係ない。<BR><BR>		nRepeatは、何回コールバックを行なうのかの指定。<BR>		これを指定した回数だけ、nCallBack間隔のコールバックが行なわれる<BR>		0ならば、無限回数、呼び出す<BR><BR>		fnは、コールバックすべき関数。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> DeleteCallBack()</DIV>
+<DIV class="comment_block">RegistCallBackで指定したpVoidと一致するコールバックをすべて消す<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> CallBack()</DIV>
+<DIV class="comment_block">登録されているコールバックのうち、時間になっているものを<BR>		順番に呼び出す。<BR><BR>		class CAppBase は、IsThreadValidで、この関数を夜斐出しているので、<BR>		CAppBaseのMainThread内では、明示的にこの関数を呼び出す必要は無い。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetTimer(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Timer!yaneTimer_h.html#ITimer" target=_self>ITimer</A>&gt;&amp; pTimer)</DIV>
+<DIV class="comment_block">CFixTimer等を使うのならば、<BR>		事前に用意されているタイマーをこいつで置き換えると良い。<BR>		ディフォルトではCTimerが使われる<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CIntervalTimer()</DIV>
+<DIV class="public_member"> virtual ~CIntervalTimer()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">typedef smart_list_ptr&lt;CTimerInfo&gt;CTimerList</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">CTimerList m_listTimerInfo</DIV>
+<DIV class="protected_member">CTimerList* GetTimerInfo()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Timer!yaneTimer_h.html#ITimer" target=_self>ITimer</A>&gt; m_pTimer</DIV>
+<DIV class="protected_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Timer!yaneTimer_h.html#ITimer" target=_self>ITimer</A>&gt; GetTimer()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CTimerInfo"></A>
+<SPAN class="reserved_word">struct</SPAN>&nbsp;<SPAN class="class_name">CIntervalTimer::CTimerInfo</SPAN>
+<HR>
+<DIV class="block_title">構造体の説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN>* m_pVoid</DIV>
+<DIV class="public_member">DWORD m_dwCallBackTimer</DIV>
+<DIV class="comment_block">タイマー識別子（ユーザーがそのクラスのthisポインタを）<BR>		渡しておけば、そのクラスが生成したタイマのみを消去することが出来る<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">DWORD m_dwInterval</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">int</SPAN> m_nRepeat</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="YTL!function_callback_h.html#function_callback" target=_self>function_callback</A>&gt; m_fnCallBack</DIV>
+<DIV class="comment_block">コールバックすべき関数<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> m_bDelete</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> IsValid()</DIV>
+<DIV class="comment_block">このオブジェクトは次のフェイズで消されるのか？<BR>iteratorがsmart_iteratorでは無いので、フェイズを遅らせて<BR>削除してやる必要がある<BR>⇒　smart_list_ptrのイテレータ抽象使うのに必要<BR></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

@@ -1,0 +1,47 @@
+
+☆　ygs2kからの主な変更点
+
+・Blend系⇒廃止。SetBltModeで統合。
+・SwapToSecondary廃止。
+・SystemMemoryPlane廃止。
+・MouseLayer廃止⇒grp/cursor.bmpに保存してあるのがマウスカーソル。
+	この素材の緑(RGB(0,255,0)が抜き色)
+・マウスは、MouseInputという関数が追加。この関数を実行しないと、
+	GetMouseInfoで得られるマウス情報は更新されない。
+・Dbg("文字列");　でデバッグウィンドゥを表示。
+
+です。
+
+SetBltModeに関してだけ説明を要すると思うのですが、これは、転送モードを事前に設定しておきます。
+
+	Blt,BltRect,ClipBlt,ClipBltRect
+	BltR,BltRectR,ClipBltR,ClipBltRectR
+に対して有効で、
+
+	SetBltMode(転送モード,α値);
+で、
+	//	0:通常転送
+	//	1:ブレンド	2:抜き色ブレンド
+	//	3:加色		4:抜き色付き加色
+	//	5:減色		6:抜き色付き減色
+になります。α値は、0～255の間で指定して、0ならば0% ,
+255ならば、100%という意味になります。初期状態では転送モードには0
+が設定されており、一度変更したら、再度変更するまでこの設定は有効です。
+
+シナリオ関係：
+	ScenarioLayerOn
+	ScenarioLayerOff
+	ScenarioEnableSkip
+	ScenarioLoad
+	ScenarioOnDraw
+これらについては、お楽しみＣＤの原稿を参照のこと。
+
+
+マップ描画関連
+	MapLayerOn
+	MapLayerOff
+	MapLoad
+	MapOnDraw
+	MapGetSize
+	MapSetView
+については、お楽しみＣＤの原稿を参照のこと。

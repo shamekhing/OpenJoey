@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>YTL/factory_permutation.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="factory_base"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">factory_base</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">factory の基底クラス<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN>* Create()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"> virtual ~factory_base()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="factory"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;T</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">factory</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">factory<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!factory_permutation_h.html#factory_base" target=_self>factory_base</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> T* CreateInstance()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN>* Create()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="factory2"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;T,&nbsp;class&nbsp;S</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">factory2</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">Tは基底クラス。Sはその派生クラス。</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!factory_permutation_h.html#factory" target=_self>factory</A>&lt;T&gt;<BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="private_member"><SPAN class="reserved_word">virtual</SPAN> T* CreateInstance()</DIV>
+<DIV class="private_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN>* Create()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="factory_i"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;T</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">factory_i</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">factory<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!factory_permutation_h.html#factory_base" target=_self>factory_base</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> T* CreateInstance()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN>* Create()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="factory_i2"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;T,&nbsp;class&nbsp;S</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">factory_i2</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">Tは基底クラス(抽象)。Sはその派生クラス。</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="YTL!factory_permutation_h.html#factory_i" target=_self>factory_i</A>&lt;T&gt;<BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="private_member"><SPAN class="reserved_word">virtual</SPAN> T* CreateInstance()</DIV>
+<DIV class="private_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN>* Create()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="factory_permutation"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;T,&nbsp;class&nbsp;S</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">factory_permutation</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">クラス置換を行なうためのテンプレート。<BR><BR>	ディフォルトで、Sクラスを生成する。<BR>	これは、Tの派生クラスであること。<BR><BR>	SetFactoryでは、Tの派生クラスのポインタを渡す。<BR>	CreateInstanceが呼び出されると、現在保持しているfactoryによって<BR>	オブジェクトを生成し、そのsmart_ptrを返す。<BR><BR>	Tが抽象クラスのときは:<BR>		class factory_permutation_i<BR>	を用いること<BR><BR>	使用例）<BR>	factory_permutation&lt;IHoge,CHogeSakura&gt; f;<BR>	//	CHogeSakuraはIHoge派生クラス<BR>	//	ディフォルトで、このオブジェクトが生成される<BR>	smart_ptr&lt;IHoge&gt; p = f.CreateInstance();<BR>	//	こうやれば、CHogeSakuraのオブジェクトが生成される<BR>	f.SetFactory((CHogeTomoyo*)0);<BR>	//	生成するオブジェクトをIHoge派生クラスであるCHogeTomoyoに<BR>	//　変更してみる<BR>	smart_ptr&lt;IHoge&gt; p = f.CreateInstance();<BR>	//	こうやれば、CHogeTomoyoのオブジェクトが生成される<BR>	smart_ptr&lt;factory&lt;IHoge&gt; &gt; h = f.GetFactory();<BR>	//	ここでは、↑でfactoryを置換したためfactory&lt;CHogeTomoyo&gt;<BR>	//	オブジェクトが生成される<BR><BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> factory_permutation()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> U</SPAN>&gt;<BR><SPAN class="reserved_word">void</SPAN> SetFactory()</DIV>
+<DIV class="public_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="YTL!factory_permutation_h.html#factory" target=_self>factory</A>&lt;T&gt;&gt; GetFactory()</DIV>
+<DIV class="comment_block">factoryの設定／取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;T&gt; CreateInstance()</DIV>
+<DIV class="comment_block">factoryによってインスタンスの生成<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="YTL!factory_permutation_h.html#factory" target=_self>factory</A>&lt;T&gt;&gt; m_vFactory</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="factory_permutation_i"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;T,&nbsp;class&nbsp;S</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">factory_permutation_i</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">クラス置換を行なうためのテンプレート。<BR>	class factory_permutation の基底クラスTが抽象クラスのときの<BR>	バージョン<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> factory_permutation_i()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg"><SPAN class="reserved_word">class</SPAN> U</SPAN>&gt;<BR><SPAN class="reserved_word">void</SPAN> SetFactory()</DIV>
+<DIV class="public_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="YTL!factory_permutation_h.html#factory_i" target=_self>factory_i</A>&lt;T&gt;&gt; GetFactory()</DIV>
+<DIV class="comment_block">factoryの設定／取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;T&gt; CreateInstance()</DIV>
+<DIV class="comment_block">factoryによってインスタンスの生成<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="YTL!factory_permutation_h.html#factory_i" target=_self>factory_i</A>&lt;T&gt;&gt; m_vFactory</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

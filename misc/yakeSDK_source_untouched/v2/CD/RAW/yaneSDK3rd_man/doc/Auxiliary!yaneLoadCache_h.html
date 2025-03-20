@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Auxiliary/yaneLoadCache.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="ILoadCacheListener"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">ILoadCacheListener</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">class CLoadCache の読み込み時のコールバック。<BR>	必要ならばnNoを変更できる<BR>	読み込むはずのファイルを他のファイルへ置換するのに使う。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> OnLoad(<SPAN class="reserved_word">int</SPAN> &amp; nNo)</DIV>
+<DIV class="public_member"> virtual ~ILoadCacheListener()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="ILoadCache"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">ILoadCache</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Set(<SPAN class="reserved_word">const</SPAN> string&amp; filename)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Load(<SPAN class="reserved_word">int</SPAN> nNo)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Release(<SPAN class="reserved_word">int</SPAN> nNo)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT ReleaseAll()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetCacheMax(<SPAN class="reserved_word">int</SPAN> nCacheMax)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">int</SPAN> GetSize()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetLoadCacheListener(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Auxiliary!yaneLoadCache_h.html#ILoadCacheListener" target=_self>ILoadCacheListener</A>&gt;&amp; v)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Auxiliary!yaneLoadCache_h.html#ILoadCacheListener" target=_self>ILoadCacheListener</A>&gt; GetLoadCacheListener()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetCanReloadAgain(<SPAN class="reserved_word">bool</SPAN> b)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> virtual ~ILoadCache()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CLoadCache"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CLoadCache</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">擬似キャッシュのような働きをします。<BR>	使用方法等については、このクラスの派生も見てください。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Auxiliary!yaneLoadCache_h.html#ILoadCache" target=_self>ILoadCache</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Set(<SPAN class="reserved_word">const</SPAN> string&amp; filename)</DIV>
+<DIV class="comment_block">定義ファイルの設定（読み込み）<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Load(<SPAN class="reserved_word">int</SPAN> nNo)</DIV>
+<DIV class="comment_block">そのナンバーのデータの読み込み<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Release(<SPAN class="reserved_word">int</SPAN> nNo)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT ReleaseAll()</DIV>
+<DIV class="comment_block">そのナンバーのデータの解放<BR>読み込んでいるデータの全解放<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetCacheMax(<SPAN class="reserved_word">int</SPAN> nCacheMax=INT_MAX)</DIV>
+<DIV class="comment_block">キャッシュ上限を設定する仕組み。<BR>		読み込んでいる数がnCacheMaxを超えた場合<BR>		最近使っていないものから解放する仕組み<BR>		defaultではINT_MAX（なのでいつまでも解放されない）<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">int</SPAN> GetSize()</DIV>
+<DIV class="comment_block">---- おまけ<BR>Setで設定した、ファイル名リストの要素数を返します。<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetLoadCacheListener(<SPAN class="reserved_word">const</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Auxiliary!yaneLoadCache_h.html#ILoadCacheListener" target=_self>ILoadCacheListener</A>&gt;&amp; v)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Auxiliary!yaneLoadCache_h.html#ILoadCacheListener" target=_self>ILoadCacheListener</A>&gt; GetLoadCacheListener()</DIV>
+<DIV class="comment_block">property..<BR>リスナの設定～取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetCanReloadAgain(<SPAN class="reserved_word">bool</SPAN> b)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CLoadCache()</DIV>
+<DIV class="public_member"> virtual ~CLoadCache()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="YTL!smart_vector_ptr_h.html#smart_vector_ptr" target=_self>smart_vector_ptr</A>&lt;CLoadCacheInfo&gt; m_aLoadCache</DIV>
+<DIV class="protected_member"><A class="class_link" href="YTL!smart_vector_ptr_h.html#smart_vector_ptr" target=_self>smart_vector_ptr</A>&lt;CLoadCacheInfo&gt;* GetLoadCache()</DIV>
+<DIV class="protected_member">CLoadCacheInfo* GetLoadCache(<SPAN class="reserved_word">int</SPAN> n)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> InnerCreate(<SPAN class="reserved_word">int</SPAN> nMax)&nbsp;=&nbsp;0</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> InnerDelete()&nbsp;=&nbsp;0</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT InnerLoad()&nbsp;=&nbsp;0</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT InnerRelease()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block">まず、このクラスから派生させ、以下の４つの関数をオーバーライドします。<BR>	たとえば、smart_vector_ptr&lt;ISound&gt; m_apSound; をメンバとして<BR>	持っているのならば、<BR>	１．InnerCreate　⇒<BR>			m_apSound.resize(nMax);<BR>	２．InnerDelete　⇒<BR>			m_apSound.clear();<BR>	３．InnerLoad(int nNo)　⇒<BR>			Loadを呼び出し、そのあと<BR>			nNoの要素を読み込む処理を書く<BR>	４．InnerRelease(int nNo) ⇒<BR>			nNoの要素を解体する処理を書く<BR>	５．デストラクタ⇒<BR>			必ずInnerDeleteを呼び出す<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nCacheMax</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> InnerPushOut()</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> InnerUse(<SPAN class="reserved_word">int</SPAN> nNo)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bCanReloadAgain</DIV>
+<DIV class="protected_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Auxiliary!yaneLoadCache_h.html#ILoadCacheListener" target=_self>ILoadCacheListener</A>&gt; m_vLoadCacheListener</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CLoadCacheInfo"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CLoadCache::CLoadCacheInfo</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">string strFilename</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> bLoaded</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">int</SPAN> nStaleTime</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CLoadCacheInfo()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

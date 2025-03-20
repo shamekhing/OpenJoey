@@ -1,0 +1,37 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CSELoader</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CSELoader</FONT><A name="CTimeBase"></A><FONT color="#ff0000"> 【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>サウンド(<A href="CSound.html">CSound</A>)の読み込み管理を行ないます。サウンドを番号で管理できます。読み込んでいるサウンドは２度読みしません。事前に読み込んでおくことも出来ます。擬似キャッシュのような働きをします。アプリケーションクラスのメンバとして持たせると便利です。<A href="CLoadCache.html">CLoadCache</A>から派生させています。参考にしてください。</P>
+<P>概念的には、CSoundLoaderとほぼ同じですが、SEの再生のためにいくつかの特徴があります。</P>
+<P>１．同一フレーム内では、何度呼び出されても一度しか再生しない。<BR>
+２．５フレーム以内ならば、同じサウンドは再度再生しない。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P><A href="CSoundLoader.html">CSoundLoader</A>を参考にしてください。</P>
+<P><FONT color="#009900">// フレームが経過した場合<BR>
+void OnPlay(void); // 毎フレーム呼び出してください。</FONT></P>
+<P><FONT color="#009900">void PlayN(int nNo); // いますぐ再生する(非ループ再生)<BR>
+void Play(int nNo); // 鳴っていなければ再生する(非ループ再生)<BR>
+void PlayLN(int nNo); // いますぐ再生する(ループ再生)<BR>
+void PlayL(int nNo); // 鳴っていなければ再生する(ループ再生)<BR>
+void PlayT(int nNo,int nTimes); // 再生回数指定再生
+<BR>
+void Stop(int nNo); // サウンドを止める<BR>
+void Reset(int nLevel=INT_MAX); // サウンドの排他カウンタのリセット<BR>
+</FONT><FONT color="#009900">bool IsPlay(int nNo); // nNoのファイルが再生中か返します</FONT></P>
+<P><FONT color="#009900">CSound* GetSound(int nNo); // サウンドの取得</FONT></P>
+<P><FONT color="#009900">bool* GetCancelFlag(void); 　// 再生キャンセルフラグ</FONT></P>
+<P>　再生キャンセルフラグを取得する。初期状態ではfalse（キャンセルしない）。これをtrueにすると、Play/PlayNでSEが再生されなくなる。PlayTは、複数回の再生。PlayT呼び出し後、一回目はすぐに再生され、２回目との間は、nTimesだけ時間が空く。これは、１回目の再生終了後に、OnPlay(
+)を何回呼び出したときに２回目が再生されるかを意味する。（以下、２回目のあと、３回目のあと．．．も同様）</P>
+<P><FONT color="#009900">void OnPlayAndReset(void); // 強制的に再生</FONT></P>
+<P>　もし、Play/PlayNを呼び出しても、OnPlayを呼び出さなくては、SEはいつまで経っても鳴らない。これでは困ることもあるので、現在再生フラグの立っているものをすべて再生するのが、この関数である。</P>
+<P><FONT color="#009900">//&nbsp;再生インターバルの設定(ディフォルトではCSELoaderCount==5)<BR>
+void SetLockInterval(int nLockInterval);<BR>
+int GetLockInterval(void);</FONT></P>
+<P>ディフォルトでは５フレーム以内ならば、再度再生しない。その５フレームというのを設定／取得する。</P>
+<HR>
+</BODY></HTML>

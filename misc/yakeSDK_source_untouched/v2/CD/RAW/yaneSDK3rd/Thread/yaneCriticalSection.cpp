@@ -1,0 +1,18 @@
+#include "stdafx.h"
+#include "yaneCriticalSection.h"
+
+CCriticalSection::CCriticalSection(){
+	::InitializeCriticalSection(&m_csCriticalSection);
+}
+
+CCriticalSection::~CCriticalSection(){
+	::DeleteCriticalSection(&m_csCriticalSection);
+}
+
+void CCriticalSection::Enter(){
+	::EnterCriticalSection(&m_csCriticalSection);
+}
+
+void CCriticalSection::Leave(){
+	::LeaveCriticalSection(&m_csCriticalSection);
+}

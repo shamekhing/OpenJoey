@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CStringMap</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CStringMap</FONT><A name="CTimeBase"></A>　<FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>キー（文字列）とデータとの連想記憶を提供します。Perlで使うような、なんでも入る変数が欲しかったので作りました。CGIを作るときとかに便利です。</P>
+<P>内部的には、map&lt;string , string &gt;として実装してあります。</P>
+<P><A href="CSerialize.html#CArchive">CArchive</A>派生クラスなので、そのままシリアライズすることも出来ます。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ変数</FONT></P>
+<P> // キーに対するデータの書き込み<BR>
+void Write(string szKey,string szData);<BR>
+void Write(string szKey,LONGLONG nData);<BR>
+　⇒　そのキーが既に存在する場合は、上書き。</P>
+<P>// キーに対するデータの追加書き込み<BR>
+void Append(string szKey,string szData);<BR>
+void Append(string szKey,LONGLONG nData);<BR>
+　⇒　stringバージョン（前者）のほうは、文字列が加算される。LONGLONGバージョン（後者）の場合は、Writeと同じ動作。</P>
+<P>// キーに対するデータの読み出し<BR>
+LRESULT Read(string szKey,string&amp; szData);<BR>
+LRESULT Read(string szKey,LONGLONG&amp; nData);</P>
+<P>// キーに対するデータの直接取得<BR>
+// (そのキーが存在しないときは、szDefault
+or lDefaultが返る)<BR>
+string GetStr(string szKey,string szDefault=&quot;&quot;);<BR>
+int GetNum(string szKey,int nDefault=0);<BR>
+// ↑これのLONGLONGのやつ作ったのだが、それは、ときどき<BR>
+// VC++のreleaseバージョンだと内部コンパイルエラーに<BR>
+// なるときがある。おそらく、LONGLONGの最適化のバグ。<BR>
+LONGLONG GetLongNum(string szKey,LONGLONG
+nDefault=0);</P>
+<P>// キーに対するデータの削除<BR>
+bool Delete(string szKey); // 削除したときにはtrue</P>
+<P>// まるごと削除<BR>
+void Clear(); // clear all data..</P>
+<P>// 定義ファイルからデータを読み出して、格納する機能<BR>
+// (シリアライズとは違い、次のようなフォーマットのファイルから読み出す)<BR>
+　// ダブルスラッシュ行はコメント<BR>
+　#string1 string2 // このように#で開始して、文字列１，２をならべる<BR>
+　// このとき、スペースがセパレータ。<BR>
+　そうすると、string1が、szKey,string2がszDataとして、保存(Write)される。<BR>
+　よって、定義ファイルから読み込み後、GetStr(&quot;string1&quot;);のようにすれば<BR>
+　string2が取得できると言うわけ！○(≧∇≦)o<BR>
+<BR>
+LRESULT ReadFromConfigFile(string szFileName);</P>
+<P>// 文字列をこの連想記憶で置換する<BR>
+void Replace(string&amp; s,bool bCaseSensitive=false);</P>
+<P>map&lt;string,string&gt;* GetMap( );<BR>
+連想記憶自体を取得する。</P>
+<HR>
+</BODY></HTML>

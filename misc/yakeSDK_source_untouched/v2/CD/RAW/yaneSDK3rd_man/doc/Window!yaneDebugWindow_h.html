@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Window/yaneDebugWindow.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="CDebugWindow"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CDebugWindow</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">エラーログの出力のためのウィンドゥクラス。<BR>	class CAppBase から派生させたアプリクラスなので、Run()関数を呼び出し、<BR>	窓を生成してから使うこと。また、CAppBaseから派生させているので、<BR>	class CAppFrame のMainThreadのなかで使うこと。<BR><BR>	デバッグのときの変数のウオッチ等に使うならば、<BR>	class CDbg のほうを使うほうが断然便利。<BR><BR>	使用例：<BR>	CDebugWindow dbg;<BR>	dbg.Run();<BR>　	dbg.Out("This may be a bug...");<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="AppFrame!yaneAppBase_h.html#CAppBase" target=_self>CAppBase</A><BR>
+<SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Auxiliary!yaneStream_h.html#ITextOutputStream" target=_self>ITextOutputStream</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Clear()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> __cdeclOut(LPSTR fmt, ... const string&amp;)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Out()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Out()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Out()</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT OnPreCreate()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CDbg"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CDbg</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">CDebugWindowを、ローカライズしたバージョン。<BR>	CDebugWindowと同じメンバ関数を持つ。<BR>	このクラスの場合、Run()は不要で、Outしたときに必要とあらば<BR>	自動的にデバッグウィンドゥを開く。デバッグ用途には、これが便利。<BR><BR>	例<BR>	CDbg().Out("x = %d",x);<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Auxiliary!yaneStream_h.html#ITextOutputStream" target=_self>ITextOutputStream</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Clear()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> __cdeclOut(LPSTR fmt, ... i)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Out(<SPAN class="reserved_word">int</SPAN> i)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Out()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Out()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">void</SPAN> SelectWindow(<SPAN class="reserved_word">int</SPAN> nDebugWindowNo)</DIV>
+<DIV class="comment_block">デバッグウィンドゥのナンバーを指定する。0～9。defaultでは0。<BR>		こいつを変更することで、出力先を変更できる。<BR>		（複数のデバッグウィンドゥを作成できる。）<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> CheckValid()</DIV>
+<DIV class="protected_member"><A class="class_link" href="Window!yaneDebugWindow_h.html#CDebugWindow" target=_self>CDebugWindow</A>* GetWindow()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="Window!yaneDebugWindow_h.html#CDebugWindow" target=_self>CDebugWindow</A>* m_lpDebugWindow[10]</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">int</SPAN> m_nTarget</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="Thread!yaneCriticalSection_h.html#CCriticalSection" target=_self>CCriticalSection</A> m_cs</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="Thread!yaneCriticalSection_h.html#CCriticalSection" target=_self>CCriticalSection</A>* GetCriticalSection()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">static</SPAN> <SPAN class="reserved_word">void</SPAN> Release(<SPAN class="reserved_word">int</SPAN> nTarget)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

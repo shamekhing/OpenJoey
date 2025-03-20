@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CStringScanner</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CStringScanner</FONT><A name="CTimeBase"></A> <FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>文字列の解析のサポートをします。<A href="CTextDraw.html">CTextDraw</A>,<A href="CScenarioView.html">CScenarioView</A>で実際に使っているので、CTextDrawの実装を見ると参考になるでしょう。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>static bool IsToken(LPSTR &amp;lp,LPSTR lp2);
+// トークンチェック<BR>
+// 一致後は、その分だけlpは前進する</P>
+<P>static LRESULT SkipTo(LPSTR &amp;lp,LPSTR
+lp2); // 指定トークンまで読み飛ばし<BR>
+// 一致後は、その分だけlpは前進する。'\0'に出くわしたら非0が返る</P>
+<P>static LRESULT SkipTo2(LPSTR &amp;lp,LPSTR
+lp2,LPSTR lp3); // 指定トークンまで読み飛ばし<BR>
+// 一致後は、その分だけlpは前進する。'\0'に出くわしたら非0が返る<BR>
+// lp3(bufは呼び出し側で用意すること)には、スキップするまでの文字列が入る</P>
+<P>static LRESULT SkipSpace(LPSTR &amp;lp);
+// スペース、タブ、改行を切り詰める<BR>
+// '\0'に出くわしたら非0が返る</P>
+<P>static LRESULT SkipSpace2(LPSTR &amp;lp);
+// スペース、タブ、改行、カンマを切り詰める<BR>
+// '\0'に出くわしたら非0が返る</P>
+<P>static LRESULT GetStrNum(LPSTR &amp;lp,int&amp;
+nRate);<BR>
+// &quot;+1&quot;という文字列ならばnRateには1が返る</P>
+<P>static LRESULT GetNum(LPSTR &amp;lp,int&amp;
+nVal);<BR>
+// +1という文字列ならばnRateには1が返る</P>
+<P>static LRESULT GetStrColor(LPSTR &amp;lp,COLORREF&amp;
+m_nFontColor);<BR>
+// &quot;#ff0000&quot;という文字列ならばRGB(255,0,0)が返る</P>
+<P>static string GetStr(LPSTR &amp;lp,CHAR c);<BR>
+// cに遭遇するところまでの文字列を返す </P>
+<P>static string GetStr(LPSTR &amp;lp);<BR>
+// スペース、タブ、改行に遭遇するまでの文字列を返す
+</P>
+<P>static string GetNextStr(LPSTR &amp;lp);<BR>
+１．スペース、タブ、改行をまず読み飛ばす<BR>
+２．文字列が始まっている場所から、再度スペース、タブ、改行に遭遇するまでの文字列を取得して返す<BR>
+３．文字列がダブルコーテーション( &quot;
+)で始まっている場合は、再度、ダブルコーテーションに遭遇するまでのところの文字列を返す。（ダブルコーテーションは文字列には含まれない）</P>
+<P>ファイル名を定義ファイルから読み込むときなどに使うと良い。</P>
+<P>static LRESULT GetNumFromCsv(LPSTR &amp;lp,int&amp;
+nVal,,bool bSkip=false);<BR>
+// カンマ、スペースを無視しながら数値を読み込む。CSVというのは、Microsoft
+Excelなどで出力できる、カンマ区切りのテキスト形式。bSkip
+== trueの場合、GetNumFromCsvをしたあとは必ず次の,は無くなります。(bSkip==falseならば、無くなりません)　1,2,3で一回Getすると2,3になります。,,2,3ならば、エラーが返し値として返り、次の,が無くなり、,2,3となります。</P>
+<P>static void Replace(string&amp; buf,LPCSTR
+pSrc,LPCSTR pDst,bool bCaseSensitive=true);<BR>
+// string中に含まれるpSrcと一致する部分をpDstに置換する<BR>
+// 日本語（マルチバイト文字）対応。bCaseSensitive==trueのときは、<BR>
+// アルファベットの大文字小文字を区別する。</P>
+<P>// 数字と文字列の相互変換関数<BR>
+// 先頭のスペースは無視しない<BR>
+static LRESULT StringToNum(string s,LONGLONG&amp;
+l);<BR>
+static void NumToString(LONGLONG l,string&amp;
+s);<BR>
+static string NumToString(LONGLONG l);</P>
+<HR>
+</BODY></HTML>

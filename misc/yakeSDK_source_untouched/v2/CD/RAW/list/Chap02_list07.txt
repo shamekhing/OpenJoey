@@ -1,0 +1,13 @@
+template<class T>
+	class auto_ptr {
+public:
+	typedef T element_type;
+	explicit auto_ptr(T *p = 0) throw();
+	auto_ptr(const auto_ptr<T>& rhs) throw();
+	auto_ptr<T>& operator=(auto_ptr<T>& rhs) throw();
+	~auto_ptr();
+	T& operator*() const throw();
+	T *operator->() const throw();
+	T *get() const throw();
+	T *release() const throw();
+};

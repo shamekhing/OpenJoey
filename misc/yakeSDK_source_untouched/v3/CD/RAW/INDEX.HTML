@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=x-sjis">
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.4 for Windows">
+<title>yaneSDK3rd style どんどんDLするなりよ</title>
+</head>
+
+<BODY bgcolor="#a6ee91" background="../sora.jpg">
+<P align="center"><FONT color="#cc0000"><B><FONT size="+2">ｙａｎｅGameＳＤＫ3rd styleダウンロードページ</FONT></B></FONT></P>
+<HR>
+<P><FONT color="#009900"><B><FONT size="+2">☆　本体・マニュアル・ツール関連</FONT></B></FONT></P>
+<P>これさえあれば、あなたもプロフェッショナルプログラマー！？</P>
+<P><FONT color="#009999">【yaneuraoGameSDK3rd style本体／マニュアル】</FONT></P>
+<P>【最新版】<BR>
+<BR>
+<A href="yaneSDK3rd0307161139.zip">yaneSDK3rd 1.40</A>　(new '03/07/16) : 安定版。VC++6/.NET/.NET2003
+, BCC5.5/BCB5/6でコンパイル可能!!!<BR>
+<BR>
+<BR>
+マニュアルは整備中。しばらくはyaneSDK2ndのものを見てください。あと、全体的な解説は、<A href="http://www.sun-inet.or.jp/~yaneurao/yaneSDK3rd/chap0000.html">こちら</A>が参考になるかも。</P>
+<P>yaneSDK3rdのアーカイブのなかには、CVSというフォルダ、ファイルが含まれています。これはいままでのバージョンを管理するためのものです。(⇒CVSについて興味のある人は、WinCVS等について調べてみると良いです)　とは言っても不要な人にとっては無用の長物なので、「cvs_delete.bat」というバッチファイルを実行すればCVS関連のファイルが一掃されるようになっています。<BR>
+</P>
+<P><FONT color="#009999">【関連ツール類】</FONT></P>
+<P>yanePackDx1.00 yaneuraoGameSDK3rd で使える階層化圧縮アーカイバ(133k)
+(New '02/03/15)→yaneSDK2ndのところからDLしてねん</P>
+<P><FONT color="#009900"><B><FONT size="+2">☆　サンプル</FONT></B></FONT></P>
+<P><FONT color="#990099"><B><FONT size="+1">その他、このクラスの使いかたがわからないとかサンプルについて要望があればお気軽に<A href="mailto:yaneurao@sun-inet.or.jp">メール</A>か、<A href="http://isweb19.infoseek.co.jp/computer/yaneurao/yaneSDK2nd/index2.html">こちら</A>の掲示板でどうぞ。バグを発見された方とか、マニュアルの誤記とかも教えていただけると助かります＾＾；</FONT></B></FONT></P>
+<CENTER>
+<TABLE border="1">
+  <TBODY>
+    <TR>
+      <TD bgcolor="#ffffff">version 1.31からyaneSDK3rd側のプリコンパイル済みヘッダの場所を変更しました。<BR>
+      古いサンプルをコンパイルするためには、サンプルのソース内にあるyaneSDK3rdの<BR>
+      プリコンパイル済みヘッダを参照している部分を次のように書き換える必要があります。<BR>
+      <BR>
+      stdafx.h<BR>
+      #include &quot;../../yaneSDK/AppFrame/stdafx.h&quot;<BR>
+      　　　　　　↓　　　　↓　　　　↓<BR>
+      #include &quot;../../yaneSDK/stdafx.h&quot;<BR><BR>
+      また以下の「サンプル２」は、全コンパイラ用のプロジェクトファイルを添付してありますので、<BR>
+      これをベースに調整していただけると良いかと思います。<BR>
+      <BR>
+      あと、yaneSDK3rd本体のほうのProject Filesというフォルダに各プラットフォーム用<BR>
+      yaneSDK3rdのプロジェクトファイルが入っています。そちらもご利用ください。<BR>
+      </TD>
+    </TR>
+  </TBODY>
+</TABLE>
+</CENTER>
+<P><BR>
+</P>
+<P><A href="sample1.lzh">サンプル１</A>：フラグのデバッグ用のウィンドゥクラス。別ウィンドゥでフラグを表示し、８進・１０進・１６進での表示／エディットを可能にします。ゲームのデバッグ等に非常に便利です。(update
+'03/03/21)<BR>
+　使用クラス：CFastDraw , CFastPlane , delegate
+, CKey , etc..</P>
+<P><A href="sample2.zip">サンプル２</A>：BGと立ち絵(YGA画像)を通常/加色/減色合成描画するだけの基本的なソース。(new
+'03/03/23 update '03/07/15)<BR>
+　使用クラス：CFPSTimer , CPlane , etc..</P>
+<P><A href="sample3.lzh">サンプル３</A>：レジストリ操作のテスト。また、窓を作らずに、スレッドを呼び出すタイプのプログラムのサンプルにもなっています。(new
+'03/03/29)<BR>
+　使用クラス：CRegistry , CThread</P>
+<P><A href="sample4.lzh">サンプル４</A>：スペースキーを押すと画面全体をキャプチャー(BMPファイルに保存)するソフト。(new
+'03/04/09)<BR>
+　使用クラス：CKey , CDIBitmap</P>
+<P><A href="sample5.lzh">サンプル５</A>：やね本の原稿コンバート用に使ってるプログラム。このホームページのyaneSDK3rdのリファレンスと、C++Maniaxもこれで書いてまする。(new
+'03/04/10 update '03/04/25)<BR>
+　使用クラス：CDir , CStringScanner</P>
+<P><A href="sample7.lzh">サンプル７</A>：lambda processor。ダイアログのサンプルに、ラムダプロセッサ作っちゃいました(new
+'03/04/15)<BR>
+　使用クラス：CDialogHelper , CStringScanner<BR>
+<A href="sample7b.lzh">サンプル７b</A>：↑のNew バージョンでけたーヽ（´ー｀）ノ(new
+'03/04/16)</P>
+<P><A href="sample8.lzh">サンプル８</A>：ボタン・エディットボックス、ピクチャーコントロール等、標準ダイアログの使用例　(new
+'03/04/25 update '03/04/28)<BR>
+　使用クラス：CDialogHelper , CMessagePooler</P>
+<P><B><FONT size="-1" color="#009900">※　ダイアログに関しては、tck/tkのようなツールを呼び出すべきなんでしょうね．．。あまりwindows標準のダイアログをwrapするクラスを作りまくっても仕方ないような気がしないでもない今日このごろ。</FONT></B></P>
+<P><A href="sample10.zip">サンプル10</A>(TaskSystem)：ゲームでよく用いるタスクシステムを汎用的なクラスとして用意しました。ただ、タスクシステムというのはゲームに合わせてカスタマイズするべきなので、このクラスには基本的なメンバしか用意してありません。もし評判が良ければ、yaneSDK3rdのほうにこのタスクシステムを取り込む予定です。(new
+'03/06/11)</P>
+<P><A href="sample11.zip">サンプル11</A>(MD5)：MD5を計算するクラス。RSA Data Security,
+Incの Message-Digest Algorithmだそうな。(new
+'03/06/17)</P>
+<P><A href="sample12.zip">サンプル12</A>(dir compare)：指定したフォルダに存在するファイルの(相対パス付き)ファイル名,ファイルサイズ,MD5をリストに書き出します。その書き出されたファイルリストと、特定フォルダの内容を比較することが出来ます。互いに離れた２つの場所で同じファイルセットであるかどうかをチェックするのに使うことが出来ます。(new
+'03/06/18)<BR>
+　使用クラス:CFolderDialog</P>
+<P><A href="sample13.zip">サンプル13</A>(sprite)：スプライト機能を実現するクラス(yaneSDK2ndからの移植)
+(new '03/06/19)<BR>
+　使用クラス:CSprite , CSpriteChara</P>
+<P><A href="sample14.zip">サンプル14</A>(Thread)：Java互換スレッド機構によるマルチスレッドのデザインパターン10種類
+(new '03/07/02 update '03/07/14)<BR>
+　使用クラス:IThread, CThread , CThreadManager,
+shared_ptr , JavaのObject型風クラス( shared_ptr&lt;void&gt;
+), CLockObject , CThreadPoolなどなど。マルチスレッドの頻出パターンを網羅！</P>
+<P><A href="sample16.zip">サンプル16</A>(layered sprite)：CSurfaceCacheクラスによって、スプライト間の優先順位を設定できているところに注目してください。このクラスを用いれば、スプライトに限らず、ISurfaceを用いるあらゆる描画に対して優先順位のコントロールが可能です
+(new '03/07/16)<BR>
+　使用クラス:CSurfaceCache</P>
+<P><A href="sample17.zip">サンプル17</A>(micro thread)：マイクロスレッドを用いれば、Win32のfiberのようなことが実現できます。ゲームのタスクも、これを利用して書けば非常に楽になります。(new
+'03/07/16)<BR>
+　使用クラス:CMicroThread</P>
+<P><A href="sample18.zip">サンプル18</A>(CLoadCache)：サウンドローダー、プレーンローダー等の使用方法のサンプル。(new
+'03/07/16)<BR>
+　使用クラス:CLoadCache,CSoundLoader,CSoundFactory,CSELoader,CPlaneFactory,CPlaneLoader</P>
+<P>・<B><FONT size="+1">DLL系</FONT></B>(yaneSDK3rd、あるいはそのほかのプログラムから呼び出して使えるDLL)
+：サンプルの番号は、↑からの通しナンバーになっているので、跳び番です（＾＾；</P>
+<P><A href="sample6.lzh">サンプル６</A>：DLL側のクラスをMAIN側から利用したり、あるいはDLLから別のDLLにあるクラスを利用したり、DLL側からMAIN側にあるクラスを利用したり．．そういう不思議なことが出来ちゃうソース。(new
+'03/04/11)<BR>
+　使用クラス：CObjectCreator</P>
+<P><A href="sample9.lzh">サンプル９</A>：DLL側でyaneuraoGameSDK3rdの機能を全部使えるようにして、かつ他のDLLに、yaneuraoGameSDK3rdのクラスをexportしたり実行ファイル(EXEファイル)側から呼び出せたり、ともかくいろいろしちゃえる方法がわかるソース。(new
+'03/05/01)<BR>
+　使用クラス:CObjectCreaterと、yaneConfig.hにあるCOMPILE_YANE_PLUGIN_DLLの使いかたがワカル！</P>
+<P><A href="sample15.zip">サンプル15</A>：日本語対応正規表現検索/置換を実現するplug
+in dll。yaneSDK3rdからならば簡単に呼び出せる。他の環境からでも、まあ呼び出せなくはない。boost::regexをPerl風に呼び出して使えるようにwrapして、日本語対応させたもの。UNICODEだけでなくSHIFT_JIS,EUC,JIS対応ね。(new
+'03/07/13)<BR>
+</P>
+<HR>
+<p align="left"><a href="http://www.sun-inet.or.jp/~yaneurao/">戻る</a></p>            
+</BODY>            
+</html>            

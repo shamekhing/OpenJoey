@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Auxiliary/yaneCOMBase.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="CCOMBase"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CCOMBase</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">COMは、スレッドベースで初期化しなければならない。<BR>	よって、COMを使う前には、inc_ref関数を呼び出し、<BR>	COMを使い終わったときには、dec_refを呼び出せば良いクラス<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> LRESULT inc_ref()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">static</SPAN> LRESULT dec_ref()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="Thread!yaneThreadLocal_h.html#ThreadLocal" target=_self>ThreadLocal</A>&lt;int&gt; m_nCount</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="Thread!yaneCriticalSection_h.html#CCriticalSection" target=_self>CCriticalSection</A> m_cr</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="Thread!yaneCriticalSection_h.html#CCriticalSection" target=_self>CCriticalSection</A>* GetCriticalSection()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CCOMObject"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;T</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CCOMObject</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">CoCreateInstance～ReleaseInstanceのwrapper<BR>	T はCOMオブジェクト<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT CreateInstance(REFCLSID clsid, REFIID guid)</DIV>
+<DIV class="comment_block">インスタンスを生成する<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT Release()</DIV>
+<DIV class="comment_block">インスタンスを解放する<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">T get()</DIV>
+<DIV class="comment_block">生成したオブジェクトを取得する<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">operator T*()</DIV>
+<DIV class="public_member">T&amp; operator*()</DIV>
+<DIV class="public_member">T* operator-&gt;()</DIV>
+<DIV class="comment_block">暗黙変換子<BR>-&gt; 演算子も定義しておく<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CCOMObject()</DIV>
+<DIV class="public_member"> virtual ~CCOMObject()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">T pObj</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CLoadLibraryWrapper"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CLoadLibraryWrapper</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">LoadLibrary～ReleaseLibraryのwrapper<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT Load(<SPAN class="reserved_word">const</SPAN> string&amp; libname)</DIV>
+<DIV class="comment_block">DLLのLoad<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> Release()</DIV>
+<DIV class="comment_block">DLLのRelease<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN>* GetProc(<SPAN class="reserved_word">const</SPAN> string&amp; funcname)</DIV>
+<DIV class="comment_block">DLL内の関数アドレスの取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">HINSTANCE Get()</DIV>
+<DIV class="comment_block">読み込んだDLLのインスタンスを返す<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CLoadLibraryWrapper()</DIV>
+<DIV class="public_member"> virtual ~CLoadLibraryWrapper()</DIV>
+<DIV class="protected_member">HINSTANCE m_hDLL</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

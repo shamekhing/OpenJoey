@@ -1,0 +1,31 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CStreamSound</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CStreamSound</FONT><A name="CTimeBase"></A>　<FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>WAVE(圧縮WAVE,MP3を含む)のストリーム再生を行ないます。圧縮WAVEには、それ用のCODECがインストールされていること、DirectShowが使えることが前提となります。(後者によりDirectX6.1以降がインストールされていることが必須条件になります）
+MP3のID2v3タグにも対応しています。（実際のサンプルが無いので動作は未確認）</P>
+<P>無圧縮WAVEのストリーム再生自体は、CODECもDirectShowも不要です。DirectX3さえ動けば動作します。</P>
+<P>このクラス自体は、<A href="CSoundBase.html">CSoundBase</A>の派生クラスなので、<A href="CSound.html">CSound</A>、<A href="CMIDIOutput.html">CMIDIOutput</A>と親和性が高いです。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P><A href="CSoundBase.html">CSoundBase</A>と同じです。<BR>
+<A href="CSound.html">CSound</A>に似せるために、以下の関数を追加しました。</P>
+<P><FONT color="#009900">LRESULT Load(const string&amp; filename);<BR>
+LRESULT Release(void); // Waveの解放</FONT></P>
+<P>外部プラグインによるファイルの読み込みに対応しました。CStreamSoundのコンストラクト時にデフォルトのCPCMReaderFactoryが用意されます。GetReaderFactory()でfactoryを取得して、AddPlugin()することによって、任意のオーディオ形式のファイルをOpen()できるようになります。</P>
+<P><FONT color="#009900">virtual void SetReaderFactory(smart_ptr&lt;CPCMReaderFactory&gt; lpPlugin);
+<BR>
+virtual void SetReaderFactory(string PluginFilename);
+<BR>
+virtual smart_ptr&lt;CPCMReaderFactory&gt; GetReaderFactory(void);</FONT></P>
+<P><FONT color="#009900">- 使用例 -<br>
+　CStreamSound bgm;<br>
+　bgm.GetReaderFactory()->AddPlugin("plugin/OggVorbisPlugin.dll");<br>
+　bgm.Open("flower.ogg");<br>
+　bgm.Play();
+</FONT></P>
+<HR>
+</BODY></HTML>

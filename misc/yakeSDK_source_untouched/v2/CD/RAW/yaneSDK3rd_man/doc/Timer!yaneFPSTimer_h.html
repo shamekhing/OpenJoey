@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Timer/yaneFPSTimer.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="IFPSTimer"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">IFPSTimer</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetFPS(DWORD fps)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> DWORD GetFPS()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> DWORD GetRealFPS()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> DWORD GetCPUPower()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> DWORD GetSkipFrame()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> ResetTimer()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> WaitFrame()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> ToBeSkip()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> ResetElapseTimeCounter()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> DWORD GetElapseTimeCounter()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> ResetCallCounter()&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> DWORD GetCallCounter()&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> virtual ~IFPSTimer()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CFPSTimer"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CFPSTimer</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">時間を効率的に待つためのタイマー。<BR>	フレームレート（一秒間の描画枚数）を６０ＦＰＳ（Frames Par Second）に<BR>	調整する時などに使う。<BR><BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Timer!yaneFPSTimer_h.html#IFPSTimer" target=_self>IFPSTimer</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> SetFPS(DWORD fps)</DIV>
+<DIV class="comment_block">FPSの設定（イニシャライズを兼ねる）<BR>		ディフォルトでは６０ＦＰＳ。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> DWORD GetFPS()</DIV>
+<DIV class="comment_block">FPSの取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> DWORD GetRealFPS()</DIV>
+<DIV class="comment_block">FPSの取得（測定値）<BR>		1秒間に何回WaitFrameを呼び出すかを、<BR>		前回32回の呼び出し時間の平均から算出する。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> DWORD GetCPUPower()</DIV>
+<DIV class="comment_block">CPU稼動率の取得（測定値）<BR>		ＣＰＵの稼働率に合わせて、0～100の間の値が返る。<BR>		ただしこれは、WaitFrameでSleepした時間から算出されたものであって、<BR>		あくまで参考値である。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> DWORD GetSkipFrame()</DIV>
+<DIV class="comment_block">SetFPSされた値までの描画に、ToBeSkipがtrueになっていたフレーム数を返す。<BR>	ただし、ここで言うフレーム数とは、WaitFrameの呼び出しごとに<BR>	１フレームと計算。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> ResetTimer()</DIV>
+<DIV class="comment_block">待ち時間の端数のリセット（普通、使う必要はない）<BR>		WaitFrameでは、前回のWaitFrameを呼び出した時間を、今回の待ち時間を<BR>		算出するのに使う（SetFPSで設定した値に近づけようとするため、前回、<BR>		不足していた時間を今回の待ち時間から減らす）ので、前回の呼び出し時間を<BR>		現在時にすることによって、今回の待ち時間への修正項を消すのがこの関数。<BR>		通常、使うことは無い。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> WaitFrame()</DIV>
+<DIV class="comment_block">１フレーム分の時間が来るまで待つ<BR>	　	メインループのなかでは、描画処理を行なったあと、<BR>		このWaitFrameを呼び出せば、SetFPSで設定した<BR>		フレームレートに自動的に調整される。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">bool</SPAN> ToBeSkip()</DIV>
+<DIV class="comment_block">次のフレームをスキップすべきか？<BR>	もし、これがtrueを返してくるならば、そのフレームの描画をまるごと<BR>	スキップしてしまえば（ただし、キャラの移動等の計算だけは行なう）、<BR>	秒間のＦＰＳは遅いマシンでも一定と仮定してプログラムすることが出来る。<BR>	ただし、そのときもWaitFrameは呼び出すこと。<BR>	詳しい解説は、やねうらおのホームページ<BR>		http://www.sun-inet.or.jp/~yaneurao/<BR>	の天才ゲームプログラマ養成ギプス第２１章を参照のこと。<BR><BR>	また、フレームをスキップするかどうかは、WaitFrameの段階で確定する。<BR>	そのため、次のWaitFrameを呼び出すまで、ToBeSkipは同じ真偽値を返し続ける。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> ResetElapseTimeCounter()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> DWORD GetElapseTimeCounter()</DIV>
+<DIV class="comment_block">WaitFrameで消費した時間を累計でカウントしている。<BR>		そのカウンタのりセットと取得するのがこの関数である。<BR>	<BR>消費時間のリセット<BR>消費時間の取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> ResetCallCounter()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> DWORD GetCallCounter()</DIV>
+<DIV class="comment_block">WaitFrameを呼び出すごとに内部的な呼び出しカウンタが<BR>		インクリメントされる。そのカウンタをリセットするのと取得するのが<BR>		この関数である。<BR>	<BR>呼出しカウンタのリセット<BR>呼出しカウンタの取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CFPSTimer()</DIV>
+<DIV class="public_member"> virtual ~CFPSTimer()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">DWORD m_dwFPS</DIV>
+<DIV class="protected_member">DWORD m_dwFPSWait</DIV>
+<DIV class="protected_member">DWORD m_dwLastDraw</DIV>
+<DIV class="protected_member">DWORD m_dwFPSWaitTT</DIV>
+<DIV class="protected_member">DWORD m_dwElapsedTime</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nUnuseSleep</DIV>
+<DIV class="protected_member">DWORD m_dwDrawTime[32]</DIV>
+<DIV class="protected_member">DWORD m_dwElapseTime[32]</DIV>
+<DIV class="protected_member">DWORD m_nDrawCount</DIV>
+<DIV class="protected_member">DWORD m_dwCallCount</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bFrameSkip</DIV>
+<DIV class="protected_member">DWORD m_dwFrameSkipCounter</DIV>
+<DIV class="protected_member">DWORD m_dwFrameSkipCounterN</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="Timer!yaneTimer_h.html#CTimer" target=_self>CTimer</A> m_vTimer</DIV>
+<DIV class="protected_member"><A class="class_link" href="Timer!yaneTimer_h.html#CTimer" target=_self>CTimer</A>* GetTimer()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

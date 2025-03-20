@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CSound</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CSound</FONT><A name="CTimeBase"></A>　<FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>サウンド再生のクラスです。一つのCSoundのインスタンスが、一つのWaveサウンドに対応します。複数のサウンドの多重再生も可能です。</P>
+<P>CDirectSoundのほうも参考にしてください。</P>
+<P><BR>
+</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P><FONT color="#009900">LRESULT Load(const string&amp; filename);<BR>
+LRESULT Release(void); // Waveの解放</FONT></P>
+<P>Waveファイルの読み込みと解放。読み込みは、.wavのほうかに、CODECを利用した圧縮WAVEファイル、MP3の読み込みをサポートしています。(CAcmクラスを利用)　CODECは、別途インストールされている必要があります。（最新版のメディアプレイヤかNewShowをインストールする必要があります。Windows2000では標準でインストールされています）
+ID3v2タグにも対応しています。（ただ、実際のサンプルが手元に無いので未確認ですが）</P>
+<P><FONT color="#009900">LRESULT Restore(void); // 保持しているファイル名に従い読み直し</FONT></P>
+<P>バッファのロスト対策です。サウンドバッファは、プライマリサウンドバッファの周波数変更等に伴ってロストします（無効な状態になる）　よって、それに応じて、この関数を呼び出してバッファを復帰させます。（通例、CDirectSoundのインスタンスが自動的に行なうので、行なう必要はありません）</P>
+<P><FONT color="#009900">LRESULT Play(void); // 再生<BR>
+<FONT color="#009900">LRESULT Play(DWORD); // 指定位置からの再生<BR>
+</FONT>LRESULT Stop(void); // 停止<BR>
+bool IsPlay(void); 　　　// 再生中ならtrue<BR>
+LRESULT Pause(void); // 再生のpause<BR>
+LRESULT Replay(void); // pauseで止めていた再生を再開。</FONT></P>
+<P>見てのとおりです＾＾<BR>
+Play(DWORD)で指定するDWORDは、指定位置から再生するためのもので、データのバイト位置を指定します。<BR>
+これは、GetPosで取得できるものです。</P>
+<P><FONT color="#009900">LRESULT SetVolume(LONG volume); // このチャンネルに対するヴォリューム設定<BR>
+LONG&nbsp;GetVolume(void)const; 　　　　　//
+このチャンネルのヴォリューム設定</FONT></P>
+<P>SetVolumeの値は、<BR>
+　DSBVOLUME_MAX（減衰なし） : 0<BR>
+　DSBVOLUME_MIX（無音） : -10000<BR>
+の間で指定します。GetVolumeの返し値も、この値の間です。</P>
+<P><FONT color="#009900">void SetLoopMode(bool bLoop); // ループで再生するか</FONT></P>
+<P>ループで再生するかの指定をします。bLoop==trueならば、ループ再生になります。</P>
+<P><FONT color="#009900">LONG&nbsp;GetPosition(void); // 再生位置を[ms]単位で返す
+-1はエラー </FONT></P>
+<P><FONT color="#009900">LONG GetFrequency(void); // 再生周波数の設定<BR>
+LRESULT SetFrequency( DWORD freq ); // 再生周波数の取得</FONT></P>
+<P>周波数は、　DSBFREQUENCY_MIN&lt;=freq &lt;=DSBFREQUENCY_MAXの範囲です。<BR>
+DSBFREQUENCY_ORIGINALを指定すると、プライマリサウンドバッファの周波数に準拠します。</P>
+<P>各定数は、DSOUND.Hで、以下のように定義されています。</P>
+<P>DSOUND.H(810): #define DSBFREQUENCY_MIN 100<BR>
+DSOUND.H(811): #define DSBFREQUENCY_MAX 100000<BR>
+DSOUND.H(812): #define DSBFREQUENCY_ORIGINAL
+0</P>
+<P><FONT color="#009900">LONG GetPos(void); // 現在の再生ポジション取得<BR>
+</FONT></P>
+<P>GetPosはエラーならば-1。再生位置をデータのバイト位置で返します。<BR>
+このGetPosで取得した値を、Play(DWORD)に渡してやれば、そのポジションからの再生が行なえます。</P>
+<P><FONT size="+1" color="#009900">☆　すべてのインスタンスに対する操作を行なうためのメンバ関数</FONT></P>
+<P><FONT color="#009900">// 現存するCSoundインスタンスすべてにアクセスするためのチェイン<BR>
+static CSoundPtrArray m_lpaSound;</FONT></P>
+<P>これは、現存するインスタンスすべてを外部から辿るために用意しています。</P>
+<P>CSoundPtrArrayの定義は、<BR>
+typedef set&lt;CSound*&gt; CSoundPtrArray;
+// チェイン<BR>
+こうなっていて、CSoundのコンストラクタとデストラクタでこの<BR>
+チェインに追加／削除しています。</P>
+<P>　例）全サウンドの停止<BR>
+　for (set&lt;CSound*&gt;::iterator it=m_lpaSound.begin();it!=m_lpaSound.end();it++){<BR>
+　　(it*)-&gt;Stop();<BR>
+　}</P>
+<P><FONT color="#009900">static LRESULT ReleaseAll(void); // 全インスタンスのWaveの解放
+<BR>
+static LRESULT RestoreAll(void); // 全インスタンスのReload<BR>
+static LRESULT SetVolumeAll(long volume);
+// 全チャンネルに対するヴォリューム<BR>
+static void StopAll(void); // 全インスタンスのStop<BR>
+static void PauseAll(void); // 全インスタンスの再生pause<BR>
+static void ReplayAll(void); // 全インスタンスpauseで止めていた再生を再開</FONT></P>
+<P><BR>
+</P>
+<P><FONT size="+1" color="#009900">☆　CDirectSoundに対する操作子</FONT></P>
+<P><FONT color="#ff0000">ただし、CSoundかCStreamSoundのインスタンスが一つ以上存在しないとCDirectSoundのインスタンスが生成されていないので、必ずCSoundのインスタンスが１つ以上生成されている場所から、この関数を呼び出してください。また、</FONT></P>
+<P><FONT color="#ff0000">　【CSoundのインスタンスの数<FONT color="#ff0000">】</FONT>＋【<FONT color="#ff0000">CStreamSound</FONT>のインスタンスの数<FONT color="#ff0000">】</FONT></FONT></P>
+<P><FONT color="#ff0000">が０から１になるとき、１から０になるとき、CDirectSoundを生成／解放するので、時間を消費します。リアルタイム性が問われる部分では気をつけてください。(下で示す、AddRefで参照カウントをインクリメントして強制的にCDirectSoundのインスタンスを生成することも出来ますが…)</FONT></P>
+<P>static LRESULT SetFormat(int nType); // プライマリサウンドバッファの周波数変更</P>
+<P>再生周波数の変更。</P>
+<P>typeのビット0→0ならばモノラル，1ならばステレオ。ビット1→0ならば8ビット,1ならば16ビット。ビット3,2→
+00ならば11KHz,01ならば22KHz,11ならば44KHz。ディフォルトは、22KHz,16ビット,ステレオなので、0111b
+= 7である。</P>
+<P>このディフォルト値である限りは、DirectSoundを協調モードで使用することが出来る。これ以外の値である場合は、優先モードで使用しなければならない。（他のソフトからはDirectSoundを利用できない状態になる）</P>
+<P>※　このSetFormatを実行した時点で、CSoundのバッファ内容はすべていったん解放され、再度読み込まれます。</P>
+<P>※　読み込むWAVEファイルと、このプライマリサウンドバッファの周波数とが違うと、読み込んだ後にフォーマット変換を内部的に行なうので、その分、処理に時間がかかります。</P>
+<P><FONT size="+1">☆　CDirectSoundの生成～解体</FONT></P>
+<P><FONT color="#009900">// こいつで参照カウントをとる<BR>
+static void AddRef(void) { if (m_nRef++==0)
+m_lpCDirectSound.Add(); }<BR>
+static void DelRef(void) { if (--m_nRef==0)
+m_lpCDirectSound.Delete(); }<BR>
+static CDirectSound* GetCDirectSound(void){
+return m_lpCDirectSound; }</FONT></P>
+<P>CDirectSoundクラスは、Singleton(アプリケーションに１つしか存在しない)なので、それを生成～解体するために、参照カウント方式を採っています。サウンドクラスを自分で用意される方は、上の３つの関数を使ってください。(CStreamSound等が参考になるでしょう)</P>
+<P><BR>
+</P>
+<P><FONT size="+1" color="#009900">☆　注意</FONT></P>
+<P>CSoundのコンストラクタに先行してウィンドゥが完成している必要があるので、CAppFrame内で使用するようにしてください。</P>
+<HR>
+</BODY></HTML>

@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>クラスリファレンス</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">各種Config</FONT> (config/yaneConfig.h)</P>
+<HR><P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>ここで、使っていないモジュールのところのdefineをコメントアウトすれば、実行ファイルが小さくなります。</P>
+<P><FONT size="+1" color="#009900">☆　定義</FONT></P>
+<P>#define USE_MIDIOutputMCI // <A href="../class/CMIDIOutput.html">CMIDIOutputMCI</A>を使うか<BR>
+#define USE_MIDIOutputDM // <A href="../class/CMIDIOutput.html">CMIDIOutputDM</A>を使うか<BR>
+// ↑これは、DirectMusicを使うので、コンパイルにはDirectX6以降のSDKがインストールされていることが必要。また、<BR>
+// 　実行するのにDirectX6以降が動作する環境でなければいけません。<BR>
+#define USE_StreamSound　 // <A href="../class/CStreamSound.html">CStreamSound</A>を使うか<BR>
+#define USE_DIB32 　　　　　　// <A href="../class/CDIB32.html">CDIB32</A>,<A href="../class/CDIBDraw.html">CDIBDraw</A>を使うか<BR>
+#define USE_DirectDraw　　　// <A href="../class/CPlane.html">CPlane</A>,<A href="../class/CDirectDraw.html">CDirectDraw</A>を使うか<BR>
+#define USE_FastDraw　　　　 // <A href="../class/CFastPlane.html">CFastPlane</A>,<A href="../class/CFastDraw.html">CFastDraw</A>を使うか</P><P>#define USE_YGA　　　　　　　// <A href="YGA.html">YGA</A>を使うか<BR>
+#define USE_MEMORY_CHECK // new,deleteごとに<A href="yaneMemory.html">ログ記録</A>を残すか？</P>
+<P>#define USE_DIRECTX<BR>
+// このオプションを外せば、<BR>
+// CDIBDrawとCDIB32オンリーで作ったウィンドゥモードでのみで<BR>
+// 動作するアプリケーションは、描画に関してはDirectX(DirectDraw)が<BR>
+// 無くても動作するようになる。</P>
+<P>#define USE_DIRECTINPUT_JOYSTICK　//　DirectInputによるJoyStickのサポート<BR>
+#define USE_WIN32_JOYSTICK　　　　　　//　Win32によるJoyStickのサポート</P>
+<P>// USE_DirectDraw & USE_DIB32 必須 <BR>
+#define USE_MovieDS　　　　　　　　// <a href="../class/CMovie.html">CMovieDSを使うか</a><br>
+//DirectShowを使う（推奨） ただしDirectX6.1以上が入っている必要がある<BR>
+// DirectShowが入っていない場合、USE_MovieAVIが定義されていればそちらで再生を試みるようになっている<br>
+#define USE_MovieAVI　　　　　　　 // <a href="../class/CMovie.html">CMovieAVIを使うか</a></P>
+<P>// 内部的にCDirectDrawかCDIB32か、どちらを用いるか指定します。<BR>
+// CDirectDrawを使用するならばUSE_DirectDrawをdefineしておくこと。<BR>
+// CDIB32を使用するならばUSE_DIB32をdefineしておくこと。<BR>
+#define USE_MovieAVI_DirectDraw<BR>
+//#define USE_MovieAVI_DIB32 // 併用不可。<BR>
+</P>
+<P>#define USE_ErrorLog // <A href="../class/CErrorLog.html">CErrorLog</A>クラスを有効にする。<BR>
+// これをdefineしなければ、CErrorLogクラスは空のクラスになり、デバッグ用のエラー<BR>
+// 文字列等はVC++の最適化によって消滅する。(8Kbyteほど実行ファイルが小さくなる)<BR>
+// ただし、これを無効に出来るのは、リリースビルドのときにのみ。</P>
+<P>#define USE_DIRECTX<BR>
+// このオプションを外せば、<BR>
+// <A href="../class/CDIBDraw.html">CDIBDraw</A>と<A href="../class/CDIB32.html">CDIB32</A>オンリーで作ったウィンドゥモードでのみで<BR>
+// 動作するアプリケーションは、描画に関してはDirectX(DirectDraw)が<BR>
+// 無くても動作するようになる。</P>
+<HR>
+</BODY></HTML>

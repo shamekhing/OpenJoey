@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CSpriteBase</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CSpriteBase</FONT><A name="CTimeBase"></A>　<FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>スプライトを定義します。スプライトとは、キャラクター、アニメーションなど一連の動きを簡単に管理するためのものです。<BR>
+このクラスは、「プレーンとその矩形領域」の集合を管理するためのクラスで、描画は担いません。スプライトの論理構造は、DirectDrawを使うか、CMapLayerを使わないのか、それともユーザーが定義したLayerによって行なうのか等とは一切無縁だからです。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>スプライトのスライス（スプライトの１コマの表示に必要になる矩形情報を保持）は、以下の構造体である。</P>
+<P>struct SSprite {<BR>
+CPlane* lpPlane; // プレーン<BR>
+RECT rcRect; // 矩形<BR>
+// ---------- 使いたければ以下のを使ってもいい
+----------<BR>
+int nOx,nOy; // 転送オフセット<BR>
+int nHeight; // 高さ(キャラのベースライン算出のため)<BR>
+bool bFast; // 抜き色無し転送か？</P>
+<P>// 補助<BR>
+void SetPlane(CPlane*lp); // プレーン全域を一つのSSpriteとする<BR>
+};</P>
+<P>これの集合を扱うための管理クラス、それがCSpriteBaseである。</P>
+<P><FONT color="#009900">void SetSprite(SSprite*); // スプライトを定義する
+lpPlane==NULLになるまで有効</FONT></P>
+<P>テキストファイルで定義されたものから読み込むには、<A href="CSpriteChara.html">CSpriteChara</A>が役に立つ。</P>
+<P><FONT color="#009900">void SetSpriteAdd(SSprite*); // スプライトを定義する。SetSpriteの1つだけスプライトを追加定義するバージョン</FONT></P>
+<P><FONT color="#009900">void Clear(void); // スプライト定義のクリア</FONT></P>
+<P><FONT color="#009900">SSprite* GetSSprite(int nAnimation); //　スプライトナンバーのSSpriteポインタを取得</FONT></P>
+<P><FONT color="#009900">int GetAnimationMax(void); // 総アニメーション枚数（SSpriteの数）の取得</FONT></P>
+<HR>
+<P><FONT size="+2">class CSprite</FONT><A name="CTimeBase"></A>　<FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>CSpriteBaseには、次にどのモーション(SSprite)を描画すべきかというような情報は保持していない。逆に、それをCSpriteBaseに保持してしまうと、同じスプライトを複数表示するときに無駄を生じてしまう。そこで、CSpriteBaseを利用して描画するのが、このCSpriteである。</P>
+<P>DirectDrawを使ったCSpriteの描画は、<A href="CDirectDraw.html">CDirectDraw</A>のメンバによって行なうことは出来ますので、そちらも参照してください。</P>
+<P><FONT color="#cc0000">要するに、スプライトの１コマがSSprite。それの配列を管理するのがCSpriteBase、その配列の何番目をいま表示しているかなどモーションカウントを管理するのがこのCSpriteなのです。</FONT></P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P><FONT color="#009900">void SetSprite(CSpriteBase*lpSpriteBase);
+// スプライトベースの設定</FONT></P>
+<P>ベースとなるCSpriteを設定。</P>
+<P><FONT color="#009900">void SetDirection(int nDirection); // 方向設定<BR>
+int GetDirection(void); // 方向取得</FONT></P>
+<P>SetSpriteで設定されたlpSpriteBase + nDirectionが、表示すべきスプライト。nDirectionはディフォルトでは0。また、アニメーションカウンタは、SetDirectionしたときに、現在の内部的に保持しているDirectionと異なれば0にリセットされる。</P>
+<P><FONT color="#009900">void SetMotion(int n);<BR>
+int GetMotion(void);<BR>
+</FONT><FONT color="#009900">void IncMotion(void); // アニメーションカウンタを進める</FONT><BR>
+<FONT color="#009900">bool IsEnd(void);</FONT></P>
+<P>アニメーションカウンタ（現在、何番目のモーションを表示しているか）を指定／取得する。</P>
+<P><FONT color="#009900">SSprite* GetSSprite(void):</FONT></P>
+<P>現在のアニメーションカウンタが指定するSSpriteのポインタを返す。描画クラスでは、これを受け取って描画するべし。</P>
+<P><FONT color="#009900">void Enable(bool bEnable);<BR>
+bool IsEnable(void);</FONT></P>
+<P>有効／無効を決定するフラグ。描画クラスでは、これを見て表示するのか表示しないのかを決定すべし。</P>
+<P><FONT color="#009900">void SetPos(int x,int y);<BR>
+void GetPos(int&amp;x,int&amp;y);</FONT></P>
+<P>ポジションの指定。描画クラスでは、これを見て表示される位置を決定する。ただし、これを見なくてもいい。それは実装者依存。</P>
+<P><FONT color="#009900">void SetHeight(int nHeight);<BR>
+int GetHeight(void);</FONT></P>
+<P>キャラクターのベースラインを算出するときのための高さ指定。描画クラスでは、これを見てキャラクターの高さを決定する。ただし、これを見なくてもいい。それは実装者依存。</P>
+<P><FONT color="#009900">void SetOffset(int nOffsetX,int nOffsetY);
+// 追加オフセット量を定義する（初期値(0,0)）<BR>
+void GetOffset(int&amp; nOffsetX,int&amp;
+nOffsetY); // 追加オフセット量を取得する</FONT></P>
+<P>同じくオフセット。</P>
+<P><FONT color="#009900">void SetLayer(int nLayer);<BR>
+int GetLayer(void);</FONT></P>
+<P>同じくレイヤ。スプライトの属するレイヤを設定する。レイヤを再現するかどうかはこのクラスをGetSSpriteで取得して描画する実装者依存。ディフォルトは8。マップレイヤ(CMapLayer)では、これをサポート。</P>
+<HR>
+<P><FONT size="+2">class CSpriteEx</FONT><A name="CTimeBase"></A>　<FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>CSpriteから派生しています。CSpriteのCMapLayerとCDirectDrawへのBltをサポートしているバージョンです。<BR>
+<A href="CSpriteLoader.html">CSpriteLoader</A>で<A href="CSpriteChara.html">CSpriteChara</A>にキャラ設定を読み込み、そこからGetSpriteしたものを、CSpriteEx::SetSpriteして、あとはCSpriteEx::Bltで描画するというのが、案外便利です。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ</FONT></P>
+<P><FONT color="#009900">void Blt(CMapLayer*lpMap);<BR>
+void Blt(CMapLayer*lpMap,int x,int y);<BR>
+void BltFix(CMapLayer*lpMap);<BR>
+void BltFix(CMapLayer*lpMap,int x,int y);<BR>
+<FONT color="#009900">void BltOnce(CMapLayer*lpMap,int x,int y);<BR>
+</FONT>void Blt(CDirectDraw*lpDraw,LPRECT lpClip=NULL);<BR>
+void Blt(CDirectDraw*lpDraw,int x,int y<FONT color="#009900">,LPRECT lpClip=NULL</FONT>);<BR>
+void BltFix(CDirectDraw*lpDraw<FONT color="#009900">,LPRECT lpClip=NULL</FONT>);<BR>
+void BltFix(CDirectDraw*lpDraw,int x,int
+y<FONT color="#009900">,LPRECT lpClip=NULL</FONT>);</FONT><BR>
+<FONT color="#009900">void BltOnce(CDirectDraw*lpDraw,int x,int
+y<FONT color="#009900">,LPRECT lpClip=NULL</FONT>);</FONT><BR>
+<FONT color="#009900">void Blt(CPlaneBase*lpPlane,LPRECT lpClip=NULL);<BR>
+void Blt(CPlaneBase*lpPlane,int x,int y,LPRECT
+lpClip=NULL);<BR>
+void BltFix(CPlaneBase*lpPlane,LPRECT lpClip=NULL);<BR>
+void BltFix(CPlaneBase*lpPlane,int x,int
+y,LPRECT lpClip=NULL);<BR>
+void BltOnce(CPlaneBase*lpPlane,int x,int
+y,LPRECT lpClip=NULL);</FONT></P>
+<P>CMapLayerとCDirectDrawへの描画をサポートしています。x,yを指定するものは、その座標に描画、指定しないものはCSprite::SetPosで設定された場所に描画されます。lpClipは、転送先のクリッピングです。ディフォルトのNULLならば転送先クリップは無しです。</P>
+<P>BltFixとなっている関数は、描画後もアニメーションカウンタをインクリメントしません。BltOnceは、アニメーションカウンタはインクリメントしていきますが、アニメーションカウンタが、最後まで行っても、リセットはしません。</P>
+<P><FONT size="+1" color="#009900">☆　注意点</FONT></P>
+<P>スプライトは、CSpriteChara::Load(&nbsp;)したときに、CAppManager::IsDirectDraw(
+)でDirectDrawを使用中かどうかを調べて、CPlane
+, CDIB32のどちらかをCreateします。この仕組みは、CPlaneBase::CreatePlane(
+)によって実現されます。そこで、DirectDrawを使いながらCreateSecondaryDIB(
+)をして、そこにスプライト描画をしようとする場合、CDIB32のスプライトを作らないといけないのに、ディフォルトではCPlaneのスプライトが出来てしまいます。これを回避するには、CPlaneBase::SetPlaneBaseFactoryで、CDIB32のFactoryを渡してやることです。詳しくは、<A href="CPlaneBase.html">CPlaneBase</A>::CreatePlane( )をご覧ください。</P>
+<HR>
+</BODY></HTML>

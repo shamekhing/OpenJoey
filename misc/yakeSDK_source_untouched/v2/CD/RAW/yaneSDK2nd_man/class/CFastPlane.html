@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CFastPlane</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CFastPlane</FONT><A name="CTimeBase"></A> <FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P><A href="CFastDraw.html">CFastDraw</A>で使用するプレーンです。<A href="CDirectDraw.html">CDirectDraw</A>に対する<A href="CPlane.html">CPlane</A>の関係と同じです。</P>
+<P>エフェクトについては、<A href="../etc/Effect.html">こちらの解説</A>をどうぞ。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>メンバは、<A href="CPlane.html">CPlane</A>や<A href="CDIB32.html">CDIB32</A>とほぼ同じ。ほとんどの関数は、CPlaneかCDIB32に同名の関数が存在するはずなので、そちらを見れば意味はわかるはずです。</P>
+<P>GetPlaneInfo( )メンバ関数で、構造体<A href="CFastPlaneInfo.html">CFastPlaneInfo</A>を取得して、自前で転送することも出来ます。</P>
+<P><FONT size="+1" color="#009900">☆　実体は何か？</FONT></P>
+<P>技術的な解説は、こちらをご覧ください。（私のホームページから抜粋）</P>
+<P><FONT color="#009900">　<A href="../etc/diw1.html">Lesson 1.</A> &nbsp;超高速描画の謎【前編】&nbsp;'01/10/04
+update '01/10/28</FONT><BR>
+<FONT color="#009900">　<A href="../etc/diw2.html">Lesson 2.</A> &nbsp;超高速描画の謎【後編】&nbsp;'01/11/03</FONT></P>
+<P>内部的には、DirectDrawSurfaceを作成しています。プライマリサーフェースのみがビデオメモリ上で、セカンダリサーフェース以降が、システムメモリ上に作成しています。サーフェース間の転送においては、IDIRECTDRAWSURFACE::Bltは一切使用していません。これは、システムメモリ間の転送の場合、ハードウェアアクセラレーションが期待できないため、結局ソフトウェアに頼らざるを得ないわけですが、ドライバメーカーが書いたようなコードでは、ものによっては使いものにならないほど遅いためです。よって、すべて自前で転送しています。</P>
+<P>ただし、すべての解像度用のルーチンを書くのは大変なので、functorを用いているわけです。その実装については、yaneFastPlane.cppのCFastPlane::Bltメンバ関数や、yaneGTL.hをご覧ください。</P>
+<P>また、<A href="../etc/YGA.html">YGA画像</A>も使えるようにするために、α情報を持ったサーフェースを作ることもあります。これは、DirectDrawSurfaceでは無く、勝手にメモリ上に確保されたサーフェースです。</P>
+<P>そこで、以下のピクセルフォーマットに対応しています。(左の数字は、CFastPlane::GetSurfaceTypeの返し値)</P>
+<P><FONT color="#009900">2: 8bpp<BR>
+3: 16(RGB565)<BR>
+4: 16(RGB555)<BR>
+5: 24(RGB888)<BR>
+6: 24(BGR888)<BR>
+7: 32(XRGB8888)<BR>
+8: 32(XBGR8888)<BR>
+10: 16+a4(ARGB4565)<BR>
+11: 16+a4(ARGB4555)<BR>
+12: 32(ARGB8888)</FONT><BR>
+<FONT color="#009900">13: 32(ABGR8888)</FONT></P>
+<P>ただし、8bppのときには、パレットですので半透明等が使えなくなります。そこで、内部的にRGB555のサーフェースを作成し、これをセカンダリサーフェースとして扱い、CFastDraw::OnDrawのなかで、8bppのセカンダリサーフェース256に転送し、そこからプライマリサーフェースへ転送するという方法をとります。また、このとき作成するRGB555のサーフェースは、16bitのDIBSectionであり、GetDCで、HDCを取得できることも保証します。これにより、8bppモードを意識すること無く、8bppモードにも対応することが可能となります。</P>
+<P>また、α付きサーフェースを作成する場合は、<BR>
+１．LoadでYGA画像を読み込む<BR>
+２．SetYGAUse(true)としてから、通常画像(bmp,jpeg)をLoadで読み込む<BR>
+３．SetYGAUse(true)としてから、CreateSurfaceでサーフェースを作成する<BR>
+４．CreateSurfaceの第３パラメータ（暗黙ではfalse）にtrueを指定する</P>
+<P>のいずれかによって、自動的に現在のセカンダリサーフェースとコンパチなα付きサーフェースが作成されます。</P>
+<P>ここで言う、コンパチな、とはRGB565ならば、ARGB4565、RGB555ならば、ARGB4555、RGB888ならば、ARGB8888、BGR888ならばABGR8888、XRGB8888ならばARGB8888、XBGR8888ならばABGR8888というように、親和性のある（ピクセルフォーマットの似た）サーフェースのことです。コンパチなα付きサーフェースからの転送は、たいていサポートされています。（例：Blt,BltFast,BlendBlt,AddColor,...）</P>
+<P>α付きサーフェースであるかどうかは、CFastPlane::IsYGA(
+)で調べることが出来ます。</P>
+<P><FONT size="+1" color="#009900">☆　自動修復サーフェース</FONT></P>
+<P>このクラスで、特徴的なのは、</P>
+<P>// 自動修復サーフェースにする(default:false)<BR>
+// (これだとLostしない。ただし、32bpp-&gt;16bppのような変換によってビット深度が失われる)<BR>
+<FONT color="#009900">void SetAutoRestore(bool bEnable) { m_bAutoRestore
+= bEnable; }<BR>
+bool GetAutoRestore() { return m_bAutoRestore;
+}<BR>
+</FONT></P>
+<P>で、自動修復サーフェースに出来ること。本来、DirectDrawSurfaceは、画面モードが切り替わったときにLostしてしまうのですが、メモリ上のサーフェースはLostしません。そこで、画面モードが切り替わったときに、ピクセルフォーマットを考慮して自前で変換しながら転送してやれば、サーフェースを修復できます。</P>
+<P>ただし、32bpp -&gt; 16bppのように変換すれば、ビット深度を失ってしまうので、そのあと16bpp
+-&gt; 32bppというように変換しても、元の画像にはなりません。このことを考慮して、ビットマップを読み込んでいるサーフェースでは、再度、ファイルから自動的に読み込むようになっています。SetAutoRestoreは、自前で描画しているサーフェースに対して使うと良いでしょう。（ディフォルトではそう設定はされていません）</P>
+<P>また、セカンダリは、ディフォルトで、この自動修復サーフェースに設定されています。よって、画面モードが変わったとしても、修復は保証されます。</P>
+<P><FONT size="+1" color="#009900">☆　自分で、拡張する方法</FONT></P>
+<P>欲しいエフェクトが用意されていなくても、どんまいどんまい！（笑）</P>
+<P>まず、サーフェースのタイプ、これは、GetSurfaceType(
+)で取得できます。</P>
+<P>抜き色については、</P>
+<P>// 上記関数で設定されたカラーキー（画面モード依存）のデータを返す<BR>
+// これで返ってきた値は、CFastPlaneRGB???::SetRGB()で設定することが出来る<BR>
+virtual DWORD GetColorKey() const { return
+m_dwColorKey; }</P>
+<P>で取得できます。これは、そのサーフェースのRGBピクセルフォーマットに変換したものです。</P>
+<P>転送のプロトタイプは、CFastPlane::Bltメンバを見ればわかると思いますが、</P>
+<P><FONT color="#009900">１．転送元と、転送先とをLockする（失敗したら、エラーリターン）<BR>
+２．GetSurfaceTypeでサーフェースの種類を取得する<BR>
+３．取得したサーフェースの種類に基づき、CFastPlaneEffect::Bltなどによって転送を定義<BR>
+４．転送元と転送先をUnlock</FONT></P>
+<P>です。CFastPlaneEffectは、<A href="../etc/GTL.html">yaneGTL.h</A>で定義されていますので、そちらも参照してください。</P>
+<P><FONT size="+1" color="#009900">☆　256色モード時の動作について</FONT></P>
+<P>256色モード時には、内部的にRGB555のサーフェースを作成することは上述しました。256色モードのとき、CFastDraw::GetSecondary(
+)で取得できるのは、このRGB555サーフェースであり、これの実体はDirectDrawSurfaceでは無いのでDirectDrawSurfaceとして描画はできません。ただし、DIBSectionなので、このセカンダリサーフェースのHDCは取得することが出来ます。</P>
+<P>何らかの理由でLPDIRECTDRAWSURFACEのポインタが必要なときは、この部分、注意する必要があります。</P>
+<P><FONT size="+1" color="#009900">☆　CDIB32と異なる点</FONT></P>
+<P>・Blt,BltFastは、非αサーフェース⇒αサーフェースへの転送をサポートしています。</P>
+<P>・BlendBltは、RGBは指定できなくなっています。（かなり遅いので）　ブレンド比率は指定できます。</P>
+<P>・BlendBltFastAlphaは、αサーフェース⇒αサーフェースへの転送をサポートしています。このとき、あとから転送したほうは、PhotoShopのレイヤで、上に存在するときのようになります。（α値を合成して転送されます）</P>
+
+<HR>
+</BODY></HTML>

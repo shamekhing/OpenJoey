@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CSpriteLoader</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CSpriteLoader</FONT><A name="CTimeBase"></A><FONT color="#ff0000"> 【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>スプライト(<A href="CSpriteChara.html">CSpriteChara</A>)の読み込み管理を行ないます。キャラクターを番号で管理できます。読み込んでいるキャラクターは２度読みしません。事前に読み込んでおくことも出来ます。擬似キャッシュのような働きをします。アプリケーションクラスのメンバとして持たせると便利です。<A href="CLoadCache.html">CLoadCache</A>から派生させています。参考にしてください。</P>
+<P>現在CDirectDrawを使っているならCPlane、CDIBDrawを使っているならCDIB32をスプライト読み込みプレーンとして内部的に生成します。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>まず、CSpriteCharaの定義ファイル名と解放レベルの設定のための構造体。</P>
+<P>struct SLOAD_CACHE&nbsp;{<BR>
+LPSTR lpszFilename; // CSpriteChara定義ファイル名<BR>
+int nReleaseLevel;　　// 解放レベル<BR>
+};</P>
+<P>void Set(SLOAD_CACHE*); // 全スプライト定義ファイルの設定<BR>
+LRESULT Load(int nNo,int ReleaseLevel=-1);
+// 読み込み<BR>
+void Release(int nNo); // 解放<BR>
+void ReleaseAll(int nReleaseLevel); // 全解放<BR>
+void ReleaseAll(int nStart,int nEnd,int nReleaseLevel=INT_MAX);//
+全解放<BR>
+CSpriteBase*GetSprite(int nNo); // スプライトの取得</P>
+<P>Setで定義ファイルリストを食わせて、Loadでその番号のスプライトを読み込み、必要に応じてGetSpriteして<A href="CSprite.html">CSpriteBase</A>を取得。これは、CSpriteEx等でSetSpriteしてそのまま使える。Releaseはナンバー指定での解放。ReleaseAllは、そのリリースレベル以下のものだけ解放。</P>
+<P>また、GetSpriteをした場合、そのスプライトを読み込んでいなければ、自動的にLoadする。よって、Loadは明示的に指定する必要はない。ただし、事前に読み込んでおかないと、読み込みのタイムラグが必要になるので、その場合だけは事前にLoadすると良い。</P>
+<P><FONT size="+1" color="#009900">☆　例</FONT></P>
+<P>SLOAD_CACHE&nbsp;SSPRITE_LOADER_DEFINE[]
+= {<BR>
+&quot;grpdt/ash.txt&quot;, 1, // 0:ash<BR>
+&quot;grpdt/tame.txt&quot;, 1, // 1:ash溜め<BR>
+&quot;grpdt/bomb.txt&quot;, 1, // 2:ash bomb<BR>
+&quot;grpdt/tama.txt&quot;, 1, // 3:ash 弾<BR>
+&quot;grpdt/fa1.txt&quot;, 0, // 4:農民1<BR>
+NULL // これが終端<BR>
+};</P>
+<P>CSpriteLoader sl;<BR>
+sl.Set(SSPRITE_LOADER_DEFINE);</P>
+<P>CSpriteEx sprite;<BR>
+sprite.SetSprite(sl.GetSprite(1));<BR>
+sprite.Blt(lpDraw,100,200);</P>
+<HR>
+</BODY></HTML>

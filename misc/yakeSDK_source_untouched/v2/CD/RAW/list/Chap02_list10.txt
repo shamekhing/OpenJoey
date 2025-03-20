@@ -1,0 +1,132 @@
+template<class T> class smart_ptr {
+/**
+	スマートポインタクラス
+	（参照カウントを持っていて、どこからも参照されなくなったときに
+	自動的にオブジェクトを解体するような賢いポインタ）
+
+	使い方：
+		smart_ptr<CHoge> s1 (new CHoge);
+		というようにすれば、あとは、
+		smart_ptr<CHoge> s2;
+		s2 = s1;
+		というようなコピー等をやっても、最後に残ったスマートポインタさんが
+		責任を持ってオブジェクトを解体してくれる！
+
+		また、コンストラクタはexplicitで定義されているので、
+			void function(smart_ptr<CHoge> v);
+		というような関数の呼び出しで、普通のポインタを渡したいときは、
+		所有権無しのスマートポインタを生成して渡すこと！
+
+		つまり、
+			function(smart_ptr<CHoge>(pHoge,false));
+		とやって、コンストラクタの第２パラメータをfalseにして呼び出す。
+
+*/
+public:
+
+	explicit smart_ptr(T *_P = NULL,bool bOwner = true) :
+	/**
+		_Pは、オブジェクトを渡します。
+		bOwnerは、このスマートポインタにオブジェクトを
+			自動削除して欲しいときにtrueにします。defaultではtrue。
+	*/
+		m_lpObj(_P),m_lpnCount(NULL) {
+			if (_P) {
+				m_lpnCount = new int(1);
+				if (!bOwner) { *m_lpnCount++; }
+				//	オーナーで無いのであれば決して解体されないようにしておく
+			}
+	}
+
+	smart_ptr(const smart_ptr& s){
+		inc_ref(s);
+	}
+
+	smart_ptr& operator = (const smart_ptr& s){
+		if (this != &s) { dec_ref(); inc_ref(s); }
+		return *this;
+	}
+
+	~smart_ptr() { dec_ref(); }
+
+	T& operator*() const  {return *get(); }
+	T* operator->() const {return get();  }
+	T* get() const { return m_lpObj; }
+
+	void Add(){
+	///	所有権を持ったインスタンスの追加生成構文
+		dec_ref();				//	前のやつ解放
+		m_lpObj = new T;		//	遅延生成
+		m_lpnCount=new int(1);	//	所有権の発生
+	}
+	void Add(T*_P){				//	ポリモーフィックな型でも可
+		dec_ref();				//	前のやつ解放
+		if (_P!=NULL) {
+			m_lpObj = _P;
+			m_lpnCount=new int(1);	//	所有権の発生
+		}
+	}
+	//	↑この２つの関数を１つにまとめると
+	//	new Tの部分で、T が抽象クラスだとコンパイルエラーになる。
+
+	template <class RelateType>
+	smart_ptr&	UpCast(smart_ptr<RelateType> s){
+	///	明示的アップキャスト構文
+	/**	ただし、同じ実体であるsmart_ptr間でアップキャストしてはいけない
+		すなわち、
+			smart_ptr<CHoge> p;
+			p.Upcast(p); // これはやってはいけない
+	*/
+		if ((void*)this != (void*)&s) {
+		//	↑型が違うかも知れないのでこの程度のチェックしか出来ない
+			dec_ref();
+			m_lpObj		= s.get();	//	inc_ref(s)と等価
+			m_lpnCount	= s.getCount();
+			*m_lpnCount ++;
+		}
+		return *this;
+	}
+
+	bool	unique() const {
+	///	オブジェクトを参照しているのが唯一か？
+		return m_lpnCount!=NULL?*m_lpnCount == 1:0;
+	}
+	int		count()	const {
+	///	オブジェクトの参照数を返す
+		return m_lpnCount!=NULL?*m_lpnCount:0;
+	}
+	int*	getCount() const {
+	//	カウンタへのポインタを返す（内部実装用）
+		return m_lpnCount;
+	}
+
+	bool	isNull() const {
+	///	指しているオブジェクトはNULLか？
+		return m_lpObj==NULL;
+	}
+
+	void	Delete() {	dec_ref(); }
+	///	このオブジェクトを解体する（ただし、他のスマートポインタから参照
+	///	されていれば、実際にdeleteまでは出来ない）
+
+protected:
+	void	dec_ref() {
+		if (m_lpnCount!=NULL){
+			if (--*m_lpnCount == 0){
+				delete m_lpObj;
+				delete	m_lpnCount;
+			}
+			m_lpObj = NULL;
+			m_lpnCount = NULL;
+		}
+	}
+
+	void	inc_ref(const smart_ptr<T>& s) {
+		m_lpObj		= s.m_lpObj;
+		m_lpnCount	= s.m_lpnCount;
+		if (m_lpnCount!=NULL) ++*m_lpnCount;
+	}
+
+	T*		m_lpObj;		//	実オブジェクト
+	int*	m_lpnCount;		//	参照カウンタへのポインタ
+};

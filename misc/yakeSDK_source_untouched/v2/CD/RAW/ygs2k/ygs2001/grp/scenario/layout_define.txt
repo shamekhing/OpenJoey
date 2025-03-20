@@ -1,0 +1,63 @@
+
+///////////////////////////////////////////////////////////////////////////
+//	『SisterAngel』のメッセージボックスは、全角26文字×3行。
+//	（禁則文字があればその行は27文字になる）
+
+//	メッセージボックス用素材の描画座標および素材ファイル名
+//	（複数指定できる）
+#mes_parts	3 319 grp/scenario/window.yga
+
+//	禁則文字を含まないメッセージボックスの最大幅
+#mes_width	520
+//	↑（『SisterAngel』では、有効幅570ドットで、
+//	文字が24×24ドットなので、530～545 + α）
+
+//	メッセージテキストの表示位置
+#mes_xy	45 361
+
+//	メッセージボックスのテキストフォントのサイズ
+#mes_fontsize 22
+//	↑（『SisterAngel』では、文字が22
+
+//	文字と文字の間隔
+#mes_space 2
+//	↑（『SisterAngel』では、2ドット
+
+//	メッセージボックスの行間
+#mes_Height 0
+
+//	禁則文字列
+#ProhibitString 「」『』《》。、，ー…“”！（）
+//	↑ここに自由に禁則文字列を追加できる
+
+//	ネームプレート表示座標
+#NamePlate 16 315
+
+//	フェースマーク表示座標
+//#FaceMark	 15 353
+//	↑これを指定しなければフェイスマークは表示はされない
+
+//	それぞれの定義ファイルを指定できる
+#BG_DEFINE		grp/scenario/bg_define.txt
+#SE_DEFINE		grp/scenario/se_define.txt
+#BGM_DEFINE		grp/scenario/bgm_define.txt
+#SC_DEFINE		grp/scenario/sc_define.txt
+#FACE_DEFINE	grp/scenario/face_define.txt
+#NAME_DEFINE	grp/scenario/name_define.txt
+#BUTTON_DEFINE	grp/scenario/button_define.txt
+
+//	---- ボタン関連
+//	パラメータは(x座標,y座標,ボタンの種類　0:無効 , 1:On/Off , 2:On1/Off1/On2/Off2)
+//	メッセージウィンドゥ削除ボタン
+#mes_buttonX	580 329 5
+//	メッセージボックス上のバックログボタン
+#mes_buttonB	560 362 6
+//	メッセージボックス上の早送りボタン
+#mes_buttonP	595 359 6
+
+//	ユーザーからの入力状態であることを示す待ちプロンプト表示位置(x,y)と
+//	点滅周期[1/30 ms] 例：30ならば２秒
+#mes_next	530	414 30
+
+//	バックログの色をRGBで16進数6桁で指定する
+#backlog_color "#60ffff"

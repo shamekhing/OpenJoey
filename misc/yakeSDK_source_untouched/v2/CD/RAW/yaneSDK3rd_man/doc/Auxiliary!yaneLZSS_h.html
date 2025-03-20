@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Auxiliary/yaneLZSS.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="ICompress"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">ICompress</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">圧縮用インターフェース<BR>		LZSS法で圧縮する実装 class CLZSS も参照のこと。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Decode(BYTE* lpSrc, BYTE*&amp; lpDst, DWORD dwSize, <SPAN class="reserved_word">bool</SPAN> bDst=true)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Encode(BYTE* lpSrc, BYTE*&amp; lpDst, DWORD dwSize, DWORD&amp; dwDstSize, <SPAN class="reserved_word">bool</SPAN> bDst=true)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> virtual ~ICompress()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CLZSS"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CLZSS</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">LZSS法による圧縮ルーチン。<BR>	圧縮はやや遅いですが、展開はメチャ速いのが特徴です。<BR><BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Auxiliary!yaneLZSS_h.html#ICompress" target=_self>ICompress</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Decode(BYTE* lpSrc, BYTE*&amp; lpDst, DWORD dwSize, <SPAN class="reserved_word">bool</SPAN> bDst=true)</DIV>
+<DIV class="comment_block">lpSrcは、展開元のバッファ（圧縮データ）。<BR>		lpDstは、展開先のバッファ（非圧縮データ）。<BR>		（bDst==trueならばこれはDecodeルーチン内でnewで確保されるので、<BR>		展開されたバッファを使用終了後にdelete [] lpDstすれば良い）<BR>		dwSizeは、展開後のバッファ（非圧縮データ）のサイズ。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Encode(BYTE* lpSrc, BYTE*&amp; lpDst, DWORD dwSize, DWORD&amp; dwDstSize, <SPAN class="reserved_word">bool</SPAN> bDst=true)</DIV>
+<DIV class="comment_block">lpSrcは、圧縮元のバッファ（非圧縮データ）。<BR>		lpDstは、圧縮先のバッファ（圧縮データ）。<BR>		（bDst==trueならば、これはEncodeルーチン内でnewで確保されるので、<BR>		圧縮されたバッファを使用終了後にはdelete [] lpDstすれば良い）<BR>		dwSizeは、圧縮元のバッファサイズ。dwDstSizeは、圧縮先のバッファサイズ。<BR><BR>		bDst==falseで呼び出した場合、実際の圧縮は行なわない。<BR>		圧縮後のサイズを仮で取得するときなどに使う。<BR>		（このときは、lpDstにはdummy変数か、*(BYTE**)NULLなどでＯＫです。<BR>		その他、LPVOID型の変数を渡したいのであれば参照渡しなので、<BR>		*(BYTE**)&amp;lpBufというようにキャストしてください）<BR><BR>		圧縮率が１００％を超えるような場合には、この関数は非０を返します。<BR>		そのときは、そのファイルの圧縮は諦めてください＾＾<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">DWORD m_dwOutCount</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">UCHAR m_szText[g_LZSS_RING_BUFFER+g_LZSS_LONGEST_MATCH-1]</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_dad[g_LZSS_RING_BUFFER+1]</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_lson[g_LZSS_RING_BUFFER+1]</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_rson[g_LZSS_RING_BUFFER+257]</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> init_tree()</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> insert_node(<SPAN class="reserved_word">int</SPAN> r)</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> delete_node(<SPAN class="reserved_word">int</SPAN> p)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_matchpos,m_matchlen</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

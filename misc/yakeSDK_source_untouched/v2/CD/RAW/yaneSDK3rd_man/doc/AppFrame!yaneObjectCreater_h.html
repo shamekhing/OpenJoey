@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>AppFrame/yaneObjectCreater.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="CDllPlugInLoader"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CDllPlugInLoader</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">class CObjectCreater で使用される<BR>	PlugIn DLLを読み込む。Plug In Dllについては、<BR>	Plug In Dll作成ガイドについてご覧ください。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Load(<SPAN class="reserved_word">const</SPAN> string&amp; szDllName)</DIV>
+<DIV class="comment_block">Plug In DLL を読み込む<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT Release()</DIV>
+<DIV class="comment_block">Plug In DLL を解放する<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> string GetFileName()</DIV>
+<DIV class="comment_block">読み込んでいるPlug In DLLの名前を返す（フルパスで）<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> HINSTANCE GetInstance()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CDllPlugInLoader()</DIV>
+<DIV class="public_member"> virtual ~CDllPlugInLoader()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member">HINSTANCE m_hDll</DIV>
+<DIV class="private_member">string m_strFileName</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="IObjectCreater"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">IObjectCreater</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN>* Create(<SPAN class="reserved_word">const</SPAN> string&amp; strClassName)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT LoadPlugIn(<SPAN class="reserved_word">const</SPAN> string&amp; strFileName)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT ReleasePlugIn(<SPAN class="reserved_word">const</SPAN> string&amp; strFileName)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> RegistClass(<SPAN class="reserved_word">const</SPAN> string&amp; strClassName)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN>* New(size_t t)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Delete(<SPAN class="reserved_word">void</SPAN>* p)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"> virtual ~IObjectCreater()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CObjectCreater"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CObjectCreater</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">DLL側のオブジェクトの生成を行なうような管理クラス<BR>	DLL側で、他のDLLにある、オブジェクトを生成したりも出来る<BR><BR>	使いかた：<BR>			//	使う前にLoad<BR>			CObjectCreater::GetObj()-&gt;LoadPlugIn("enraSound.dll");<BR>			IVorbis* p = (IVorbis*)CObjectCreater::GetObj()-&gt;Create("CVorbis");<BR>			if (p!=NULL){<BR>				p-&gt;Play();<BR>				delete p;<BR>			}<BR>			//	使い終わったら、解放<BR>			IObjectCreater::GetObj()-&gt;ReleasePlugIn("enraSound.dll");<BR><BR>		main側であろうがdll側であろうが、上の方法で登録されている<BR>		のであれば、どこにあるオブジェクトであっても生成できる！<BR>		すなわち、dll側から、他のdllで登録されているオブジェクトでも<BR>		呼び出すことが出来る！<BR><BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="AppFrame!yaneObjectCreater_h.html#IObjectCreater" target=_self>IObjectCreater</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="AppFrame!yaneObjectCreater_h.html#CObjectCreater" target=_self>CObjectCreater</A>* GetObj()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN>* Create(<SPAN class="reserved_word">const</SPAN> string&amp; strClassName)</DIV>
+<DIV class="comment_block">このCObjectCreaterに登録されているオブジェクトを<BR>		その名前で生成する<BR><BR>		この関数で生成されたオブジェクトはdeleteでdeleteして良い。<BR>		（ここで読み込まれているDllは、class CDllPlugInLoader<BR>		に書かれている要件を満たすから）<BR><BR>		もし登録されていなければNULLが返る<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT LoadPlugIn(<SPAN class="reserved_word">const</SPAN> string&amp; strFileName)</DIV>
+<DIV class="comment_block">PlugInDllを読み込む（参照カウントを持っている）<BR>この関数で、Plug In Dllを読み込むと、自動的に<BR>		クラス（のfactory）が、登録される。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT ReleasePlugIn(<SPAN class="reserved_word">const</SPAN> string&amp; strFileName)</DIV>
+<DIV class="comment_block">PlugInDllを解放する（参照カウントを持っている）<BR>この関数で、Plug In Dllを解放すると、<BR>		クラス（のfactory）の登録が解除される<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> RegistClass(<SPAN class="reserved_word">const</SPAN> string&amp; strClassName)</DIV>
+<DIV class="comment_block">DLL側が、オブジェクトを登録するのに使う。<BR>		main側では、使う必要は無い。（使っても良い）<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN>* New(size_t t)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Delete(<SPAN class="reserved_word">void</SPAN>* p)</DIV>
+<DIV class="comment_block">Main側のnewとdelete(DLL側からは、これを呼び出してもらう)<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CObjectCreater()</DIV>
+<DIV class="protected_member"><A class="class_link" href="YTL!smart_vector_ptr_h.html#smart_vector_ptr" target=_self>smart_vector_ptr</A>&lt;CPlugInInfo&gt; m_apPlugIn</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="YTL!smart_vector_ptr_h.html#smart_vector_ptr" target=_self>smart_vector_ptr</A>&lt;CObjectInfo&gt; m_apObjectInfo</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="YTL!smart_vector_ptr_h.html#smart_vector_ptr" target=_self>smart_vector_ptr</A>&lt;CPlugInInfo&gt;* GetPlugInInfo()</DIV>
+<DIV class="protected_member"><A class="class_link" href="YTL!smart_vector_ptr_h.html#smart_vector_ptr" target=_self>smart_vector_ptr</A>&lt;CObjectInfo&gt;* GetObjectInfo()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="Thread!yaneCriticalSection_h.html#CCriticalSection" target=_self>CCriticalSection</A> m_cr</DIV>
+<DIV class="protected_member"><A class="class_link" href="Thread!yaneCriticalSection_h.html#CCriticalSection" target=_self>CCriticalSection</A>* GetCriticalSection()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="YTL!smart_vector_ptr_h.html#smart_vector_ptr" target=_self>smart_vector_ptr</A>&lt;CPlugInInfo&gt;::iterator FindPlugIn(<SPAN class="reserved_word">const</SPAN> string&amp; strPlugInName)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">CPlugInInfo* m_pPlugInInfo</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">static</SPAN> <A class="class_link" href="YTL!singleton_h.html#singleton" target=_self>singleton</A>&lt;<A class="class_link" href="AppFrame!yaneObjectCreater_h.html#CObjectCreater" target=_self>CObjectCreater</A>&gt; m_vObj</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CPlugInInfo"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CObjectCreater::CPlugInInfo</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">読み込んでいるPlug Inを管理するための構造体</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><A class="class_link" href="AppFrame!yaneObjectCreater_h.html#CDllPlugInLoader" target=_self>CDllPlugInLoader</A> vPlugIn</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">int</SPAN> nRef</DIV>
+<DIV class="public_member"> CPlugInInfo()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CObjectInfo"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CObjectCreater::CObjectInfo</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">登録されているPlug-Inとオブジェクトを管理するための構造体</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">CPlugInInfo* pPlugIn</DIV>
+<DIV class="public_member">string strClassName</DIV>
+<DIV class="public_member"><A class="class_link" href="YTL!factory_permutation_h.html#factory_base" target=_self>factory_base</A>* factory</DIV>
+<DIV class="public_member"> CObjectInfo()</DIV>
+<DIV class="public_member"> ~CObjectInfo()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

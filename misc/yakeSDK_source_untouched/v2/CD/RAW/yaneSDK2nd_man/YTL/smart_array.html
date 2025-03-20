@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>クラスリファレンス</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">template &lt;class T&gt; class smart_array</FONT><A name="CTimeBase"></A>　<FONT color="#ff0000">【テンプレート<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>配列用のスマートポインタです。auto_arrayの拡張バージョンです。Javaのような安全なメモリ管理が出来るようになります。</P>
+<P>スマートポインタ間でのコピーでは、オブジェクトは安全に共有され、最後のスマートポインタが解放されるときに、オブジェクトは解放されます。</P>
+<P>実際の使用方法については、<A href="http://www.sun-inet.or.jp/~yaneurao/">私のホームページ</A>の天才ゲームプログラマ養成ギプス第１１章も参考にしてください。</P>
+<P><FONT size="+1" color="#009900">☆　使いかた</FONT></P>
+<P><A href="smart_ptr.html">smart_ptr</A>とほぼ同じです。追加／変更のある関数は、以下のものです。</P>
+<P><FONT color="#009900">smart_array(S *_P = NULL,int nMax=0,bool
+bOwner=false);</FONT></P>
+<P>まず、コンストラクタでは、ディフォルトで所有権を持ちません。nMaxで配列の要素数を設定しておけばoperator
+[ ]でアクセスしたときに、アクセスが範囲外であるかどうかのチェックが行なわれますので、安全に配列の要素にアクセスされます。また、S*として、クラスTをアップキャストした型を渡しても
+operator [ ]で正常にアクセスできます。<FONT color="#cc0000">ただし、この場合、デストラクタが正常に呼び出されません。</FONT>よって、この機能はデストラクタを持たないクラスに対して限定的にしか使えません。もし、この機能が必要ならば、<A href="smart_vector_ptr.html">smart_vector_ptr</A>を使うと良いでしょう。</P>
+<P>// サイズ指定によるコンストラクト(いちいち引数で(new
+T[n],n,ture)なんて書くのはダサイ！)<BR>
+<FONT color="#009900">smart_array(int n);</FONT></P>
+<P>// 所有権を持ったインスタンスの追加生成構文<BR>
+<FONT color="#009900">void Add(int n); // nは要素数<BR>
+void Add(S*_P,int nMax=0);// ポリモーフィックな型でも可</FONT></P>
+<P>// 安全な配列アクセス<BR>
+<FONT color="#009900">T&amp; operator [ ] (int n);</FONT></P>
+<P><FONT color="#009900">void clear( );</FONT> // バッファ自体の解放</P>
+<P>Deleteを呼び出すだけ。std::vectorに準拠させるために用意してある。</P>
+<P>// インスタンスの生成追加構文<BR>
+<FONT color="#009900">void resize(int n);</FONT> // nは要素数</P>
+<P>Addを呼び出すだけ。std::vectorに準拠させるために用意してある。</P>
+<P>iterator begin( );<BR>
+iterator end( ); // このendは、配列サイズが与えられていないと正しい値が返らない<BR>
+iterator At(int n); // n番目の要素を指すiteratorを返す</P>
+<P>begin,endはstd::vector等と同じです。iteratorも定義してあります。</P>
+<P><FONT size="+1" color="#009900">☆　iteratorについて</FONT></P>
+<P>iteratorについては、std::vector::iterator等と同じです。operator
+++ , -- ,+= ,-= , 比較等を実装してあります。</P>
+<P><FONT size="+1" color="#009900">☆　備考</FONT></P>
+<P>このテンプレートは、class smart_aobjから派生させています。これは、JavaのObjectクラスに相当します。よって、あらゆるスマートポインタ（で管理されているオブジェクト）はsmart_aobjにアップキャストすることが出来ます。これにより、あらゆるオブジェクトを一元管理することが出来ます。</P>
+<HR>
+</BODY></HTML>

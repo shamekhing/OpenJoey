@@ -1,0 +1,13 @@
+	CTextOutputStreamFile dump;
+	dump.SetFileName("leaklog.txt");
+	CMemoryState s;
+
+	s.BeginSnap();
+
+	{
+		BYTE* lpabyLeak1 = new BYTE[100];
+		DWORD* lpabyLeak2 = new DWORD[100];
+	}
+	s.EndSnap();
+
+	s.Dump(&dump);

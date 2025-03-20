@@ -1,0 +1,27 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CLZSS</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CLZSS</FONT><A name="CTimeBase"></A></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>LZSS法による圧縮ルーチン。圧縮はやや遅いですが、展開はメチャ速いのが特徴です。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>// Decodeする。Dst先のバッファはbDstがtrueならば確保される<BR>
+<FONT color="#009999">LRESULT Decode(BYTE* lpSrc,BYTE*&amp; lpDst,DWORD
+dwSize,bool bDst=true);<BR>
+</FONT></P>
+<P>lpSrcは、展開元のバッファ（圧縮データ）。lpDstは、展開先のバッファ（非圧縮データ）。（bDst==trueならばこれはDecodeルーチン内でnewで確保されるので、展開されたバッファを使用終了後にdelete
+[] lpDstすれば良い） dwSizeは、展開後のバッファ（非圧縮データ）のサイズ。</P>
+<P>// Encodeする。Dst先のバッファはbDstがtrueならば確保される<BR>
+<FONT color="#009999">LRESULT Encode(BYTE* lpSrc,BYTE*&amp; lpDst,DWORD
+dwSize,DWORD&amp; dwDstSize,<FONT color="#009999">bool bDst=true</FONT>);</FONT></P>
+<P>lpSrcは、圧縮元のバッファ（非圧縮データ）。lpDstは、圧縮先のバッファ（圧縮データ）。（bDst==trueならば、これはEncodeルーチン内でnewで確保されるので、圧縮されたバッファを使用終了後にはdelete
+[] lpDstすれば良い） dwSizeは、圧縮元のバッファサイズ。dwDstSizeは、圧縮先のバッファサイズ。</P>
+<P>bDst==falseで呼び出した場合、実際の圧縮は行なわない。圧縮後のサイズを仮で取得するときなどに使う。（このときは、lpDstにはdummy変数か、*(BYTE**)NULLなどでＯＫです。その他、LPVOID型の変数を渡したいのであれば参照渡しなので、*(BYTE**)&amp;lpBufというようにキャストしてください）</P>
+<P>圧縮率が１００％を超えるような場合には、この関数は非０を返します。そのときは、そのファイルの圧縮は諦めてください＾＾</P>
+<P><FONT size="+1" color="#009900">☆　参考文献</FONT></P>
+<P>奥村晴彦著『C言語による最新アルゴリズム事典』／技術評論社</P>
+<HR>
+</BODY></HTML>

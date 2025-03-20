@@ -1,0 +1,10 @@
+template <class T>
+class	CVariantContainer : public CVariant {
+public:
+	CVariantContainer(){}
+	CVariantContainer(const T& t) :m_obj(t){}
+	void	Set(const T& t){ m_obj = t; }
+	T Get() { return m_obj; }
+protected:
+	T m_obj;
+};

@@ -1,0 +1,11 @@
+
+yaneuraoGameScript version 1.57からインポートライブラリに
+対応させました。
+
+従来のDLLに対しても互換はありますが、今後はこのインポート
+ライブラリという形で提供して行きたいと考えています。
+（こちらのほうがDLLより遥かに便利なので）
+
+今後ともyaneuraoGameScriptをよろしくお願いします。
+
+やねうらお/ yaneurao@sun-inet.or.jp

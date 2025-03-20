@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>クラスリファレンス</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">template &lt;class T&gt; class mediator</FONT><A name="CTimeBase"></A>　<FONT color="#ff0000">【テンプレート<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>擬似的に内部クラスを実現します。外部クラスに対するアクセス手段を提供します。<BR>
+実際の使用方法については、<A href="http://www.sun-inet.or.jp/~yaneurao/">私のホームページ</A>の天才ゲームプログラマ養成ギプス第１１章も参考にしてください。</P>
+<P><FONT size="+1" color="#009900">☆　関数</FONT></P>
+<P><FONT color="#009900">mediator(T* pT=NULL);</FONT> // pT ：外部クラス</P>
+<P><FONT color="#009900">void SetOutClass(T*pT);</FONT> // 外部クラスを設定する<BR>
+<FONT color="#009900">T&amp; GetOutClass( );</FONT> // 設定しておいた外部クラスを取得する</P>
+<P><FONT size="+1" color="#009900">☆　使用例</FONT></P>
+<P>// mediator&lt;T&gt;からclass listenerを派生。<BR>
+// 必要ならばTクラス内でclass listenerをfriend指定。<BR>
+// listenerのコンストラクタではT*を得てmediator&lt;T&gt;の<BR>
+// コンストラクタに渡す。<BR>
+<BR>
+// あとは、↓のマクロを介して、<BR>
+#define outer GetOutClass()<BR>
+<BR>
+// outer.m_x = 10; //というように外部クラス(T)のメンバ<BR>
+// にアクセスできる。<BR>
+<BR>
+例）<BR>
+class CMyListener : public mediator&lt;CApp&gt;
+{<BR>
+public:<BR>
+　CMyListener(CApp*p) :mediator&lt;CApp&gt;(p)
+{}<BR>
+　void test(){<BR>
+　　outer.m_x = 10; // これで外部クラスにアクセスできる<BR>
+　}<BR>
+　// 必要に応じてvirtualで実装する<BR>
+};<BR>
+<BR>
+CApp::CApp() {<BR>
+　CMyListener listener(this);<BR>
+}</P><HR>
+</BODY></HTML>

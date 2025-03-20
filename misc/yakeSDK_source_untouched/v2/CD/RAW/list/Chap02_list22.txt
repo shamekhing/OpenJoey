@@ -1,0 +1,49 @@
+template <class T,class S>
+class factory_permutation {
+/**
+	クラス置換を行なうためのテンプレート。
+
+	ディフォルトで、Sクラスを生成する。
+	これは、Tの派生クラスであること。
+
+	SetFactoryでは、Tの派生クラスのポインタを渡す。
+	CreateInstanceが呼び出されると、現在保持しているfactoryによって
+	オブジェクトを生成し、そのsmart_ptrを返す。
+
+	使用例）
+	factory_permutation<IHoge,CHogeSakura> f;
+	//	CHogeSakuraはIHoge派生クラス
+	//	ディフォルトで、このオブジェクトが生成される
+	smart_ptr<IHoge> p = f.CreateInstance();
+	//	こうやれば、CHogeSakuraのオブジェクトが生成される
+	f.SetFactory((CHogeTomoyo*)0);
+	//	このfactoryで生成するオブジェクトをIHoge派生クラスであるCHogeTomoyoに
+	//　変更してみる
+	smart_ptr<IHoge> p = f.CreateInstance();
+	//	こうやれば、CHogeTomoyoのオブジェクトが生成される
+	smart_ptr<factory<IHoge> > h = f.GetFactory();
+	//	ここでは、↑でfactoryを置換したためfactory<CHogeTomoyo>
+	//	オブジェクトが生成される
+
+*/
+public:
+	factory_permutation() :
+	  m_vFactory(new factory2<T,S>){}
+
+	///		factoryの設定／取得
+	template <class U>
+	void	SetFactory(const U*) {
+	//	↑ここで指定しているclass Uは、Tの派生クラスと仮定。
+		m_vFactory.Add(new factory2<T,U>);
+	}
+	smart_ptr<factory<T> > GetFactory() const
+	{ return m_vFactory; }
+
+	///		factoryによってインスタンスの生成
+	smart_ptr<T> CreateInstance() {
+		return smart_ptr<T>(m_vFactory->CreateInstance());
+	}
+
+protected:
+	smart_ptr<factory<T> >	m_vFactory;
+};

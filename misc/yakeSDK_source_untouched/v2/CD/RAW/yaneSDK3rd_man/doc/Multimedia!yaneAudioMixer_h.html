@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Multimedia/yaneAudioMixer.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="IAudioMixer"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">IAudioMixer</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetVolumeRel(eAudioMix eDevice, double dRelVolume)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetVolumeAbs(eAudioMix eDevice, <SPAN class="reserved_word">const</SPAN> vector&lt;DWORD&gt;&amp; adwVol)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetVolumeOrg(eAudioMix eDevice)&nbsp;=&nbsp;0</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetVolumeRel(eAudioMix eDevice, double &amp; dRelVolume)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetVolumeAbs(eAudioMix eDevice, vector&lt;DWORD&gt;&amp; adwVol)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetVolumeOrg(eAudioMix eDevice, vector&lt;DWORD&gt;&amp; adwVol)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT RestoreVolume(eAudioMix eDevice)&nbsp;=&nbsp;0</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> virtual ~IAudioMixer()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CAudioMixer"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CAudioMixer</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">オーディオのミキシング用。MIDI、CD、WAVEのミキシングを直接変更する。<BR>	ミキシングをコントロールするので、その機器から直接スピーカーに<BR>	出力している場合は無意味である。<BR><BR>	class CVolumeFader も参照すること。<BR><BR>	相対ヴォリュームは、初期値（CAudioMixerのコンストラクトが<BR>	完成した時点での値）からの相対指定となります。<BR>	初期値ならば1(100%)その２倍ならば2(200%)、０ならば無音量。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Multimedia!yaneAudioMixer_h.html#IAudioMixer" target=_self>IAudioMixer</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetVolumeRel(eAudioMix eDevice, double dRelVolume)</DIV>
+<DIV class="comment_block">相対ボリューム設定<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetVolumeAbs(eAudioMix eDevice, <SPAN class="reserved_word">const</SPAN> vector&lt;DWORD&gt;&amp; adwVol)</DIV>
+<DIV class="comment_block">絶対ボリューム設定<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT SetVolumeOrg(eAudioMix eDevice)</DIV>
+<DIV class="comment_block">初期ボリュームに設定<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetVolumeRel(eAudioMix eDevice, double &amp; dRelVolume)</DIV>
+<DIV class="comment_block">相対ボリューム取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetVolumeAbs(eAudioMix eDevice, vector&lt;DWORD&gt;&amp; adwVol)</DIV>
+<DIV class="comment_block">絶対ボリューム取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT GetVolumeOrg(eAudioMix eDevice, vector&lt;DWORD&gt;&amp; adwVol)</DIV>
+<DIV class="comment_block">初期ボリューム取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">virtual</SPAN> LRESULT RestoreVolume(eAudioMix eDevice)</DIV>
+<DIV class="comment_block">現在のボリューム設定を、「初期ボリューム設定」に保存する<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> IsSuccessInit()</DIV>
+<DIV class="comment_block">初期化に成功したか？<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CAudioMixer()</DIV>
+<DIV class="public_member"> virtual ~CAudioMixer()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">DWORD m_dwVol</DIV>
+<DIV class="protected_member">LONG m_lPan</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member">CAudioInfo m_vAudioInfo[4]</DIV>
+<DIV class="private_member">CAudioInfo* GetAudioInfo()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member">HMIXER m_hMixer</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member">UINT m_MixerID</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member">MIXERCAPS m_MixerCaps</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member">MIXERLINE m_MixerLine[4]</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member">MIXERCONTROL m_MixerControl</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member">MIXERLINECONTROLS m_MixerLineControl</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member">MIXERCONTROLDETAILS m_MCD</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;MIXERCONTROLDETAILS_UNSIGNED&gt; m_MCD_UnSigned</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">LRESULT Open()</DIV>
+<DIV class="protected_member">LRESULT Close()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">LRESULT GetMixerLineControl(<SPAN class="reserved_word">int</SPAN> iLineID)</DIV>
+<DIV class="protected_member">LRESULT GetMixerLineControl(MIXERLINE&amp; ml)</DIV>
+<DIV class="protected_member">LRESULT SetMixerControlDetails(<SPAN class="reserved_word">int</SPAN> iLineID, <SPAN class="reserved_word">bool</SPAN> bMono)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="private_member">LRESULT GetMixerDev()</DIV>
+<DIV class="private_member"><SPAN class="reserved_word">void</SPAN> ErrAudioMixer(MMRESULT AMErr, LPCSTR strBuf)</DIV>
+<DIV class="private_member"><SPAN class="reserved_word">bool</SPAN> m_bSuccessInit</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+<A name="CAudioInfo"></A>
+<SPAN class="reserved_word">struct</SPAN>&nbsp;<SPAN class="class_name">CAudioMixer::CAudioInfo</SPAN>
+<HR>
+<DIV class="block_title">構造体の説明</DIV>
+<DIV class="comment_block">なし</DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> m_bAudioComponent</DIV>
+<DIV class="public_member">vector&lt;DWORD&gt; m_dwOriginalVol</DIV>
+<DIV class="public_member"> CAudioInfo()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

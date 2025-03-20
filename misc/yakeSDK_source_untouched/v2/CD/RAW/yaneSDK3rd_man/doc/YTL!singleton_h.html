@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>YTL/singleton.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="singleton"></A>
+<SPAN class="reserved_word">template</SPAN>&nbsp;&lt;<SPAN class="template_arg">class&nbsp;T</SPAN>&gt;<BR><SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">singleton</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">このポインタは、<BR>	必要に迫られたときに始めてobjectをnewするようなポインタ<BR><BR>	非ローカルなstaticオブジェクトとして、<BR><BR>	class CHoge{<BR>	public:<BR>		static singleton&lt;CHoge&gt; m_obj;<BR>		static CHoge* GetObj() { return m_obj-&gt;get(); }<BR>	};<BR>	のように使って大丈夫！オブジェクトの解体についても保証される<BR><BR>	というか、このクラスは、ひとつのクラスにつき、一つしか存在できない。<BR>	おまけに、上記のようにstaticとしてしか使えない(;´Д`)<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block">なし</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> singleton()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> ~singleton()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">T&amp; operator*()</DIV>
+<DIV class="public_member">T* operator-&gt;()</DIV>
+<DIV class="public_member">T* get()</DIV>
+<DIV class="comment_block">ポインタのふりをするための仕掛け<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> isNull()</DIV>
+<DIV class="comment_block">オブジェクトがNullかどうかを検証する<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> Release()</DIV>
+<DIV class="comment_block">オブジェクトを強制的に解体する<BR>（デストラクタでも解放している）<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> CheckInstance()</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">static</SPAN> T* m_lpObj</DIV>
+<DIV class="comment_block">Log記録中(BeginSnap～EndSnapの最中)<BR>			このときに生成されたオブジェクトは、EndSnapのあと、<BR>			operator new/deleteのオーバーロードが解除されるまでに<BR>			オブジェクトをコールバックによって解体してやる必要がある<BR>		<BR>インスタンスが存在するのかそのチェックを行ない、<BR>		存在しなければ生成する。本来、明示的に行なう必要は無いが、<BR>		このオブジェクト自体が非常に初期化の時間のかかり、<BR>		リアルタイムにその初期化を行なわれては困るときには、<BR>		（必要なのがわかっていれば）事前に生成を行なっておく<BR>		ことで、それを回避できる。<BR>	<BR></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

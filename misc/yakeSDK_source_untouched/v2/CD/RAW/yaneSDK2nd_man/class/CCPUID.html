@@ -1,0 +1,22 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CCPUID</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CCPUID</FONT></P>
+
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>CPUの判別を行ない、値を返します。PlainPentium,MMX
+Pentium,Pentium Pro以降(Celeron,Pentium II以降もこれに含まれる)の３種類を判別します。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P><FONT color="#009900">static int GetID(void);</FONT></P>
+<P>　CPU判別を行ないます。486以前ならば1,PlainPentiumならば2,MMX
+Pentiumならば3,Pentium Pro以降ならば4が返ります。<BR>
+　今後、判別するCPUの数を増やすかも知れませんので、PentiumPro以降をチェックするには、</P>
+<P>　　if (CCPUID::GetID() == 4)</P>
+<P><FONT color="#ff0000">ではなくて</FONT></P>
+<P>　　if (CCPUID::GetID() &gt;= 4)</P>
+<P>と比較するようにしてください。</P>
+<HR>
+</BODY></HTML>

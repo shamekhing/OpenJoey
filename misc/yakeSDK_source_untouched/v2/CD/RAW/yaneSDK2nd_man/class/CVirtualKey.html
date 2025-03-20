@@ -1,0 +1,38 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CVirtualKey</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CVirtualKey</FONT><A name="CTimeBase"></A> <FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>統合キー入力クラス。<A href="CKeyBase.html">CKeyBase</A>の派生クラスを利用して、それらをひとまとめにして管理できる。</P>
+<P>たとえば、キーボードの↑キーと、テンキーの８キー、ジョイスティックの↑入力を、一つの仮想キーとして登録することによって、それらのどれか一つが入力されているかを、関数をひとつ呼び出すだけで判定できるようになる。</P>
+<P>実際に<A href="CKey.html">CKey,CKey2</A>は、このクラスの応用事例なので、そちらも参照すること。</P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>全体的な流れは、キーデバイスの登録→仮想キーの設定としておいて、InputしたのちIsVKeyPress/IsVKeyPushで判定です。</P>
+<P><FONT color="#ff0000"> // キーデバイスの登録<BR>
+</FONT><FONT color="#009900">void ClearKeyDevice(void); // デバイスのクリア<BR>
+void AddDevice(CKeyBase*); // デバイスの追加<BR>
+void RemoveDevice(CKeyBase*); // デバイスの削除<BR>
+void Input(void); //　登録しておいたデバイスから読みこみ</FONT></P>
+<P>　キーデバイスとは、CKeyBaseの派生クラスのインスタンス。具体的にはCDirectInput,CMIDIInput,CJoyStickのインスタンスが挙げられる。入力したいキーデバイスをまず登録する。そしてInputを呼び出すことによって、それらのGetStateが呼び出される。</P>
+<P><FONT color="#009900">CKeyBase* GetDevice(int n); // ｎ番目に登録したデバイスの取得
+</FONT></P>
+<P>　この関数を使えばｎ番目（０から始まる）のAddDeviceしたデバイスを取得できる。たとえば、<A href="CKey.html">CKey,CKey2</A>を使いつつも、キーボードのそれぞれのキー入力状態を検知したいような場合などに使う。また、RemoveDeviceするときに、CKeyBase*が必要なので、２つ目に登録したデバイスを削除したいならば
+m_Key.RemoveDevice(m_Key.GetDevice(1));のようにして行なう。このとき、仮想キーのうち、そのデバイスを使っている部分は自動的に削除される。（CKeyでジョイスティック入力は不要ならば、m_Key.RemoveDevice(m_Key.GetDevice(1));のようにすればＯＫ）</P>
+<P><FONT color="#ff0000">// 仮想キーの追加・削除<BR>
+</FONT><FONT color="#009900">void ClearKeyList(void); // 仮想キーのリセット<BR>
+void AddKey(int vkey,CKeyBase*,int key);
+// 仮想キーの追加<BR>
+void RemoveKey(int vkey,CKeyBase*,int key);
+// 仮想キーの削除</FONT></P>
+<P>　vkeyは、仮想キー番号。これは0～VIRTUAL_KEY_MAX-1(現在88にdefineされている)番まで登録可能。<BR>
+　キーデバイスCKeyBase*は、CKeyBaseの派生クラスのインスタンス。keyは、そのキーデバイスのkeyナンバー。</P>
+<P><FONT color="#ff0000">// 仮想キーの調査<BR>
+</FONT><FONT color="#009900">bool IsVKeyPress(int vkey); // 仮想キーを調べる<BR>
+bool IsVKeyPush(int vkey); // 仮想キーを調べる</FONT></P>
+<P>　仮想キーのvkeyが押されているかどうかを調べる。IsVKeyPressのほうは、現在押されていればtrue。IsVKeyPushは、前回押されていなくて、今回押されていればtrue。</P>
+<P><FONT color="#ff0000">// 仮想キーのクリア<BR>
+</FONT><FONT color="#009900">void ResetKey(void); // 仮想キーの入力情報をクリアする。このあと次にInputするまでのあいだIsVKeyPress/Push</FONT>はfalseを返す。</P><HR>
+</BODY></HTML>

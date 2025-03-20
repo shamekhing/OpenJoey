@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Multimedia/yaneWaveStaticSound.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="CWaveStaticSound"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CWaveStaticSound</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">Wave再生のための class ISound 派生クラス<BR>	実際はclass CWaveSoundを通じて利用する<BR>	class CWaveStreamSound と違い、ファイルを丸ごと読んで再生する<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Multimedia!yaneSound_h.html#IWaveSound" target=_self>IWaveSound</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CWaveStaticSound(<A class="class_link" href="Multimedia!yaneWaveOutput_h.html#IWaveOutput" target=_self>IWaveOutput</A>* p)</DIV>
+<DIV class="public_member"> virtual ~CWaveStaticSound()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT Open(<SPAN class="reserved_word">const</SPAN> string&amp; strFileName)</DIV>
+<DIV class="public_member">LRESULT Close()</DIV>
+<DIV class="public_member">LRESULT Play()</DIV>
+<DIV class="public_member">LRESULT Replay()</DIV>
+<DIV class="public_member">LRESULT Stop()</DIV>
+<DIV class="public_member">LRESULT Pause()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> IsPlay()</DIV>
+<DIV class="public_member">LRESULT SetLoopPlay(<SPAN class="reserved_word">bool</SPAN> bLoop)</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">bool</SPAN> IsLoopPlay()</DIV>
+<DIV class="public_member">LONG GetLength()</DIV>
+<DIV class="public_member">LRESULT SetCurrentPos(LONG lPos)</DIV>
+<DIV class="public_member">LONG GetCurrentPos()</DIV>
+<DIV class="public_member">LRESULT SetVolume(LONG volume)</DIV>
+<DIV class="public_member">LONG GetVolume()</DIV>
+<DIV class="public_member">string GetFileName()</DIV>
+<DIV class="public_member"><SPAN class="reserved_word">int</SPAN> GetType()</DIV>
+<DIV class="comment_block">override from class ISound<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT Restore()</DIV>
+<DIV class="comment_block">override from class IWaveSound<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT Load(<SPAN class="reserved_word">const</SPAN> string&amp; strFileName)</DIV>
+<DIV class="comment_block">ファイルを読み込む<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT Release()</DIV>
+<DIV class="comment_block">ファイルを閉じる<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LRESULT SetFrequency(DWORD freq)</DIV>
+<DIV class="comment_block">再生周波数の取得<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member">LONG GetFrequency()</DIV>
+<DIV class="comment_block">再生周波数の設定<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSoundBuffer_h.html#ISoundBuffer" target=_self>ISoundBuffer</A>&gt; m_vBuffer</DIV>
+<DIV class="protected_member"><A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSoundBuffer_h.html#ISoundBuffer" target=_self>ISoundBuffer</A>&gt; GetBuffer()</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">void</SPAN> SetBuffer(<A class="class_link" href="YTL!smart_ptr_h.html#smart_ptr" target=_self>smart_ptr</A>&lt;<A class="class_link" href="Multimedia!yaneSoundBuffer_h.html#ISoundBuffer" target=_self>ISoundBuffer</A>&gt; v)</DIV>
+<DIV class="comment_block">///////////////////////////////////////////////////////////////////////<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">string m_strFileName</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_bPaused</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">bool</SPAN> m_bLoop</DIV>
+<DIV class="protected_member">DWORD m_nAvgBytesPerSec</DIV>
+<DIV class="protected_member">LONG m_lLength</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><A class="class_link" href="Multimedia!yaneWaveOutput_h.html#IWaveOutput" target=_self>IWaveOutput</A>* GetOutput()</DIV>
+<DIV class="protected_member"><A class="class_link" href="Multimedia!yaneWaveOutput_h.html#IWaveOutput" target=_self>IWaveOutput</A>* m_pOutput</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>

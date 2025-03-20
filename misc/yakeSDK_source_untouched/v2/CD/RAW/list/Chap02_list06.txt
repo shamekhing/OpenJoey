@@ -1,0 +1,52 @@
+
+#ifdef USE_YANE_NEWDELETE	//	new,deleteのカスタマイズバージョン(高速)
+
+//	一斉に確保するメモリ
+static	BYTE* g_lpaMemory = 0;		//	一斉確保するメモリ
+static bool g_bInitialize = false;	//	上のメモリは初期化されているか？
+const	int g_nBlockSize = 16;		//	1ブロックのサイズ(byte)
+const	int g_nBlockNum = 4096;		//	この数だけ一気にブロック確保
+//	16*4096 = 64K　これくらいならば許せるだろう
+
+static int	g_anBlank[g_nBlockNum];				//	空きエリアを記憶する
+static int	g_nMax;
+
+void* operator new (size_t t){
+	static BYTE aanHeap[g_nBlockNum][g_nBlockSize];	//	ヒープメモリ
+	//	ローカルで確保するのは、終了時に自動的に解放されるように
+
+	if (!g_bInitialize) {
+		g_nMax = g_nBlockNum;				//	すべて空き
+		for(int i=0;i<g_nBlockNum;++i) {
+			g_anBlank[i] = i;
+		}
+		g_lpaMemory = (BYTE*)aanHeap;	// これをグローバル変数に伝播させておく
+		g_bInitialize = true;	//	初期化終了
+	}
+
+	if (g_nMax == 0 || g_nBlockSize < t) {
+		//	空きエリアあらへん or 規定サイズ以上のメモリ確保要求
+		return (void *)::malloc(t);
+	}
+
+	//	空きブロックを返す
+	return (void*)&aanHeap[g_anBlank[--g_nMax]];
+}
+
+void operator delete(void*p){
+	//	newが一度も呼び出されていないのにdeleteが呼び出されることは無い
+	//	（と仮定している）
+
+	int n = (BYTE*)p - (BYTE*)g_lpaMemory;
+
+	//	自分のヒープ上のメモリか？
+	if ((0 <= n) && (n < g_nBlockNum*g_nBlockSize)) {
+		n /= g_nBlockSize;
+		g_anBlank[g_nMax++] = n;	//	メモリの解放
+	} else {
+		::free(p);
+	}
+}
+
+#endif
+

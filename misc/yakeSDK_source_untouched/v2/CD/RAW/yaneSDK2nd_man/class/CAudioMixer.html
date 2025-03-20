@@ -1,0 +1,37 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META name="GENERATOR" content="IBM HomePage Builder 2001 V5.0.0 for Windows">
+<TITLE>class CAudioMixer</TITLE>
+</HEAD><BODY bgcolor="#ccffcc" text="#336633" link="#0066cc" vlink="#009999" alink="#ff9900">
+<P><FONT size="+2">class CAudioMixer</FONT><A name="CTimeBase"></A>　<FONT color="#ff0000">【コンポーネント<FONT color="#ff0000">】</FONT></FONT></P>
+<HR>
+<P><FONT size="+1" color="#009900">☆　内容</FONT></P>
+<P>オーディオのミキシング用。MIDI、CD、WAVEのミキシングを直接変更する。ミキシングをコントロールするので、その機器から直接スピーカーに出力している場合は無意味である。</P>
+<P><FONT color="#ff0000">CVolumeFaderも参照すること。</FONT></P>
+<P><FONT size="+1" color="#009900">☆　メンバ関数</FONT></P>
+<P>LRESULT SetVolumeRel(eAudioMix eDevice,double
+dRelVolume,int nRelPan); // 相対ボリューム設定<BR>
+LRESULT SetVolumeAbs(eAudioMix eDevice,DWORD
+dwVolume,LONG lPan); // 絶対ボリューム設定<BR>
+LRESULT SetVolumeOrg(eAudioMix eDevice);
+// 初期ボリュームに設定<BR>
+LRESULT GetVolumeRel(eAudioMix eDevice,double
+&amp;dRelVolume,int &amp;nRelPan); // 相対ボリューム取得<BR>
+LRESULT GetVolumeAbs(eAudioMix eDevice,DWORD
+&amp;dwVolume,LONG &amp;lPan); // 絶対ボリューム取得<BR>
+LRESULT GetVolumeOrg(eAudioMix eDevice,DWORD
+&amp;vol1,DWORD &amp;vol2 )const; // 初期ボリューム取得</P>
+<P>相対ヴォリュームは、初期値（CAudioMixerのコンストラクトが完成した時点での値）からの相対指定となります。初期値ならば1(100%)その２倍ならば2(200%)、０ならば無音量。</P>
+<P>eAudioMixとして選択されるデバイスは、以下のもの。</P>
+<P><FONT color="#009900">enum eAudioMix {<BR>
+AUDIO_MIX_MASTER,　// マスターヴォリューム<BR>
+AUDIO_MIX_WAVE,　　　// WAVEヴォリューム<BR>
+AUDIO_MIX_MIDI,　　　　// MIDI出力ヴォリューム<BR>
+AUDIO_MIX_CD　　　　　// CD再生ヴォリューム<BR>
+};</FONT></P>
+<P>lPanは、左右のスピーカーの振り分け。-32767～32768(0x7fff..0x8000)の間の値で指定。0ならばセンター。-32767ならば、左スピーカーのみの出力。32768ならば右スピーカーのみの出力。</P>
+<P>nRelPanは、修正項。たとえばSetVolumeRelならば、オリジナルの音量振り分け位置nOrgPanに対してlPan
+= nRelPan + nOrgPanとして、SetVolumeAbsに委譲する。</P>
+
+<HR>
+</BODY></HTML>

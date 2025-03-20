@@ -1,0 +1,184 @@
+//////////////////////////////////////////////////////////////////////////////
+
+class name	: CScriptCompiler
+内容		: スクリプトコンパイラ
+
+	yaneuraoGameScript2000のほうが、このスクリプトコンパイラのサンプルソースも
+	兼ねているのでそちらに添付されているソース・マニュアルを参考にされること
+	お勧めします。
+
+	//////////////////////////////////////////////////////////////////
+		関連ファイル
+	//////////////////////////////////////////////////////////////////
+
+
+	yaneScriptCompiler.h	// 親玉:p
+	yaneScriptCompiler.cpp
+
+	yaneCodeGenerator.h		// コードジェネレータ
+	yaneCodeGenerator.cpp
+	yaneParser.h			// パーザー（構文解析器）
+	yaneParser.cpp
+	yaneScanner.h			// スキャナ（トークン解析器）
+	yaneScanner.cpp
+	yaneVirtualCPU.h		// 仮想CPUエミュレーションカーネル
+	yaneVirtualCPU.cpp
+
+
+	//////////////////////////////////////////////////////////////////
+		概要
+	//////////////////////////////////////////////////////////////////
+
+	スクリプト（ユーザー言語）のコンパイルを行なうクラスです。
+	さらに、ユーザー言語に、（実行段階において）任意の関数を追加できます。
+
+	言語の基本仕様は、Ｃ言語風で、関数呼出しをサポートしています。
+
+	コンパイル後のコードは、仮想ＣＰＵコードに変換され、CVirtualCPUクラス
+	（yaneVirtualCPU.h / yaneVirtualCPU.cppを参照のこと）を経て実行されます。
+
+	これにより、特定のゲームで、そのゲームの一部機能等をユーザーに
+	カスタマイズしてもらうというようなことが可能になります。
+
+	実際に、やねうらおは、この機能を利用して、市販のゲームを作りました。
+	そのときは、デザイナーサイドと頻繁にやりとりを交わせないため、これこれ
+	こういうスクリプトを用意したから、あとは好きなように作り込んでください
+	というような方法で逃げました（笑）
+
+	クライアントにプログラミングを押し付けると言うと聞こえが悪いですが（笑）
+	ユーザー側でプログラミングすることにより、無限の可能性を切り開けるものだと
+	私は信じています。
+
+//////////////////////////////////////////////////////////////////////////////
+
+	納期ないんで（笑）サポートした範囲とサポート出来なかった範囲を
+	書きます。（一日でこんだけ作れっちゅーほうが無理：笑）
+	
+	変数型はLONGタイプしかサポートしていません。構造体もサポートしていません。
+	変数宣言は、関数の頭でしかできません。
+	const宣言サポートしてません。サポートするかどうかは考え中です:p
+	関数のプロトタイプ宣言はありません。（LONGしか型がないため不要なのです:p）
+	関数の引数は、LONG型しか取れません。配列は不可です。
+
+	配列はサポートしています。（LONG型の配列になります）
+
+	実際の使用例等は、yaneGameScript2000のほうを参考にすると良いでしょう。
+
+//////////////////////////////////////////////////////////////////////////////
+
+	おまけ。
+
+					スクリプト言語
+						yaneurao Game Script '2000
+											の言語定義
+
+//////////////////////////////////////////////////////////////////////////////
+
+
+	☆　表記法（EBNF記法に、以下の拡張を加えたもの）
+
+		[ xxxxx	]	省略可能			（ []は0回か1回をあらわす)
+		[ x | y ]	省略可能な選択		（ []は0回か1回をあらわす)
+		( x | y )	省略不可能な選択	（ ()は1回をあらわす）
+		{ xxxxx }	クリーネ閉包　　	（0回以上の繰り返し)
+		{ x | y }	選択つきクリーネ閉包（0回以上の選択つき繰り返し)
+		< xxxxx >	正の閉包	　　	(1回以上の繰り返し)
+		< x | y >	選択つき正の閉方	(1回以上の選択つき繰り返し)
+
+	この拡張は、やねうらおによる。
+
+
+	☆　構文規則(thax to Niklaus Wirth)
+
+	//	for CScanner
+		num		:=	TK_NUM
+		ident	:=	TK_LABELの変数
+		USER_STRUCT := ユーザー定義されたstruct 
+			(scannerの段階ではTK_LABELなので注意すること)
+
+	// like Oberon-0 (which is similar to Modula-2)
+		factor	:=	ident selector | func_call | num | "で囲まれた文字列 | 'で囲まれた文字
+			| "(" expression ")" | ("~" | "!" ) factor.
+		// 最後のは、単項演算子。（優先順位めちゃ高い）
+
+		term	:=	factor { ("*" | "/" | "&" | "%" | "%%" ) factor }.
+		// 優先順位の高い、２項演算子はここ。
+
+		simple_expression :=	["+" | "-" | "&" | "&&" | "*"]
+				term {("+" | "-" | "|" | "||" | "^" | "<<" | ">>") term}.
+		//	比較的優先順位の低い、単項演算子、および２項演算子はここ。
+		//	&,*は、アドレス演算子および、ポインタ。
+		//	>>,<<は、ビットシフト演算子。
+
+		expression	:=	simple_expression
+			[ ("=="|"!="|"<"|"<="|">"|">=") simple_expression ].
+
+		assignment	:= ident selector ("=" expression | "++" | "--").
+
+		//　代入
+
+		selector	:= { "[" expression "]" | "." ident | "->" ident }.
+		//	配列および、構造体参照
+
+		actual_parameters := "(" [ expression { "," expression } ] ")".
+		func_call		:=	ident actual_parameter.
+		if_statement	:= "if" "(" expression ")" statement [ "else " statement ].
+		case_block		:= ("case" expression ":" statement | "default" ":" statement).
+		alt_statement	:= "alt" "{" {case_block} "}".
+		loop_statement	:= "loop" statement.
+		break_statement	:= "break" { num } ";".
+		return_statement:= "return" [ { ident | num } ] ";".
+		goto_statement	:= "goto" ident ";".
+		for_statement	:= "for" "(" statement [expression] ";" [assignment] ")" statement.
+		while_statement := "while" "(" expression ")" statement ";".
+		do_statement	:= "do" statement while "(" expression ")" ";".
+		jump_statement	:= "jump" "(" expression { "," ident } ")" ";".
+
+		label_statement	:= ident ":".
+
+		statement	:= ( "{" {statement_sequence} "}" |
+			assignment + ";" | if_statement | loop_statement |
+			return_statement | break_statement	| goto_statement |
+			label_statement | for_statement | declarations |
+			while_statement | do_statement | ";" ).
+		statement_sequence := statement { statement }.
+
+		typename		:= ("long" | "int" | "short" | "byte" | "str" | "void" | USER_STRUCT ) {"*"} [&]
+
+		declare_parameters	:= [typename [ident] { "," typename [ident] } ].
+
+		define_function		:= typename ident "(" declare_parameters ")" "{" statement_sequence "}".
+		declare_function	:= typename ident "(" declare_parameters ")" ";".
+
+		declare_variable	:=	[typename < ident_list > ";"]
+		ident_list			:= ident selector { "," ident selector }.
+
+		declare_const		:= "const" typename ident ";".
+
+		declare_struct		:= "struct" ident ";".
+		define_struct		:= "struct" ident "{" {field_list} "}".
+
+		field_list			:= [typename ident ";"].
+
+		declarations		:= {	declare_function	|
+									declare_struct		|	define_struct	|
+									declare_variable	|	declare_const }.
+
+		program				:= { declare_function | declarations }.
+
+	// includeは、スキャナ側の仕事...。
+
+
+	// yaneurao memo.
+	// 選択において左端が共通項を持つ場合、その部分をくくり出すこと。
+	//	ex.)
+	//	 factorはident selectorとfunc_callの選択で、
+	//		ident selectorとfunc_callは左端に共通非終端記号identを持つので、ここで
+	//		くくり出して、実際は、identの次のTokenがselectorなのかactual_parameterなのか
+	//		判別する必要があるということ。
+	//
+	//	このような左端の共通項くくり出しさえ行なえば、この程度の言語ならば
+	//	再帰を用いて最左導出可能が可能である。換言すれば、LL(1)で解析できる
+	//	ということである。
+
+//////////////////////////////////////////////////////////////////////////////

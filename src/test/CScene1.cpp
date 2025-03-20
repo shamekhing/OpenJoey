@@ -31,11 +31,14 @@ void CScene1::OnDraw(const smart_ptr<ISurface>& lp) {
 		string exampleText = pTextPtr->GetFont()->GetText() + ".";
         pTextPtr->GetFont()->SetText(exampleText);
 		pTextPtr->UpdateTextAA();
-		app->OnPreClose();
+
+		GetSceneControl()->CallSceneFast(SCENE_ISEND);
+        //GetSceneControl()->JumpScene(SCENE_ISEND);
+		//app->OnPreClose();
     }
 
     if (key.IsKeyPush(6)) {  // Enter
-        GetSceneControl()->PushScene(SCENE1);
+        GetSceneControl()->PushScene(SCENE3);
         GetSceneControl()->JumpScene(SCENE3);
         return;
     }

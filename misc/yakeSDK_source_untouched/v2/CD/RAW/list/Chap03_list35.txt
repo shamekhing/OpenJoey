@@ -1,0 +1,54 @@
+class CInteriorCounter : public ICounter {
+/**
+	内分カウンタを提供します。
+
+	Setメンバ関数で、初期値(nStart)・終了値(nEnd)、
+	そして分割数(nFrames)を設定します。
+
+	そうすれば、このカウンタはnStartから始まり、
+	nFrame回のIncメンバ関数の呼び出しによってnEndに到達するような
+	内分カウンタとなります。
+
+	また、Incは、operator++としても定義してあります。
+	Incの逆操作であるDecもあり、それはoperator--としても定義してあります。
+*/
+public:
+	CInteriorCounter();
+
+	///	intとの相互変換
+	virtual operator int () const { return m_nNow; }
+	virtual const int operator = (int n) { m_nNow = m_nStart = n; m_nFramesNow = 0; return n; }
+
+	virtual void	Inc();		///	加算
+	CInteriorCounter& operator++() { Inc(); return (*this); }
+	CInteriorCounter operator++(int) { CInteriorCounter _Tmp = *this; Inc(); return (_Tmp); }
+
+	virtual void	Dec();		///	減算
+	CInteriorCounter& operator--() { Dec(); return (*this); }
+	CInteriorCounter operator--(int) { CInteriorCounter _Tmp = *this; Dec(); return (_Tmp); }
+
+	void	Set(int nStart,int nEnd,int nFrames);
+	/**
+		初期値(nStart)・終了値(nEnd)、そして分割数(nFrames)を設定します。
+	*/
+
+	///	現在の値を（一時的に）変更する。次のInc/Decで、正常な値に戻る
+	void	Set(int nNow) { *this = nNow; }
+
+	virtual bool	IsBegin() const { return (m_nNow == m_nStart);}
+	virtual bool	IsEnd() const { return (m_nNow == m_nEnd);}
+
+	///	property
+	int		GetFrame() const { return m_nFrames; }
+	int		GetStart() const { return m_nStart;}
+	int		GetEnd() const { return m_nEnd;}
+	///		現在のフレーム数(incをした回数)の取得。
+	int		GetFrameNow() const { return m_nFramesNow; }
+
+protected:
+	int		m_nNow;			//	現在の値
+	int		m_nStart;		//	初期値
+	int		m_nEnd;			//	終了値
+	int		m_nFrames;		//	フレーム分割数（終了値になるまで何回Incをすればいいのか）
+	int		m_nFramesNow;	//	現在、何フレーム目か？
+};

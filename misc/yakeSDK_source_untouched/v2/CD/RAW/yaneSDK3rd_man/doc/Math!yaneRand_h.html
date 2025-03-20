@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=Shift_jis">
+<META http-equiv="Content-Language" content="ja">
+<META name="GENERATOR" content="autoref version 1.0.0">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="document.css">
+<SCRIPT LANGUAGE="JavaScript" SRC="document.js"></SCRIPT>
+<TITLE>Math/yaneRand.h のドキュメント</TITLE>
+</HEAD>
+<BODY>
+<A name="top"></A>
+<A name="CRand"></A>
+<SPAN class="reserved_word">class</SPAN>&nbsp;<SPAN class="class_name">CRand</SPAN>
+<HR>
+<DIV class="block_title">クラスの説明</DIV>
+<DIV class="comment_block">Mersenne Twister法による高精度の乱数発生ルーチンです。<BR>	2^19937-1という天文学的な大きさの周期性を持った乱数を高速に生成します。<BR><BR>	class IArchive 派生クラスなので、任意のタイミングで乱数の種を<BR>	そのまま保存しておき、同じ系列の乱数を再度発生させることも出来ます。<BR></DIV>
+<DIV class="block_title">継承元</DIV>
+<DIV class="super_class_block"><SPAN class="reserved_word">public</SPAN>&nbsp;<A class="class_link" href="Auxiliary!yaneSerialize_h.html#IArchive" target=_self>IArchive</A><BR>
+</DIV>
+<DIV class="block_title">クラスメンバ</DIV>
+<DIV class="class_member_block"><DIV class="public_member">DWORD Get()</DIV>
+<DIV class="public_member">DWORD Get(DWORD n)</DIV>
+<DIV class="comment_block">乱数の取得。前者はDWORD全域の乱数を取得。<BR>後者は、0～n-1までの乱数を取得。<BR>n==0ならば、class CRuntimeExeption 例外が発生<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> SetSeed(DWORD dwSeed)</DIV>
+<DIV class="comment_block">乱数の種を設定します。設定された種に従って、乱数は生成されていきます。<BR>		必ず一度は呼び出す必要があります。<BR>		呼び出さないときは、<BR>			SetSeed(4357);<BR>		が、一番最初の乱数取得のときに実行されます。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"><SPAN class="reserved_word">void</SPAN> Randomize()</DIV>
+<DIV class="comment_block">乱数の種として、現在時刻を与えます。<BR>		要するに、再現性の無い乱数が出来ます。<BR>		SetSeed(GetTickCount())とやっているので、<BR>		SetSeedを呼び出す必要はありません。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> CRand()</DIV>
+<DIV class="public_member"> CRand(DWORD dwSeed)</DIV>
+<DIV class="comment_block">コンストラクタは、２種類あり、パラメータ無しのほうは、<BR>		乱数の初期化を行ないません。パラメータ有りのほうは、<BR>		乱数の種を引数として取り、それに基づいた乱数を生成します。<BR>		（内部的にSetSeedを行なうということです。<BR>		よって、SetSeedをこのあと行なう必要はありません）<BR>		前回と同じ乱数系列を再現したい場合などにこれを使います。<BR>	<BR></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="public_member"> virtual ~CRand()</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member">DWORD m_dwMt[624]</DIV>
+<DIV class="protected_member"><SPAN class="reserved_word">int</SPAN> m_nMti</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<DIV class="class_member_block"><DIV class="protected_member"><SPAN class="reserved_word">virtual</SPAN> <SPAN class="reserved_word">void</SPAN> Serialize(<A class="class_link" href="Auxiliary!yaneSerialize_h.html#ISerialize" target=_self>ISerialize</A>&amp; s)</DIV>
+<DIV class="comment_block"></DIV>
+</DIV>
+<HR><BR>
+</BODY></HTML>
