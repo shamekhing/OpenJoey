@@ -6,6 +6,7 @@
 // Scene headers
 #include "../test/CScene1.h"
 #include "../test/CSceneYesNo.h"
+#include "../test/CSceneSplash.h"
 
 // Created by derplayer
 // Created on 2025-01-19 15:46:24
@@ -16,6 +17,7 @@ smart_ptr<IScene> CJoeySceneFactory::CreateScene(int nScene) {
         case SCENE1: scene = new CScene1(); break;
         case SCENE2: scene = new CScene1(); break;
         case SCENE3: scene = new CScene1(); break;
+		case SCENE_SPLASH: scene = new CSceneSplash(); break;
 		case SCENE_ISEND: scene = new CSceneYesNo(); break;
         default: return smart_ptr<IScene>(); // Return null on error
     }

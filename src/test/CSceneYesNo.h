@@ -21,7 +21,9 @@ private:
     CKey1 key;
     CFixMouse m_mouse;
     smart_ptr<ISurface> m_vBackground;      // Background capture
+	ISurface* m_vBackground1;      // Background capture
 	CFastPlane m_vFastBackground;      // Background capture1
+	CFastPlane* m_vFastBackground1;
     CPlaneLoader m_vPlaneLoader;
     CPlane m_pMessageSurface;  // "Exit?" message surface
     
@@ -30,6 +32,7 @@ private:
     
     int m_nButton;            // Selected button (0=none, 1=yes, 2=no)
     CRootCounter m_nFade;     // Fade effect counter
+	bool IsSetLeva;
 };
 
 #endif // CSCENEYESNO_H

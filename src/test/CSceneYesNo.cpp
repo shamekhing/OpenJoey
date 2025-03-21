@@ -8,6 +8,7 @@ void CSceneYesNo::OnInit() {
     // Initialize input
     m_mouse.Flush();
     m_mouse.SetGuardTime(1);
+	IsSetLeva = false;
 
     // Load resources
     m_vPlaneLoader.SetReadDir("test/yesno/");  // Base directory
@@ -26,10 +27,26 @@ void CSceneYesNo::OnInit() {
     CFastPlaneFactory* factoryX = app->GetDrawFactory();
     if (factoryX) {
 		smart_ptr<ISurface> screenPtr = factoryX->GetDraw()->GetSecondary()->clone();
+		
+		//CFastPlane* asdf = factoryX->GetDraw()->GetSecondary();
+		m_vBackground1 = app->GetDraw()->GetSecondary();
+		//m_vBackground1->Release();
+		m_vBackground1->SubColorFast(172);  // Darken
+
+		CFastPlane* TP = factoryX->GetDraw()->GetSecondary();
+		smart_ptr<ISurface> TPS = smart_ptr<ISurface>(new CFastPlane(TP->GetFastDraw()), false);
+		//TPS->Release();
+		//TP->Restore();
+		//smart_ptr<ISurface> srf = TP->clone();
+		//ISurface* TP1 = srf.get();
+		//TP1->Release();
+
 		//smart_ptr<ISurface> secondary = smart_ptr<ISurface>(factoryX->GetDraw()->GetSecondary(), false);
         if (screenPtr.get()) {
-			screenPtr->SubColorBltFastFade(screenPtr.get(), 0, 0, 172);  // Darken
-			m_vBackground = screenPtr;
+			screenPtr->SubColorFast(172);  // Darken
+
+			m_vBackground = TPS;
+			//screenPtr->Release();
 			//m_vFastBackground = CFastPlane(secondary.get());
             OutputDebugStringA("Background loaded with app factory\n");
         }
@@ -90,7 +107,8 @@ void CSceneYesNo::OnInit() {
     if (factory && factory->GetDraw()) {
         // Create a new plane from the current screen
         //m_vBackground = CPlane(factory->GetDraw()->GetSecondary());
-        
+		//m_vFastBackground1 = new CFastPlane(app->GetDraw()->GetSecondary()->GetFastDraw());
+
         // If you want to darken it, do it in OnDraw instead of here
         // This way we avoid surface locking issues during initialization
     }
@@ -147,9 +165,16 @@ void CSceneYesNo::OnMove(const smart_ptr<ISurface>& lp) {
 
 void CSceneYesNo::OnDraw(const smart_ptr<ISurface>& lp) {
 
+	if(IsSetLeva == false) {
+		//m_vFastBackground1 = app->GetDraw()->GetSecondary();
+		m_vBackground = app->GetDraw()->GetSecondary()->clone();
+		IsSetLeva = true;
+		return;
+	}
     // Draw darkened background
-	CSurfaceInfo* m_vBackgroundInfo = m_vBackground->GetSurfaceInfo();
-    lp->Blt(m_vBackground.get(), 0, 0);
+	//lp->Clear();
+	CSurfaceInfo* m_vBackgroundInfo = m_vBackground1->GetSurfaceInfo();
+    lp->BltFast(m_vBackground.getObj(), 0, 0);
 
 	//factoryZ->GetDraw()->GetSecondary()->Blt(m_vBackground, 0, 0);
 	//CPlane bgPlane;

@@ -13,6 +13,19 @@ void CScene1::OnInit() {
     pTextPtr->UpdateTextAA();
     pText = CPlane(pTextPtr);
 	nFade.Set(0, 255, 16);
+
+	// OpenJoey debug menu registered keys
+	key.AddKey(32,0,DIK_0);
+	key.AddKey(33,0,DIK_1);
+	key.AddKey(34,0,DIK_2);
+	key.AddKey(35,0,DIK_3);
+	key.AddKey(36,0,DIK_4);
+	key.AddKey(37,0,DIK_5);
+	key.AddKey(38,0,DIK_6);
+	key.AddKey(39,0,DIK_7);
+	key.AddKey(40,0,DIK_8);
+	key.AddKey(41,0,DIK_9);
+	key.AddKey(42,0,DIK_0);
 }
 
 void CScene1::OnMove(const smart_ptr<ISurface>& lp) {
@@ -42,6 +55,12 @@ void CScene1::OnDraw(const smart_ptr<ISurface>& lp) {
         GetSceneControl()->JumpScene(SCENE3);
         return;
     }
+
+	if (key.IsKeyPush(42)) {  // 0
+        GetSceneControl()->CallSceneFast(SCENE_SPLASH);
+        return;
+    }
+
 
 	// Apply text to scene surface
     lp->BltNatural(pText,20,100);

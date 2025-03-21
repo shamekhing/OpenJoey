@@ -224,6 +224,12 @@
 					RelativePath=".\test\CScene1.h">
 				</File>
 				<File
+					RelativePath=".\test\CSceneSplash.cpp">
+				</File>
+				<File
+					RelativePath=".\test\CSceneSplash.h">
+				</File>
+				<File
 					RelativePath=".\test\CSceneYesNo.cpp">
 				</File>
 				<File
