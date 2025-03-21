@@ -139,6 +139,11 @@ public:
 	virtual void	SetReadDir(const string& path)=0;
 	virtual string	GetReadDir() const = 0;
 
+#ifdef OPENJOEY_ENGINE_FIXES
+	virtual void	SetLang(const string& lang)=0;
+	virtual string	GetLang() const = 0;
+#endif
+
 	virtual ~ILoadCache(){}
 };
 
@@ -196,6 +201,16 @@ public:
 			// DERPLAYER: This is probably a bug in the v3 version of the engine. In v2 its fine.
 #ifdef OPENJOEY_ENGINE_FIXES
 			pInfo->strFileName = m_strReadDir + CStringScanner::GetStrFileName(lp);
+			char langChar = m_langId[0]; // Get the first character of the langid string (i think its always only one char for lang setup?)
+
+			// replace all '?' characters in strFileName with runtime lang character
+			for (size_t i = 0; i < pInfo->strFileName.size(); ++i) {
+				if (pInfo->strFileName[i] == '?') {
+					pInfo->strFileName[i] = langChar;
+				}
+			}
+
+			// TODO: parse the X/Y pos of the asset in own properties
 #else
 			pInfo->strFileName = m_strReadDir + CStringScanner::GetStrFromCsv(lp); // original yaneSDK v3 call (breaks txt paths)
 #endif
@@ -329,6 +344,14 @@ public:
 	virtual string	GetReadDir() const 
 		{ return m_strReadDir; }
 
+#ifdef OPENJOEY_ENGINE_FIXES
+	virtual void	SetLang(const string& langId)
+		{ m_langId = langId; }
+
+	virtual string	GetLang() const 
+		{ return m_langId; }
+#endif
+
 	//	設定ファイルの２度読みの禁止(default:true == ２度読み可能)
 	virtual void	SetCanReloadAgain(bool b) { m_bCanReloadAgain = b; }
 
@@ -378,6 +401,9 @@ protected:
 
 	//	ファイルが存在するパス(相対指定)
 	string	m_strReadDir;
+#ifdef OPENJOEY_ENGINE_FIXES
+	string	m_langId;
+#endif
 
 	virtual LRESULT InnerLoad(const smart_obj& obj) = 0;
 	/**

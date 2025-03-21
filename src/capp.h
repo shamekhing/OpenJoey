@@ -19,6 +19,9 @@ public:
     // Getters for scenes to use
     CMouse* GetMouse() { return &mouse_; }
 
+	// Language
+	string GetLang() { return "e"; }
+
 	// WM_CLOSE
 	LRESULT	OnPreClose(void);
 
