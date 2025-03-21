@@ -55,6 +55,21 @@ bool CGUINormalButtonListener::IsButton(int px, int py) {
     }
 }
 
+bool CGUINormalButtonListener::IsButtonNoGFX(int px, int py, RECT& bounds) {
+    // Check if the button type is valid
+    if (m_nType == 0) {
+        return false; // Button type is invalid
+    }
+
+    // Perform manual boundary check with the provided rectangle
+    if (px >= bounds.left && px <= bounds.right &&
+        py >= bounds.top && py <= bounds.bottom) {
+        return true; // Point is within the rectangle
+    }
+
+    return false; // Point is outside the rectangle
+}
+
 LRESULT CGUINormalButtonListener::OnDraw(ISurface* lp, int x, int y, bool bPush, bool bIn) {
     if (m_nType == 0) return 0;
 
@@ -137,10 +152,15 @@ LRESULT CGUIButton::OnSimpleMove(ISurface* lp) {
     bool bLUp = (m_nButton & 2) && (!(b & 2));
     bool bLDown = (!(m_nButton & 2)) && (b & 2);
 
-    GetXY(m_nX, m_nY);
+    //GetXY(m_nX, m_nY); // TODO: ??? was it always here? - this causes movement wtf
     bool bIn = m_pvButtonEvent->IsButton(x - m_nX, y - m_nY);
-    bool bNGuard = !m_pvMouse->IsGuardTime();
 
+	// Special edgecase mode - for collision on sliced menu gfx buttons
+	if(m_boundsMode){
+		bIn = m_pvButtonEvent->IsButtonNoGFX(x - m_nX, y - m_nY, m_bounds);
+	}
+    bool bNGuard = !m_pvMouse->IsGuardTime();
+	
     if (bIn && bNGuard) {
         if (bRDown) m_pvButtonEvent->OnRBDown();
         if (bLDown) m_pvButtonEvent->OnLBDown();
@@ -181,10 +201,19 @@ LRESULT CGUIButton::OnSimpleDraw(ISurface* lp) {
 }
 
 ISurface* CGUIButton::GetPlane() {
-    if (m_pvButtonEvent.get() == NULL) return NULL;
-    //CGUINormalButtonListener* pListener = static_cast<CGUINormalButtonListener*>(m_pvButtonEvent.get());
-    //return pListener->GetPlane();
+	if (m_pvButtonEvent.get() == NULL) return NULL;
+	//CGUINormalButtonListener* pListener = static_cast<CGUINormalButtonListener*>(m_pvButtonEvent.get());
+	//return pListener->GetPlane();
 	return ((CGUINormalButtonListener*)(CGUIButtonEventListener*)m_pvButtonEvent.get())->GetPlane();
+
+	//CGUIButtonEventListener* buttonEventListener = (CGUIButtonEventListener*)m_pvButtonEvent.get();
+	//CGUINormalButtonListener* normalButtonListener = (CGUINormalButtonListener*)buttonEventListener;
+	//ISurface* plane;
+
+	//if (normalButtonListener) {
+	//	plane = normalButtonListener->GetPlane();
+	//}
+	//return plane;
 }
 
 bool CGUIButton::IsLClick() {
@@ -200,6 +229,9 @@ void CGUIButton::Reset() {
     m_nButton = 0;
     m_bIn = false;
     m_bFocusing = false;
+
+	m_boundsMode = false;
+	m_bounds = RECT();
 }
 
 void CGUIButton::GetXY(int &x, int &y) {

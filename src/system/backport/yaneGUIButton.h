@@ -27,6 +27,7 @@ public:
     virtual void OnLBUp(void){}
 
     virtual bool IsButton(int px, int py){ return true; }
+	virtual bool IsButtonNoGFX(int px, int py, RECT& b){ return true; }
     virtual LRESULT OnDraw(ISurface* lp, int x, int y, bool bPush, bool bIn){ return 0; }
 
     virtual bool IsLClick(){ 
@@ -42,14 +43,23 @@ public:
     virtual void SetPlaneLoader(smart_ptr<CPlaneLoader> pv, int nNo);
     virtual void SetPlane(smart_ptr<ISurface> pv);
     virtual ISurface* GetPlane(void){ 
+
+		if(m_bHasPlane) return m_vPlane.get();
+		return m_vPlaneLoader->GetPlane(m_nPlaneStart).get();
+
 		// TODO: no idea, is this right? - could be that it breaks anim
 		if(m_vPlane.isNull())
 			return NULL;
 			//m_vPlane = smart_ptr<ISurface>(m_vPlaneLoader->GetPlane(m_nPlaneStart).get(), false);
 		return m_vPlane.get(); 
 	}
-    
+
+	virtual void SetPlaneNumber(int nNo){ 
+		m_nPlaneStart = nNo;
+	}
+
     virtual bool IsButton(int px, int py);
+	virtual bool IsButtonNoGFX(int px, int py, RECT& b);
     virtual LRESULT OnDraw(ISurface* lp, int x, int y, bool bPush, bool bIn);
 
     virtual void SetType(int nType);
@@ -96,6 +106,8 @@ public:
     void SetEvent(smart_ptr<CGUIButtonEventListener> pv) { Reset(); m_pvButtonEvent = pv; }
     void SetLeftClick(bool b) { m_bLeftClick = b; }
     void SetRightClick(bool b) { m_bRightClick = b; }
+	void SetBounds(RECT b) { m_bounds = b; m_boundsMode = true; }
+	void ResetBounds(RECT b) { m_bounds = RECT(); m_boundsMode = false; }
 
     smart_ptr<CGUIButtonEventListener> GetEvent() { return m_pvButtonEvent; }
     bool IsPushed(void) { return m_bPushed; }
@@ -126,6 +138,9 @@ private:
     bool m_bLeftClick;
     bool m_bRightClick;
     bool m_bFocusing;
+
+	bool m_boundsMode;
+	RECT m_bounds;
 };
 
 } // namespace Draw
