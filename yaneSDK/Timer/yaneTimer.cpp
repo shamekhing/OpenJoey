@@ -78,6 +78,13 @@ void CTimer::Restart(){
 	}
 }
 
+#ifdef OPENJOEY_ENGINE_FIXES
+bool CTimer::IsPause(){
+	if(m_bPaused <= 0) return false;
+	return true;
+}
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 //	class CFixTimer
 

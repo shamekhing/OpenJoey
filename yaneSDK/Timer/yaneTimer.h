@@ -76,6 +76,9 @@ public:
 	virtual void	Set(DWORD);			///	Œ»İ‚Ì‚Ìİ’è
 	virtual void	Pause();			///	Pause‹@”
 	virtual void	Restart();			///	Pause‰ğœ
+#ifdef OPENJOEY_ENGINE_FIXES
+	virtual bool	IsPause();			///	IsPause
+#endif
 
 	CTimer();
 	virtual ~CTimer();

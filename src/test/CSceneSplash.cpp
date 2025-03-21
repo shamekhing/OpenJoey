@@ -11,10 +11,11 @@ void CSceneSplash::OnInit() {
 	IsReadToLoadMenu = false;
 
 	// Fade timer
-	m_nFade = CRootCounter(0, 255, 8);
+	m_nFade = CSaturationCounter(0, 255, 8);
     m_nPhase = CRootCounter(0, 6, 1);
 	m_timer = CTimer();
 	m_timer.Reset();
+	m_timer.Pause();
 
 	// Load splash screen define
 	m_vPlaneLoader.SetLang(app->GetLang());
@@ -38,28 +39,41 @@ void CSceneSplash::OnMove(const smart_ptr<ISurface>& lp) {
 }
 
 void CSceneSplash::OnDraw(const smart_ptr<ISurface>& lp) {
-
-	lp->Clear();
-
-	// TODO: this is wrong and results in invalid brightness fade step but i am to tired now its 3am, fix in future
-	if (m_timer.Get() < 1000) m_nFade.Inc();
-	if (m_timer.Get() > 4000) m_nFade.Dec();
+	//lp->Clear();
 	
-	if (m_nFade.IsEnd())
-	{
-		if(IsReadToLoadMenu)
-		{
-			GetSceneControl()->ReturnScene();
-			return;
+	if (m_nFade.IsEnd() == false && m_timer.IsPause()){
+		m_nFade.Inc();
+	}
+	else {
+		if(m_timer.IsPause() == true) {
+			m_timer.Restart();
 		}
+	}
 
-		// Reset timer and swap splash for the second screen
-		m_timer.Reset();
-		m_nFade.Reset();
-		m_splash0 = m_splash1;
-		IsReadToLoadMenu = true;
+	if(m_timer.Get() > 2000)
+	{
+		// Start deincrement
+		m_nFade.Dec();
+
+		if(m_nFade.IsBegin()){
+
+			// The swap already happen so we are at stage 2 of splash
+			if(m_splash0 == m_splash1){
+				IsReadToLoadMenu = true;
+			}
+
+			// Reinit timer for second splash after de-fade is done
+			m_timer.Reset();
+			m_timer.Pause();
+			m_splash0 = m_splash1; // swap splash after finish
+		}
+	}
+
+	if(IsReadToLoadMenu)
+	{
+		GetSceneControl()->ReturnScene();
+		return;
 	}
 
 	lp->BlendBltFast(m_splash0, 0, 0, m_nFade);
-	
 }

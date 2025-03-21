@@ -26,9 +26,10 @@ private:
 	ISurface* m_splash0;
 	ISurface* m_splash1;
 
-    CRootCounter m_nFade;     // Fade effect counter
+    CSaturationCounter m_nFade;     // Fade effect counter
 	CRootCounter m_nPhase;     // Fade effect phase
 	CTimer m_timer;
+	bool SplashTimerWait;
 	bool IsReadToLoadMenu;
 };
 
