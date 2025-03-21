@@ -14,6 +14,7 @@ enum SCENE {
     SCENE2,
     SCENE3,
 	SCENE_SPLASH,
+	SCENE_MAINMENU,
     SCENE_ISEND  // "Exit?" confirmation scene
 };
 

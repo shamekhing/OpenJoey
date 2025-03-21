@@ -25,7 +25,7 @@ void CScene1::OnInit() {
 	key.AddKey(39,0,DIK_7);
 	key.AddKey(40,0,DIK_8);
 	key.AddKey(41,0,DIK_9);
-	key.AddKey(42,0,DIK_0);
+	key.AddKey(42,0,DIK_A);
 }
 
 void CScene1::OnMove(const smart_ptr<ISurface>& lp) {
@@ -56,8 +56,13 @@ void CScene1::OnDraw(const smart_ptr<ISurface>& lp) {
         return;
     }
 
-	if (key.IsKeyPush(42)) {  // 0
+	if (key.IsKeyPush(32)) {  // 0
         GetSceneControl()->CallSceneFast(SCENE_SPLASH);
+        return;
+    }
+
+	if (key.IsKeyPush(33)) {  // 1
+        GetSceneControl()->CallSceneFast(SCENE_MAINMENU);
         return;
     }
 
