@@ -940,6 +940,10 @@ public:
 		ただし、サーフェースの内容はコピーされるわけではない。
 	*/
 
+#ifdef OPENJOEY_ENGINE_FIXES
+	virtual smart_ptr<ISurface> cloneFull()=0;
+#endif
+
 	ISurface();
 	virtual ~ISurface() {}	//	merely place holder
 
@@ -1002,6 +1006,9 @@ public:
 	virtual ISurfaceRGB GetColorKey() const { return 0; }
 	virtual LRESULT SetColorKeyPos(int x,int y){ return 0; }
 	virtual smart_ptr<ISurface> clone() { return smart_ptr<ISurface>(new CSurfaceNullDevice);}
+#ifdef OPENJOEY_ENGINE_FIXES
+virtual smart_ptr<ISurface> cloneFull() { return smart_ptr<ISurface>(new CSurfaceNullDevice);}
+#endif
 	virtual LRESULT		Clear(LPCRECT lpRect=NULL){ return 0;}
 	virtual void		SetFillColor(ISurfaceRGB c) {}
 	virtual ISurfaceRGB	GetFillColor() const { return 0;}

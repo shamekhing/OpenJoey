@@ -26,15 +26,17 @@ void CSceneYesNo::OnInit() {
     // Check factory (for background)
     CFastPlaneFactory* factoryX = app->GetDrawFactory();
     if (factoryX) {
-		smart_ptr<ISurface> screenPtr = factoryX->GetDraw()->GetSecondary()->clone();
-		
-		//CFastPlane* asdf = factoryX->GetDraw()->GetSecondary();
-		m_vBackground1 = app->GetDraw()->GetSecondary();
-		//m_vBackground1->Release();
-		m_vBackground1->SubColorFast(172);  // Darken
+		smart_ptr<ISurface> screenPtr = factoryX->GetDraw()->GetSecondary()->cloneFull();
 
-		CFastPlane* TP = factoryX->GetDraw()->GetSecondary();
-		smart_ptr<ISurface> TPS = smart_ptr<ISurface>(new CFastPlane(TP->GetFastDraw()), false);
+		//CFastPlane* asdf = factoryX->GetDraw()->GetSecondary();
+		//m_vBackground1 = app->GetDraw()->GetSecondary();
+		//m_vBackground1->Release();
+		//m_vBackground1->SubColorFast(172);  // Darken
+
+		//m_lastFrameFB = factoryX->GetDraw()->GetSecondary();
+		//CFastPlane* TP = factoryX->GetDraw()->GetSecondary();
+		//smart_ptr<ISurface> TPS = smart_ptr<ISurface>(new CFastPlane(TP->GetFastDraw()), false);
+
 		//TPS->Release();
 		//TP->Restore();
 		//smart_ptr<ISurface> srf = TP->clone();
@@ -43,9 +45,9 @@ void CSceneYesNo::OnInit() {
 
 		//smart_ptr<ISurface> secondary = smart_ptr<ISurface>(factoryX->GetDraw()->GetSecondary(), false);
         if (screenPtr.get()) {
-			screenPtr->SubColorFast(172);  // Darken
+			screenPtr->SubColorFast(255255255);  // Darken
+			m_vBackground = screenPtr;
 
-			m_vBackground = TPS;
 			//screenPtr->Release();
 			//m_vFastBackground = CFastPlane(secondary.get());
             OutputDebugStringA("Background loaded with app factory\n");
@@ -165,16 +167,20 @@ void CSceneYesNo::OnMove(const smart_ptr<ISurface>& lp) {
 
 void CSceneYesNo::OnDraw(const smart_ptr<ISurface>& lp) {
 
+	lp->Clear();
+	//lp->BltFast(m_vBackground, 0, 0);
+
 	if(IsSetLeva == false) {
 		//m_vFastBackground1 = app->GetDraw()->GetSecondary();
-		m_vBackground = app->GetDraw()->GetSecondary()->clone();
-		IsSetLeva = true;
-		return;
+		//m_vBackground = app->GetDraw()->GetSecondary()->clone();
+		//IsSetLeva = true;
+		//return;
 	}
     // Draw darkened background
-	//lp->Clear();
-	CSurfaceInfo* m_vBackgroundInfo = m_vBackground1->GetSurfaceInfo();
-    lp->BltFast(m_vBackground.getObj(), 0, 0);
+	CSurfaceInfo* m_vBackgroundInfo = m_vBackground->GetSurfaceInfo();
+	lp->BltFast(m_vBackground.get(), 0, 0);
+	//CSurfaceInfo* m_vBackgroundInfo = app->framebufferCache->GetSurfaceInfo();
+	//lp->BltFast(app->framebufferCache.get(), 0, 0);
 
 	//factoryZ->GetDraw()->GetSecondary()->Blt(m_vBackground, 0, 0);
 	//CPlane bgPlane;
@@ -217,4 +223,13 @@ void CSceneYesNo::OnDraw(const smart_ptr<ISurface>& lp) {
         //BYTE fadeAlpha = (BYTE)(255 - ((int)m_nFade * 16));
         //lp->BlendBltFast(m_vBackground.get(), 0, 0, fadeAlpha);
     }
+
+
+	// Apply text to scene surface
+	CTextFastPlane* pTextPtr = new CTextFastPlane;
+    pTextPtr->GetFont()->SetText("This is a fastcall test scene.\nPress YES to return to the scene that called this or NO to exit the app.");
+    pTextPtr->GetFont()->SetSize(20);
+    pTextPtr->UpdateTextAA();
+    CPlane pText = CPlane(pTextPtr);
+	lp->BltNatural(pText,20,100);
 }

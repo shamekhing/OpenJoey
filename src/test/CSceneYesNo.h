@@ -27,6 +27,8 @@ private:
     CPlaneLoader m_vPlaneLoader;
     CPlane m_pMessageSurface;  // "Exit?" message surface
     
+	CFastPlane* m_lastFrameFB;
+
     CGUIButton m_vButtons[2];  // Yes/No buttons
     //CGUINormalButtonListener m_vButtonEvents[2];  // Button event handlers
     

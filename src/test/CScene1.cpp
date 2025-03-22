@@ -33,8 +33,7 @@ void CScene1::OnMove(const smart_ptr<ISurface>& lp) {
 }
 
 void CScene1::OnDraw(const smart_ptr<ISurface>& lp) {
-
-    //lp->Clear();
+    lp->Clear();
     //lp->BltFast(bgPlane.get(), 0, 0);
 
 	ISurfaceTransBlt::CircleBlt1(lp.get(), bgPlane.get(), 0, 0, (int)nFade, 0, 255);
@@ -45,14 +44,13 @@ void CScene1::OnDraw(const smart_ptr<ISurface>& lp) {
         pTextPtr->GetFont()->SetText(exampleText);
 		pTextPtr->UpdateTextAA();
 
-		GetSceneControl()->CallSceneFast(SCENE_ISEND);
+		//GetSceneControl()->CallSceneFast(SCENE_ISEND);
         //GetSceneControl()->JumpScene(SCENE_ISEND);
 		//app->OnPreClose();
     }
 
     if (key.IsKeyPush(6)) {  // Enter
-        GetSceneControl()->PushScene(SCENE3);
-        GetSceneControl()->JumpScene(SCENE3);
+		GetSceneControl()->CallSceneFast(SCENE_ISEND);
         return;
     }
 

@@ -67,6 +67,74 @@ smart_ptr<ISurface> CFastPlane::clone() {
 	return smart_ptr<ISurface>(new CFastPlane(GetMyFastDraw()));
 }
 
+#ifdef OPENJOEY_ENGINE_FIXES
+smart_ptr<ISurface> CFastPlane::cloneFull() {
+    // Validate FastDraw instance
+    CFastDraw* pFastDraw = GetMyFastDraw();
+    if (!pFastDraw) {
+        throw std::runtime_error("FastDraw instance is invalid.");
+    }
+
+    // Create a new CFastPlane instance
+    CFastPlane* pClone = new CFastPlane(pFastDraw);
+
+    // Create a new surface with identical dimensions and type
+    pClone->CreateSurface(m_nSizeX, m_nSizeY, m_bYGA);
+
+    if (m_lpSurface) {
+        // Ensure surface is restored
+        if (m_lpSurface->IsLost()) {
+            m_lpSurface->Restore();
+        }
+
+        DDSURFACEDESC desc;
+        ZeroMemory(&desc, sizeof(desc));
+        desc.dwSize = sizeof(desc);
+
+        // Lock the source surface
+        HRESULT hr = m_lpSurface->Lock(NULL, &desc, DDLOCK_WAIT | DDLOCK_READONLY, NULL);
+        if (hr == DDERR_WASSTILLDRAWING) {
+            while ((hr = m_lpSurface->Lock(NULL, &desc, DDLOCK_WAIT | DDLOCK_READONLY, NULL)) == DDERR_WASSTILLDRAWING)
+                ; // Retry until the surface is ready
+        }
+        if (FAILED(hr)) {
+            delete pClone;
+            throw std::runtime_error("Failed to lock the source framebuffer surface.");
+        }
+
+        // Lock the cloned surface
+        DDSURFACEDESC cloneDesc;
+        ZeroMemory(&cloneDesc, sizeof(cloneDesc));
+        cloneDesc.dwSize = sizeof(cloneDesc);
+        hr = pClone->m_lpSurface->Lock(NULL, &cloneDesc, DDLOCK_WAIT, NULL);
+        if (FAILED(hr)) {
+            m_lpSurface->Unlock(NULL);
+            delete pClone;
+            throw std::runtime_error("Failed to lock the cloned surface.");
+        }
+
+        // Copy surface data row by row
+        for (DWORD row = 0; row < desc.dwHeight; row++) {
+            memcpy(
+                static_cast<BYTE*>(cloneDesc.lpSurface) + row * cloneDesc.lPitch,
+                static_cast<BYTE*>(desc.lpSurface) + row * desc.lPitch,
+                desc.dwWidth * (desc.ddpfPixelFormat.dwRGBBitCount / 8)
+            );
+        }
+
+        // Unlock both surfaces
+        m_lpSurface->Unlock(NULL);
+        pClone->m_lpSurface->Unlock(NULL);
+    }
+
+    // Update cloned surface properties
+    pClone->UpdateColorKey();
+    pClone->SetSystemMemoryUse(m_bUseSystemMemory);
+
+    return smart_ptr<ISurface>(pClone);
+}
+#endif
+
 LRESULT	CFastPlane::Release(){
 	//	owner create surface
 	//	256色モードの仮想セカンダリはDIBとして作成してたんか？

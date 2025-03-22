@@ -40,11 +40,13 @@ void CApp::MainThread() {
     while (IsThreadValid()){
         ISurface* pSecondary = GetDraw()->GetSecondary();
 		smart_ptr<ISurface> surface(pSecondary, false); // false means don't take ownership (don't delete)
-		testInt += 16;
-		if(testInt >= 256) testInt = 0;
 
-        pSecondary->Clear();
+		//framebufferCache = surface->cloneFull();
+		//testInt += 16;
+		//if(testInt >= 256) testInt = 0;
+
         // If you're always transferring the background to the entire screen, you don't need to clear it
+		//pSecondary->Clear();
 
         // Different drawing for each phase
         switch (nPhase){
@@ -176,7 +178,7 @@ class CAppMainWindow : public CAppBase {    // Derived from application class
 		CApp().Start();
 	};
 	virtual LRESULT OnPreCreate(CWindowOption &opt){
-		opt.caption = "OpenJoey v0.01";
+		opt.caption = "OpenJoey v0.02";
 		// you can also load whole dialog from .rc (for fancy win32 GUI stuff, see sample8 (v3))
 		// opt.dialog = MAKEINTRESOURCE(IDD_DIALOG1);
 		return 0;

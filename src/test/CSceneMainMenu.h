@@ -24,6 +24,12 @@ private:
     smart_ptr<ISurface> m_background;
     
 	CSaturationCounter m_nFade;     // Fade effect counter
+	CSaturationCounter m_nFade2;     // Fade effect counter
+	CSaturationCounter m_nFade3;     // Fade effect counter
+	CSaturationCounter m_nFadeButton;     // button Fade effect counter
+	CSaturationCounter m_nButtonClickTracker;
+	CTimer m_timer;
+	CTimer m_timer2;
 
 	// Main Menu buttons
 	CGUIButton m_vButtons[6];

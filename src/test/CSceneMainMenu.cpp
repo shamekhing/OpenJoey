@@ -3,6 +3,9 @@
 // Created on 2025-03-21 19:02:59
 
 #include "CSceneMainMenu.h"
+static bool ButtonAnimFowardDirection = true;
+static bool ButtonAnimPause = false;
+static bool ButtonClicked = false;
 
 void CSceneMainMenu::OnInit() {
 	// Initialize input
@@ -11,6 +14,16 @@ void CSceneMainMenu::OnInit() {
 
 	// Fade timer
 	m_nFade = CSaturationCounter(0, 255, 8);
+	m_nFade2 = CSaturationCounter(0, 255, 8);
+	m_nFade3 = CSaturationCounter(0, 255, 8);
+	m_nFadeButton = CSaturationCounter(0, 5, 1);
+	m_nButtonClickTracker = CSaturationCounter(0, 5, 1);
+	m_timer = CTimer();
+	m_timer2 = CTimer();
+	m_timer.Reset();
+	m_timer.Pause();
+	m_timer2.Restart();
+	m_timer2.Reset(); //always running
 
 	// Load splash screen define
 	m_vPlaneLoader.SetLang(app->GetLang());
@@ -75,6 +88,9 @@ void CSceneMainMenu::OnMove(const smart_ptr<ISurface>& lp) {
 	key.Input();
 	m_mouse.Flush(); // or buttons will stuck
 
+    // Handle Space debug key
+    if (key.IsKeyPush(5)) {  GetSceneControl()->JumpScene(SCENE1); }
+
 	// Update buttons
     for(int i = 0; i < 6; i++) {
 		m_vButtons[i].OnSimpleMove(lp.get());
@@ -90,22 +106,49 @@ void CSceneMainMenu::OnMove(const smart_ptr<ISurface>& lp) {
 			
         }
 
+		// set highlight gfx sheet
 		if (m_vButtons[i].IsIn()) {
 			//p->SetImageOffset(1);
-			p->SetPlaneNumber(8);
+			//p->SetPlaneNumber(13); //8-13 (7 is base backdrop without highlight)
 		} else{
 			//p->SetImageOffset(2);
-			p->SetPlaneNumber(7);
+			//p->SetPlaneNumber(5);
+			//m_timer.Reset();
+			//m_timer.Pause();
 		}
     }
+
+	switch(m_nButton) {
+		case 1:
+			app->OnPreClose(); // TODO: placeholder
+			ButtonClicked = true;
+			break;
+		case 2:
+			app->OnPreClose(); // TODO: placeholder
+			ButtonClicked = true;
+			break;
+		case 3:
+			app->OnPreClose(); // TODO: placeholder
+			ButtonClicked = true;
+			break;
+		case 4:
+			//app->OnPreClose(); // TODO: placeholder
+			GetSceneControl()->CallSceneFast(SCENE_ISEND);
+			ButtonClicked = true;
+			break;
+		case 5:
+			app->OnPreClose();
+			ButtonClicked = true;
+			break;
+		case 0:
+		default:
+			break;
+	}
+	m_nButton = 0; // reset button state
 }
 
 void CSceneMainMenu::OnDraw(const smart_ptr<ISurface>& lp) {
-
-	lp->BltFast(m_title1, 0, 0);
-	lp->BlendBltFast(m_title2, 0, 0, m_nFade);
-	
-	m_nFade.Inc();
+	lp->Clear();
 
 	int x, y, b;
     m_mouse.GetInfo(x, y, b);
@@ -113,8 +156,30 @@ void CSceneMainMenu::OnDraw(const smart_ptr<ISurface>& lp) {
 	sprintf(buf, "MouseLoop menu: %d %d %d\n", x,y,b);
 	OutputDebugStringA(buf);
 
-	// base drop
-	lp->BltFast(m_menu1, 227, 331);
+	if(m_timer2.Get() > 0)
+		lp->BltFast(m_title1, 0, 0);
+	if(m_timer2.Get() > 300) {
+		lp->BlendBltFast(m_title2, 0, 0, m_nFade);
+		m_nFade.Inc();
+	}
+	
+	if(m_timer2.Get() > 1000) {
+		// base menu button backdrop
+		//lp->BltFast(m_menu1, 227, 331);
+		lp->BlendBltFast(m_menu1, 227, 331, m_nFade2);
+		m_nFade2.Inc();
+	}
+
+	// btn click tracker update
+	//if(ButtonClicked){ 		
+	//	if (m_timer2.Get() % 500 == 0)
+	//	{
+	//		//m_nButtonClickTracker.Inc();
+	//		CGUIButtonEventListener* e	= m_vButtons[m_nButton].GetEvent().get();
+	//		CGUINormalButtonListener* p	= (CGUINormalButtonListener*)e;
+	//		if(m_nButtonClickTracker.Get() == 0) p->SetPlaneNumber(8);
+	//	}
+	//}
 
 	// Draw buttons
     const int buttonCount = 6; // Total number of buttons
@@ -126,21 +191,44 @@ void CSceneMainMenu::OnDraw(const smart_ptr<ISurface>& lp) {
 	int width = 0, height = 0;
 	// Loop through and blit each slice of the source surface onto the target `lp`
 	for (int i = 0; i < buttonCount; ++i) {
+		// Button event cast
+		CGUIButtonEventListener* e	= m_vButtons[i].GetEvent().get();
+		CGUINormalButtonListener* p	= (CGUINormalButtonListener*)e;
+
+		// TODO: a second timer for short gfx button highlight freeze of 250 msec?
+		//if(ButtonAnimPause)
+		//	p->SetPlaneNumber(8); // freeze gfx btn
+		//else
+		//	p->SetPlaneNumber(8+m_nFadeButton.Get()); // update fade button gfx
+
+		//if(!ButtonClicked) p->SetPlaneNumber(8+m_nFadeButton.Get()); // update fade button gfx
+		 p->SetPlaneNumber(8+m_nFadeButton.Get()); // update fade button gfx
+
 		ISurface* originalSurface = m_vButtons[i].GetPlane();
 		originalSurface->GetSize(width, height); // Ensure variables match expected types
 
 		// Define the source rectangle for the current slice
 		RECT sourceRect = { 0, i * sliceHeight, width, (i + 1) * sliceHeight };
 
-        // Calculate the destination position on the target surface (lp)
-        int destX = BUTTON_X; // X position remains constant
-        int destY = BUTTON_Y + (i * sliceHeight); // Increment Y for each button
+		// Calculate the destination position on the target surface (lp)
+		int destX = BUTTON_X; // X position remains constant
+		int destY = BUTTON_Y + (i * sliceHeight); // Increment Y for each button
 
 		// Blit the slice directly onto the primary surface
 		if (m_vButtons[i].IsIn())
 		{
-			//originalSurface = m_vButtons[3].GetPlane();
 			lp->BltFast(originalSurface, destX, destY, NULL, &sourceRect, NULL, 0);
+
+			m_timer.Restart();
+			if(m_timer.Get() > 100)
+			{
+				if(ButtonAnimFowardDirection) m_nFadeButton.Inc(); else m_nFadeButton.Dec();
+
+				if(m_nFadeButton.IsEnd()) { ButtonAnimFowardDirection = false; }
+				if(m_nFadeButton.IsBegin()) { ButtonAnimFowardDirection = true; }
+
+				m_timer.Reset();
+			}
 		}
     }
 

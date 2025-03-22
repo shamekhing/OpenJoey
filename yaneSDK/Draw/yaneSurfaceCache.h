@@ -141,6 +141,9 @@ public:
 	virtual LRESULT SetSize(int x,int y) { return 0; }
 	virtual ISurfaceRGB GetColorKey() const { return 0; }
 	virtual smart_ptr<ISurface> clone() { return smart_ptr<ISurface>(new CSurfaceNullDevice);}
+#ifdef OPENJOEY_ENGINE_FIXES
+	virtual smart_ptr<ISurface> cloneFull() { return smart_ptr<ISurface>(new CSurfaceNullDevice);}
+#endif
 	virtual ISurfaceRGB	GetFillColor() const { return 0;}
 	virtual LRESULT CreateSurfaceByType(int sx,int sy,int nType) { return 0; }
 

@@ -39,7 +39,7 @@ void CSceneSplash::OnMove(const smart_ptr<ISurface>& lp) {
 }
 
 void CSceneSplash::OnDraw(const smart_ptr<ISurface>& lp) {
-	//lp->Clear();
+	lp->Clear();
 	
 	if (m_nFade.IsEnd() == false && m_timer.IsPause()){
 		m_nFade.Inc();
@@ -71,7 +71,7 @@ void CSceneSplash::OnDraw(const smart_ptr<ISurface>& lp) {
 
 	if(IsReadToLoadMenu)
 	{
-		GetSceneControl()->ReturnScene();
+		GetSceneControl()->JumpScene(SCENE_MAINMENU);
 		return;
 	}
 

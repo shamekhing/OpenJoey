@@ -56,6 +56,9 @@ public:
 	*/
 
 	virtual smart_ptr<ISurface> clone();
+#ifdef OPENJOEY_ENGINE_FIXES
+	virtual smart_ptr<ISurface> cloneFull();
+#endif
 	virtual LRESULT CreateSurfaceByType(int sx,int sy,int nType);
 
 	/**
