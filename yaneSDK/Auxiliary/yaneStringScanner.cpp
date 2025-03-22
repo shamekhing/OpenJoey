@@ -196,6 +196,52 @@ string CStringScanner::GetStrFileName(LPCSTR &lp){
 	return str;
 }
 
+#ifdef OPENJOEY_ENGINE_FIXES
+int ConvertToInt(const std::string& str) {
+    // std::stoi backport - uses strtol for conversion, 10 is numerical base
+    return static_cast<int>(std::strtol(str.c_str(), NULL, 10));
+}
+
+// Updated GetStrResolution function
+POINT CStringScanner::GetStrResolution(LPCSTR& lp) {
+    std::string str;
+
+    // Skip non-digit characters safely
+    while (*lp) {
+        // Only proceed if the character is a valid digit (ASCII range '0'-'9')
+        if (::isdigit(static_cast<unsigned char>(*lp))) {
+            break; // Stop skipping when a digit is found
+        }
+        lp++;
+    }
+
+    // Collect digits safely
+    std::string digits;
+    while (*lp && ::isdigit(static_cast<unsigned char>(*lp))) {
+        digits += *lp;
+        lp++;
+    }
+
+    // Handle cases where no valid digits were found
+    POINT res = {0, 0};
+    if (digits.empty()) {
+        // No digits found, return default POINT values
+        return res;
+    }
+
+    // Handle 6 or 8 digit numbers
+    if (digits.length() == 6) {
+        res.x = ConvertToInt(digits.substr(0, 3)); // Use ConvertToInt
+        res.y = ConvertToInt(digits.substr(3, 3)); // Use ConvertToInt
+    } else if (digits.length() == 8) {
+        res.x = ConvertToInt(digits.substr(0, 4)); // Use ConvertToInt
+        res.y = ConvertToInt(digits.substr(4, 4)); // Use ConvertToInt
+    }
+
+    return res;
+}
+#endif
+
 string CStringScanner::GetNextStr(LPCSTR &lp){
 	//	スペース、タブ、改行に遭遇するところまでの文字列を返す
 	//	全角未対応＾＾；

@@ -55,6 +55,10 @@ static	string GetStr(LPCSTR &lp);
 static	string GetStrFileName(LPCSTR &lp);
 	///	タブ、改行に遭遇するまでの文字列を返す
 
+#ifdef OPENJOEY_ENGINE_FIXES
+static	POINT GetStrResolution(LPCSTR &lp);
+#endif
+
 static	string GetNextStr(LPCSTR &lp);
 ///	最初に遭遇したスペース、タブ、改行を無視し、そのあとスペース、タブ、
 ///	改行に遭遇するまでの文字列を返す

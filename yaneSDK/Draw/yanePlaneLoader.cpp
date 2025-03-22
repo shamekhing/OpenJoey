@@ -46,6 +46,19 @@ string	CPlaneLoader::GetFileName(int nNo){
 	return (smart_ptr_static_cast<CLoadCacheInfo>(obj))->strFileName;
 }
 
+#ifdef OPENJOEY_ENGINE_FIXES
+POINT	CPlaneLoader::GetXY(int nNo){
+
+	smart_obj obj;
+	if (GetIDObjectManager()->getObject(nNo,obj)!=0){
+		POINT res = {0, 0};
+		return res;
+	}
+
+	return (smart_ptr_static_cast<CLoadCacheInfo>(obj))->pObjPos;
+}
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 LRESULT		CPlaneLoader::InnerLoad(const smart_obj& obj){

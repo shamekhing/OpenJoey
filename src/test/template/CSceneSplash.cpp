@@ -16,5 +16,5 @@ void CSceneSplash::OnMove(const smart_ptr<ISurface>& lp) {
 }
 
 void CSceneSplash::OnDraw(const smart_ptr<ISurface>& lp) {
-
+	lp->Clear();
 }

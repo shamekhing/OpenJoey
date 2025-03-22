@@ -45,6 +45,9 @@ struct CLoadCacheInfo
 {
 	smart_obj	pObj;		//	オブジェクト(CFastPlaneとかCSoundとか..)
 	string		strFileName;// 読み込むべきファイル名
+#ifdef OPENJOEY_ENGINE_FIXES
+	POINT		pObjPos;
+#endif
 };
 
 class ICacheStaleListener
@@ -198,9 +201,11 @@ public:
 			LPCSTR lp = buf;
 			T* pInfo = new T;
 
-			// DERPLAYER: This is probably a bug in the v3 version of the engine. In v2 its fine.
 #ifdef OPENJOEY_ENGINE_FIXES
 			pInfo->strFileName = m_strReadDir + CStringScanner::GetStrFileName(lp);
+			// INFO: this code adds together pos numbers that are following after and resets when none is there? AND thats also how the real game works!?
+			POINT coords = CStringScanner::GetStrResolution(lp); // parse the X/Y pos of the asset in own properties
+			pInfo->pObjPos = coords;
 			char langChar = m_langId[0]; // Get the first character of the langid string (i think its always only one char for lang setup?)
 
 			// replace all '?' characters in strFileName with runtime lang character
@@ -209,9 +214,8 @@ public:
 					pInfo->strFileName[i] = langChar;
 				}
 			}
-
-			// TODO: parse the X/Y pos of the asset in own properties
 #else
+			// DERPLAYER: this is prob. a bug in the v3 version of the engine. In v2 sdk its fine. But we do our own stuff in OpenJoey so anyway...
 			pInfo->strFileName = m_strReadDir + CStringScanner::GetStrFromCsv(lp); // original yaneSDK v3 call (breaks txt paths)
 #endif
 			smart_obj obj(pInfo);

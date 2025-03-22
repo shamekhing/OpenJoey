@@ -1,5 +1,5 @@
 # OpenJoey - Open Source reimplementation of Yu-Gi-Oh! - Power of Chaos
-**OpenJoey**: a free, open source black-box re-implementation (NOT a decompilation) of [Power of Chaos](https://yugioh.fandom.com/wiki/Yu-Gi-Oh!_Power_of_Chaos) games.
+**OpenJoey**: a free, open source black-box re-implementation (NOT a decompilation) of the [Power of Chaos](https://yugioh.fandom.com/wiki/Yu-Gi-Oh!_Power_of_Chaos) game serires.
 Powered by the yaneSDK engine for accurace reimplementation.
 
 ## Work in progress
@@ -34,7 +34,6 @@ It was also used by other japanese games in early 00's (way too many to count, m
 There is also a [gamedev programming book series](https://www.amazon.co.jp/Windowsプロフェッショナルゲームプログラミング-やね-うらお/dp/479800314X) on it how to use the engine (but in japanese only).
 
 ## Legal disclaimers
-
 * This project is not affiliated with or endorsed by KONAMI or KABUSHIKI KAISHA SHUEISHA in any way. Yu-Gi-Oh! is a trademark of KABUSHIKI KAISHA SHUEISHA.
 * This project is non-commercial. The source code is available for free and always will be.
 * OpenJoey is nowhere near playable yet, but when it is and you want to play with it,
@@ -52,4 +51,4 @@ You can also download the original source code on his website if you want.
 [Official YaneSDK Homepage](https://bm98.yaneu.com/yaneSDK.html)
 
 ## TODO
-* CI compile (something like a Docker imagewith msvc toolkit & wine)
+* CI compile (something like a Docker image with msvc toolkit & wine)

@@ -942,6 +942,12 @@ public:
 
 #ifdef OPENJOEY_ENGINE_FIXES
 	virtual smart_ptr<ISurface> cloneFull()=0;
+
+	// Optional positions of surface (easier storage)
+	virtual POINT GetPos() { return m_vSurfacePosition; }
+	virtual LONG GetPosX() { return m_vSurfacePosition.x; }
+	virtual LONG GetPosY() { return m_vSurfacePosition.y; }
+	virtual void SetPos(POINT pos) { m_vSurfacePosition = pos; }
 #endif
 
 	ISurface();
@@ -951,6 +957,10 @@ protected:
 	///	サーフェース情報を持った構造体
 	smart_ptr<CSurfaceInfo>	m_vSurfaceInfo;
 	smart_ptr<ISurfaceLocker> m_vSurfacelocker;
+
+#ifdef OPENJOEY_ENGINE_FIXES
+	POINT m_vSurfacePosition;
+#endif
 
 	// ---------------------- 透過キー関連 ----------------------------
 	//	default(ResetColorKeyの動作)ではm_bUsePosColorKey==true

@@ -133,7 +133,8 @@ void CSceneMainMenu::OnMove(const smart_ptr<ISurface>& lp) {
 			break;
 		case 4:
 			//app->OnPreClose(); // TODO: placeholder
-			GetSceneControl()->CallSceneFast(SCENE_ISEND);
+			//GetSceneControl()->CallSceneFast(SCENE_ISEND);
+			GetSceneControl()->CallSceneFast(SCENE_SETTINGS);
 			ButtonClicked = true;
 			break;
 		case 5:
@@ -180,58 +181,58 @@ void CSceneMainMenu::OnDraw(const smart_ptr<ISurface>& lp) {
 	//		if(m_nButtonClickTracker.Get() == 0) p->SetPlaneNumber(8);
 	//	}
 	//}
+	if(m_timer2.Get() > 2000) {
+		// Draw buttons
+		const int buttonCount = 6; // Total number of buttons
+		const int sliceHeight = 37; // Height of each button slice
+		const int BUTTON_X = 227 + 5; // Starting X position on `lp`
+		const int BUTTON_Y = 331 + 27; // Starting Y position on `lp`
 
-	// Draw buttons
-    const int buttonCount = 6; // Total number of buttons
-	const int sliceHeight = 37; // Height of each button slice
-	const int BUTTON_X = 227 + 5; // Starting X position on `lp`
-	const int BUTTON_Y = 331 + 27; // Starting Y position on `lp`
+		// Get the dimensions of the source surface
+		int width = 0, height = 0;
+		// Loop through and blit each slice of the source surface onto the target `lp`
+		for (int i = 0; i < buttonCount; ++i) {
+			// Button event cast
+			CGUIButtonEventListener* e	= m_vButtons[i].GetEvent().get();
+			CGUINormalButtonListener* p	= (CGUINormalButtonListener*)e;
 
-	// Get the dimensions of the source surface
-	int width = 0, height = 0;
-	// Loop through and blit each slice of the source surface onto the target `lp`
-	for (int i = 0; i < buttonCount; ++i) {
-		// Button event cast
-		CGUIButtonEventListener* e	= m_vButtons[i].GetEvent().get();
-		CGUINormalButtonListener* p	= (CGUINormalButtonListener*)e;
+			// TODO: a second timer for short gfx button highlight freeze of 250 msec?
+			//if(ButtonAnimPause)
+			//	p->SetPlaneNumber(8); // freeze gfx btn
+			//else
+			//	p->SetPlaneNumber(8+m_nFadeButton.Get()); // update fade button gfx
 
-		// TODO: a second timer for short gfx button highlight freeze of 250 msec?
-		//if(ButtonAnimPause)
-		//	p->SetPlaneNumber(8); // freeze gfx btn
-		//else
-		//	p->SetPlaneNumber(8+m_nFadeButton.Get()); // update fade button gfx
+			//if(!ButtonClicked) p->SetPlaneNumber(8+m_nFadeButton.Get()); // update fade button gfx
+			p->SetPlaneNumber(8+m_nFadeButton.Get()); // update fade button gfx
 
-		//if(!ButtonClicked) p->SetPlaneNumber(8+m_nFadeButton.Get()); // update fade button gfx
-		 p->SetPlaneNumber(8+m_nFadeButton.Get()); // update fade button gfx
+			ISurface* originalSurface = m_vButtons[i].GetPlane();
+			originalSurface->GetSize(width, height); // Ensure variables match expected types
 
-		ISurface* originalSurface = m_vButtons[i].GetPlane();
-		originalSurface->GetSize(width, height); // Ensure variables match expected types
+			// Define the source rectangle for the current slice
+			RECT sourceRect = { 0, i * sliceHeight, width, (i + 1) * sliceHeight };
 
-		// Define the source rectangle for the current slice
-		RECT sourceRect = { 0, i * sliceHeight, width, (i + 1) * sliceHeight };
+			// Calculate the destination position on the target surface (lp)
+			int destX = BUTTON_X; // X position remains constant
+			int destY = BUTTON_Y + (i * sliceHeight); // Increment Y for each button
 
-		// Calculate the destination position on the target surface (lp)
-		int destX = BUTTON_X; // X position remains constant
-		int destY = BUTTON_Y + (i * sliceHeight); // Increment Y for each button
-
-		// Blit the slice directly onto the primary surface
-		if (m_vButtons[i].IsIn())
-		{
-			lp->BltFast(originalSurface, destX, destY, NULL, &sourceRect, NULL, 0);
-
-			m_timer.Restart();
-			if(m_timer.Get() > 100)
+			// Blit the slice directly onto the primary surface
+			if (m_vButtons[i].IsIn())
 			{
-				if(ButtonAnimFowardDirection) m_nFadeButton.Inc(); else m_nFadeButton.Dec();
+				lp->BltFast(originalSurface, destX, destY, NULL, &sourceRect, NULL, 0);
 
-				if(m_nFadeButton.IsEnd()) { ButtonAnimFowardDirection = false; }
-				if(m_nFadeButton.IsBegin()) { ButtonAnimFowardDirection = true; }
+				m_timer.Restart();
+				if(m_timer.Get() > 100)
+				{
+					if(ButtonAnimFowardDirection) m_nFadeButton.Inc(); else m_nFadeButton.Dec();
 
-				m_timer.Reset();
+					if(m_nFadeButton.IsEnd()) { ButtonAnimFowardDirection = false; }
+					if(m_nFadeButton.IsBegin()) { ButtonAnimFowardDirection = true; }
+
+					m_timer.Reset();
+				}
 			}
 		}
-    }
-
+	}
     // Handle fade out effect when button is selected
    // if (m_nButton != 0) {
    //     m_nFade++;

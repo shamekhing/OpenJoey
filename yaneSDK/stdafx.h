@@ -92,6 +92,7 @@ using namespace yaneuraoGameSDK3rd::Dll;
 	#include <algorithm>
     #include <memory>
 	#include <math.h>
+	#include <cctype>
 
 	using std::set;
 	//	I'm sorry (;ÅLÑD`)

@@ -38,6 +38,9 @@ public:
 
 	///	nNoのファイル名を取得
 	string	GetFileName(int nNo );
+#ifdef OPENJOEY_ENGINE_FIXES
+	POINT	GetXY(int nNo);
+#endif
 
 	/**
 		抜き色の設定／取得
