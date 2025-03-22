@@ -114,6 +114,7 @@ void CGUINormalButtonListener::OnLBDown() {
 }
 
 ISurface* CGUINormalButtonListener::GetMyPlane(bool bPush) {
+	if(m_bHasPlane) return m_vPlane.get();
     if (m_vPlaneLoader.get() == NULL) return NULL;
     
     int n = m_nPlaneStart;

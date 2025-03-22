@@ -44,7 +44,8 @@ public:
     virtual void SetPlane(smart_ptr<ISurface> pv);
     virtual ISurface* GetPlane(void){ 
 
-		if(m_bHasPlane) return m_vPlane.get();
+		if(m_bHasPlane) 
+			return m_vPlane.get();
 		return m_vPlaneLoader->GetPlane(m_nPlaneStart).get();
 
 		// TODO: no idea, is this right? - could be that it breaks anim
