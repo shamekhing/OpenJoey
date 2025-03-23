@@ -32,27 +32,13 @@ void CSceneSettings::OnInit() {
 	m_settingsBackdrop = m_vPlaneLoader.GetPlane(0);
 	m_settingsBackdrop->SetPos(m_vPlaneLoader.GetXY(0));
 
-	//m_settingsWindowBtn = m_vPlaneLoader.GetPlane(1);
-	//m_settingsWindowBtn->SetPos(m_vPlaneLoader.GetXY(1));
-	//m_settingsFullscreenBtn = m_vPlaneLoader.GetPlane(2);
-	//m_settingsFullscreenBtn->SetPos(m_vPlaneLoader.GetXY(2));
-	//m_settingsBitBtn = m_vPlaneLoader.GetPlane(3);
-	//m_settingsBitBtn->SetPos(m_vPlaneLoader.GetXY(3));
-
-	// INFO: alpha channel. do not use fast draw calls for those.
-	m_settingsWindowBtnEffect = m_vPlaneLoader.GetPlane(4);
-	m_settingsWindowBtnEffect->SetPos(m_vPlaneLoader.GetXY(4));
-	m_settingsFullscreenBtnEffect = m_vPlaneLoader.GetPlane(5);
-	m_settingsFullscreenBtnEffect->SetPos(m_vPlaneLoader.GetXY(5));
-	m_settingsBitBtn16Effect = m_vPlaneLoader.GetPlane(6);
-	m_settingsBitBtn16Effect->SetPos(m_vPlaneLoader.GetXY(6));
-	m_settingsBitBtn24Effect = m_vPlaneLoader.GetPlane(7);
-	m_settingsBitBtn24Effect->SetPos(m_vPlaneLoader.GetXY(7));
-	m_settingsBitBtn32Effect = m_vPlaneLoader.GetPlane(8);
-	m_settingsBitBtn32Effect->SetPos(m_vPlaneLoader.GetXY(8));
-
-	//m_settingsBackBtn = m_vPlaneLoader.GetPlane(9);
-	//m_settingsBackBtn->SetPos(m_vPlaneLoader.GetXY(9));
+	// Not buttons, so are rendered manualy in Draw tick
+	m_settingsWindowBtn = m_vPlaneLoader.GetPlane(1);
+	m_settingsWindowBtn->SetPos(m_vPlaneLoader.GetXY(1));
+	m_settingsFullscreenBtn = m_vPlaneLoader.GetPlane(2);
+	m_settingsFullscreenBtn->SetPos(m_vPlaneLoader.GetXY(2));
+	m_settingsBitBtn = m_vPlaneLoader.GetPlane(3);
+	m_settingsBitBtn->SetPos(m_vPlaneLoader.GetXY(3));
 
 	//m_settingsVolumeSlider1 = m_vPlaneLoader.GetPlane(10);
 	//m_settingsVolumeSlider1->SetPos(m_vPlaneLoader.GetXY(10));
@@ -62,8 +48,9 @@ void CSceneSettings::OnInit() {
 	//m_settingsVolumeSlider3->SetPos(m_vPlaneLoader.GetXY(12));
 
 	// Create an array of button IDs
-    int buttonIds[] = {1, 2, 9, 10, 11};
+    int buttonIds[] = {4, 5, 6, 7, 8, 9};
     const int buttonCount = sizeof(buttonIds) / sizeof(buttonIds[0]); // Calculate array size
+	m_vPlaneLoader.SetColorKey(ISurface::makeRGB(0, 255, 0, 128)); // alpha value because transparency logic will mismatch, code is expecting RGBA and not RGB
 
 	// Setup buttons
 	for (int j = 0; j < buttonCount; ++j) {
@@ -79,23 +66,18 @@ void CSceneSettings::OnInit() {
 		CGUINormalButtonListener* p = static_cast<CGUINormalButtonListener*>(buttonListener.get());
 
 		// Setup button plane
-		CPlane pln = m_vPlaneLoader.GetPlane(i); // alpha channel - so no FastPlanes
-		pln->SetPos(m_vPlaneLoader.GetXY(i)); // rendering pos
+		CPlane pln = m_vPlaneLoader.GetPlane(i);
+		POINT pos = m_vPlaneLoader.GetXY(i);
+		pln->SetPos(pos); // rendering pos
 		smart_ptr<ISurface> plnPtr(pln.get(), false); // no ownership
 		p->SetPlane(plnPtr);
 		btn->SetEvent(buttonListener);
 		btn->SetXY(pln->GetPosX(), pln->GetPosY()); // collision pos
 
-		// Veritical button to be sliced via BUTTON_SPACING!
-		if(i == 3)
-		{
-			// TODO: this is so unfinished
-			const int BUTTON_SPACING = 80; // BUTTON_BITS / 3
-			RECT boundsRect = { 0, i * BUTTON_SPACING, pln->GetPosY(), (i + 1) * BUTTON_SPACING };
-			btn->SetBounds(boundsRect);
-			//m_vButtonsBit
-			continue;
-		}
+		// Manual calculate the bounding rectangle - only use when really needed like for sliced gfx.
+		//SIZE surfSize = pln->GetSurfaceInfo()->GetSize();
+		//RECT boundsRect = { 0, 0, surfSize.cx, surfSize.cy };
+		//btn->SetBounds(boundsRect);
 
 		// Insert btn into smart pointer vector list
 		smart_ptr<CGUIButton> btnSmartPtr(btn);
@@ -107,8 +89,8 @@ void CSceneSettings::OnMove(const smart_ptr<ISurface>& lp) {
 	key.Input();
 	m_mouse.Flush(); // or buttons will stuck
 
-	// Handle Space debug key
-    if (key.IsKeyPush(5)) {  GetSceneControl()->ReturnScene(); }
+	if(m_timerMain.Get() < 500) return; // Wait until backdrop is blitted
+    if (key.IsKeyPush(5)) {  GetSceneControl()->ReturnScene(); } // Handle Space debug key
 
 	// Update buttons
 	int index = 0;
@@ -121,29 +103,40 @@ void CSceneSettings::OnMove(const smart_ptr<ISurface>& lp) {
 
 			if (m_nButton == 0 && button->IsLClick())
 			{
-				m_nButton = button->GetID(); // Selected button (0=none, .......................
+				m_nButton = button->GetID(); // Selected button id
 			}
 
 			if (button->IsIn())
 			{
-				//p->SetImageOffset(1);
+				p->SetImageOffset(1);
 			}
 		}
 	}
 
 	switch(m_nButton) {
-		case 1: //WINDOW
+		case 4: //WINDOW
+			app->GetSettings()->WindowMode = true;
 			break;
-		case 2: //FULLSCREEN
+		case 5: //FULLSCREEN
+			app->GetSettings()->WindowMode = false;
 			break;
-		case 3: //BITCOUNT
+		case 6: //BITCOUNT16
+			app->GetSettings()->BitCount = 0;
+			break;
+		case 7: //BITCOUNT24
+			app->GetSettings()->BitCount = 1;
+			break;
+		case 8: //BITCOUNT32
+			app->GetSettings()->BitCount = 2;
 			break;
 		case 9: //BACK
 			GetSceneControl()->ReturnScene();
 			break;
 		case 10: //VOL_MINUS
+			app->GetSettings()->Volume -= 5;
 			break;
 		case 11: //VOL_PLUS
+			app->GetSettings()->Volume += 5;
 			break;
 		default:
 			break;
@@ -159,53 +152,48 @@ void CSceneSettings::OnDraw(const smart_ptr<ISurface>& lp) {
 		lp->BlendBltFast(m_settingsBackdrop, m_settingsBackdrop->GetPosX(), m_settingsBackdrop->GetPosY(), m_nFade);
 	}
 
-	if(m_timerMain.Get() > 200) {
-		//lp->BlendBltFast(m_settingsWindowBtn, m_settingsWindowBtn->GetPosX(), m_settingsWindowBtn->GetPosY(), m_nFade);
-		//lp->BlendBltFast(m_settingsFullscreenBtn, m_settingsFullscreenBtn->GetPosX(), m_settingsFullscreenBtn->GetPosY(), m_nFade);
-		//lp->BlendBltFast(m_settingsBitBtn, m_settingsBitBtn->GetPosX(), m_settingsBitBtn->GetPosY(), m_nFade);
+	if(m_timerMain.Get() > 500) {
 
-		//lp->BlendBltFast(m_settingsBackBtn, m_settingsBackBtn->GetPosX(), m_settingsBackBtn->GetPosY(), m_nFade);
+		// Draw settings overlays (TODO: in real game its INVERTED...)
+		if(app->GetSettings()->WindowMode == true){
+			lp->BltFast(m_settingsWindowBtn, m_settingsWindowBtn->GetPosX(), m_settingsWindowBtn->GetPosY());
+		} else {
+			lp->BltFast(m_settingsFullscreenBtn, m_settingsFullscreenBtn->GetPosX(), m_settingsFullscreenBtn->GetPosY());
 
-		//lp->BlendBlt(m_settingsBitBtn32Effect, m_settingsBitBtn32Effect->GetPosX(), m_settingsBitBtn32Effect->GetPosY(), m_nFade);
-	}
+			// Prepare horizontal blit rectangle split
+			int buttonCount = 3;
+			int btnId = app->GetSettings()->BitCount; // Retrieve the button ID
+			SIZE surfSize = m_settingsBitBtn->GetSurfaceInfo()->GetSize();
+			int sliceWidth = surfSize.cx / buttonCount; // Divide the width into 3 equal parts
+			int sliceWidthOffset = sliceWidth * btnId; // Calculate vertical offset based on button position
+			RECT sourceRect = {
+				btnId * sliceWidth,
+					0,
+					(btnId + 1) * sliceWidth,
+					surfSize.cy
+			};
 
-	// Draw settings overlays (TODO: in real game its INVERTED...)
-	if(app->GetSettings()->WindowMode == true)
-		lp->Blt(m_settingsWindowBtnEffect, m_settingsWindowBtnEffect->GetPosX(), m_settingsWindowBtnEffect->GetPosY());
-	else
-		lp->Blt(m_settingsFullscreenBtnEffect, m_settingsFullscreenBtnEffect->GetPosX(), m_settingsFullscreenBtnEffect->GetPosY());
+			// Blit the rectangle
+			lp->BltFast(m_settingsBitBtn, m_settingsBitBtn->GetPosX()+sliceWidthOffset, m_settingsBitBtn->GetPosY(), NULL, &sourceRect, NULL, 0);
+		}
 
-	//Draw buttons
-	const int buttonCount = 6; // Total number of buttons
+		int index = 0;
+		for (smart_vector_ptr<CGUIButton>::iterator it = m_vButtons.begin(); it != m_vButtons.end(); ++it, ++index) {
+			CGUIButton* button = it->get();
+			if (button) {
+				// Button event cast
+				CGUIButtonEventListener* e	= button->GetEvent().get();
+				CGUINormalButtonListener* p	= (CGUINormalButtonListener*)e;
+				ISurface* originalSurface = button->GetPlane();
 
-	// Get the dimensions of the source surface
-	int width = 0, height = 0;
-
-	int index = 0;
-	for (smart_vector_ptr<CGUIButton>::iterator it = m_vButtons.begin(); it != m_vButtons.end(); ++it, ++index) {
-		CGUIButton* button = it->get();
-		if (button) {
-			// Button event cast
-			CGUIButtonEventListener* e	= button->GetEvent().get();
-			CGUINormalButtonListener* p	= (CGUINormalButtonListener*)e;
-
-			ISurface* originalSurface = button->GetPlane();
-			originalSurface->GetSize(width, height); // Ensure variables match expected types
-
-			// Define the source rectangle for the current slice
-			//RECT sourceRect = { 0, i * sliceHeight, width, (i + 1) * sliceHeight };
-
-			//// Calculate the destination position on the target surface (lp)
-			//int destX = BUTTON_X; // X position remains constant
-			//int destY = BUTTON_Y + (i * sliceHeight); // Increment Y for each button
-
-			// Blit the button surface onto the primary surface
-			if (button->IsIn())
-			{
-				lp->Blt(originalSurface, originalSurface->GetPosX(), originalSurface->GetPosY());
+				// Blit the button surface onto the primary surface
+				if (button->IsIn())
+				{
+					lp->BltNatural(originalSurface, originalSurface->GetPosX(), originalSurface->GetPosY()); // BltNatural is good for alpha channel
+					break; // Only one button at time
+				}
 			}
 		}
 	}
-
 	m_nFade.Inc();
 }
