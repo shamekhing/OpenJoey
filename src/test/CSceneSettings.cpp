@@ -32,12 +32,12 @@ void CSceneSettings::OnInit() {
 	m_settingsBackdrop = m_vPlaneLoader.GetPlane(0);
 	m_settingsBackdrop->SetPos(m_vPlaneLoader.GetXY(0));
 
-	m_settingsWindowBtn = m_vPlaneLoader.GetPlane(1);
-	m_settingsWindowBtn->SetPos(m_vPlaneLoader.GetXY(1));
-	m_settingsFullscreenBtn = m_vPlaneLoader.GetPlane(2);
-	m_settingsFullscreenBtn->SetPos(m_vPlaneLoader.GetXY(2));
-	m_settingsBitBtn = m_vPlaneLoader.GetPlane(3);
-	m_settingsBitBtn->SetPos(m_vPlaneLoader.GetXY(3));
+	//m_settingsWindowBtn = m_vPlaneLoader.GetPlane(1);
+	//m_settingsWindowBtn->SetPos(m_vPlaneLoader.GetXY(1));
+	//m_settingsFullscreenBtn = m_vPlaneLoader.GetPlane(2);
+	//m_settingsFullscreenBtn->SetPos(m_vPlaneLoader.GetXY(2));
+	//m_settingsBitBtn = m_vPlaneLoader.GetPlane(3);
+	//m_settingsBitBtn->SetPos(m_vPlaneLoader.GetXY(3));
 
 	// INFO: alpha channel. do not use fast draw calls for those.
 	m_settingsWindowBtnEffect = m_vPlaneLoader.GetPlane(4);
@@ -51,19 +51,26 @@ void CSceneSettings::OnInit() {
 	m_settingsBitBtn32Effect = m_vPlaneLoader.GetPlane(8);
 	m_settingsBitBtn32Effect->SetPos(m_vPlaneLoader.GetXY(8));
 
-	m_settingsBackBtn = m_vPlaneLoader.GetPlane(9);
-	m_settingsBackBtn->SetPos(m_vPlaneLoader.GetXY(9));
+	//m_settingsBackBtn = m_vPlaneLoader.GetPlane(9);
+	//m_settingsBackBtn->SetPos(m_vPlaneLoader.GetXY(9));
 
-	m_settingsVolumeSlider1 = m_vPlaneLoader.GetPlane(10);
-	m_settingsVolumeSlider1->SetPos(m_vPlaneLoader.GetXY(10));
-	m_settingsVolumeSlider2 = m_vPlaneLoader.GetPlane(11);
-	m_settingsVolumeSlider2->SetPos(m_vPlaneLoader.GetXY(11));
-	m_settingsVolumeSlider3 = m_vPlaneLoader.GetPlane(12);
-	m_settingsVolumeSlider3->SetPos(m_vPlaneLoader.GetXY(12));
+	//m_settingsVolumeSlider1 = m_vPlaneLoader.GetPlane(10);
+	//m_settingsVolumeSlider1->SetPos(m_vPlaneLoader.GetXY(10));
+	//m_settingsVolumeSlider2 = m_vPlaneLoader.GetPlane(11);
+	//m_settingsVolumeSlider2->SetPos(m_vPlaneLoader.GetXY(11));
+	//m_settingsVolumeSlider3 = m_vPlaneLoader.GetPlane(12);
+	//m_settingsVolumeSlider3->SetPos(m_vPlaneLoader.GetXY(12));
+
+	// Create an array of button IDs
+    int buttonIds[] = {1, 2, 9, 10, 11};
+    const int buttonCount = sizeof(buttonIds) / sizeof(buttonIds[0]); // Calculate array size
 
 	// Setup buttons
-	for(int i = 1; i < 7; i++) {
-		m_vButtons[i].SetMouse(smart_ptr<CFixMouse>(&m_mouse, false));
+	for (int j = 0; j < buttonCount; ++j) {
+        int i = buttonIds[j]; // Get the current ID
+		CGUIButton* btn = new CGUIButton();
+		btn->SetID(i);
+		btn->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false));
 
 		// Create the button listener as CGUIButtonEventListener type directly
 		smart_ptr<CGUIButtonEventListener> buttonListener(new CGUINormalButtonListener());
@@ -76,8 +83,8 @@ void CSceneSettings::OnInit() {
 		pln->SetPos(m_vPlaneLoader.GetXY(i)); // rendering pos
 		smart_ptr<ISurface> plnPtr(pln.get(), false); // no ownership
 		p->SetPlane(plnPtr);
-		m_vButtons[i].SetEvent(buttonListener);
-		m_vButtons[i].SetXY(pln->GetPosX(), pln->GetPosY()); // collision pos
+		btn->SetEvent(buttonListener);
+		btn->SetXY(pln->GetPosX(), pln->GetPosY()); // collision pos
 
 		// Veritical button to be sliced via BUTTON_SPACING!
 		if(i == 3)
@@ -85,12 +92,14 @@ void CSceneSettings::OnInit() {
 			// TODO: this is so unfinished
 			const int BUTTON_SPACING = 80; // BUTTON_BITS / 3
 			RECT boundsRect = { 0, i * BUTTON_SPACING, pln->GetPosY(), (i + 1) * BUTTON_SPACING };
-			m_vButtons[i].SetBounds(boundsRect);
+			btn->SetBounds(boundsRect);
 			//m_vButtonsBit
 			continue;
 		}
 
-		break; // DEBUG!
+		// Insert btn into smart pointer vector list
+		smart_ptr<CGUIButton> btnSmartPtr(btn);
+		m_vButtons.insert(btnSmartPtr);
 	}
 }
 
@@ -102,37 +111,49 @@ void CSceneSettings::OnMove(const smart_ptr<ISurface>& lp) {
     if (key.IsKeyPush(5)) {  GetSceneControl()->ReturnScene(); }
 
 	// Update buttons
-    for(int i = 1; i < 6; i++) {
-		m_vButtons[i].OnSimpleMove(lp.get());
-		CGUIButtonEventListener* e	= m_vButtons[i].GetEvent().get();
-		CGUINormalButtonListener* p	= (CGUINormalButtonListener*)e;
+	int index = 0;
+	for (smart_vector_ptr<CGUIButton>::iterator it = m_vButtons.begin(); it != m_vButtons.end(); ++it, ++index) {
+		CGUIButton* button = it->get();
+		if (button) {
+			button->OnSimpleMove(lp.get());
+			CGUIButtonEventListener* e	= button->GetEvent().get();
+			CGUINormalButtonListener* p	= (CGUINormalButtonListener*)e;
 
-        // Check for button clicks
-        if (m_nButton == 0 && m_vButtons[i].IsLClick()) {
-            m_nButton = i + 1; // Selected button (0=none, 1=yes, 2=no) .......................
-			//p->SetType(32);
-			//p->SetImageOffset(2);
-        }
+			if (m_nButton == 0 && button->IsLClick())
+			{
+				m_nButton = button->GetID(); // Selected button (0=none, .......................
+			}
 
-		// set highlight gfx sheet
-		if (m_vButtons[i].IsIn()) {
-			//p->SetImageOffset(1);
-			//p->SetPlaneNumber(1); //8-13 (7 is base backdrop without highlight)
-			//p->SetBlinkSpeed(1);
-		} else{
-			//p->SetImageOffset(2);
-			//p->SetPlaneNumber(2);
-			//m_timer.Reset();
-			//m_timer.Pause();
+			if (button->IsIn())
+			{
+				//p->SetImageOffset(1);
+			}
 		}
-		break; // DEBUG!!!
-    }
+	}
 
+	switch(m_nButton) {
+		case 1: //WINDOW
+			break;
+		case 2: //FULLSCREEN
+			break;
+		case 3: //BITCOUNT
+			break;
+		case 9: //BACK
+			GetSceneControl()->ReturnScene();
+			break;
+		case 10: //VOL_MINUS
+			break;
+		case 11: //VOL_PLUS
+			break;
+		default:
+			break;
+	}
+	m_nButton = 0;
 }
 
 void CSceneSettings::OnDraw(const smart_ptr<ISurface>& lp) {
 	//lp->Clear();
-	//lp->BltFast(m_background.get(), 0, 0); // always render cached framebuffer
+	//lp->BltFast(m_background.get(), 0, 0); // render cached framebuffer (this can restore FB when something overrides it)
 
 	if(m_timerMain.Get() > 0) {
 		lp->BlendBltFast(m_settingsBackdrop, m_settingsBackdrop->GetPosX(), m_settingsBackdrop->GetPosY(), m_nFade);
@@ -148,37 +169,42 @@ void CSceneSettings::OnDraw(const smart_ptr<ISurface>& lp) {
 		//lp->BlendBlt(m_settingsBitBtn32Effect, m_settingsBitBtn32Effect->GetPosX(), m_settingsBitBtn32Effect->GetPosY(), m_nFade);
 	}
 
+	// Draw settings overlays (TODO: in real game its INVERTED...)
+	if(app->GetSettings()->WindowMode == true)
+		lp->Blt(m_settingsWindowBtnEffect, m_settingsWindowBtnEffect->GetPosX(), m_settingsWindowBtnEffect->GetPosY());
+	else
+		lp->Blt(m_settingsFullscreenBtnEffect, m_settingsFullscreenBtnEffect->GetPosX(), m_settingsFullscreenBtnEffect->GetPosY());
 
-	// Draw buttons
+	//Draw buttons
 	const int buttonCount = 6; // Total number of buttons
 
 	// Get the dimensions of the source surface
 	int width = 0, height = 0;
-	// Loop through and blit each slice of the source surface onto the target `lp`
-	for (int i = 1; i < buttonCount; ++i) {
-		// Button event cast
-		CGUIButtonEventListener* e	= m_vButtons[i].GetEvent().get();
-		CGUINormalButtonListener* p	= (CGUINormalButtonListener*)e;
 
-		//if(!ButtonClicked) p->SetPlaneNumber(8+m_nFadeButton.Get()); // update fade button gfx
-		//p->SetPlaneNumber(8+m_nFadeButton.Get()); // update fade button gfx
+	int index = 0;
+	for (smart_vector_ptr<CGUIButton>::iterator it = m_vButtons.begin(); it != m_vButtons.end(); ++it, ++index) {
+		CGUIButton* button = it->get();
+		if (button) {
+			// Button event cast
+			CGUIButtonEventListener* e	= button->GetEvent().get();
+			CGUINormalButtonListener* p	= (CGUINormalButtonListener*)e;
 
-		ISurface* originalSurface = m_vButtons[i].GetPlane();
-		originalSurface->GetSize(width, height); // Ensure variables match expected types
+			ISurface* originalSurface = button->GetPlane();
+			originalSurface->GetSize(width, height); // Ensure variables match expected types
 
-		// Define the source rectangle for the current slice
-		//RECT sourceRect = { 0, i * sliceHeight, width, (i + 1) * sliceHeight };
+			// Define the source rectangle for the current slice
+			//RECT sourceRect = { 0, i * sliceHeight, width, (i + 1) * sliceHeight };
 
-		//// Calculate the destination position on the target surface (lp)
-		//int destX = BUTTON_X; // X position remains constant
-		//int destY = BUTTON_Y + (i * sliceHeight); // Increment Y for each button
+			//// Calculate the destination position on the target surface (lp)
+			//int destX = BUTTON_X; // X position remains constant
+			//int destY = BUTTON_Y + (i * sliceHeight); // Increment Y for each button
 
-		// Blit the button surface onto the primary surface
-		if (m_vButtons[i].IsIn())
-		{
-			lp->BltFast(originalSurface, originalSurface->GetPosX(), originalSurface->GetPosY());
+			// Blit the button surface onto the primary surface
+			if (button->IsIn())
+			{
+				lp->Blt(originalSurface, originalSurface->GetPosX(), originalSurface->GetPosY());
+			}
 		}
-		break;
 	}
 
 	m_nFade.Inc();

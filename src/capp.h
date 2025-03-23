@@ -3,6 +3,7 @@
 
 #include "system/effects/yanePlaneEffectBlt.h"
 #include "system/CJoeySceneFactory.h"
+#include "system/CJoeyGameSettings.h"
 
 class CApp : public CAppFrame {
 public:
@@ -19,6 +20,9 @@ public:
     // Getters for scenes to use
     CMouse* GetMouse() { return &mouse_; }
 
+	// Getter for GameSettings
+    GameSettings* GetSettings() { return &settings_; }
+
 	// Language
 	string GetLang() { return "e"; }
 
@@ -29,6 +33,7 @@ protected:
     CFastPlaneFactory    planeFactory_;    // This contains CFastDraw, so you should draw through this
     CSoundFactory        soundFactory_;    // Same applies for Sound
     CMouse               mouse_;           // Mouse input handling
+	GameSettings		 settings_; // GameSettings
     
     bool m_bWindowClosing;
     smart_ptr<ISceneControl> m_sceneControl; // Store it as member now

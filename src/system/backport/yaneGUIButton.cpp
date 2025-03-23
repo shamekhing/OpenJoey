@@ -135,6 +135,7 @@ CGUIButton::CGUIButton(void) {
     m_pvButtonEvent = smart_ptr<CGUIButtonEventListener>(new CGUINormalButtonListener());
     m_bLeftClick = true;
     m_bRightClick = false;
+	m_id = -1;
     Reset();
 }
 

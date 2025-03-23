@@ -27,7 +27,8 @@ private:
 	CSaturationCounter m_nFade;
 	CTimer m_timerMain;
 
-	CGUIButton m_vButtons[11];		// Theoreticly 8 because of volume bars but TODO
+	//CGUIButton m_vButtons[11];		// Theoreticly 8 because of volume bars but TODO
+	smart_vector_ptr<CGUIButton> m_vButtons; // we vector now, fuck arrays :^)
 	int m_nButton;					// Selected button (0=none, 1=x, 2=x, 3=x, 4=x, 5=x)
 
 	ISurface* m_settingsBackdrop;

@@ -35,6 +35,11 @@ void CApp::MainThread() {
     m_sceneControl = smart_ptr<ISceneControl>(new CSceneControl(factory));
 	m_sceneControl->JumpScene(SCENE1);
 
+	// fake settings (parse later registry)
+	settings_.BitCount = 2;
+	settings_.Volume = 50;
+	settings_.WindowMode = true;
+
 	int nPat = 0;
 	int testInt = 0;
     while (IsThreadValid()){

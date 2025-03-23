@@ -109,6 +109,8 @@ public:
     void SetRightClick(bool b) { m_bRightClick = b; }
 	void SetBounds(RECT b) { m_bounds = b; m_boundsMode = true; }
 	void ResetBounds(RECT b) { m_bounds = RECT(); m_boundsMode = false; }
+	void SetID(int i) { m_id = i; }
+	int  GetID() { return  m_id; }
 
     smart_ptr<CGUIButtonEventListener> GetEvent() { return m_pvButtonEvent; }
     bool IsPushed(void) { return m_bPushed; }
@@ -142,6 +144,7 @@ private:
 
 	bool m_boundsMode;
 	RECT m_bounds;
+	int m_id;
 };
 
 } // namespace Draw

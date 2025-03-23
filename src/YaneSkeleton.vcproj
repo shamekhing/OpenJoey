@@ -193,6 +193,9 @@
 				Name="system"
 				Filter="">
 				<File
+					RelativePath=".\system\CJoeyGameSettings.h">
+				</File>
+				<File
 					RelativePath=".\system\CJoeySceneFactory.cpp">
 				</File>
 				<File
