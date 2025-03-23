@@ -46,6 +46,8 @@ There is also a [gamedev programming book series](https://www.amazon.co.jp/Windo
 * No assets from the original games are included in this repo.
 
 ## License
+The source code provided in this repository for OpenJoey is licenced under the [GNU General Public License version 3](https://www.gnu.org/licenses/gpl.html).
+
 The original yaneSDK was released as public domain by Motohiro Isozaki aka [yaneurao](https://github.com/yaneurao).
 You can also download the original source code on his website if you want.
 [Official YaneSDK Homepage](https://bm98.yaneu.com/yaneSDK.html)
