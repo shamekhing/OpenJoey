@@ -47,6 +47,14 @@ private:
     ISurface* m_sliderTop;          // Match other surface declarations
     ISurface* m_sliderMiddle;
     ISurface* m_sliderBottom;
+	// Sliced
+	// Volume slider graphics
+    ISurface* m_sliderLeftNormal;    // Left button normal state
+    ISurface* m_sliderLeftHover;     // Left button hover state
+    ISurface* m_sliderRightNormal;   // Right button normal state
+    ISurface* m_sliderRightHover;    // Right button hover state
+    ISurface* m_sliderBarNormal;     // Slider bar normal state
+    ISurface* m_sliderBarHover;      // Slider bar hover state
 };
 
 #endif // CSCENESETTINGS_H

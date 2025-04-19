@@ -114,8 +114,6 @@ void CSceneSettings::OnInit() {
 		// Get positions from the plane loader coordinates
 		POINT leftPos = m_vPlaneLoader.GetXY(10);   // Position of left cap
 		POINT rightPos = m_vPlaneLoader.GetXY(11);  // Position of right cap
-	    
-		// Get the size information from the third line (index 12)
 		POINT sizeInfo = m_vPlaneLoader.GetXY(12);  // This should give us the size specification
 	    
 		RECT rc;
@@ -125,21 +123,12 @@ void CSceneSettings::OnInit() {
 			rightPos.x,               // Right position X
 			leftPos.y + sizeInfo.y    // Use height from size specification
 		);
-	    
-		m_volumeSlider->SetRect(&rc);
-        
-        // Set as vertical slider
-        m_volumeSlider->SetType(1);
-        
-        // Set number of volume steps (0-100 in 20 steps)
-        m_volumeSlider->SetItemNum(100, 1);  // 100 horizontal positions, 1 vertical
-        
-        // Set initial position based on current volume
-        int currentVol = app->GetSettings()->Volume;
-        m_volumeSlider->SetSelectedItem(currentVol, 0);  // X position is volume now
 
-        // Set mouse input
-        m_volumeSlider->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false));
+		m_volumeSlider->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false));  // Set mouse first
+		m_volumeSlider->SetRect(&rc);                                     // Then set position
+		m_volumeSlider->SetType(1);                                       // Make it horizontal
+		m_volumeSlider->SetItemNum(101, 0);                               // Set range
+		m_volumeSlider->SetSelectedItem(app->GetSettings()->Volume, 0);   // Set initial value last
     }
 }
 
@@ -173,14 +162,19 @@ void CSceneSettings::OnMove(const smart_ptr<ISurface>& lp) {
 
 	// Update slider
     if(m_volumeSlider) {
-        m_volumeSlider->OnSimpleMove(lp.get());
-        
-        // Check if slider value changed
-        if(m_volumeSlider->IsUpdate()) {
-            int x, y;
-            m_volumeSlider->GetSelectedItem(x, y);
-            app->GetSettings()->Volume = x;  // Use X instead of Y for horizontal
-        }
+		m_volumeSlider->OnSimpleMove(lp.get());
+	    
+		if(m_volumeSlider->IsDraged()) {
+			int x, y;
+			m_volumeSlider->GetSelectedItem(x, y);
+			//if(x >= 0 && x <= 99) {
+				app->GetSettings()->Volume = x;
+				OutputDebugStringA("Volume during drag: ");
+				char debug[32];
+				sprintf(debug, "%d\n", x);
+				OutputDebugStringA(debug);
+			//}
+		}
     }
 
 	switch(m_nButton) {

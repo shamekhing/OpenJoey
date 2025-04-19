@@ -240,19 +240,21 @@ LRESULT CGUISlider::OnSimpleMove(ISurface* lp) {
         if (!m_bDraged) {
             m_bDraged = true;
             m_nDragPosX = mx - nXX;
-            m_nDragPosY = my - nYY;
-        }
-    }
+			m_nDragPosY = my - nYY;
+		}
+	}
 
-    if (m_bDraged) {
-        // Update selected item while dragging
-        int x = mmx - m_nDragPosX;
-        int y = mmy - m_nDragPosY;
+	if (m_bDraged) {
+		// Update selected item while dragging
+		//int x = mmx - m_nDragPosX;
+		//int y = mmy - m_nDragPosY;
+		int x = mmx - m_rcRect.left - m_nDragPosX;
+		int y = mmy - m_rcRect.top - m_nDragPosY;
 
-        if (m_nItemNumX >= 2 && w != 0) {
-            m_nSelectedItemX = (x * (m_nItemNumX - 1) + w / 2) / w;
-        }
-        else {
+		if (m_nItemNumX >= 2 && w != 0) {
+			m_nSelectedItemX = (x * (m_nItemNumX - 1) + w / 2) / w;
+		}
+		else {
             m_nSelectedItemX = 0;
         }
 
