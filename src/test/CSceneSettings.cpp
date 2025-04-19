@@ -101,12 +101,13 @@ void CSceneSettings::OnInit() {
     // Create the slider listener
     smart_ptr<CGUISliderEventListener> sliderListener(new CGUINormalSliderListener());
     CGUINormalSliderListener* p = static_cast<CGUINormalSliderListener*>(sliderListener.get());
+	POINT sizeInfo = m_vPlaneLoader.GetXY(12);  // This will give slider x/y size (inverted, yes its this hacky specified in TXT)
+	sliderListener->SetMinSize(sizeInfo.y, sizeInfo.x);
 
     if (m_sliderTop && m_sliderMiddle && m_sliderBottom) {
 		// Get positions from the plane loader coordinates
 		POINT leftPos = m_vPlaneLoader.GetXY(10);   // Position of left cap
 		POINT rightPos = m_vPlaneLoader.GetXY(11);  // Position of right cap
-		POINT sizeInfo = m_vPlaneLoader.GetXY(12);  // This should give us the size specification
 
 		// For slicing
 	    int buttonSize = sizeInfo.x;    // Width AND height of the arrow buttons
@@ -114,14 +115,16 @@ void CSceneSettings::OnInit() {
 		int buttonHeight = sizeInfo.x;  // Height is same as buttonSize for ALL elements
 		//##---
 		int sliderWidthOffset = sizeInfo.y;
-		RECT normalSlider  = { 0, sizeInfo.x * 2, sliderWidthOffset, sizeInfo.x * 3 };
-		RECT clickedSlider = { sliderWidthOffset, sizeInfo.x * 2, sliderWidthOffset * 2, sizeInfo.x * 3 };
+		// Define normal and clicked slider dynamically
+		// Adjusted slider buttons (1x2 setup)
+		RECT normalSlider  = { sizeInfo.x * 2, 0, sizeInfo.x * 2 + sliderWidthOffset, sizeInfo.x };  // Last entry in row 0
+		RECT clickedSlider = { sizeInfo.x * 2, sizeInfo.x, sizeInfo.x * 2 + sliderWidthOffset, sizeInfo.x * 2 };  // Last entry in row 1
 
         // Setup the planes directly in the listener
-        CPlane pln = m_vPlaneLoader.GetPlane(10); // Use first plane for pre-slicing
+        CPlane pln = m_vPlaneLoader.GetPlane(10); // Use slider entry for pre-slicing
 		m_sliderNormal.CreateSurface(sliderWidth, buttonHeight, false);  
 		RECT srcRegion = {0, 0, sliderWidth, buttonHeight};  // Take first 32x32 pixels
-		m_sliderNormal.BltFast(pln.get(), 0, 0, NULL, &srcRegion);
+		m_sliderNormal.BltFast(pln.get(), 0, 0, NULL, &normalSlider);
 
 		smart_ptr<ISurface> plnPtr(&m_sliderNormal, false); // no ownership
         p->SetPlane(plnPtr);
@@ -132,7 +135,7 @@ void CSceneSettings::OnInit() {
 
 		RECT rc; //ehhhhh
 		SetRect(&rc, 
-			leftPos.x+sizeInfo.y,                // Left position X
+			leftPos.x+sizeInfo.y,	  // Left position X
 			leftPos.y,                // Left position Y
 			rightPos.x,               // Right position X
 			leftPos.y + sizeInfo.y    // Use height from size specification
@@ -143,7 +146,6 @@ void CSceneSettings::OnInit() {
 		m_volumeSlider->SetType(1);                                       // Make it horizontal
 		m_volumeSlider->SetItemNum(101, 0);                               // Set range
 		m_volumeSlider->SetSelectedItem(app->GetSettings()->Volume, 0);   // Set initial value last
-		//sliderListener->SetMinSize(15,25);
     }
 }
 
@@ -243,7 +245,7 @@ void CSceneSettings::OnDraw(const smart_ptr<ISurface>& lp) {
 		if(m_volumeSlider && m_timerMain.Get() > 500) {
 			m_volumeSlider->OnSimpleDraw(lp.get());
 		}
-
+		
 		// Draw settings overlays (TODO: in real game its INVERTED...)
 		if(app->GetSettings()->WindowMode == true){
 			lp->BltFast(m_settingsWindowBtn, m_settingsWindowBtn->GetPosX(), m_settingsWindowBtn->GetPosY());

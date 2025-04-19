@@ -11,35 +11,33 @@ CGUISliderEventListener::CGUISliderEventListener() {
 }
 
 void CGUINormalSliderListener::GetSliderSize(int nX, int nY, int& sx, int& sy) {
-    // Get the movable area
+    // Calculate movable area
     LPRECT lprc = GetSlider()->GetRect();
-    
-    // Get size from our surface
-    if (m_bHasPlane && m_vPlane.get()) {
-        m_vPlane->GetSize(sx, sy);
-    }
-    else {
-        sx = m_nMinX;
-        sy = m_nMinY;
-    }
+    int w = lprc->right - lprc->left;
+    int h = lprc->bottom - lprc->top;
 
-    // Ensure minimum size
-    if (sx < m_nMinX) sx = m_nMinX;
-    if (sy < m_nMinY) sy = m_nMinY;
+    if (nX == 0) {
+        sx = w;
+    } else {
+        sx = w / nX;
+        // If below minimum size, use minimum size
+        if (sx < m_nMinX) sx = m_nMinX;
+    }
+    if (nY == 0) {
+        sy = h;
+    } else {
+        sy = h / nY;
+        // If below minimum size, use minimum size
+        if (sy < m_nMinY) sy = m_nMinY;
+    }
 }
 
 LRESULT CGUINormalSliderListener::OnDraw(ISurface* lp, int x, int y, int nX, int nY) {
     int nType = GetSlider()->GetType();
-	LPRECT lprc = GetSlider()->GetRect();
 
     // Get total slider size
     int nSx, nSy;
     GetSliderSize(nX, nY, nSx, nSy);
-
-    // For horizontal slider (Type 1), fix the Y position
-    if (nType == 1) {
-        y = lprc->top;  // Lock Y position to top of movable area
-    }
 
     if (m_bHasPlane) {
         return lp->BltNatural(m_vPlane.get(), x, y);
