@@ -83,6 +83,53 @@ void CSceneSettings::OnInit() {
 		smart_ptr<CGUIButton> btnSmartPtr(btn);
 		m_vButtons.insert(btnSmartPtr);
 	}
+
+    // Slider test
+    // Load slider graphics from the plane loader (raw pointers like other surfaces)
+    m_sliderTop = m_vPlaneLoader.GetPlane(10);
+    m_sliderMiddle = m_vPlaneLoader.GetPlane(11);
+    m_sliderBottom = m_vPlaneLoader.GetPlane(12);
+
+    // Set positions like other elements
+    if(m_sliderTop) m_sliderTop->SetPos(m_vPlaneLoader.GetXY(10));
+    if(m_sliderMiddle) m_sliderMiddle->SetPos(m_vPlaneLoader.GetXY(11));
+    if(m_sliderBottom) m_sliderBottom->SetPos(m_vPlaneLoader.GetXY(12));
+
+    // Create slider
+    m_volumeSlider = new CGUISlider();
+
+    // Create the slider listener
+    smart_ptr<CGUISliderEventListener> sliderListener(new CGUINormalSliderListener());
+    CGUINormalSliderListener* p = static_cast<CGUINormalSliderListener*>(sliderListener.get());
+
+    if (m_sliderTop && m_sliderMiddle && m_sliderBottom) {
+        // Setup the planes directly in the listener
+        CPlane pln = m_vPlaneLoader.GetPlane(10); // Use first plane for collision
+        smart_ptr<ISurface> plnPtr(pln.get(), false); // no ownership
+        p->SetPlane(plnPtr);
+        
+        // Configure the slider
+        m_volumeSlider->SetEvent(sliderListener);
+        
+        // Set slider position and size
+        RECT rc;
+        POINT pos = m_vPlaneLoader.GetXY(10);
+        ::SetRect(&rc, pos.x, pos.y, pos.x + 20, pos.y + 100);
+        m_volumeSlider->SetRect(&rc);
+        
+        // Set as vertical slider
+        m_volumeSlider->SetType(0);
+        
+        // Set number of volume steps (0-100 in 20 steps)
+        m_volumeSlider->SetItemNum(1, 20);
+        
+        // Set initial position based on current volume
+        int currentVol = app->GetSettings()->Volume;
+        m_volumeSlider->SetSelectedItem(0, currentVol / 5);
+
+        // Set mouse input
+        m_volumeSlider->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false));
+    }
 }
 
 void CSceneSettings::OnMove(const smart_ptr<ISurface>& lp) {
@@ -112,6 +159,19 @@ void CSceneSettings::OnMove(const smart_ptr<ISurface>& lp) {
 			}
 		}
 	}
+
+	// Update slider
+    if(m_volumeSlider) {
+        m_volumeSlider->OnSimpleMove(lp.get());
+        
+        // Check if slider value changed
+        if(m_volumeSlider->IsUpdate()) {
+            int x, y;
+            m_volumeSlider->GetSelectedItem(x, y);
+            // Convert 0-20 range back to 0-100
+            app->GetSettings()->Volume = y * 5;
+        }
+    }
 
 	switch(m_nButton) {
 		case 4: //WINDOW
@@ -153,6 +213,11 @@ void CSceneSettings::OnDraw(const smart_ptr<ISurface>& lp) {
 	}
 
 	if(m_timerMain.Get() > 500) {
+
+		// Draw slider
+		if(m_volumeSlider && m_timerMain.Get() > 500) {
+			m_volumeSlider->OnSimpleDraw(lp.get());
+		}
 
 		// Draw settings overlays (TODO: in real game its INVERTED...)
 		if(app->GetSettings()->WindowMode == true){

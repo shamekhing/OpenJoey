@@ -9,6 +9,7 @@
 #include "../CApp.h"
 #include "../system/CJoeySceneFactory.h"
 #include "../system/backport/yaneGUIButton.h"
+#include "../system/backport/yaneGUISlider.h"
 
 class CSceneSettings : public CBaseScene {
 public:
@@ -41,6 +42,11 @@ private:
 	ISurface* m_settingsVolumeSlider1;
 	ISurface* m_settingsVolumeSlider2;
 	ISurface* m_settingsVolumeSlider3;
+
+    CGUISlider* m_volumeSlider;     // Change to raw pointer like other surfaces
+    ISurface* m_sliderTop;          // Match other surface declarations
+    ISurface* m_sliderMiddle;
+    ISurface* m_sliderBottom;
 };
 
 #endif // CSCENESETTINGS_H
