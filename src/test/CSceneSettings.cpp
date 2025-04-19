@@ -84,7 +84,7 @@ void CSceneSettings::OnInit() {
 		m_vButtons.insert(btnSmartPtr);
 	}
 
-    // Slider test
+    // Volume Slider test
     // Load slider graphics from the plane loader (raw pointers like other surfaces)
     m_sliderTop = m_vPlaneLoader.GetPlane(10);
     m_sliderMiddle = m_vPlaneLoader.GetPlane(11);
@@ -111,21 +111,32 @@ void CSceneSettings::OnInit() {
         // Configure the slider
         m_volumeSlider->SetEvent(sliderListener);
         
-        // Set slider position and size
-        RECT rc;
-        POINT pos = m_vPlaneLoader.GetXY(10);
-        ::SetRect(&rc, pos.x, pos.y, pos.x + 20, pos.y + 100);
-        m_volumeSlider->SetRect(&rc);
+		// Get positions from the plane loader coordinates
+		POINT leftPos = m_vPlaneLoader.GetXY(10);   // Position of left cap
+		POINT rightPos = m_vPlaneLoader.GetXY(11);  // Position of right cap
+	    
+		// Get the size information from the third line (index 12)
+		POINT sizeInfo = m_vPlaneLoader.GetXY(12);  // This should give us the size specification
+	    
+		RECT rc;
+		SetRect(&rc, 
+			leftPos.x,                // Left position X
+			leftPos.y,                // Left position Y
+			rightPos.x,               // Right position X
+			leftPos.y + sizeInfo.y    // Use height from size specification
+		);
+	    
+		m_volumeSlider->SetRect(&rc);
         
         // Set as vertical slider
-        m_volumeSlider->SetType(0);
+        m_volumeSlider->SetType(1);
         
         // Set number of volume steps (0-100 in 20 steps)
-        m_volumeSlider->SetItemNum(1, 20);
+        m_volumeSlider->SetItemNum(100, 1);  // 100 horizontal positions, 1 vertical
         
         // Set initial position based on current volume
         int currentVol = app->GetSettings()->Volume;
-        m_volumeSlider->SetSelectedItem(0, currentVol / 5);
+        m_volumeSlider->SetSelectedItem(currentVol, 0);  // X position is volume now
 
         // Set mouse input
         m_volumeSlider->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false));
@@ -168,8 +179,7 @@ void CSceneSettings::OnMove(const smart_ptr<ISurface>& lp) {
         if(m_volumeSlider->IsUpdate()) {
             int x, y;
             m_volumeSlider->GetSelectedItem(x, y);
-            // Convert 0-20 range back to 0-100
-            app->GetSettings()->Volume = y * 5;
+            app->GetSettings()->Volume = x;  // Use X instead of Y for horizontal
         }
     }
 
