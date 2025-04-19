@@ -51,6 +51,7 @@ private:
 	// Volume slider graphics
     CFastPlane m_sliderNormal;    // Left button normal state
     CFastPlane m_sliderHover;     // Left button hover state
+	CTimer m_timerSliderPress;
 };
 
 #endif // CSCENESETTINGS_H

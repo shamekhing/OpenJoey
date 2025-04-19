@@ -79,6 +79,13 @@ void CSceneSettings::OnInit() {
 		//RECT boundsRect = { 0, 0, surfSize.cx, surfSize.cy };
 		//btn->SetBounds(boundsRect);
 
+		// Vol+/- are sliced and need custom bounds
+		if(i == 10 || i == 11){
+			POINT posVol = m_vPlaneLoader.GetXY(12); //HACKO (only use x value!)
+			RECT boundsRect = { 0, 0, posVol.x, posVol.x };
+			btn->SetBounds(boundsRect);
+		}
+
 		// Insert btn into smart pointer vector list
 		smart_ptr<CGUIButton> btnSmartPtr(btn);
 		m_vButtons.insert(btnSmartPtr);
@@ -112,18 +119,18 @@ void CSceneSettings::OnInit() {
 		// For slicing
 	    int buttonSize = sizeInfo.x;    // Width AND height of the arrow buttons
 		int sliderWidth = sizeInfo.y;   // Width of the slider graphic
-		int buttonHeight = sizeInfo.x;  // Height is same as buttonSize for ALL elements
+		int buttonHeight = sizeInfo.x*2;  // Height is same as buttonSize for ALL elements
 		//##---
 		int sliderWidthOffset = sizeInfo.y;
 		// Define normal and clicked slider dynamically
 		// Adjusted slider buttons (1x2 setup)
-		RECT normalSlider  = { sizeInfo.x * 2, 0, sizeInfo.x * 2 + sliderWidthOffset, sizeInfo.x };  // Last entry in row 0
-		RECT clickedSlider = { sizeInfo.x * 2, sizeInfo.x, sizeInfo.x * 2 + sliderWidthOffset, sizeInfo.x * 2 };  // Last entry in row 1
+		RECT normalSlider  = { sizeInfo.x * 2, 0,			sizeInfo.x * 2 + sliderWidthOffset, sizeInfo.x	   };  // Last entry in row 0
+		RECT clickedSlider = { sizeInfo.x * 2, sizeInfo.x,  sizeInfo.x * 2 + sliderWidthOffset, sizeInfo.x * 2 };  // Last entry in row 1
 
         // Setup the planes directly in the listener
         CPlane pln = m_vPlaneLoader.GetPlane(10); // Use slider entry for pre-slicing
 		m_sliderNormal.CreateSurface(sliderWidth, buttonHeight, false);  
-		RECT srcRegion = {0, 0, sliderWidth, buttonHeight};  // Take first 32x32 pixels
+		//normalSlider.top *= 2;
 		m_sliderNormal.BltFast(pln.get(), 0, 0, NULL, &normalSlider);
 
 		smart_ptr<ISurface> plnPtr(&m_sliderNormal, false); // no ownership
@@ -133,12 +140,12 @@ void CSceneSettings::OnInit() {
         m_volumeSlider->SetEvent(sliderListener);
         
 
-		RECT rc; //ehhhhh
-		SetRect(&rc, 
-			leftPos.x+sizeInfo.y,	  // Left position X
+		RECT rc;
+		SetRect(&rc,
+			leftPos.x + sizeInfo.x,	  // Left position X
 			leftPos.y,                // Left position Y
 			rightPos.x,               // Right position X
-			leftPos.y + sizeInfo.y    // Use height from size specification
+			leftPos.y + sizeInfo.x    // Use height from size specification
 		);
 
 		m_volumeSlider->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false));  // Set mouse first
@@ -165,7 +172,8 @@ void CSceneSettings::OnMove(const smart_ptr<ISurface>& lp) {
 			CGUIButtonEventListener* e	= button->GetEvent().get();
 			CGUINormalButtonListener* p	= (CGUINormalButtonListener*)e;
 
-			if (m_nButton == 0 && button->IsLClick())
+			bool btnPressFlag = button->IsLClick(); //TODO: button->IsPushed() + some Counter , to match game
+			if (m_nButton == 0 && btnPressFlag)
 			{
 				m_nButton = button->GetID(); // Selected button id
 			}
@@ -177,22 +185,33 @@ void CSceneSettings::OnMove(const smart_ptr<ISurface>& lp) {
 		}
 	}
 
+	int vol = app->GetSettings()->Volume;
+	int volInc = 8;
+
 	// Update slider
     if(m_volumeSlider) {
 		m_volumeSlider->OnSimpleMove(lp.get());
-	    
+		
+		// Apply volume mouse click
+		if (m_volumeSlider->GetButton() != 0 && m_mouse.IsPushLButton())
+		{
+			CGUISliderEventListener* s = m_volumeSlider->GetEvent().get();
+			if(s->GetLastEvent() == CGUISliderEventListener::SliderEvent::PageLeft)
+				vol -= volInc;
+			if(s->GetLastEvent() == CGUISliderEventListener::SliderEvent::PageRight)
+				vol += volInc;
+		}
+
 		if(m_volumeSlider->IsDraged()) {
 			int x, y;
 			m_volumeSlider->GetSelectedItem(x, y);
-			if(x >= 0 && x <= 99) {
-				app->GetSettings()->Volume = x;
-				OutputDebugStringA("Volume during drag: ");
-				char debug[32];
-				sprintf(debug, "%d\n", x);
-				OutputDebugStringA(debug);
-			}
+			vol = x;
+			OutputDebugStringA("Volume during drag: ");
+			char debug[32];
+			sprintf(debug, "%d\n", x);
+			OutputDebugStringA(debug);
 		}
-    }
+	}
 
 	switch(m_nButton) {
 		case 4: //WINDOW
@@ -214,21 +233,23 @@ void CSceneSettings::OnMove(const smart_ptr<ISurface>& lp) {
 			GetSceneControl()->ReturnScene();
 			break;
 		case 10: //VOL_MINUS
-			if(app->GetSettings()->Volume >= 0 && app->GetSettings()->Volume <= 100){
-				app->GetSettings()->Volume -= 10;
-				m_volumeSlider->SetSelectedItem(app->GetSettings()->Volume, 0);
-			}
-			break;
 		case 11: //VOL_PLUS
-			if(app->GetSettings()->Volume >= 0 && app->GetSettings()->Volume <= 100){
-				app->GetSettings()->Volume += 10;
-				m_volumeSlider->SetSelectedItem(app->GetSettings()->Volume, 0);
-			}
+			if(m_nButton == 10) vol -= volInc;
+			if(m_nButton == 11) vol += volInc;
 			break;
 		default:
 			break;
 	}
 	m_nButton = 0;
+
+	// Apply volume value
+	if(vol >= 100) vol = 100;
+	if(vol <= 0) vol = 0;
+
+	if(vol >= 0 && vol <= 100){
+		app->GetSettings()->Volume = vol;
+		m_volumeSlider->SetSelectedItem(app->GetSettings()->Volume, 0);
+	}
 }
 
 void CSceneSettings::OnDraw(const smart_ptr<ISurface>& lp) {

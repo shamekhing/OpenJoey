@@ -8,6 +8,7 @@ namespace Draw {
 CGUISliderEventListener::CGUISliderEventListener() {
     m_nMinX = 5;
     m_nMinY = 5;
+	ResetEventFlag();
 }
 
 void CGUINormalSliderListener::GetSliderSize(int nX, int nY, int& sx, int& sy) {
@@ -178,13 +179,13 @@ LRESULT CGUISlider::OnSimpleMove(ISurface* lp) {
     bool bIn;
     // Is mouse over slider area?
     LPRECT prc = GetRect();
-    bool bSliderIn = (prc->left <= mmx) && (mmx < prc->right) &&
+    m_nInSlider = (prc->left <= mmx) && (mmx < prc->right) &&
                     (prc->top <= mmy) && (mmy < prc->bottom);
 
     if (m_bDraged) {
         bIn = true; // Always true while dragging
     }
-    else if (!bSliderIn) {
+    else if (!m_nInSlider) {
         bIn = false;
     }
     else {
@@ -200,7 +201,7 @@ LRESULT CGUISlider::OnSimpleMove(ISurface* lp) {
     }
 
     // Handle slider button clicks
-    if (!bIn && bSliderIn && bNGuard) {
+    if (!bIn && m_nInSlider && bNGuard) {
         switch (m_nType) {
         case 0: // Vertical slider
             if (mmy < nYY) {

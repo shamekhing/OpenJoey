@@ -22,18 +22,22 @@ class CGUISlider;
 class CGUISliderEventListener {
 public:
     virtual void OnInit(void) {}
-    
+
     // These MUST be overridden
     virtual bool IsButton(int px, int py) { return true; }
     virtual bool IsButtonNoGFX(int px, int py, RECT& b) { return true; }
     virtual LRESULT OnDraw(ISurface* lp, int x, int y, int nX, int nY) { return 0; }
     virtual void GetSliderSize(int nX, int nY, int& sx, int& sy) = 0;
 
-    // Events (override as needed)
-    virtual void OnPageUp() {}    // Vertical slider: area above button clicked
-    virtual void OnPageDown() {}  // Vertical slider: area below button clicked
-    virtual void OnPageLeft() {}  // Horizontal slider: area left of button clicked
-    virtual void OnPageRight() {} // Horizontal slider: area right of button clicked
+    // Events
+	enum SliderEvent { None, PageUp, PageDown, PageLeft, PageRight };
+	virtual void OnPageUp() { m_lastEvent = PageUp; }		// Vertical slider: area above button clicked
+    virtual void OnPageDown() { m_lastEvent = PageDown; }	// Vertical slider: area below button clicked
+    virtual void OnPageLeft() { m_lastEvent = PageLeft; }	// Horizontal slider: area left of button clicked
+    virtual void OnPageRight() { m_lastEvent = PageRight; }	// Horizontal slider: area right of button clicked
+
+    SliderEvent GetLastEvent() const { return m_lastEvent; }
+    void ResetEventFlag() { m_lastEvent = None; }
 
     void SetMinSize(int sx, int sy) { m_nMinX = sx; m_nMinY = sy; }
     void GetMinSize(int& sx, int& sy) { sx = m_nMinX; sy = m_nMinY; }
@@ -47,6 +51,7 @@ public:
 protected:
     smart_ptr<CGUISlider> m_vGUISlider;
     int m_nMinX, m_nMinY;    // Minimum slider size
+    SliderEvent m_lastEvent; // Using the "m_" prefix for clarity
 };
 
 class CGUINormalSliderListener : public CGUISliderEventListener {
@@ -72,6 +77,7 @@ public:
     bool IsDraged() { return m_bDraged; }
     bool IsIn() { return m_bIn; }
     bool IsUpdate() { return m_bUpdate; }
+	int GetButton() { if(!m_nInSlider) { return 0; } return m_nButton; }
     
     void SetRect(LPRECT lprc) { m_rcRect = *lprc; }
     LPRECT GetRect() { return &m_rcRect; }
@@ -110,6 +116,7 @@ private:
     int m_nDragPosY;       // Y coordinate where drag started (relative)
     bool m_bFocusing;      // Focus gained this frame?
     int m_nButton;         // Previous mouse button state
+	bool m_nInSlider;		// Set when the cursor is inside the slider area
     bool m_bIn;           // Was mouse inside button last frame?
     bool m_bUpdate;       // Slider position changed since last frame
     RECT m_rcRect;       // Slider movement area
