@@ -16,7 +16,7 @@ void CSceneYesNo::OnInit() {
         OutputDebugStringA("Error: Failed to load test/yesno/list.txt\n");
     }
 
-    //m_pMessageSurface = m_vPlaneLoader.GetPlane(0);  // Plane 0 = first line
+    m_pMessageSurface = m_vPlaneLoader.GetPlane(0);  // Plane 0 = first line
 	//std::string testo = m_vPlaneLoader.GetFileName(0);
 	//CSurfaceInfo* testS = m_pMessageSurface->GetSurfaceInfo();
     if (m_pMessageSurface.get() == NULL) {
@@ -194,6 +194,19 @@ void CSceneYesNo::OnDraw(const smart_ptr<ISurface>& lp) {
     //int sx, sy;
     //m_pMessageSurface->GetSize(sx, sy);
     //lp->BltNatural(m_pMessageSurface.get(), 320 - sx/2, 200 - sy/2);
+
+	// DEMO: draw a simple 32x32 green rectangle
+	CFastPlane redPlane;
+	redPlane.SetFillColor(ISurface::makeRGB(0, 255, 0, 0)); 
+	redPlane.CreateSurface(32, 32, false);  
+	lp->BltFast(&redPlane, 32, 32);
+
+	// DEMO1: blit data onto new 32x32 surface and draw it
+	CFastPlane bgSurface;
+	bgSurface.CreateSurface(32, 32, false);  
+	RECT srcRegion = {0, 0, 32, 32};  // Take first 32x32 pixels
+	bgSurface.BltFast(m_pMessageSurface.get(), 0, 0, NULL, &srcRegion);
+	lp->BltFast(&bgSurface, 128, 32);
 
 	int x, y, b;
     m_mouse.GetInfo(x, y, b);

@@ -49,12 +49,8 @@ private:
     ISurface* m_sliderBottom;
 	// Sliced
 	// Volume slider graphics
-    ISurface* m_sliderLeftNormal;    // Left button normal state
-    ISurface* m_sliderLeftHover;     // Left button hover state
-    ISurface* m_sliderRightNormal;   // Right button normal state
-    ISurface* m_sliderRightHover;    // Right button hover state
-    ISurface* m_sliderBarNormal;     // Slider bar normal state
-    ISurface* m_sliderBarHover;      // Slider bar hover state
+    CFastPlane m_sliderNormal;    // Left button normal state
+    CFastPlane m_sliderHover;     // Left button hover state
 };
 
 #endif // CSCENESETTINGS_H

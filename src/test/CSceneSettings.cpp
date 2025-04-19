@@ -48,7 +48,7 @@ void CSceneSettings::OnInit() {
 	//m_settingsVolumeSlider3->SetPos(m_vPlaneLoader.GetXY(12));
 
 	// Create an array of button IDs
-    int buttonIds[] = {4, 5, 6, 7, 8, 9};
+    int buttonIds[] = {4, 5, 6, 7, 8, 9, 10, 11};
     const int buttonCount = sizeof(buttonIds) / sizeof(buttonIds[0]); // Calculate array size
 	m_vPlaneLoader.SetColorKey(ISurface::makeRGB(0, 255, 0, 128)); // alpha value because transparency logic will mismatch, code is expecting RGBA and not RGB
 
@@ -103,22 +103,36 @@ void CSceneSettings::OnInit() {
     CGUINormalSliderListener* p = static_cast<CGUINormalSliderListener*>(sliderListener.get());
 
     if (m_sliderTop && m_sliderMiddle && m_sliderBottom) {
+		// Get positions from the plane loader coordinates
+		POINT leftPos = m_vPlaneLoader.GetXY(10);   // Position of left cap
+		POINT rightPos = m_vPlaneLoader.GetXY(11);  // Position of right cap
+		POINT sizeInfo = m_vPlaneLoader.GetXY(12);  // This should give us the size specification
+
+		// For slicing
+	    int buttonSize = sizeInfo.x;    // Width AND height of the arrow buttons
+		int sliderWidth = sizeInfo.y;   // Width of the slider graphic
+		int buttonHeight = sizeInfo.x;  // Height is same as buttonSize for ALL elements
+		//##---
+		int sliderWidthOffset = sizeInfo.y;
+		RECT normalSlider  = { 0, sizeInfo.x * 2, sliderWidthOffset, sizeInfo.x * 3 };
+		RECT clickedSlider = { sliderWidthOffset, sizeInfo.x * 2, sliderWidthOffset * 2, sizeInfo.x * 3 };
+
         // Setup the planes directly in the listener
-        CPlane pln = m_vPlaneLoader.GetPlane(10); // Use first plane for collision
-        smart_ptr<ISurface> plnPtr(pln.get(), false); // no ownership
+        CPlane pln = m_vPlaneLoader.GetPlane(10); // Use first plane for pre-slicing
+		m_sliderNormal.CreateSurface(sliderWidth, buttonHeight, false);  
+		RECT srcRegion = {0, 0, sliderWidth, buttonHeight};  // Take first 32x32 pixels
+		m_sliderNormal.BltFast(pln.get(), 0, 0, NULL, &srcRegion);
+
+		smart_ptr<ISurface> plnPtr(&m_sliderNormal, false); // no ownership
         p->SetPlane(plnPtr);
         
         // Configure the slider
         m_volumeSlider->SetEvent(sliderListener);
         
-		// Get positions from the plane loader coordinates
-		POINT leftPos = m_vPlaneLoader.GetXY(10);   // Position of left cap
-		POINT rightPos = m_vPlaneLoader.GetXY(11);  // Position of right cap
-		POINT sizeInfo = m_vPlaneLoader.GetXY(12);  // This should give us the size specification
-	    
-		RECT rc;
+
+		RECT rc; //ehhhhh
 		SetRect(&rc, 
-			leftPos.x,                // Left position X
+			leftPos.x+sizeInfo.y,                // Left position X
 			leftPos.y,                // Left position Y
 			rightPos.x,               // Right position X
 			leftPos.y + sizeInfo.y    // Use height from size specification
@@ -129,6 +143,7 @@ void CSceneSettings::OnInit() {
 		m_volumeSlider->SetType(1);                                       // Make it horizontal
 		m_volumeSlider->SetItemNum(101, 0);                               // Set range
 		m_volumeSlider->SetSelectedItem(app->GetSettings()->Volume, 0);   // Set initial value last
+		//sliderListener->SetMinSize(15,25);
     }
 }
 
@@ -167,13 +182,13 @@ void CSceneSettings::OnMove(const smart_ptr<ISurface>& lp) {
 		if(m_volumeSlider->IsDraged()) {
 			int x, y;
 			m_volumeSlider->GetSelectedItem(x, y);
-			//if(x >= 0 && x <= 99) {
+			if(x >= 0 && x <= 99) {
 				app->GetSettings()->Volume = x;
 				OutputDebugStringA("Volume during drag: ");
 				char debug[32];
 				sprintf(debug, "%d\n", x);
 				OutputDebugStringA(debug);
-			//}
+			}
 		}
     }
 
@@ -197,10 +212,16 @@ void CSceneSettings::OnMove(const smart_ptr<ISurface>& lp) {
 			GetSceneControl()->ReturnScene();
 			break;
 		case 10: //VOL_MINUS
-			app->GetSettings()->Volume -= 5;
+			if(app->GetSettings()->Volume >= 0 && app->GetSettings()->Volume <= 100){
+				app->GetSettings()->Volume -= 10;
+				m_volumeSlider->SetSelectedItem(app->GetSettings()->Volume, 0);
+			}
 			break;
 		case 11: //VOL_PLUS
-			app->GetSettings()->Volume += 5;
+			if(app->GetSettings()->Volume >= 0 && app->GetSettings()->Volume <= 100){
+				app->GetSettings()->Volume += 10;
+				m_volumeSlider->SetSelectedItem(app->GetSettings()->Volume, 0);
+			}
 			break;
 		default:
 			break;
@@ -255,11 +276,34 @@ void CSceneSettings::OnDraw(const smart_ptr<ISurface>& lp) {
 				CGUINormalButtonListener* p	= (CGUINormalButtonListener*)e;
 				ISurface* originalSurface = button->GetPlane();
 
-				// Blit the button surface onto the primary surface
-				if (button->IsIn())
+				// Special edge case for slicee volume buttons
+				if(index == 6 || index == 7){
+					POINT sizeInfo = m_vPlaneLoader.GetXY(12); // Get volume +/- button size from txt (devs did it very hacky, x is x/y size and y is x size of slider)
+					RECT hoverButtonLeft = { 0, 0, sizeInfo.x, sizeInfo.x };
+					RECT hoverButtonRight = { sizeInfo.x, 0, sizeInfo.x * 2, sizeInfo.x };
+					RECT clickedButtonLeft = { 0, sizeInfo.x, sizeInfo.x, sizeInfo.x * 2 };
+					RECT clickedButtonRight = { sizeInfo.x, sizeInfo.x, sizeInfo.x * 2, sizeInfo.x * 2 };
+					if (button->IsIn())
+					{
+						if(index == 6){ // Arrow left
+							if (button->IsPushed())  lp->BltFast(originalSurface, originalSurface->GetPosX(), originalSurface->GetPosY(), NULL, &clickedButtonLeft, NULL, 0);
+							else lp->BltFast(originalSurface, originalSurface->GetPosX(), originalSurface->GetPosY(), NULL, &hoverButtonLeft, NULL, 0);
+						}
+
+						if(index == 7){ // Arrow right
+							if (button->IsPushed())  lp->BltFast(originalSurface, originalSurface->GetPosX(), originalSurface->GetPosY(), NULL, &clickedButtonRight, NULL, 0);
+							else lp->BltFast(originalSurface, originalSurface->GetPosX(), originalSurface->GetPosY(), NULL, &hoverButtonRight, NULL, 0);
+						}
+					}
+				} 
+				else
 				{
-					lp->BltNatural(originalSurface, originalSurface->GetPosX(), originalSurface->GetPosY()); // BltNatural is good for alpha channel
-					break; // Only one button at time
+					// Blit the button surface onto the primary surface
+					if (button->IsIn())
+					{
+						lp->BltNatural(originalSurface, originalSurface->GetPosX(), originalSurface->GetPosY()); // BltNatural is good for alpha channel
+						break; // Only one button at time
+					}
 				}
 			}
 		}
