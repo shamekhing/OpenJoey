@@ -1,6 +1,6 @@
 // CSceneCardList.h
 // Created by derplayer
-// Created on 2025-05-23 11:42:23
+// Created on 2025-05-23 11:47:22
 
 #ifndef CSCENECARDLIST_H
 #define CSCENECARDLIST_H
@@ -23,7 +23,7 @@ struct CardInfo {
     int id;
     int templateId;
     bool isNew;
-	std::string bmpName;  // Store the actual BMP filename (TODO: use bin DB for this later on)
+    std::string bmpName;  // Store the actual BMP filename (TODO: use bin DB for this later on)
 };
 
 class CSceneCardList : public CBaseScene {
@@ -43,28 +43,29 @@ private:
     CPlaneLoader m_vPlaneLoader;        // For scene elements
     CPlaneLoader m_vDetailPlaneLoader;   // For detail elements
 
-    // Animation counters
+    // Animation state
     CSaturationCounter m_nFade;
-    CInteriorCounter m_nCardAnimations[CARDS_PER_PAGE];
-    CInteriorCounter m_nCardScaleAnimations[CARDS_PER_PAGE];  // Added scale animation
     CTimer m_timerMain;
+    CInteriorCounter m_nCardAnimations[CARD_COLUMNS];
+    CInteriorCounter m_nCardScaleAnimations[CARD_COLUMNS];
+    bool m_bColumnAnimationStarted[CARD_COLUMNS];
+    static const int ANIM_SPEED = 8;
 
     // Card grid and selection
-    smart_vector_ptr<CGUIButton> m_vButtons;
     std::vector<CardInfo> m_ownedCards;
     int m_nCurrentPage;
     int m_nTotalPages;
 
     // UI Elements
-    CPlane m_titlePlane;                 // Title plane
-    CPlane m_bgPlane;                    // Background plane
-    CPlane m_cardHoverBorder;            // Card hover border from plane loader
-    CFastPlane m_cardPreviewImage;       // Card preview surface
+    CPlane m_titlePlane;
+    CPlane m_bgPlane;
+    CPlane m_cardHoverBorder;
+    CFastPlane m_cardPreviewImage;
     CGUIButton* m_backButton;
     CGUIButton* m_prevPageButton;
     CGUIButton* m_nextPageButton;
 
-    // Card preview elements
+    // Card preview state
     int m_nPreviewCardId;
     bool m_bPreviewCardIsMonster;
 
@@ -76,7 +77,6 @@ private:
     void DrawCardPreview(const smart_ptr<ISurface>& lp);
     void DrawPagination(const smart_ptr<ISurface>& lp);
     void DrawCollectionRate(const smart_ptr<ISurface>& lp);
-    void HandleCardHover(int cardIndex, int x, int y);
     void UpdateCardAnimations();
     void ChangePage(bool forward);
 };

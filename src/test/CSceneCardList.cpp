@@ -17,6 +17,17 @@ void CSceneCardList::OnInit() {
     m_timerMain.Restart();
     m_timerMain.Reset();
 
+    // Initialize column animations
+    for (int col = 0; col < CARD_COLUMNS; col++) {
+        m_nCardAnimations[col].Set(-CARD_HEIGHT/2, 0, ANIM_SPEED);      // Start at middle of cell
+        m_nCardScaleAnimations[col].Set(0, 100, ANIM_SPEED-2);          // Scale animation slightly faster
+        m_bColumnAnimationStarted[col] = false;
+    }
+
+    // Start first two columns immediately
+    m_bColumnAnimationStarted[0] = true;
+    m_bColumnAnimationStarted[1] = true;
+
     // Initialize page tracking
     m_nCurrentPage = 1;
     m_nPreviewCardId = 0;
@@ -45,17 +56,6 @@ void CSceneCardList::OnInit() {
 
     InitializeUI();
     LoadCardData();
-
-    // Initialize card animations - start from above the slots and animate down
-    for (int i = 0; i < CARDS_PER_PAGE; i++) {
-        // Change from moving down from slot to moving into slot from above
-        m_nCardAnimations[i].Set(-CARD_HEIGHT, 0, 20); // Start -CARD_HEIGHT pixels above final position
-    }
-
-    // Add scale animation counter
-    for (int i = 0; i < CARDS_PER_PAGE; i++) {
-        m_nCardScaleAnimations[i].Set(0, 100, 16); // 16 frames for scale animation (80% of 20 frames)
-    }
 }
 
 void CSceneCardList::InitializeUI() {
@@ -213,9 +213,23 @@ void CSceneCardList::OnMove(const smart_ptr<ISurface>& lp) {
 }
 
 void CSceneCardList::UpdateCardAnimations() {
-    for (int i = 0; i < CARDS_PER_PAGE; i++) {
-        m_nCardAnimations[i].Inc();
-        m_nCardScaleAnimations[i].Inc();
+    // Update started columns
+    for (int col = 0; col < CARD_COLUMNS; col++) {
+        if (m_bColumnAnimationStarted[col]) {
+            m_nCardAnimations[col].Inc();
+            m_nCardScaleAnimations[col].Inc();
+        }
+    }
+
+    // Check if we should start new columns
+    for (int col = 2; col < CARD_COLUMNS; col++) {
+        if (!m_bColumnAnimationStarted[col]) {
+            // Start new column if previous column is mostly done (80% complete)
+            if (m_bColumnAnimationStarted[col-2] && 
+                m_nCardAnimations[col-2].GetFrameNow() >= (int)(ANIM_SPEED * 0.8)) {
+                m_bColumnAnimationStarted[col] = true;
+            }
+        }
     }
 }
 
@@ -224,18 +238,20 @@ void CSceneCardList::ChangePage(bool forward) {
         if (m_nCurrentPage < m_nTotalPages) {
             m_nCurrentPage++;
             // Reset animations for new page
-            for (int i = 0; i < CARDS_PER_PAGE; i++) {
-                m_nCardAnimations[i].Set(-CARD_HEIGHT, 0, 20);
-                m_nCardScaleAnimations[i].Set(0, 100, 16);
+            for (int col = 0; col < CARD_COLUMNS; col++) {
+                m_nCardAnimations[col].Set(-CARD_HEIGHT/2, 0, ANIM_SPEED);
+                m_nCardScaleAnimations[col].Set(0, 100, ANIM_SPEED-2);
+                m_bColumnAnimationStarted[col] = (col < 2); // Start first two columns
             }
         }
     } else {
         if (m_nCurrentPage > 1) {
             m_nCurrentPage--;
-            // Reset animations for new page
-            for (int i = 0; i < CARDS_PER_PAGE; i++) {
-                m_nCardAnimations[i].Set(-CARD_HEIGHT, 0, 20);
-                m_nCardScaleAnimations[i].Set(0, 100, 16);
+            // Reset animations for new page (same as forward)
+            for (int col = 0; col < CARD_COLUMNS; col++) {
+                m_nCardAnimations[col].Set(-CARD_HEIGHT/2, 0, ANIM_SPEED);
+                m_nCardScaleAnimations[col].Set(0, 100, ANIM_SPEED-2);
+                m_bColumnAnimationStarted[col] = (col < 2); // Start first two columns
             }
         }
     }
@@ -290,32 +306,34 @@ void CSceneCardList::DrawCardGrid(const smart_ptr<ISurface>& lp) {
 
     int startIndex = (m_nCurrentPage - 1) * CARDS_PER_PAGE;
     
-    for (int row = 0; row < CARD_ROWS; row++) {
-        for (int col = 0; col < CARD_COLUMNS; col++) {
+    // Draw columns from right to left
+    for (int col = CARD_COLUMNS - 1; col >= 0; col--) {
+        // Skip if column animation hasn't started yet
+        if (!m_bColumnAnimationStarted[col]) continue;
+
+        for (int row = 0; row < CARD_ROWS; row++) {
             int index = startIndex + (row * CARD_COLUMNS) + col;
             int x = GRID_START_X + (col * (CARD_WIDTH + CARD_SPACING_X));
             int y = GRID_START_Y + (row * (CARD_HEIGHT + CARD_SPACING_Y));
 
-            // Apply card animation offset - now moves from above into position
-            int animIndex = (row * CARD_COLUMNS) + col;
-            y += (int)m_nCardAnimations[animIndex];
+            // Apply card animation offset
+            y += (int)m_nCardAnimations[col];
 
             // Draw card if we have it
             if (index >= 0 && (size_t)index < m_ownedCards.size()) {
                 const CardInfo& card = m_ownedCards[index];
                 
-                // Create temporary plane for card image
                 CFastPlane cardPlane;
                 char filepath[256];
                 sprintf(filepath, "data/mini/%s.bmp", card.bmpName.c_str());
                 
                 if (cardPlane.Load(filepath) == 0) {
                     // Get current scale (0-100%)
-                    int scalePercent = (int)m_nCardScaleAnimations[animIndex];
+                    int scalePercent = (int)m_nCardScaleAnimations[col];
                     
                     // Calculate scaled width
                     int scaledWidth = (CARD_WIDTH * scalePercent) / 100;
-                    if (scaledWidth < 1) scaledWidth = 1; // Ensure minimum width of 1 pixel
+                    if (scaledWidth < 1) scaledWidth = 1;
                     
                     // Center the scaled card
                     int xOffset = (CARD_WIDTH - scaledWidth) / 2;
@@ -331,7 +349,6 @@ void CSceneCardList::DrawCardGrid(const smart_ptr<ISurface>& lp) {
                     // Draw the scaled card
                     lp->BltFast(&scaledCard, x + xOffset, y);
 
-                    // Draw NEW indicator if card is new
                     if (card.isNew) {
                         CPlane newIndicator = m_vPlaneLoader.GetPlane(11);
                         if (newIndicator) {
