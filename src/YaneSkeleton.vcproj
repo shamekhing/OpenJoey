@@ -233,6 +233,12 @@
 					RelativePath=".\test\CScene1.h">
 				</File>
 				<File
+					RelativePath=".\test\CSceneCardList.cpp">
+				</File>
+				<File
+					RelativePath=".\test\CSceneCardList.h">
+				</File>
+				<File
 					RelativePath=".\test\CSceneMainMenu.cpp">
 				</File>
 				<File

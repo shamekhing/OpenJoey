@@ -69,6 +69,11 @@ void CScene1::OnDraw(const smart_ptr<ISurface>& lp) {
         return;
     }
 
+	if (key.IsKeyPush(35)) {  // 3
+        GetSceneControl()->CallSceneFast(SCENE_CARDLIST);
+        return;
+    }
+
 
 	// Apply text to scene surface
     lp->BltNatural(pText,20,100);
