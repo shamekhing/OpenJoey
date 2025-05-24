@@ -13,9 +13,17 @@ void CSceneCardList::OnInit() {
 
     // Init counters and timers
     m_nFade = CSaturationCounter(0, 255, 8);
+	nFadeBG.Set(0, 255, 16);
     m_timerMain = CTimer();
     m_timerMain.Restart();
     m_timerMain.Reset();
+
+    // Clone fb from previous scene if needed
+    smart_ptr<ISurface> screenPtr = app->GetDraw()->GetSecondary()->cloneFull();
+    if (screenPtr.get()) {
+        m_background = screenPtr;
+        OutputDebugStringA("Framebuffer data cloned and loaded successfully!\n");
+    }
 
     // Initialize column animations
     for (int col = 0; col < CARD_COLUMNS; col++) {
@@ -47,15 +55,106 @@ void CSceneCardList::OnInit() {
         OutputDebugStringA("Error: Failed to load data/y/list/list_detail.txt\n");
     }
 
-    // Clone fb from previous scene if needed
-    smart_ptr<ISurface> screenPtr = app->GetDraw()->GetSecondary()->cloneFull();
-    if (screenPtr.get()) {
-        m_background = screenPtr;
-        OutputDebugStringA("Framebuffer data cloned and loaded successfully!\n");
-    }
-
     InitializeUI();
     LoadCardData();
+}
+
+void CSceneCardList::SetHoverButtonPlane(CGUIButton* btn, int id, bool negativeOrder = false){
+		CGUIButtonEventListener* e = btn->GetEvent().get();
+		CGUINormalButtonListener* p	= (CGUINormalButtonListener*)e;
+		if (btn->IsIn())
+			if(negativeOrder)
+				p->SetPlaneNumber(id-1);
+			else
+				p->SetPlaneNumber(id+1);
+		else 
+			p->SetPlaneNumber(id);
+}
+
+void CSceneCardList::OnMove(const smart_ptr<ISurface>& lp) {
+    key.Input();
+    m_mouse.Flush();
+
+    if (m_timerMain.Get() < 500) return;
+
+    // Handle back button
+    if (key.IsKeyPush(5)) { // Space key
+        GetSceneControl()->ReturnScene();
+    }
+
+    // Update buttons
+    if (m_backButton) {
+		m_backButton->OnSimpleMove(lp.get());
+		SetHoverButtonPlane(m_backButton, 1);
+        if (m_backButton->IsLClick()) {
+            GetSceneControl()->ReturnScene();
+        }
+    }
+
+    // Handle page navigation
+    if (m_prevPageButton) {
+		m_prevPageButton->OnSimpleMove(lp.get());
+		SetHoverButtonPlane(m_prevPageButton, 6, true);
+
+        if (m_prevPageButton->IsLClick() && m_nCurrentPage > 1) {
+            ChangePage(false);
+        }
+    }
+
+    if (m_nextPageButton) {
+		m_nextPageButton->OnSimpleMove(lp.get());
+		SetHoverButtonPlane(m_nextPageButton, 8, true);
+        if (m_nextPageButton->IsLClick() && m_nCurrentPage < m_nTotalPages) {
+            ChangePage(true);
+        }
+    }
+
+    // Update card animations
+    UpdateCardAnimations();
+}
+
+void CSceneCardList::OnDraw(const smart_ptr<ISurface>& lp) {
+    // Draw background
+	if (m_bgPlane) { // && nFadeBG.IsEnd() == false
+        //lp->BltFast(m_bgPlane.get(), m_bgPlane->GetPosX(), m_bgPlane->GetPosY());
+		ISurfaceTransBlt::CircleBlt5(lp.get(), m_bgPlane.get(), 0, 0, (int)nFadeBG, 0, 255);
+		nFadeBG.Inc();
+		//return;
+	}
+
+    // Draw title with fade effect
+    if (m_timerMain.Get() > 0 && m_titlePlane) {
+        lp->BlendBltFast(m_titlePlane.get(), m_titlePlane->GetPosX(), m_titlePlane->GetPosY(), m_nFade);
+    }
+
+    if (m_timerMain.Get() > 500) {
+        // Draw page navigation buttons
+        if (m_prevPageButton) {
+            m_prevPageButton->OnSimpleDraw(lp.get());
+        }
+        if (m_nextPageButton) {
+            m_nextPageButton->OnSimpleDraw(lp.get());
+        }
+
+        // Draw back button
+        if (m_backButton) {
+            m_backButton->OnSimpleDraw(lp.get());
+        }
+
+        // Draw card grid
+        DrawCardGrid(lp);
+
+        // Draw card preview
+        DrawCardPreview(lp);
+
+        // Draw pagination
+        DrawPagination(lp);
+
+        // Draw collection rate
+        DrawCollectionRate(lp);
+    }
+
+    m_nFade.Inc();
 }
 
 void CSceneCardList::InitializeUI() {
@@ -77,13 +176,14 @@ void CSceneCardList::InitializeUI() {
     backBtn->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false));
     smart_ptr<CGUIButtonEventListener> buttonListener(new CGUINormalButtonListener());
     CGUINormalButtonListener* p = static_cast<CGUINormalButtonListener*>(buttonListener.get());
-    
+    p->SetPlaneLoader(smart_ptr<CPlaneLoader>(&m_vPlaneLoader, false), 1);
+
     // Back button plane
-    CPlane backPlane = m_vPlaneLoader.GetPlane(1); // back_off_?.bmp
+    //CPlane backPlane = m_vPlaneLoader.GetPlane(1); // back_off_?.bmp
     POINT backPos = m_vPlaneLoader.GetXY(1);
-    backPlane->SetPos(backPos);
+    //backPlane->SetPos(backPos);
     
-    p->SetPlane(smart_ptr<ISurface>(backPlane.get(), false));
+    //p->SetPlane(smart_ptr<ISurface>(backPlane.get(), false));
     backBtn->SetEvent(buttonListener);
     backBtn->SetXY(backPos.x, backPos.y);
     m_backButton = backBtn;
@@ -105,13 +205,14 @@ void CSceneCardList::InitializePageControls() {
     leftBtn->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false));
     smart_ptr<CGUIButtonEventListener> leftListener(new CGUINormalButtonListener());
     CGUINormalButtonListener* pl = static_cast<CGUINormalButtonListener*>(leftListener.get());
-    
+    pl->SetPlaneLoader(smart_ptr<CPlaneLoader>(&m_vPlaneLoader, false), 6);
+
     // Left arrow planes
-    CPlane leftNormalPlane = m_vPlaneLoader.GetPlane(6); // pe_yaji_l1.bmp
+    //CPlane leftNormalPlane = m_vPlaneLoader.GetPlane(6); // pe_yaji_l1.bmp
     POINT leftPos = m_vPlaneLoader.GetXY(6);
-    leftNormalPlane->SetPos(leftPos);
+    //leftNormalPlane->SetPos(leftPos);
     
-    pl->SetPlane(smart_ptr<ISurface>(leftNormalPlane.get(), false));
+    //pl->SetPlane(smart_ptr<ISurface>(leftNormalPlane.get(), false));
     leftBtn->SetEvent(leftListener);
     leftBtn->SetXY(leftPos.x, leftPos.y);
     m_prevPageButton = leftBtn;
@@ -121,13 +222,14 @@ void CSceneCardList::InitializePageControls() {
     rightBtn->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false));
     smart_ptr<CGUIButtonEventListener> rightListener(new CGUINormalButtonListener());
     CGUINormalButtonListener* pr = static_cast<CGUINormalButtonListener*>(rightListener.get());
-    
+    pr->SetPlaneLoader(smart_ptr<CPlaneLoader>(&m_vPlaneLoader, false), 8);
+
     // Right arrow planes
-    CPlane rightNormalPlane = m_vPlaneLoader.GetPlane(8); // pe_yaji_r1.bmp
+    //CPlane rightNormalPlane = m_vPlaneLoader.GetPlane(8); // pe_yaji_r1.bmp
     POINT rightPos = m_vPlaneLoader.GetXY(8);
-    rightNormalPlane->SetPos(rightPos);
+    //rightNormalPlane->SetPos(rightPos);
     
-    pr->SetPlane(smart_ptr<ISurface>(rightNormalPlane.get(), false));
+    //pr->SetPlane(smart_ptr<ISurface>(rightNormalPlane.get(), false));
     rightBtn->SetEvent(rightListener);
     rightBtn->SetXY(rightPos.x, rightPos.y);
     m_nextPageButton = rightBtn;
@@ -177,41 +279,6 @@ void CSceneCardList::LoadCardData() {
     OutputDebugStringA(debugStr);
 }
 
-void CSceneCardList::OnMove(const smart_ptr<ISurface>& lp) {
-    key.Input();
-    m_mouse.Flush();
-
-    if (m_timerMain.Get() < 500) return;
-
-    // Handle back button
-    if (key.IsKeyPush(5)) { // Space key
-        GetSceneControl()->ReturnScene();
-    }
-
-    // Update buttons
-    if (m_backButton && m_backButton->OnSimpleMove(lp.get())) {
-        if (m_backButton->IsLClick()) {
-            GetSceneControl()->ReturnScene();
-        }
-    }
-
-    // Handle page navigation
-    if (m_prevPageButton && m_prevPageButton->OnSimpleMove(lp.get())) {
-        if (m_prevPageButton->IsLClick() && m_nCurrentPage > 1) {
-            ChangePage(false);
-        }
-    }
-
-    if (m_nextPageButton && m_nextPageButton->OnSimpleMove(lp.get())) {
-        if (m_nextPageButton->IsLClick() && m_nCurrentPage < m_nTotalPages) {
-            ChangePage(true);
-        }
-    }
-
-    // Update card animations
-    UpdateCardAnimations();
-}
-
 void CSceneCardList::UpdateCardAnimations() {
     // Update started columns
     for (int col = 0; col < CARD_COLUMNS; col++) {
@@ -257,47 +324,6 @@ void CSceneCardList::ChangePage(bool forward) {
     }
 }
 
-void CSceneCardList::OnDraw(const smart_ptr<ISurface>& lp) {
-    // Draw background
-    if (m_bgPlane) {
-        lp->BltFast(m_bgPlane.get(), m_bgPlane->GetPosX(), m_bgPlane->GetPosY());
-    }
-
-    // Draw title with fade effect
-    if (m_timerMain.Get() > 0 && m_titlePlane) {
-        lp->BlendBltFast(m_titlePlane.get(), m_titlePlane->GetPosX(), m_titlePlane->GetPosY(), m_nFade);
-    }
-
-    if (m_timerMain.Get() > 500) {
-        // Draw page navigation buttons
-        if (m_prevPageButton) {
-            m_prevPageButton->OnSimpleDraw(lp.get());
-        }
-        if (m_nextPageButton) {
-            m_nextPageButton->OnSimpleDraw(lp.get());
-        }
-
-        // Draw back button
-        if (m_backButton) {
-            m_backButton->OnSimpleDraw(lp.get());
-        }
-
-        // Draw card grid
-        DrawCardGrid(lp);
-
-        // Draw card preview
-        DrawCardPreview(lp);
-
-        // Draw pagination
-        DrawPagination(lp);
-
-        // Draw collection rate
-        DrawCollectionRate(lp);
-    }
-
-    m_nFade.Inc();
-}
-
 void CSceneCardList::DrawCardGrid(const smart_ptr<ISurface>& lp) {
     const int GRID_START_X = 230;
     const int GRID_START_Y = 108;
@@ -305,7 +331,7 @@ void CSceneCardList::DrawCardGrid(const smart_ptr<ISurface>& lp) {
     const int CARD_SPACING_Y = 15;
 
     int startIndex = (m_nCurrentPage - 1) * CARDS_PER_PAGE;
-    
+
     // Draw columns from right to left
     for (int col = CARD_COLUMNS - 1; col >= 0; col--) {
         // Skip if column animation hasn't started yet
@@ -348,9 +374,9 @@ void CSceneCardList::DrawCardGrid(const smart_ptr<ISurface>& lp) {
                     
                     // Draw the scaled card
                     lp->BltFast(&scaledCard, x + xOffset, y);
-
+					
                     if (card.isNew) {
-                        CPlane newIndicator = m_vPlaneLoader.GetPlane(11);
+                        CPlane newIndicator = m_vPlaneLoader.GetPlane(10);
                         if (newIndicator) {
                             lp->BltFast(newIndicator.get(), x + 5, y + 26);
                         }

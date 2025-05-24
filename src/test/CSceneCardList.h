@@ -45,6 +45,7 @@ private:
 
     // Animation state
     CSaturationCounter m_nFade;
+	CSaturationCounter nFadeBG;
     CTimer m_timerMain;
     CInteriorCounter m_nCardAnimations[CARD_COLUMNS];
     CInteriorCounter m_nCardScaleAnimations[CARD_COLUMNS];
@@ -79,6 +80,7 @@ private:
     void DrawCollectionRate(const smart_ptr<ISurface>& lp);
     void UpdateCardAnimations();
     void ChangePage(bool forward);
+	void SetHoverButtonPlane(CGUIButton* btn, int id, bool negativeOrder);
 };
 
 #endif // CSCENECARDLIST_H
