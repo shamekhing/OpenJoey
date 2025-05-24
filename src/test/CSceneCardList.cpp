@@ -406,8 +406,15 @@ void CSceneCardList::DrawCardPreview(const smart_ptr<ISurface>& lp) {
 
 void CSceneCardList::DrawPagination(const smart_ptr<ISurface>& lp) {
     // Load page number font
-    CPlane pageFont = m_vPlaneLoader.GetPlane(4); // page_font.bmp
+    CPlane pageFont = m_vPlaneLoader.GetPlane(3); // page_font.bmp
+
     if (!pageFont) return;
+
+	// BUG: the specified TXT offsets do not work, something is wrong...
+	POINT pageLP = m_vPlaneLoader.GetXY(3);
+	POINT pageRP = m_vPlaneLoader.GetXY(4);
+	int pOffsetX = 8;
+	int pOffsetY = 9;
 
     // Draw current page number (positions from list_scene.txt)
     char pageNum[8];
@@ -417,8 +424,8 @@ void CSceneCardList::DrawPagination(const smart_ptr<ISurface>& lp) {
     
     for (char* p = pageNum; *p; p++) {
         int digit = *p - '0';
-        SIZE srcSize = { digit * 21, 0 }; // Source position
-        lp->BltFast(pageFont.get(), numX, numY, &srcSize);
+        RECT srcSize = { digit * 15, 0, digit * 15 + 15, 19 };
+        lp->BltNatural(pageFont.get(), numX-pOffsetX, numY-pOffsetY, 0, &srcSize);
         numX += 21;
     }
 
@@ -428,8 +435,9 @@ void CSceneCardList::DrawPagination(const smart_ptr<ISurface>& lp) {
     
     for (char* p = pageNum; *p; p++) {
         int digit = *p - '0';
-        SIZE srcSize = { digit * 21, 0 }; // Source position
-        lp->BltFast(pageFont.get(), numX, numY, &srcSize);
+        //SIZE srcSize = { digit * 21, 0 }; // Source position
+		RECT srcSize = { digit * 15, 0, digit * 15 + 15, 19 };
+        lp->BltNatural(pageFont.get(), numX-pOffsetX, numY-pOffsetY, 0, &srcSize);
         numX += 21;
     }
 }
