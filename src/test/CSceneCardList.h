@@ -1,6 +1,7 @@
 // CSceneCardList.h
 // Created by derplayer
 // Created on 2025-05-23 11:47:22
+// Offsets copypasted from https://github.com/CatchABus/ygo-emu-poc (MIT, thanks @CatchABus)
 
 #ifndef CSCENECARDLIST_H
 #define CSCENECARDLIST_H

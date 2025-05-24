@@ -434,10 +434,11 @@ void CSceneCardList::DrawPagination(const smart_ptr<ISurface>& lp) {
     }
 }
 
+// TODO: This needs further code. Switch all few seconds from Percentage% to OwnedCards/AllCards label
 void CSceneCardList::DrawCollectionRate(const smart_ptr<ISurface>& lp) {
     // Get font and symbol planes
-    CPlane rateFont = m_vPlaneLoader.GetPlane(12);    // get_font.bmp
-    CPlane rateSymbol = m_vPlaneLoader.GetPlane(13);  // get_symbol.bmp
+    CPlane rateFont = m_vPlaneLoader.GetPlane(11);    // get_font.bmp
+    CPlane rateSymbol = m_vPlaneLoader.GetPlane(12);  // get_symbol.bmp
     
     if (!rateFont || !rateSymbol) return;
 
@@ -447,7 +448,7 @@ void CSceneCardList::DrawCollectionRate(const smart_ptr<ISurface>& lp) {
     sprintf(rateStr, "%.1f", rate);
 
     // Draw at position from list_scene.txt (761,080)
-    int numX = 761;
+    int numX = 670;
     int numY = 80;
 
     // Draw digits
@@ -455,11 +456,15 @@ void CSceneCardList::DrawCollectionRate(const smart_ptr<ISurface>& lp) {
         if (*p == '.') continue;  // Skip decimal point for now
         
         int digit = *p - '0';
-        SIZE srcSize = { digit * 10, 0 }; // Source position
-        lp->BltFast(rateFont.get(), numX, numY, &srcSize);
+		RECT srcSize = { digit * 12, 0, digit * 12 + 12, 15 };
+        lp->BltNatural(rateFont.get(), numX, numY, 0, &srcSize);
         numX += 10;
     }
 
     // Draw % symbol
-    lp->BltFast(rateSymbol.get(), numX, numY);
+	RECT rectSlash   = { 0, 0, 11, 18 };   // For "/"
+	RECT rectDot     = { 11, 0, 17, 18 };  // For "."
+	RECT rectPercent = { 15, 0, 36, 18 };  // For "%"
+
+    lp->BltNatural(rateSymbol.get(), numX+2, numY-1, 0, &rectPercent);
 }
