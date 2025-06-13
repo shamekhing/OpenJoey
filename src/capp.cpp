@@ -19,6 +19,28 @@ void CApp::MainThread() {
         return;
     }
 
+	// TEST BIN SYSTEM - Can we get data for card 235
+    const Card* card235 = binSystem_.GetCard(891); //428
+    if(card235)
+    {
+        // Access card 235's data:
+        const char* name = card235->name.name;
+        WORD attack = card235->properties.GetAttackValue();
+        WORD defense = card235->properties.GetDefenseValue();
+        const char* desc = card235->description;
+    }
+
+    // Or if you need all cards
+    const Card* allCards = binSystem_.GetCards();
+    DWORD cardCount = binSystem_.GetCardCount();
+    
+    for(DWORD i = 0; i < cardCount; i++)
+    {
+        const Card* currentCard = &allCards[i];
+        // Work with currentCard...
+    }
+
+	// PLANE TEST
     CPlane bgplane;
     bgplane->Load("data/y/try/end_e.bmp");
 

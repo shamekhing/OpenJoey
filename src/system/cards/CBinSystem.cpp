@@ -3,11 +3,8 @@
 #include "CBinDecompress.h"
 
 CBinSystem::CBinSystem()
-    : m_cardProps(NULL)
-    , m_cardNames(NULL)
-    , m_cardRealIds(NULL)
-    , m_cardInternalIds(NULL)
-    , m_cardPacks(NULL)
+    : m_cards(NULL)
+    , m_dialogs(NULL)
     , m_cardDescriptions(NULL)
     , m_cardDescIndexes(NULL)
     , m_dialogTexts(NULL)
@@ -19,18 +16,13 @@ CBinSystem::CBinSystem()
 
 CBinSystem::~CBinSystem()
 {
-    if(m_cardProps) delete[] m_cardProps;
-    if(m_cardNames) delete[] m_cardNames;
-    if(m_cardRealIds) delete[] m_cardRealIds;
-    if(m_cardInternalIds) delete[] m_cardInternalIds;
-    if(m_cardPacks) delete[] m_cardPacks;
+    if(m_cards) delete[] m_cards;
+    if(m_dialogs) delete[] m_dialogs;
     if(m_cardDescriptions) delete[] m_cardDescriptions;
     if(m_cardDescIndexes) delete[] m_cardDescIndexes;
     if(m_dialogTexts) delete[] m_dialogTexts;
     if(m_dialogIndexes) delete[] m_dialogIndexes;
 }
-
-// In CBinSystem.cpp, update the loading functions to use language suffix
 
 BOOL CBinSystem::Initialize(const char* basePath, const char* language)
 {
@@ -109,8 +101,15 @@ BOOL CBinSystem::LoadCardProperties(const char* path)
     if(!data) return FALSE;
 
     m_cardCount = size / sizeof(CardProperties);
-    m_cardProps = new CardProperties[m_cardCount];
-    memcpy(m_cardProps, data, size);
+    
+    // Allocate the unified card array
+    m_cards = new Card[m_cardCount];
+    memset(m_cards, 0, m_cardCount * sizeof(Card));
+
+    // Copy properties into each card
+    for(DWORD i = 0; i < m_cardCount; i++) {
+        memcpy(&m_cards[i].properties, &((CardProperties*)data)[i], sizeof(CardProperties));
+    }
 
     delete[] data;
     return TRUE;
@@ -122,15 +121,16 @@ BOOL CBinSystem::LoadCardNames(const char* path)
     BYTE* data = DecompressFile(path, size);
     if(!data) return FALSE;
 
-    // Verify size matches card count
     if(size != m_cardCount * sizeof(CardName))
     {
         delete[] data;
         return FALSE;
     }
 
-    m_cardNames = new CardName[m_cardCount];
-    memcpy(m_cardNames, data, size);
+    // Copy names into each card
+    for(DWORD i = 0; i < m_cardCount; i++) {
+        memcpy(&m_cards[i].name, &((CardName*)data)[i], sizeof(CardName));
+    }
 
     delete[] data;
     return TRUE;
@@ -142,15 +142,16 @@ BOOL CBinSystem::LoadCardRealIds(const char* path)
     BYTE* data = DecompressFile(path, size);
     if(!data) return FALSE;
 
-    // Verify size matches card count
     if(size != m_cardCount * sizeof(CardRealId))
     {
         delete[] data;
         return FALSE;
     }
 
-    m_cardRealIds = new CardRealId[m_cardCount];
-    memcpy(m_cardRealIds, data, size);
+    // Copy real IDs into each card
+    for(DWORD i = 0; i < m_cardCount; i++) {
+        memcpy(&m_cards[i].realId, &((CardRealId*)data)[i], sizeof(CardRealId));
+    }
 
     delete[] data;
     return TRUE;
@@ -162,13 +163,10 @@ BOOL CBinSystem::LoadCardInternalIds(const char* path)
     BYTE* data = DecompressFile(path, size);
     if(!data) return FALSE;
 
-    // Allocate exactly m_cardCount entries since that's already the correct count
-    m_cardInternalIds = new CardInternalId[m_cardCount];
-    
     // Set first entry to 0xFFFF
-    m_cardInternalIds[0].id = 0xFFFF;
+    m_cards[0].internalId.id = 0xFFFF;
 
-    // Copy the actual card data starting at index 1
+    // Copy remaining internal IDs
     const size_t bytesToCopy = (m_cardCount - 1) * sizeof(CardInternalId);
     if(size < bytesToCopy)
     {
@@ -176,7 +174,9 @@ BOOL CBinSystem::LoadCardInternalIds(const char* path)
         return FALSE;
     }
     
-    memcpy(&m_cardInternalIds[1], data, bytesToCopy); // void* moved to entry [1]
+    for(DWORD i = 1; i < m_cardCount; i++) {
+        memcpy(&m_cards[i].internalId, &((CardInternalId*)data)[i-1], sizeof(CardInternalId));
+    }
 
     delete[] data;
     return TRUE;
@@ -201,6 +201,11 @@ BOOL CBinSystem::LoadCardDescriptions(const char* path, const char* indexPath)
     m_cardDescIndexes = (DWORD*)indexData;
     m_cardDescriptions = (char*)textData;
 
+    // Set description pointers for each card
+    for(DWORD i = 0; i < m_cardCount; i++) {
+        m_cards[i].description = &m_cardDescriptions[m_cardDescIndexes[i]];
+    }
+
     return TRUE;
 }
 
@@ -220,9 +225,15 @@ BOOL CBinSystem::LoadDialogTexts(const char* path, const char* indexPath)
         return FALSE;
     }
 
+    m_dialogCount = indexSize / sizeof(DWORD);
     m_dialogIndexes = (DWORD*)indexData;
     m_dialogTexts = (char*)textData;
-    m_dialogCount = indexSize / sizeof(DWORD);
+
+    // Allocate and setup dialog entries
+    m_dialogs = new DialogEntry[m_dialogCount];
+    for(DWORD i = 0; i < m_dialogCount; i++) {
+        m_dialogs[i].text = &m_dialogTexts[m_dialogIndexes[i]];
+    }
 
     return TRUE;
 }
@@ -233,98 +244,96 @@ BOOL CBinSystem::LoadCardPacks(const char* path)
     BYTE* data = DecompressFile(path, size);
     if(!data) return FALSE;
 
-    // Card packs have 1115 pairs of 2 bytes each (2230 bytes total)
-    const size_t CARD_PACK_COUNT = 1115;
-    
-    // Verify size is exactly 2230 bytes
     if(size != 2230)
     {
         delete[] data;
         return FALSE;
     }
 
-    m_cardPacks = new CardPack[CARD_PACK_COUNT];
-    memcpy(m_cardPacks, data, size);
+    // Copy pack data into each card
+    for(DWORD i = 0; i < m_cardCount; i++) {
+        memcpy(&m_cards[i].pack, &((CardPack*)data)[i], sizeof(CardPack));
+    }
 
     delete[] data;
     return TRUE;
 }
 
-// Getter implementations
+// Getter implementations now use m_cards directly
 WORD CBinSystem::GetDefenseValue(DWORD cardId)
 {
     if(cardId >= m_cardCount) return 0;
-    return m_cardProps[cardId].GetDefenseValue();
+    return m_cards[cardId].properties.GetDefenseValue();
 }
 
 WORD CBinSystem::GetAttackValue(DWORD cardId)
 {
     if(cardId >= m_cardCount) return 0;
-    return m_cardProps[cardId].GetAttackValue();
+    return m_cards[cardId].properties.GetAttackValue();
 }
 
 MonsterType CBinSystem::GetMonsterType(DWORD cardId)
 {
     if(cardId >= m_cardCount) return TYPE_NONE;
-    return m_cardProps[cardId].GetMonsterType();
+    return m_cards[cardId].properties.GetMonsterType();
 }
 
 CardCategory CBinSystem::GetCardCategory(DWORD cardId)
 {
     if(cardId >= m_cardCount) return CATEGORY_NORMAL_0;
-    return m_cardProps[cardId].GetCardCategory();
+    return m_cards[cardId].properties.GetCardCategory();
 }
 
 MonsterAttribute CBinSystem::GetMonsterAttribute(DWORD cardId)
 {
     if(cardId >= m_cardCount) return ATTR_DIVINE_BEAST_NO_TRIBUTE;
-    return m_cardProps[cardId].GetMonsterAttribute();
+    return m_cards[cardId].properties.GetMonsterAttribute();
 }
 
 MonsterStars CBinSystem::GetMonsterStars(DWORD cardId)
 {
     if(cardId >= m_cardCount) return STARS_1;
-    return m_cardProps[cardId].GetMonsterStars();
+    return m_cards[cardId].properties.GetMonsterStars();
 }
 
 BOOL CBinSystem::RequiresTwoTributes(DWORD cardId)
 {
     if(cardId >= m_cardCount) return FALSE;
-    return m_cardProps[cardId].RequiresTwoTributes();
+    return m_cards[cardId].properties.RequiresTwoTributes();
 }
 
 const char* CBinSystem::GetCardName(DWORD cardId)
 {
     if(cardId >= m_cardCount) return NULL;
-    return m_cardNames[cardId].name;
+    return m_cards[cardId].name.name;
 }
 
 WORD CBinSystem::GetCardRealId(DWORD internalId)
 {
     if(internalId >= m_cardCount) return 0xFFFF;
-    return m_cardRealIds[internalId].id;
+    return m_cards[internalId].realId.id;
 }
 
 WORD CBinSystem::GetCardInternalId(DWORD cardId)
 {
     if(cardId >= m_cardCount) return 0;
-    return m_cardInternalIds[cardId].id;
+    return m_cards[cardId].internalId.id;
 }
 
 const char* CBinSystem::GetCardDescription(DWORD cardId)
 {
     if(cardId >= m_cardCount) return NULL;
-    return &m_cardDescriptions[m_cardDescIndexes[cardId]];
+    return m_cards[cardId].description;
 }
 
 const char* CBinSystem::GetDialogText(DWORD dialogId)
 {
     if(dialogId >= m_dialogCount) return NULL;
-    return &m_dialogTexts[m_dialogIndexes[dialogId]];
+    return m_dialogs[dialogId].text;
 }
 
 BOOL CBinSystem::IsCardAvailable(DWORD cardId, BYTE gameId)
 {
     if(cardId >= m_cardCount) return FALSE;
-    return (m_cardPacks[cardId].gameFlags & gameId) != 0;
+    return (m_cards[cardId].pack.gameFlags & gameId) != 0;
 }
