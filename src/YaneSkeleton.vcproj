@@ -222,6 +222,22 @@
 				<File
 					RelativePath=".\system\effects\yanePlaneEffectBlt.h">
 				</File>
+				<Filter
+					Name="cards"
+					Filter="">
+					<File
+						RelativePath=".\system\cards\CBinDecompress.cpp">
+					</File>
+					<File
+						RelativePath=".\system\cards\CBinDecompress.h">
+					</File>
+					<File
+						RelativePath=".\system\cards\CBinSystem.cpp">
+					</File>
+					<File
+						RelativePath=".\system\cards\CBinSystem.h">
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="test"

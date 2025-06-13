@@ -136,6 +136,36 @@ void CSceneYesNo::OnInit() {
         m_vButtons[i].SetXY(216 + i*BUTTON_SPACING, BUTTON_Y);
     }
 
+	// DEMO: test button as cards
+	// Create plane loader
+    //CPlaneLoader loaderDemo;
+    //loaderDemo.SetColorKey(ISurfaceRGB(0, 255, 0));
+
+    // Example: Manually add surfaces to specific ID slots
+    //loaderDemo.Set
+    //// Slot ID 1
+    //CPlane plane1;
+    //plane1.Load("card1.bmp");  // Your image path
+    //POINT pos1 = { 100, 100 };
+    //plane1.SetPos(pos1);
+    //loaderDemo.Add(1, plane1);  // Add to slot 1
+
+    for(int i = 0; i < 8; i++) {
+        m_vCards[i].SetMouse(smart_ptr<CFixMouse>(&m_mouse, false));
+
+        // Create the button listener as CGUIButtonEventListener type directly
+        smart_ptr<CGUIButtonEventListener> buttonListener(new CGUINormalButtonListener());
+        
+        // Cast to derived type to access CGUINormalButtonListener methods
+        CGUINormalButtonListener* p = static_cast<CGUINormalButtonListener*>(buttonListener.get());
+		CPlane pln = m_vPlaneLoader.GetPlane(0);
+		//pln->SetPos(0,0);
+		smart_ptr<ISurface> plnPtr(pln.get(), false); // no ownership
+		p->SetPlane(plnPtr);
+        m_vCards[i].SetEvent(buttonListener);
+        m_vCards[i].SetXY(64 + (64 * i), 128);
+    }
+
     m_nButton = 0;
     m_nFade.Set(0, 16, 1);  // 16 frames fade
 }
@@ -169,6 +199,10 @@ void CSceneYesNo::OnDraw(const smart_ptr<ISurface>& lp) {
 
 	lp->Clear();
 	//lp->BltFast(m_vBackground, 0, 0);
+
+	for(int i = 0; i < 8; i++) {
+		m_vCards[i].OnSimpleDraw(lp.get());
+	}
 
 	if(IsSetLeva == false) {
 		//m_vFastBackground1 = app->GetDraw()->GetSecondary();

@@ -12,6 +12,13 @@ void CApp::MainThread() {
     // Make this the main application (close all other windows when exiting)
     SetMainApp(true);
 
+	// Initialize BinSystem
+	if(!binSystem_.Initialize("data/bin#", GetLangFull().c_str()))
+    {
+        MessageBox(NULL, "Failed to initialize BinSystem!", "Error", MB_OK | MB_ICONERROR);
+        return;
+    }
+
     CPlane bgplane;
     bgplane->Load("data/y/try/end_e.bmp");
 

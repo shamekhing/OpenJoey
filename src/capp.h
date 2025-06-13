@@ -4,6 +4,7 @@
 #include "system/effects/yanePlaneEffectBlt.h"
 #include "system/CJoeySceneFactory.h"
 #include "system/CJoeyGameSettings.h"
+#include "system/cards/CBinSystem.h"
 
 class CApp : public CAppFrame {
 public:
@@ -23,8 +24,12 @@ public:
 	// Getter for GameSettings
     GameSettings* GetSettings() { return &settings_; }
 
+	// Getter for BinSystem
+    CBinSystem* GetBinSystem() { return &binSystem_; }
+
 	// Language
 	string GetLang() { return "e"; }
+	string GetLangFull() { return "eng"; }
 
 	// WM_CLOSE
 	LRESULT	OnPreClose(void);
@@ -33,7 +38,8 @@ protected:
     CFastPlaneFactory    planeFactory_;    // This contains CFastDraw, so you should draw through this
     CSoundFactory        soundFactory_;    // Same applies for Sound
     CMouse               mouse_;           // Mouse input handling
-	GameSettings		 settings_; // GameSettings
+	GameSettings		 settings_;		   // GameSettings
+	CBinSystem			 binSystem_;       // BinSystem
     
     bool m_bWindowClosing;
     smart_ptr<ISceneControl> m_sceneControl; // Store it as member now

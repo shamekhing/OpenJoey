@@ -30,6 +30,7 @@ private:
 	CFastPlane* m_lastFrameFB;
 
     CGUIButton m_vButtons[2];  // Yes/No buttons
+	CGUIButton m_vCards[8];		// 8 Dummy cards
     //CGUINormalButtonListener m_vButtonEvents[2];  // Button event handlers
     
     int m_nButton;            // Selected button (0=none, 1=yes, 2=no)
