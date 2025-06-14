@@ -19,15 +19,22 @@ void CApp::MainThread() {
         return;
     }
 
-	// TEST BIN SYSTEM - Can we get data for card 235
-    const Card* card235 = binSystem_.GetCard(891); //428
-    if(card235)
+	// TEST BIN SYSTEM - Can we get data for a card
+    const Card* cardUnitTest = binSystem_.GetCard(582); //582 (normal monster), 428 (effect monster), 235 (trap), 852 (Spell card), 1064 (fusion)
+    if(cardUnitTest)
     {
-        // Access card 235's data:
-        const char* name = card235->name.name;
-        WORD attack = card235->properties.GetAttackValue();
-        WORD defense = card235->properties.GetDefenseValue();
-        const char* desc = card235->description;
+        // Access card's data:
+        const char* name = cardUnitTest->name.name;
+		BOOL gfxValid = cardUnitTest->hasValidGFX;
+        WORD attack = cardUnitTest->properties.GetAttackValue();
+        WORD defense = cardUnitTest->properties.GetDefenseValue();
+		MonsterType type = cardUnitTest->properties.GetMonsterType();
+		CardCategory cat = cardUnitTest->properties.GetCardCategory();
+		MonsterAttribute attr = cardUnitTest->properties.GetMonsterAttribute();
+		BYTE stars = cardUnitTest->properties.GetMonsterStars();
+        const char* desc = cardUnitTest->description;
+		const char* gfxPath = cardUnitTest->imageFilename;
+		const char* gfxMiniPath = cardUnitTest->imageMiniFilename;
     }
 
     // Or if you need all cards

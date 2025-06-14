@@ -9,6 +9,8 @@ CBinSystem::CBinSystem()
     , m_cardDescIndexes(NULL)
     , m_dialogTexts(NULL)
     , m_dialogIndexes(NULL)
+	, m_cardList(NULL)
+	, m_cardListMini(NULL)
     , m_cardCount(0)
     , m_dialogCount(0)
 {
@@ -22,6 +24,8 @@ CBinSystem::~CBinSystem()
     if(m_cardDescIndexes) delete[] m_cardDescIndexes;
     if(m_dialogTexts) delete[] m_dialogTexts;
     if(m_dialogIndexes) delete[] m_dialogIndexes;
+	if(m_cardList) delete[] m_cardList;
+	if(m_cardListMini) delete[] m_cardListMini;
 }
 
 BOOL CBinSystem::Initialize(const char* basePath, const char* language)
@@ -58,6 +62,14 @@ BOOL CBinSystem::Initialize(const char* basePath, const char* language)
     // Load card pack data (no language suffix)
     sprintf(fullPath, "%s\\card_pack.bin", basePath);
     if(!LoadCardPacks(fullPath)) return FALSE;
+
+	// Load card list
+    sprintf(fullPath, "%s\\..\\card\\list_card.txt", basePath);
+    if(!LoadCardList(fullPath, FALSE)) return FALSE;
+
+	// Load card list (mini)
+    sprintf(fullPath, "%s\\..\\mini\\list_card.txt", basePath);
+    if(!LoadCardList(fullPath, TRUE)) return FALSE;
 
     return TRUE;
 }
@@ -259,6 +271,55 @@ BOOL CBinSystem::LoadCardPacks(const char* path)
     return TRUE;
 }
 
+BOOL CBinSystem::LoadCardList(const char* path, BOOL isMini)
+{
+    FILE* file = fopen(path, "r");
+    if(!file) return FALSE;
+
+    // Allocate array based on card count
+    CardListEntry** targetArray = isMini ? &m_cardListMini : &m_cardList;
+    *targetArray = new CardListEntry[m_cardCount];
+    memset(*targetArray, 0, sizeof(CardListEntry) * m_cardCount);
+
+    char line[MAX_PATH];
+    WORD currentId = 0;
+
+    while(fgets(line, sizeof(line), file))
+    {
+        // Skip comment lines that don't have .bmp
+        if(strstr(line, ".bmp") == NULL)
+            continue;
+
+        // Remove newline if present
+        char* newline = strchr(line, '\n');
+        if(newline) *newline = '\0';
+
+        // Store filename and update card reference
+        if(currentId < m_cardCount) {
+            strcpy((*targetArray)[currentId].imageFilename, line);
+            
+			// Update the appropriate pointer in the Card structure
+			if(isMini) {
+				m_cards[currentId].imageMiniFilename = (*targetArray)[currentId].imageFilename;
+			} else {
+				m_cards[currentId].imageFilename = (*targetArray)[currentId].imageFilename;
+			}
+
+			// No GFX in game files for the card but is specified (sometimes incomplete)
+			if(strstr(line, "card_ura.bmp") != NULL && currentId != 0) {
+				m_cards[currentId].hasValidGFX = false;
+			} else {
+				m_cards[currentId].hasValidGFX = true;
+			}
+
+            currentId++;
+        }
+    }
+
+    fclose(file);
+    return TRUE;
+}
+
 // Getter implementations now use m_cards directly
 WORD CBinSystem::GetDefenseValue(DWORD cardId)
 {
@@ -274,13 +335,13 @@ WORD CBinSystem::GetAttackValue(DWORD cardId)
 
 MonsterType CBinSystem::GetMonsterType(DWORD cardId)
 {
-    if(cardId >= m_cardCount) return TYPE_NONE;
+    if(cardId >= m_cardCount) return TYPE_WINGED_BEAST;
     return m_cards[cardId].properties.GetMonsterType();
 }
 
 CardCategory CBinSystem::GetCardCategory(DWORD cardId)
 {
-    if(cardId >= m_cardCount) return CATEGORY_NORMAL_0;
+    if(cardId >= m_cardCount) return CATEGORY_NORMAL;
     return m_cards[cardId].properties.GetCardCategory();
 }
 
@@ -290,9 +351,9 @@ MonsterAttribute CBinSystem::GetMonsterAttribute(DWORD cardId)
     return m_cards[cardId].properties.GetMonsterAttribute();
 }
 
-MonsterStars CBinSystem::GetMonsterStars(DWORD cardId)
+BYTE CBinSystem::GetMonsterStars(DWORD cardId)
 {
-    if(cardId >= m_cardCount) return STARS_1;
+    if(cardId >= m_cardCount) return 0;
     return m_cards[cardId].properties.GetMonsterStars();
 }
 
@@ -336,4 +397,16 @@ BOOL CBinSystem::IsCardAvailable(DWORD cardId, BYTE gameId)
 {
     if(cardId >= m_cardCount) return FALSE;
     return (m_cards[cardId].pack.gameFlags & gameId) != 0;
+}
+
+const char* CBinSystem::GetCardImageFilename(DWORD cardId)
+{
+    if(cardId >= m_cardCount) return NULL;
+    return m_cards[cardId].imageFilename;
+}
+
+const char* CBinSystem::GetCardImageMiniFilename(DWORD cardId)
+{
+    if(cardId >= m_cardCount) return NULL;
+    return m_cards[cardId].imageMiniFilename;
 }

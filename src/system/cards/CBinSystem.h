@@ -5,85 +5,77 @@
 
 // Card property enums
 enum MonsterType {
-    TYPE_NONE = 0,
-    TYPE_DRAGON = 1,
-    TYPE_ZOMBIE = 2,
-    TYPE_FIEND = 3,
-    TYPE_PYRO = 4,
-    TYPE_SEASERPENT = 5,
-    TYPE_ROCK = 6,
-    TYPE_MACHINE = 7,
-    TYPE_FISH = 8,
-    TYPE_DINOSAUR = 9,
-    TYPE_INSECT = 0xA,
-    TYPE_BEAST = 0xB,
-    TYPE_BEASTWARRIOR = 0xC,
-    TYPE_PLANT = 0xD,
-    TYPE_WARRIOR = 0xF
+    TYPE_WINGED_BEAST		= 0x0,
+    TYPE_DRAGON				= 0x1,
+    TYPE_ZOMBIE				= 0x2,
+    TYPE_FIEND				= 0x3,
+    TYPE_PYRO				= 0x4,
+    TYPE_SEA_SERPENT		= 0x5,
+    TYPE_ROCK				= 0x6,
+    TYPE_MACHINE			= 0x7,
+    TYPE_FISH				= 0x8,
+    TYPE_DINOSAUR			= 0x9,
+    TYPE_INSECT				= 0xA,
+    TYPE_BEAST				= 0xB,
+    TYPE_BEAST_WARRIOR		= 0xC,
+    TYPE_PLANT				= 0xD,
+    TYPE_AQUA				= 0xE,
+    TYPE_WARRIOR			= 0xF,
+    // Additional types when useSecondary flag is set
+    TYPE_UNUSED				= 0x10,
+    TYPE_FAIRY				= 0x11,
+    TYPE_SPELLCASTER		= 0x12,
+    TYPE_THUNDER			= 0x13,
+    TYPE_REPTILE			= 0x14,
+    TYPE_TRAPCARD			= 0x15,
+    TYPE_SPELLCARD			= 0x16,
+	TYPE_NON_GAME_CARD		= 0x17,
+	TYPE_DIVINE_BEAST		= 0x18
 };
 
 enum CardCategory {
-    CATEGORY_NORMAL_0 = 0,
-    CATEGORY_NORMAL_1 = 1,
-    CATEGORY_NORMAL_2 = 2,
-    CATEGORY_NORMAL_3 = 3,
-    CATEGORY_EFFECT_4 = 4,
-    CATEGORY_EFFECT_5 = 5,
-    CATEGORY_EFFECT_6 = 6,
-    CATEGORY_EFFECT_7 = 7,
-    CATEGORY_FUSION_8 = 8,
-    CATEGORY_FUSION_9 = 9,
-    CATEGORY_FUSION_A = 0xA,
-    CATEGORY_FUSION_B = 0xB,
-    CATEGORY_RITUAL_C = 0xC,
-    CATEGORY_RITUAL_D = 0xD,
-    CATEGORY_RITUAL_E = 0xE,
-    CATEGORY_RITUAL_F = 0xF
+    CATEGORY_NORMAL = 0x0,    // Includes 0,1,2,3
+    CATEGORY_EFFECT = 0x4,    // Includes 4,5,6,7
+    CATEGORY_FUSION = 0x8,    // Includes 8,9,A,B
+    CATEGORY_RITUAL = 0xC   // Includes C,D,E,F
 };
 
 enum MonsterAttribute {
-    ATTR_DIVINE_BEAST_NO_TRIBUTE = 0,
-    ATTR_DIVINE_BEAST_2_TRIBUTE = 1,
-    ATTR_LIGHT_NO_TRIBUTE = 2,
-    ATTR_LIGHT_2_TRIBUTE = 3,
-    ATTR_DARK_NO_TRIBUTE = 4,
-    ATTR_DARK_2_TRIBUTE = 5,
-    ATTR_WATER_NO_TRIBUTE = 6,
-    ATTR_WATER_2_TRIBUTE = 7,
-    ATTR_FIRE_NO_TRIBUTE = 8,
-    ATTR_FIRE_2_TRIBUTE = 9,
-    ATTR_EARTH_NO_TRIBUTE = 0xA,
-    ATTR_EARTH_2_TRIBUTE = 0xB,
-    ATTR_WIND_NO_TRIBUTE = 0xC,
-    ATTR_WIND_2_TRIBUTE = 0xD
-};
-
-enum MonsterStars {
-    STARS_1 = 0xA,   // 1 Star
-    STARS_2 = 0xC,   // 2 Stars
-    STARS_3 = 0xE,   // 3 Stars
-    STARS_8 = 0x0,   // 8 Stars
-    STARS_9 = 0x2,   // 9 Stars
-    STARS_10 = 0x4,  // 10 Stars
-    STARS_11 = 0x6,  // 11 Stars
-    STARS_12 = 0x8   // 12 Stars
+    ATTR_DIVINE_BEAST_NO_TRIBUTE	= 0x0,
+    ATTR_DIVINE_BEAST_2_TRIBUTE		= 0x1,
+    ATTR_LIGHT_NO_TRIBUTE			= 0x2,
+    ATTR_LIGHT_2_TRIBUTE			= 0x3,
+    ATTR_DARK_NO_TRIBUTE			= 0x4,
+    ATTR_DARK_2_TRIBUTE				= 0x5,
+    ATTR_WATER_NO_TRIBUTE			= 0x6,
+    ATTR_WATER_2_TRIBUTE			= 0x7,
+    ATTR_FIRE_NO_TRIBUTE			= 0x8,
+    ATTR_FIRE_2_TRIBUTE				= 0x9,
+    ATTR_EARTH_NO_TRIBUTE			= 0xA,
+    ATTR_EARTH_2_TRIBUTE			= 0xB,
+    ATTR_WIND_NO_TRIBUTE			= 0xC,
+    ATTR_WIND_2_TRIBUTE				= 0xD,
+	ATTR_UNUSED_NO_TRIBUTE			= 0xE,
+    ATTR_UNUSED_2_TRIBUTE			= 0xF
 };
 
 struct CardPropertiesBytes {
     BYTE defenseModifiers;   // Position 1-2: DEF
     BYTE attackModifiers;    // Position 3-4: ATK
     BYTE typeAndCategory;    // Position 5-6: Type & Category
-    BYTE attrAndStars;      // Position 7-8: Attribute & Stars
+    BYTE attrAndStars;       // Position 7-8: Attribute & Stars
 };
 
 struct CardProperties {
-	CardPropertiesBytes bytes;
 	// Special thanks to @github.com/kiemkhach for his Excel table with correct formulas
+	// https://github.com/derplayer/YuGiOh-PoC-ModTools/discussions/2#discussioncomment-5973506
+	CardPropertiesBytes bytes;
+
 	WORD GetAttackValue() const {
 		// Split bytes into same nibbles as Excel
-		BYTE P = bytes.attackModifiers >> 4;     // High ATK nibble (14 for Jinzo)
-		BYTE Q = bytes.attackModifiers & 0x0F;   // Low ATK nibble (0 for Jinzo)
-		BYTE S = bytes.typeAndCategory & 0x0F;   // Low type nibble (5 for Jinzo)
+		BYTE P = bytes.attackModifiers >> 4;     // High ATK nibble
+		BYTE Q = bytes.attackModifiers & 0x0F;   // Low ATK nibble
+		BYTE S = bytes.typeAndCategory & 0x0F;   // Low type nibble
 
 		// Excel formula: P*80 + (Q - REST(Q,2))*5 + 1280*REST(S,4)
 		return (P * 80) +                   // 14 * 80 = 1120
@@ -94,9 +86,9 @@ struct CardProperties {
 
 	WORD GetDefenseValue() const {
 		// Split bytes into same nibbles as Excel
-		BYTE M = bytes.defenseModifiers >> 4;     // High DEF nibble (9 for Jinzo)
-		BYTE N = bytes.defenseModifiers & 0x0F;   // Low DEF nibble (6 for Jinzo)
-		BYTE Q = bytes.attackModifiers & 0x0F;    // Low ATK nibble (0 for Jinzo)
+		BYTE M = bytes.defenseModifiers >> 4;     // High DEF nibble
+		BYTE N = bytes.defenseModifiers & 0x0F;   // Low DEF nibble
+		BYTE Q = bytes.attackModifiers & 0x0F;    // Low ATK nibble
 
 		// Excel formula: M*160 + N*10 + REST(Q,2)*2560
 		return (M * 160) +                  // 9 * 160 = 1440
@@ -105,27 +97,54 @@ struct CardProperties {
 		// Example Total id 428: 1440 + 60 + 0 = 1500
 	}
 
-    // Rest stays the same
-    MonsterType GetMonsterType() const {
-        return (MonsterType)(bytes.typeAndCategory & 0x0F);
-    }
+	MonsterType GetMonsterType() const {
+		BYTE typeIdx = (bytes.typeAndCategory >> 4);     // Get upper nibble for type
+		BYTE y = (bytes.attrAndStars & 0x0F);            // Get Y value (using lower nibble)
+		BOOL useSecondary = ((y % 2) + 2) == 3;          // REST(Y,2) + 2 == 3 means secondary
+	    
+		if(useSecondary) {
+			return (MonsterType)(0x10 | typeIdx);
+		}
+		return (MonsterType)typeIdx;
+	}
 
-    CardCategory GetCardCategory() const {
-        return (CardCategory)((bytes.typeAndCategory >> 4) & 0x0F);
-    }
+	CardCategory GetCardCategory() const {
+		// Get low nibble (category data)
+		BYTE categoryNibble = (bytes.typeAndCategory & 0x0F);
 
-    MonsterAttribute GetMonsterAttribute() const {
-        return (MonsterAttribute)(bytes.attrAndStars & 0x0F);
-    }
+		// Convert from nibble value to actual category
+		if (categoryNibble >= 0x4 && categoryNibble <= 0x7)
+			return CATEGORY_EFFECT;
+		else if (categoryNibble >= 0x8 && categoryNibble <= 0xB)
+			return CATEGORY_FUSION;
+		else if (categoryNibble >= 0xC && categoryNibble <= 0xF)
+			return CATEGORY_RITUAL;
+		else // 0x0-0x3
+			return CATEGORY_NORMAL;
+	}
 
-    MonsterStars GetMonsterStars() const {
-        return (MonsterStars)((bytes.attrAndStars >> 4) & 0x0F);
-    }
+	MonsterAttribute GetMonsterAttribute() const {
+		BYTE attr = ((bytes.attrAndStars >> 4) & 0x0F);
+		return (MonsterAttribute)attr;  // Get upper nibble of attrAndStars
+	}
 
-    BOOL RequiresTwoTributes() const {
-        BYTE stars = (bytes.attrAndStars >> 4) & 0x0F;
-        return stars >= 7;
-    }
+	BYTE GetMonsterStars() const {
+		BYTE Y = bytes.attrAndStars & 0x0F;     // Low nibble
+		BYTE X = bytes.attrAndStars >> 4;       // High nibble
+		return (Y / 2) + ((X % 2) * 8);
+	}
+
+	BOOL RequiresTwoTributes() const {
+		MonsterAttribute attr = GetMonsterAttribute();
+		return (attr == ATTR_DIVINE_BEAST_2_TRIBUTE ||
+			attr == ATTR_LIGHT_2_TRIBUTE ||
+			attr == ATTR_DARK_2_TRIBUTE ||
+			attr == ATTR_WATER_2_TRIBUTE ||
+			attr == ATTR_FIRE_2_TRIBUTE ||
+			attr == ATTR_EARTH_2_TRIBUTE ||
+			attr == ATTR_WIND_2_TRIBUTE ||
+			attr == ATTR_UNUSED_2_TRIBUTE);
+	}
 };
 
 // Simple structures for BIN files
@@ -154,9 +173,12 @@ struct CardPack {
     WORD padding;    // 2 bytes padding
 };
 
-// First part stays the same until the class declaration...
+// Not part of the BIN system, but used by it exclusively
+struct CardListEntry {
+    char imageFilename[MAX_PATH];
+};
 
-// New unified card structure
+// Unified card structure
 struct Card {
 	DWORD cardId;
     CardProperties properties;
@@ -165,6 +187,9 @@ struct Card {
     CardInternalId internalId;
     CardPack pack;
     const char* description;  // Points to text in m_cardDescriptions buffer
+	const char* imageFilename;		// Points to regular image filename
+    const char* imageMiniFilename;	// Points to mini image filename
+	BOOL hasValidGFX;
 };
 
 // Dialog entry structure
@@ -185,7 +210,7 @@ public:
     MonsterType GetMonsterType(DWORD cardId);
     CardCategory GetCardCategory(DWORD cardId);
     MonsterAttribute GetMonsterAttribute(DWORD cardId);
-    MonsterStars GetMonsterStars(DWORD cardId);
+    BYTE GetMonsterStars(DWORD cardId);
     BOOL RequiresTwoTributes(DWORD cardId);
 
     // File data getters - keep these the same but modify their implementation
@@ -195,6 +220,8 @@ public:
     const char* GetCardDescription(DWORD cardId);
     const char* GetDialogText(DWORD dialogId);
     BOOL IsCardAvailable(DWORD cardId, BYTE gameId);
+	const char* GetCardImageFilename(DWORD cardId);
+	const char* GetCardImageMiniFilename(DWORD cardId);
 
     const Card* GetCard(DWORD cardId) const {
         if(cardId >= m_cardCount) return NULL;
@@ -214,11 +241,14 @@ private:
     BOOL LoadCardDescriptions(const char* path, const char* indexPath);
     BOOL LoadDialogTexts(const char* path, const char* indexPath);
     BOOL LoadCardPacks(const char* path);
-    
+    BOOL LoadCardList(const char* path, BOOL isMini);
+
     BYTE* DecompressFile(const char* path, DWORD& outSize);
 
     // New data storage
     Card* m_cards;              // Main array of cards [m_cardCount]
+	CardListEntry* m_cardList;		// card_list (for GFX assignment)
+	CardListEntry* m_cardListMini;  // card_list entries but for mini preview GFX
     DialogEntry* m_dialogs;     // Array of dialog entries [m_dialogCount]
     
     // Keep these buffers for text storage
