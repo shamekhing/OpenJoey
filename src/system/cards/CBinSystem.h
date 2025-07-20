@@ -5,22 +5,22 @@
 
 // Card property enums
 enum MonsterType {
-    TYPE_WINGED_BEAST		= 0x0,
-    TYPE_DRAGON				= 0x1,
-    TYPE_ZOMBIE				= 0x2,
-    TYPE_FIEND				= 0x3,
-    TYPE_PYRO				= 0x4,
-    TYPE_SEA_SERPENT		= 0x5,
-    TYPE_ROCK				= 0x6,
-    TYPE_MACHINE			= 0x7,
-    TYPE_FISH				= 0x8,
-    TYPE_DINOSAUR			= 0x9,
-    TYPE_INSECT				= 0xA,
-    TYPE_BEAST				= 0xB,
-    TYPE_BEAST_WARRIOR		= 0xC,
-    TYPE_PLANT				= 0xD,
-    TYPE_AQUA				= 0xE,
-    TYPE_WARRIOR			= 0xF,
+    TYPE_WINGED_BEAST		= 0x00,
+    TYPE_DRAGON				= 0x01,
+    TYPE_ZOMBIE				= 0x02,
+    TYPE_FIEND				= 0x03,
+    TYPE_PYRO				= 0x04,
+    TYPE_SEA_SERPENT		= 0x05,
+    TYPE_ROCK				= 0x06,
+    TYPE_MACHINE			= 0x07,
+    TYPE_FISH				= 0x08,
+    TYPE_DINOSAUR			= 0x09,
+    TYPE_INSECT				= 0x0A,
+    TYPE_BEAST				= 0x0B,
+    TYPE_BEAST_WARRIOR		= 0x0C,
+    TYPE_PLANT				= 0x0D,
+    TYPE_AQUA				= 0x0E,
+    TYPE_WARRIOR			= 0x0F,
     // Additional types when useSecondary flag is set
     TYPE_UNUSED				= 0x10,
     TYPE_FAIRY				= 0x11,
@@ -34,29 +34,29 @@ enum MonsterType {
 };
 
 enum CardCategory {
-    CATEGORY_NORMAL = 0x0,    // Includes 0,1,2,3
-    CATEGORY_EFFECT = 0x4,    // Includes 4,5,6,7
-    CATEGORY_FUSION = 0x8,    // Includes 8,9,A,B
-    CATEGORY_RITUAL = 0xC   // Includes C,D,E,F
+    CATEGORY_NORMAL = 0x00,		// Includes 0,1,2,3
+    CATEGORY_EFFECT = 0x04,		// Includes 4,5,6,7
+    CATEGORY_FUSION = 0x08,		// Includes 8,9,A,B
+    CATEGORY_RITUAL = 0x0C		// Includes C,D,E,F
 };
 
 enum MonsterAttribute {
-    ATTR_DIVINE_BEAST_NO_TRIBUTE	= 0x0,
-    ATTR_DIVINE_BEAST_2_TRIBUTE		= 0x1,
-    ATTR_LIGHT_NO_TRIBUTE			= 0x2,
-    ATTR_LIGHT_2_TRIBUTE			= 0x3,
-    ATTR_DARK_NO_TRIBUTE			= 0x4,
-    ATTR_DARK_2_TRIBUTE				= 0x5,
-    ATTR_WATER_NO_TRIBUTE			= 0x6,
-    ATTR_WATER_2_TRIBUTE			= 0x7,
-    ATTR_FIRE_NO_TRIBUTE			= 0x8,
-    ATTR_FIRE_2_TRIBUTE				= 0x9,
-    ATTR_EARTH_NO_TRIBUTE			= 0xA,
-    ATTR_EARTH_2_TRIBUTE			= 0xB,
-    ATTR_WIND_NO_TRIBUTE			= 0xC,
-    ATTR_WIND_2_TRIBUTE				= 0xD,
-	ATTR_UNUSED_NO_TRIBUTE			= 0xE,
-    ATTR_UNUSED_2_TRIBUTE			= 0xF
+    ATTR_DIVINE_BEAST_NO_TRIBUTE	= 0x00,
+    ATTR_DIVINE_BEAST_2_TRIBUTE		= 0x01,
+    ATTR_LIGHT_NO_TRIBUTE			= 0x02,
+    ATTR_LIGHT_2_TRIBUTE			= 0x03,
+    ATTR_DARK_NO_TRIBUTE			= 0x04,
+    ATTR_DARK_2_TRIBUTE				= 0x05,
+    ATTR_WATER_NO_TRIBUTE			= 0x06,
+    ATTR_WATER_2_TRIBUTE			= 0x07,
+    ATTR_FIRE_NO_TRIBUTE			= 0x08,
+    ATTR_FIRE_2_TRIBUTE				= 0x09,
+    ATTR_EARTH_NO_TRIBUTE			= 0x0A,
+    ATTR_EARTH_2_TRIBUTE			= 0x0B,
+    ATTR_WIND_NO_TRIBUTE			= 0x0C,
+    ATTR_WIND_2_TRIBUTE				= 0x0D,
+	ATTR_UNUSED_NO_TRIBUTE			= 0x0E,
+    ATTR_UNUSED_2_TRIBUTE			= 0x0F
 };
 
 struct CardPropertiesBytes {
@@ -67,7 +67,7 @@ struct CardPropertiesBytes {
 };
 
 struct CardProperties {
-	// Special thanks to @github.com/kiemkhach for his Excel table with correct formulas
+	// Special thanks to @github.com/kiemkhach for his spreadsheet table with correct formulas
 	// https://github.com/derplayer/YuGiOh-PoC-ModTools/discussions/2#discussioncomment-5973506
 	CardPropertiesBytes bytes;
 
@@ -228,9 +228,16 @@ public:
         return &m_cards[cardId];
     }
 
+	const DialogEntry* GetDialog(DWORD dialogId) const {
+        if(dialogId >= m_dialogCount) return NULL;
+        return &m_dialogs[dialogId];
+    }
+
     // Alternative if you want direct array access (be careful with this!)
     const Card* GetCards() const { return m_cards; }
     DWORD GetCardCount() const { return m_cardCount; }
+	const DialogEntry* GetDialogs() const { return m_dialogs; }
+    DWORD GetDialogCount() const { return m_dialogCount; }
 
 private:
     // Loading functions stay the same
@@ -246,10 +253,10 @@ private:
     BYTE* DecompressFile(const char* path, DWORD& outSize);
 
     // New data storage
-    Card* m_cards;              // Main array of cards [m_cardCount]
+    Card* m_cards;					// Main array of cards [m_cardCount]
 	CardListEntry* m_cardList;		// card_list (for GFX assignment)
 	CardListEntry* m_cardListMini;  // card_list entries but for mini preview GFX
-    DialogEntry* m_dialogs;     // Array of dialog entries [m_dialogCount]
+    DialogEntry* m_dialogs;			// Array of dialog entries [m_dialogCount]
     
     // Keep these buffers for text storage
     char* m_cardDescriptions;   // Buffer for all card descriptions

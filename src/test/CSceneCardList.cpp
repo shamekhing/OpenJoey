@@ -13,7 +13,7 @@ void CSceneCardList::OnInit() {
 
     // Init counters and timers
     m_nFade = CSaturationCounter(0, 255, 8);
-	nFadeBG.Set(0, 255, 16);
+    nFadeBG.Set(0, 255, 16);
     m_timerMain = CTimer();
     m_timerMain.Restart();
     m_timerMain.Reset();
@@ -22,7 +22,7 @@ void CSceneCardList::OnInit() {
     smart_ptr<ISurface> screenPtr = app->GetDraw()->GetSecondary()->cloneFull();
     if (screenPtr.get()) {
         m_background = screenPtr;
-        OutputDebugStringA("Framebuffer data cloned and loaded successfully!\n");
+        // OutputDebugStringA("Framebuffer data cloned and loaded successfully!\n"); // Commented out for performance
     }
 
     // Initialize column animations
@@ -57,18 +57,20 @@ void CSceneCardList::OnInit() {
 
     InitializeUI();
     LoadCardData();
+    LoadCardTexturesForCurrentPage(); // Load initial page textures
 }
 
 void CSceneCardList::SetHoverButtonPlane(CGUIButton* btn, int id, bool negativeOrder = false){
-		CGUIButtonEventListener* e = btn->GetEvent().get();
-		CGUINormalButtonListener* p	= (CGUINormalButtonListener*)e;
-		if (btn->IsIn())
-			if(negativeOrder)
-				p->SetPlaneNumber(id-1);
-			else
-				p->SetPlaneNumber(id+1);
-		else 
-			p->SetPlaneNumber(id);
+    // Reverting to original logic as GetPlaneNumber is not public.
+    CGUIButtonEventListener* e = btn->GetEvent().get();
+    CGUINormalButtonListener* p    = (CGUINormalButtonListener*)e;
+    if (btn->IsIn())
+        if(negativeOrder)
+            p->SetPlaneNumber(id-1);
+        else
+            p->SetPlaneNumber(id+1);
+    else
+        p->SetPlaneNumber(id);
 }
 
 void CSceneCardList::OnMove(const smart_ptr<ISurface>& lp) {
@@ -84,8 +86,8 @@ void CSceneCardList::OnMove(const smart_ptr<ISurface>& lp) {
 
     // Update buttons
     if (m_backButton) {
-		m_backButton->OnSimpleMove(lp.get());
-		SetHoverButtonPlane(m_backButton, 1);
+        m_backButton->OnSimpleMove(lp.get());
+        SetHoverButtonPlane(m_backButton, 1);
         if (m_backButton->IsLClick()) {
             GetSceneControl()->ReturnScene();
         }
@@ -93,8 +95,8 @@ void CSceneCardList::OnMove(const smart_ptr<ISurface>& lp) {
 
     // Handle page navigation
     if (m_prevPageButton) {
-		m_prevPageButton->OnSimpleMove(lp.get());
-		SetHoverButtonPlane(m_prevPageButton, 6, true);
+        m_prevPageButton->OnSimpleMove(lp.get());
+        SetHoverButtonPlane(m_prevPageButton, 6, true);
 
         if (m_prevPageButton->IsLClick() && m_nCurrentPage > 1) {
             ChangePage(false);
@@ -102,8 +104,8 @@ void CSceneCardList::OnMove(const smart_ptr<ISurface>& lp) {
     }
 
     if (m_nextPageButton) {
-		m_nextPageButton->OnSimpleMove(lp.get());
-		SetHoverButtonPlane(m_nextPageButton, 8, true);
+        m_nextPageButton->OnSimpleMove(lp.get());
+        SetHoverButtonPlane(m_nextPageButton, 8, true);
         if (m_nextPageButton->IsLClick() && m_nCurrentPage < m_nTotalPages) {
             ChangePage(true);
         }
@@ -115,12 +117,10 @@ void CSceneCardList::OnMove(const smart_ptr<ISurface>& lp) {
 
 void CSceneCardList::OnDraw(const smart_ptr<ISurface>& lp) {
     // Draw background
-	if (m_bgPlane) { // && nFadeBG.IsEnd() == false
-        //lp->BltFast(m_bgPlane.get(), m_bgPlane->GetPosX(), m_bgPlane->GetPosY());
-		ISurfaceTransBlt::CircleBlt5(lp.get(), m_bgPlane.get(), 0, 0, (int)nFadeBG, 0, 255);
-		nFadeBG.Inc();
-		//return;
-	}
+    if (m_bgPlane) {
+        ISurfaceTransBlt::CircleBlt5(lp.get(), m_bgPlane.get(), 0, 0, (int)nFadeBG, 0, 255);
+        nFadeBG.Inc();
+    }
 
     // Draw title with fade effect
     if (m_timerMain.Get() > 0 && m_titlePlane) {
@@ -160,7 +160,7 @@ void CSceneCardList::OnDraw(const smart_ptr<ISurface>& lp) {
 void CSceneCardList::InitializeUI() {
     // Load background
     CPlane bgPlane = m_vDetailPlaneLoader.GetPlane(0); // list_bg.bmp
-	POINT bgPos = { 0, 0 }; //HACK: this seems to be hardcoded in exe and the txt spec is not used? (POINT bgPos = m_vDetailPlaneLoader.GetXY(0);)
+    POINT bgPos = { 0, 0 }; //HACK: this seems to be hardcoded in exe and the txt spec is not used? (POINT bgPos = m_vDetailPlaneLoader.GetXY(0);)
     bgPlane->SetPos(bgPos);
     m_bgPlane = bgPlane;
 
@@ -177,19 +177,14 @@ void CSceneCardList::InitializeUI() {
     smart_ptr<CGUIButtonEventListener> buttonListener(new CGUINormalButtonListener());
     CGUINormalButtonListener* p = static_cast<CGUINormalButtonListener*>(buttonListener.get());
     p->SetPlaneLoader(smart_ptr<CPlaneLoader>(&m_vPlaneLoader, false), 1);
-
-    // Back button plane
-    //CPlane backPlane = m_vPlaneLoader.GetPlane(1); // back_off_?.bmp
-    POINT backPos = m_vPlaneLoader.GetXY(1);
-    //backPlane->SetPos(backPos);
     
-    //p->SetPlane(smart_ptr<ISurface>(backPlane.get(), false));
+    POINT backPos = m_vPlaneLoader.GetXY(1);
     backBtn->SetEvent(buttonListener);
     backBtn->SetXY(backPos.x, backPos.y);
     m_backButton = backBtn;
 
     // Get card hover border from plane loader
-    CPlane cardWakuPlane = m_vPlaneLoader.GetPlane(9); // card_waku_s.bmp from list_scene.txt
+    m_cardHoverBorder = m_vPlaneLoader.GetPlane(9); // card_waku_s.bmp from list_scene.txt
 
     // Create preview card surface
     m_cardPreviewImage.CreateSurface(200, 290, false);
@@ -205,14 +200,9 @@ void CSceneCardList::InitializePageControls() {
     leftBtn->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false));
     smart_ptr<CGUIButtonEventListener> leftListener(new CGUINormalButtonListener());
     CGUINormalButtonListener* pl = static_cast<CGUINormalButtonListener*>(leftListener.get());
-    pl->SetPlaneLoader(smart_ptr<CPlaneLoader>(&m_vPlaneLoader, false), 6);
+    pl->SetPlaneLoader(smart_ptr<CPlaneLoader>(&m_vPlaneLoader, false), 6); // pe_yaji_l1.bmp, pe_yaji_l2.bmp etc.
 
-    // Left arrow planes
-    //CPlane leftNormalPlane = m_vPlaneLoader.GetPlane(6); // pe_yaji_l1.bmp
     POINT leftPos = m_vPlaneLoader.GetXY(6);
-    //leftNormalPlane->SetPos(leftPos);
-    
-    //pl->SetPlane(smart_ptr<ISurface>(leftNormalPlane.get(), false));
     leftBtn->SetEvent(leftListener);
     leftBtn->SetXY(leftPos.x, leftPos.y);
     m_prevPageButton = leftBtn;
@@ -222,14 +212,9 @@ void CSceneCardList::InitializePageControls() {
     rightBtn->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false));
     smart_ptr<CGUIButtonEventListener> rightListener(new CGUINormalButtonListener());
     CGUINormalButtonListener* pr = static_cast<CGUINormalButtonListener*>(rightListener.get());
-    pr->SetPlaneLoader(smart_ptr<CPlaneLoader>(&m_vPlaneLoader, false), 8);
+    pr->SetPlaneLoader(smart_ptr<CPlaneLoader>(&m_vPlaneLoader, false), 8); // pe_yaji_r1.bmp, pe_yaji_r2.bmp etc.
 
-    // Right arrow planes
-    //CPlane rightNormalPlane = m_vPlaneLoader.GetPlane(8); // pe_yaji_r1.bmp
     POINT rightPos = m_vPlaneLoader.GetXY(8);
-    //rightNormalPlane->SetPos(rightPos);
-    
-    //pr->SetPlane(smart_ptr<ISurface>(rightNormalPlane.get(), false));
     rightBtn->SetEvent(rightListener);
     rightBtn->SetXY(rightPos.x, rightPos.y);
     m_nextPageButton = rightBtn;
@@ -237,47 +222,95 @@ void CSceneCardList::InitializePageControls() {
 
 void CSceneCardList::LoadCardData() {
     std::ifstream cardList("data/card/list_card.txt");
-    std::string line;
-    int currentId = -1;
-    std::string currentBmp;
-
-    while (std::getline(cardList, line)) {
-        if (line.empty() || line[0] == '\n') continue;
-        
-        if (line.substr(0, 2) == "//") {
-            if (line.length() > 8) { // Check for ID line
-                size_t idStart = line.find("[");
-                size_t idEnd = line.find("]");
-                if (idStart != std::string::npos && idEnd != std::string::npos) {
-                    std::string idStr = line.substr(idStart + 1, idEnd - idStart - 1);
-                    currentId = std::atoi(idStr.c_str());
-                }
-            }
-        } else if (line.find(".bmp") != std::string::npos) {
-            currentBmp = line;
-            // Skip card_ura.bmp as it's the backing
-            if (currentId != -1 && currentBmp != "card_ura.bmp") {
-                CardInfo card;
-                card.id = currentId;
-                card.templateId = currentId;
-                card.isNew = false;
-                card.bmpName = currentBmp.substr(0, currentBmp.length() - 4); // Remove .bmp extension
-                m_ownedCards.push_back(card);
-                
-                char debugStr[256];
-                sprintf(debugStr, "Added card ID: %d, BMP: %s\n", currentId, card.bmpName.c_str());
-                OutputDebugStringA(debugStr);
-            }
-            currentId = -1;
-        }
+    if (!cardList.is_open()) {
+        OutputDebugStringA("Error: Failed to open data/card/list_card.txt\n");
+        return;
     }
 
+    std::string line;
+    while (std::getline(cardList, line)) {
+        if (line.empty()) continue;
+        if (!line.empty() && line[line.length() - 1] == '\r') {
+            line.erase(line.length() - 1);
+        }
+        if (line.empty()) continue;
+
+        int currentId = -1; // Reset for each potential card entry
+        std::string currentBmp;
+
+        // Check if it's an ID line (starts with // and contains [ID])
+        if (line.substr(0, 2) == "//") {
+            size_t idStart = line.find("[");
+            size_t idEnd = line.find("]");
+            if (idStart != std::string::npos && idEnd != std::string::npos && idEnd > idStart) {
+                std::string idStr = line.substr(idStart + 1, idEnd - idStart - 1);
+                currentId = std::atoi(idStr.c_str());
+                // The next non-comment line should be the BMP
+                std::string nextLine;
+                if (std::getline(cardList, nextLine)) {
+                    if (!nextLine.empty() && nextLine[nextLine.length() - 1] == '\r') {
+                        nextLine.erase(nextLine.length() - 1);
+                    }
+                    if (nextLine.find(".bmp") != std::string::npos) {
+                        currentBmp = nextLine;
+                        if (currentId != -1 && currentBmp != "card_ura.bmp") {
+                            CardInfo card;
+                            card.id = currentId;
+                            card.templateId = currentId;
+                            card.isNew = false;
+                            card.bmpName = currentBmp.substr(0, currentBmp.length() - 4); // Remove .bmp extension
+                            m_ownedCards.push_back(card);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    cardList.close();
+
     m_nTotalPages = (m_ownedCards.size() + CARDS_PER_PAGE - 1) / CARDS_PER_PAGE;
-    
-    char debugStr[256];
-    sprintf(debugStr, "Total cards loaded: %d\n", m_ownedCards.size());
-    OutputDebugStringA(debugStr);
 }
+
+void CSceneCardList::ClearCardTextures() {
+    m_cardTextures.clear();
+}
+
+void CSceneCardList::LoadCardTexturesForCurrentPage() {
+    ClearCardTextures(); // Clear previously loaded textures
+
+    int startIndex = (m_nCurrentPage - 1) * CARDS_PER_PAGE;
+    int endIndex = startIndex + CARDS_PER_PAGE;
+    if ((size_t)endIndex > m_ownedCards.size()) {
+        endIndex = m_ownedCards.size();
+    }
+
+    char filepath[256];
+    for (int i = startIndex; i < endIndex; ++i) {
+        const CardInfo& card = m_ownedCards[i];
+        
+        // FIX: Store smart_ptr<CFastPlane> directly.
+        // Allocate CFastPlane on heap, smart_ptr will manage its lifetime.
+        smart_ptr<CFastPlane> cardPlane = smart_ptr<CFastPlane>(new CFastPlane());
+        sprintf(filepath, "data/mini/%s.bmp", card.bmpName.c_str());
+        
+        if (cardPlane->Load(filepath) == 0) {
+            m_cardTextures[card.id] = cardPlane; // Assignment is now type-compatible
+        } else {
+            // Clean up the allocated CFastPlane if loading failed.
+            // smart_ptr would normally delete, but if it's not inserted into map, it won't be owned.
+            // If smart_ptr always takes ownership even if not assigned (depends on its constructor),
+            // then `delete cardPlane.get()` is wrong.
+            // Let's assume the smart_ptr constructor takes ownership when a raw pointer is passed.
+            // If `cardPlane` goes out of scope and wasn't added to the map, it will be deleted.
+            // So no explicit `delete` is needed here for `cardPlane`.
+            
+            char debugStr[256];
+            sprintf(debugStr, "Warning: Failed to load card texture: %s\n", filepath);
+            OutputDebugStringA(debugStr);
+        }
+    }
+}
+
 
 void CSceneCardList::UpdateCardAnimations() {
     // Update started columns
@@ -292,7 +325,7 @@ void CSceneCardList::UpdateCardAnimations() {
     for (int col = CARD_COLUMNS - 3; col >= 0; col--) {
         if (!m_bColumnAnimationStarted[col]) {
             // Start new column if next column is mostly done (80% complete)
-            if (m_bColumnAnimationStarted[col + 2] && 
+            if (m_bColumnAnimationStarted[col + 2] &&
                 m_nCardAnimations[col + 2].GetFrameNow() >= (int)(ANIM_SPEED * 0.8)) {
                 m_bColumnAnimationStarted[col] = true;
             }
@@ -301,26 +334,25 @@ void CSceneCardList::UpdateCardAnimations() {
 }
 
 void CSceneCardList::ChangePage(bool forward) {
+    int oldPage = m_nCurrentPage;
     if (forward) {
         if (m_nCurrentPage < m_nTotalPages) {
             m_nCurrentPage++;
-            // Reset animations for new page
-            for (int col = 0; col < CARD_COLUMNS; col++) {
-                m_nCardAnimations[col].Set(-CARD_HEIGHT/2, 0, ANIM_SPEED);
-                m_nCardScaleAnimations[col].Set(0, 100, ANIM_SPEED-2);
-                m_bColumnAnimationStarted[col] = (col >= CARD_COLUMNS - 2); // Start rightmost two columns
-            }
         }
     } else {
         if (m_nCurrentPage > 1) {
             m_nCurrentPage--;
-            // Reset animations for new page (same as forward)
-            for (int col = 0; col < CARD_COLUMNS; col++) {
-                m_nCardAnimations[col].Set(-CARD_HEIGHT/2, 0, ANIM_SPEED);
-                m_nCardScaleAnimations[col].Set(0, 100, ANIM_SPEED-2);
-                m_bColumnAnimationStarted[col] = (col >= CARD_COLUMNS - 2); // Start rightmost two columns
-            }
         }
+    }
+
+    if (m_nCurrentPage != oldPage) {
+        // Reset animations for new page
+        for (int col = 0; col < CARD_COLUMNS; col++) {
+            m_nCardAnimations[col].Set(-CARD_HEIGHT/2, 0, ANIM_SPEED);
+            m_nCardScaleAnimations[col].Set(0, 100, ANIM_SPEED-2);
+            m_bColumnAnimationStarted[col] = (col >= CARD_COLUMNS - 2); // Start rightmost two columns
+        }
+        LoadCardTexturesForCurrentPage(); // Load new textures for the changed page
     }
 }
 
@@ -333,20 +365,22 @@ void CSceneCardList::DrawCardGrid(const smart_ptr<ISurface>& lp) {
     int startIndex = (m_nCurrentPage - 1) * CARDS_PER_PAGE;
     
     // Loop through each card position from right to left, top to bottom
-    // Start from rightmost column, move left
     for (int col = CARD_COLUMNS - 1; col >= 0; col--) {
         // Skip if column animation hasn't started yet
         if (!m_bColumnAnimationStarted[col]) continue;
 
+        // Pre-calculate column-specific animation values once per column
+        int currentYOffset = (int)m_nCardAnimations[col];
+        int scalePercent = (int)m_nCardScaleAnimations[col];
+        int scaledWidth = (CARD_WIDTH * scalePercent) / 100;
+        if (scaledWidth < 1) scaledWidth = 1; // Ensure width is at least 1 pixel
+        int xOffset = (CARD_WIDTH - scaledWidth) / 2;
+
         // For each column, go through rows top to bottom
         for (int row = 0; row < CARD_ROWS; row++) {
             // Calculate position on screen
-            // Note: col is already counting from right, so we don't need to reverse it
             int x = GRID_START_X + (col * (CARD_WIDTH + CARD_SPACING_X));
-            int y = GRID_START_Y + (row * (CARD_HEIGHT + CARD_SPACING_Y));
-
-            // Apply card animation offset
-            y += (int)m_nCardAnimations[col];
+            int y = GRID_START_Y + (row * (CARD_HEIGHT + CARD_SPACING_Y)) + currentYOffset;
 
             // Calculate the index in the collection
             int collectionIndex = startIndex + (row * CARD_COLUMNS) + col;
@@ -355,31 +389,29 @@ void CSceneCardList::DrawCardGrid(const smart_ptr<ISurface>& lp) {
             if (collectionIndex >= 0 && (size_t)collectionIndex < m_ownedCards.size()) {
                 const CardInfo& card = m_ownedCards[collectionIndex];
                 
-                CFastPlane cardPlane;
-                char filepath[256];
-                sprintf(filepath, "data/mini/%s.bmp", card.bmpName.c_str());
-                
-                if (cardPlane.Load(filepath) == 0) {
-                    // Get current scale (0-100%)
-                    int scalePercent = (int)m_nCardScaleAnimations[col];
-                    
-                    // Calculate scaled width
-                    int scaledWidth = (CARD_WIDTH * scalePercent) / 100;
-                    if (scaledWidth < 1) scaledWidth = 1;
-                    
-                    // Center the scaled card
-                    int xOffset = (CARD_WIDTH - scaledWidth) / 2;
-                    
-                    // Create temporary surface for scaled card
-                    CFastPlane scaledCard;
-                    scaledCard.CreateSurface(scaledWidth, CARD_HEIGHT, false);
-                    
-                    // Scale the card horizontally
-                    cardPlane.SetSize(scaledWidth, CARD_HEIGHT);
-                    scaledCard.BltFast(&cardPlane, 0, 0);
-                    
-                    // Draw the scaled card
-                    lp->BltFast(&scaledCard, x + xOffset, y);
+                // Get the card texture from the cache - now smart_ptr<CFastPlane>
+                std::map<int, smart_ptr<CFastPlane> >::iterator it = m_cardTextures.find(card.id);
+                if (it != m_cardTextures.end() && it->second.get()) {
+                    smart_ptr<CFastPlane> cachedCardPlane = it->second;
+
+                    // Source rectangle (entire original card)
+                    RECT srcRect = {0, 0, CARD_WIDTH, CARD_HEIGHT}; 
+
+                    // Destination size (scaled dimensions)
+                    // This is the `SIZE` struct that BltFast expects for `pDstSize`
+                    SIZE dstSize = {scaledWidth, CARD_HEIGHT};
+
+                    // Blit the card to the screen, applying scaling
+                    // The `lp` surface (screen) is the destination for BltFast.
+                    // Parameters: pSrc, x, y, pDstSize, pSrcRect, pDstClip, nBasePoint
+                    lp->BltFast(
+                        cachedCardPlane.get(), // Source surface
+                        x + xOffset, y,        // Destination coordinates
+                        &dstSize,              // Pointer to destination size (for scaling)
+                        &srcRect,              // Pointer to source rectangle
+                        NULL,                  // No destination clip
+                        0                      // No base point
+                    );
                 
                     if (card.isNew) {
                         CPlane newIndicator = m_vPlaneLoader.GetPlane(10);
@@ -416,11 +448,8 @@ void CSceneCardList::DrawPagination(const smart_ptr<ISurface>& lp) {
 
     if (!pageFont) return;
 
-	// BUG: the specified TXT offsets do not work, something is wrong...
-	POINT pageLP = m_vPlaneLoader.GetXY(3);
-	POINT pageRP = m_vPlaneLoader.GetXY(4);
-	int pOffsetX = 8;
-	int pOffsetY = 9;
+    int pOffsetX = 8;
+    int pOffsetY = 9;
 
     // Draw current page number (positions from list_scene.txt)
     char pageNum[8];
@@ -430,9 +459,9 @@ void CSceneCardList::DrawPagination(const smart_ptr<ISurface>& lp) {
     
     for (char* p = pageNum; *p; p++) {
         int digit = *p - '0';
-        RECT srcSize = { digit * 15, 0, digit * 15 + 15, 19 };
-        lp->BltNatural(pageFont.get(), numX-pOffsetX, numY-pOffsetY, 0, &srcSize);
-        numX += 21;
+        RECT srcSize = { digit * 15, 0, digit * 15 + 15, 19 }; // Font character width is 15px, height 19px
+        lp->BltNatural(pageFont.get(), numX - pOffsetX, numY - pOffsetY, 0, &srcSize);
+        numX += 21; // Advance X for next digit
     }
 
     // Draw total pages
@@ -441,10 +470,9 @@ void CSceneCardList::DrawPagination(const smart_ptr<ISurface>& lp) {
     
     for (char* p = pageNum; *p; p++) {
         int digit = *p - '0';
-        //SIZE srcSize = { digit * 21, 0 }; // Source position
-		RECT srcSize = { digit * 15, 0, digit * 15 + 15, 19 };
-        lp->BltNatural(pageFont.get(), numX-pOffsetX, numY-pOffsetY, 0, &srcSize);
-        numX += 21;
+        RECT srcSize = { digit * 15, 0, digit * 15 + 15, 19 }; // Font character width is 15px, height 19px
+        lp->BltNatural(pageFont.get(), numX - pOffsetX, numY - pOffsetY, 0, &srcSize);
+        numX += 21; // Advance X for next digit
     }
 }
 
@@ -456,8 +484,11 @@ void CSceneCardList::DrawCollectionRate(const smart_ptr<ISurface>& lp) {
     
     if (!rateFont || !rateSymbol) return;
 
-    // Calculate collection rate
-    float rate = (float)m_ownedCards.size() / m_nTotalPages * 100.0f;
+    float rate = 0.0f;
+    if (m_nTotalPages > 0) {
+        rate = (float)m_ownedCards.size() / (m_nTotalPages * CARDS_PER_PAGE) * 100.0f;
+    }
+    
     char rateStr[16];
     sprintf(rateStr, "%.1f", rate);
 
@@ -467,18 +498,20 @@ void CSceneCardList::DrawCollectionRate(const smart_ptr<ISurface>& lp) {
 
     // Draw digits
     for (char* p = rateStr; *p; p++) {
-        if (*p == '.') continue;  // Skip decimal point for now
+        if (*p == '.') {
+            RECT srcSize = { 11, 0, 17, 18 };
+            lp->BltNatural(rateSymbol.get(), numX, numY + 12, 0, &srcSize);
+            numX += 6;
+            continue;
+        }
         
         int digit = *p - '0';
-		RECT srcSize = { digit * 12, 0, digit * 12 + 12, 15 };
+        RECT srcSize = { digit * 12, 0, digit * 12 + 12, 15 };
         lp->BltNatural(rateFont.get(), numX, numY, 0, &srcSize);
         numX += 10;
     }
 
     // Draw % symbol
-	RECT rectSlash   = { 0, 0, 11, 18 };   // For "/"
-	RECT rectDot     = { 11, 0, 17, 18 };  // For "."
-	RECT rectPercent = { 15, 0, 36, 18 };  // For "%"
-
-    lp->BltNatural(rateSymbol.get(), numX+2, numY-1, 0, &rectPercent);
+    RECT rectPercent = { 15, 0, 36, 18 };
+    lp->BltNatural(rateSymbol.get(), numX + 2, numY - 1, 0, &rectPercent);
 }

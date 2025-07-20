@@ -11,6 +11,7 @@
 #include "../system/CJoeySceneFactory.h"
 #include "../system/backport/yaneGUIButton.h"
 #include "../system/backport/yaneGUISlider.h"
+#include <map> // For card texture caching
 
 // Constants
 const int CARD_ROWS = 5;
@@ -46,7 +47,7 @@ private:
 
     // Animation state
     CSaturationCounter m_nFade;
-	CSaturationCounter nFadeBG;
+    CSaturationCounter nFadeBG;
     CTimer m_timerMain;
     CInteriorCounter m_nCardAnimations[CARD_COLUMNS];
     CInteriorCounter m_nCardScaleAnimations[CARD_COLUMNS];
@@ -71,17 +72,21 @@ private:
     int m_nPreviewCardId;
     bool m_bPreviewCardIsMonster;
 
+    std::map<int, smart_ptr<CFastPlane> > m_cardTextures; // Stores raw card images as CFastPlane
+
     // Private methods
     void InitializeUI();
     void InitializePageControls();
     void LoadCardData();
+    void LoadCardTexturesForCurrentPage(); // New method to load textures for the current page
+    void ClearCardTextures();              // New method to clear textures
     void DrawCardGrid(const smart_ptr<ISurface>& lp);
     void DrawCardPreview(const smart_ptr<ISurface>& lp);
     void DrawPagination(const smart_ptr<ISurface>& lp);
     void DrawCollectionRate(const smart_ptr<ISurface>& lp);
     void UpdateCardAnimations();
     void ChangePage(bool forward);
-	void SetHoverButtonPlane(CGUIButton* btn, int id, bool negativeOrder);
+    void SetHoverButtonPlane(CGUIButton* btn, int id, bool negativeOrder);
 };
 
 #endif // CSCENECARDLIST_H
