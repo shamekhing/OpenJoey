@@ -46,7 +46,7 @@ void CSceneCardList::OnInit() {
 
     // Initialize page tracking
     m_nCurrentPage = 1;
-    m_nPreviewCardId = 0;
+    m_nPreviewCardId = 0; // Initialize to 0, means no card is previewed
     m_bPreviewCardIsMonster = false;
 
     // Load scene layout data
@@ -55,6 +55,9 @@ void CSceneCardList::OnInit() {
     if (m_vPlaneLoader.Set("data/y/list/list_scene.txt", false) != 0) {
         OutputDebugStringA("Error: Failed to load data/y/list/list_scene.txt\n");
     }
+    // FIX: Set color key for transparency on m_vPlaneLoader
+    m_vPlaneLoader.SetColorKey(ISurface::makeRGB(0, 255, 0, 128)); // alpha value because transparency logic will mismatch, code is expecting RGBA and not RGB
+
 
     // Load detail layout data
     m_vDetailPlaneLoader.SetLang(app->GetLang());
@@ -63,9 +66,15 @@ void CSceneCardList::OnInit() {
         OutputDebugStringA("Error: Failed to load data/y/list/list_detail.txt\n");
     }
 
+	// Load m_fullCardPreviewPlane from card_ura.bmp
+	smart_ptr<CFastPlane> uraDefaultPlane(new CFastPlane());
+	if (uraDefaultPlane->Load("data/card/card_ura.bmp") == 0) {
+		m_fullCardPreviewPlaneUra = uraDefaultPlane;
+	}
+
     InitializeUI();
-    LoadCardData();
-    LoadCardTexturesForCurrentPage(); // Load initial page textures
+    LoadCardData(); // This will now also create the CGUUIButton for each card
+    LoadCardTexturesForCurrentPage(); // Load initial page textures (and associate with buttons)
 
     // Initialize individual card animations for the first page
     ResetCardAnimations(true); // Prepare for initial grid entry animation
@@ -116,6 +125,8 @@ void CSceneCardList::OnMove(const smart_ptr<ISurface>& lp) {
             m_bPageChangeRequested = true;
             m_bForwardPageChange = false;
             m_sceneAnimState = SAS_EXITING_GRID; // Start exit animation
+            m_nPreviewCardId = 0; // Clear preview on page change
+            m_fullCardPreviewPlane = smart_ptr<CFastPlane>(); // FIX: Clear full card preview
         }
     }
 
@@ -126,8 +137,54 @@ void CSceneCardList::OnMove(const smart_ptr<ISurface>& lp) {
             m_bPageChangeRequested = true;
             m_bForwardPageChange = true;
             m_sceneAnimState = SAS_EXITING_GRID; // Start exit animation
+            m_nPreviewCardId = 0; // Clear preview on page change
+            m_fullCardPreviewPlane = smart_ptr<CFastPlane>(); // FIX: Clear full card preview
         }
     }
+
+    // Update individual card buttons for current page
+    int startIndex = (m_nCurrentPage - 1) * CARDS_PER_PAGE;
+    int endIndex = startIndex + CARDS_PER_PAGE;
+    if ((size_t)endIndex > m_ownedCards.size()) {
+        endIndex = m_ownedCards.size();
+    }
+
+    // Only allow card interaction when grid is idle
+    if (m_sceneAnimState == SAS_IDLE) {
+        for (int col = 0; col < CARD_COLUMNS; col++) {
+            for (int row = 0; row < CARD_ROWS; row++) {
+                int collectionIndex = startIndex + (col * CARD_ROWS) + row;
+
+                if (collectionIndex >= 0 && (size_t)collectionIndex < m_ownedCards.size()) {
+                    CardInfo& currentCard = m_ownedCards[collectionIndex];
+                    if (currentCard.m_cardButton.get()) {
+                        currentCard.m_cardButton->OnSimpleMove(lp.get()); // Update card button state
+
+                        if (currentCard.m_cardButton->IsLClick()) {
+                            m_nPreviewCardId = currentCard.id; // Set the clicked card's ID for preview
+                            m_bPreviewCardIsMonster = true; // For now, assume all are monsters
+                            // Load the full card graphic
+                            char fullCardPath[256];
+                            sprintf(fullCardPath, "data/card/%s.bmp", currentCard.bmpName.c_str());
+                            smart_ptr<CFastPlane> fullPlane(new CFastPlane());
+                            if (fullPlane->Load(fullCardPath) == 0) {
+                                m_fullCardPreviewPlane = fullPlane;
+                                OutputDebugStringA("Loaded full card preview: ");
+                                OutputDebugStringA(fullCardPath);
+                                OutputDebugStringA("\n");
+                            } else {
+                                m_fullCardPreviewPlane = smart_ptr<CFastPlane>(); // FIX: Clear if load failed
+                                OutputDebugStringA("Failed to load full card preview: ");
+                                OutputDebugStringA(fullCardPath);
+                                OutputDebugStringA("\n");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
     // Update card animations based on scene state
     UpdateCardAnimations();
@@ -162,7 +219,7 @@ void CSceneCardList::OnDraw(const smart_ptr<ISurface>& lp) {
         // Draw card grid (logic will now consider animation state)
         DrawCardGrid(lp);
 
-        // Draw card preview
+        // Draw card preview (now uses m_fullCardPreviewPlane)
         DrawCardPreview(lp);
 
         // Draw pagination
@@ -204,7 +261,7 @@ void CSceneCardList::InitializeUI() {
     // Get card hover border from plane loader
     m_cardHoverBorder = m_vPlaneLoader.GetPlane(9); // card_waku_s.bmp from list_scene.txt
 
-    // Create preview card surface
+    // Create preview card surface (this might still be used for background, but not for the actual image)
     m_cardPreviewImage.CreateSurface(200, 290, false);
     m_cardPreviewImage.SetFillColor(ISurface::makeRGB(0, 0, 0, 0));
 
@@ -277,15 +334,42 @@ void CSceneCardList::LoadCardData() {
                             card.templateId = currentId;
                             card.isNew = false;
                             card.bmpName = currentBmp.substr(0, currentBmp.length() - 4); // Remove .bmp extension
-                            
+
                             // Initialize new animation members for each card with ORIGINAL speeds
                             card.m_nScaleAnimation.Set(0, 100, ORIGINAL_CARD_ANIM_SCALE_SPEED);
                             // Subtler Y-offset start value for the "drop-in" effect
-                            card.m_nYOffsetAnimation.Set(-(CARD_HEIGHT / 8), 0, ORIGINAL_CARD_ANIM_SPEED); 
-                            
+                            card.m_nYOffsetAnimation.Set(-(CARD_HEIGHT / 8), 0, ORIGINAL_CARD_ANIM_SPEED);
+
                             card.m_bAnimationStarted = false;
                             card.m_bAnimationCompleted = false;
-                            m_ownedCards.push_back(card);
+
+                            // NEW: Create CGUIButton for each card
+                            CGUIButton* cardBtn = new CGUIButton(); // Allocated with new, owned by smart_ptr
+                            cardBtn->SetID(card.id); // Use card ID as button ID
+                            cardBtn->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false));
+
+                            smart_ptr<CGUIButtonEventListener> cardBtnListener(new CGUINormalButtonListener());
+                            CGUINormalButtonListener* pBtn = static_cast<CGUINormalButtonListener*>(cardBtnListener.get());
+
+                            // Create a CFastPlane for this card's image
+                            smart_ptr<CFastPlane> cardPlane = smart_ptr<CFastPlane>(new CFastPlane());
+                            char filepath[256];
+                            sprintf(filepath, "data/mini/%s.bmp", card.bmpName.c_str());
+                            if (cardPlane->Load(filepath) == 0) {
+                                // Set the button's plane to the card's image
+                                pBtn->SetPlane(smart_ptr<ISurface>(cardPlane.get(), false)); // Button listener doesn't own surface
+                                cardBtn->SetEvent(cardBtnListener);
+                                // Set position later in DrawCardGrid as it changes due to animation
+                                card.m_cardButton = smart_ptr<CGUIButton>(cardBtn); // Assign smart_ptr ownership
+                                m_ownedCards.push_back(card);
+                                // Store the texture in map for quick lookup later if needed, though button now owns it visually
+                                m_cardTextures[card.id] = cardPlane; // Keep in map for reference, or if direct blitting is still desired
+                            } else {
+                                delete cardBtn; // Clean up button if image failed to load
+                                char debugStr[256];
+                                sprintf(debugStr, "Warning: Failed to load card texture for button: %s\n", filepath);
+                                OutputDebugStringA(debugStr);
+                            }
                         }
                     }
                 }
@@ -298,11 +382,19 @@ void CSceneCardList::LoadCardData() {
 }
 
 void CSceneCardList::ClearCardTextures() {
+    // We are now relying on the CGUIButton's internal plane, so this might not be strictly necessary
+    // for rendering, but good to clear if the textures are cached elsewhere.
+    // If the CFastPlane is only held by m_cardTextures and then passed to the button listener,
+    // then clearing this map would release the shared_ptr and potentially delete the surface.
+    // Ensure button has its own strong reference or is passed a raw ptr if we manage its lifetime.
+    // For now, let's keep it clear to release memory from old page.
     m_cardTextures.clear();
+    m_fullCardPreviewPlane = smart_ptr<CFastPlane>(); // FIX: Clear full card preview with explicit smart_ptr()
 }
 
 void CSceneCardList::LoadCardTexturesForCurrentPage() {
-    ClearCardTextures(); // Clear previously loaded textures
+    // This function will now update the plane for the CGUUIButton associated with each card
+    ClearCardTextures(); // Clear previously loaded textures and full preview
 
     int startIndex = (m_nCurrentPage - 1) * CARDS_PER_PAGE;
     int endIndex = startIndex + CARDS_PER_PAGE;
@@ -312,17 +404,28 @@ void CSceneCardList::LoadCardTexturesForCurrentPage() {
 
     char filepath[256];
     for (int i = startIndex; i < endIndex; ++i) {
-        const CardInfo& card = m_ownedCards[i];
+        CardInfo& card = m_ownedCards[i]; // Use reference to modify button
 
-        smart_ptr<CFastPlane> cardPlane = smart_ptr<CFastPlane>(new CFastPlane());
-        sprintf(filepath, "data/mini/%s.bmp", card.bmpName.c_str());
+        if (card.m_cardButton.get()) { // Check if the button exists for this card
+            smart_ptr<CFastPlane> cardPlane = smart_ptr<CFastPlane>(new CFastPlane());
+            sprintf(filepath, "data/mini/%s.bmp", card.bmpName.c_str());
 
-        if (cardPlane->Load(filepath) == 0) {
-            m_cardTextures[card.id] = cardPlane;
-        } else {
-            char debugStr[256];
-            sprintf(debugStr, "Warning: Failed to load card texture: %s\n", filepath);
-            OutputDebugStringA(debugStr);
+            if (cardPlane->Load(filepath) == 0) {
+                m_cardTextures[card.id] = cardPlane; // Keep a reference in the map
+
+                // Set the button's plane using the newly loaded texture
+                smart_ptr<CGUIButtonEventListener> cardBtnListener = card.m_cardButton->GetEvent();
+                CGUINormalButtonListener* pBtn = static_cast<CGUINormalButtonListener*>(cardBtnListener.get());
+                pBtn->SetPlane(smart_ptr<ISurface>(cardPlane.get(), false)); // Button listener doesn't own surface
+            } else {
+                // If loading fails, clear the button's plane to avoid drawing a stale image
+                smart_ptr<CGUIButtonEventListener> cardBtnListener = card.m_cardButton->GetEvent();
+                CGUINormalButtonListener* pBtn = static_cast<CGUINormalButtonListener*>(cardBtnListener.get());
+                pBtn->SetPlane(smart_ptr<ISurface>()); // FIX: Set plane to a null smart_ptr
+                char debugStr[256];
+                sprintf(debugStr, "Warning: Failed to load card texture (for button update): %s\n", filepath);
+                OutputDebugStringA(debugStr);
+            }
         }
     }
 }
@@ -353,7 +456,7 @@ void CSceneCardList::ResetCardAnimations(bool forNewPage) {
         }
     }
     // RESET the scene frame counter when page changes / animations are reset
-    m_currentSceneFrameCount = 0; 
+    m_currentSceneFrameCount = 0;
 }
 
 // ChangePage now only signals a page change, actual change happens in UpdateCardAnimations
@@ -391,17 +494,17 @@ void CSceneCardList::UpdateCardAnimations() {
     }
 
     bool overallAnimationComplete = true; // Overall check for all cards on the page
-    int currentFrameCount = m_currentSceneFrameCount; 
+    int currentFrameCount = m_currentSceneFrameCount;
 
     if (m_sceneAnimState == SAS_INITIAL_LOAD || m_sceneAnimState == SAS_ENTERING_GRID) {
-        for (int col = 0; col < CARD_COLUMNS; col++) { 
-            for (int row = 0; row < CARD_ROWS; row++) { 
+        for (int col = 0; col < CARD_COLUMNS; col++) {
+            for (int row = 0; row < CARD_ROWS; row++) {
                 int collectionIndex = startIndex + (col * CARD_ROWS) + row;
 
                 if (collectionIndex >= 0 && (size_t)collectionIndex < m_ownedCards.size()) {
                     CardInfo& currentCard = m_ownedCards[collectionIndex];
 
-                    if (!currentCard.m_bAnimationCompleted) { 
+                    if (!currentCard.m_bAnimationCompleted) {
                         int diagonalStep;
                         if (m_sceneAnimState == SAS_INITIAL_LOAD || m_bForwardPageChange) {
                             // Initial load and entering from Right-Button (forward) -> Top-Right to Bottom-Left
@@ -409,8 +512,8 @@ void CSceneCardList::UpdateCardAnimations() {
                         } else { // SAS_ENTERING_GRID and !m_bForwardPageChange (back button) -> Top-Left to Bottom-Right
                             diagonalStep = GetDiagonalStep_FromTopLeft(col, row);
                         }
-                        
-                        int desiredStartFrame = diagonalStep * DIAGONAL_STAGGER_DELAY_PER_STEP; 
+
+                        int desiredStartFrame = diagonalStep * DIAGONAL_STAGGER_DELAY_PER_STEP;
 
                         if (currentFrameCount >= desiredStartFrame) {
                             currentCard.m_bAnimationStarted = true;
@@ -420,7 +523,7 @@ void CSceneCardList::UpdateCardAnimations() {
                             if (!currentCard.m_nScaleAnimation.IsEnd()) {
                                 currentCard.m_nScaleAnimation.Inc(); // Scale up
                                 currentCard.m_nYOffsetAnimation.Inc(); // Drop down
-                                overallAnimationComplete = false; 
+                                overallAnimationComplete = false;
                             } else {
                                 currentCard.m_bAnimationCompleted = true;
                             }
@@ -438,8 +541,8 @@ void CSceneCardList::UpdateCardAnimations() {
 
     } else if (m_sceneAnimState == SAS_EXITING_GRID) {
         bool allAnimationsCompleted = true;
-        
-        for (int col = 0; col < CARD_COLUMNS; col++) { 
+
+        for (int col = 0; col < CARD_COLUMNS; col++) {
             for (int row = 0; row < CARD_ROWS; row++) {
                 int collectionIndex = startIndex + (col * CARD_ROWS) + row;
 
@@ -459,14 +562,14 @@ void CSceneCardList::UpdateCardAnimations() {
                         int desiredStartExitFrame = diagonalStep * EXIT_DIAGONAL_STAGGER_DELAY_PER_STEP;
 
                         if (currentFrameCount >= desiredStartExitFrame) {
-                            card.m_bAnimationStarted = true; 
+                            card.m_bAnimationStarted = true;
                         }
 
                         if (card.m_bAnimationStarted) {
                             if (!card.m_nScaleAnimation.IsBegin()) { // Check if it's scaled to 0
                                 card.m_nScaleAnimation.Dec(); // Scale down
                                 card.m_nYOffsetAnimation.Dec(); // Move up (to initial offset position)
-                                allAnimationsCompleted = false; 
+                                allAnimationsCompleted = false;
                             } else {
                                 card.m_bAnimationCompleted = true;
                             }
@@ -486,9 +589,9 @@ void CSceneCardList::UpdateCardAnimations() {
                     m_nCurrentPage--;
                 }
                 m_bPageChangeRequested = false;
-                LoadCardTexturesForCurrentPage(); 
+                LoadCardTexturesForCurrentPage();
                 ResetCardAnimations(true);       // Reset for new page entry
-                m_sceneAnimState = SAS_ENTERING_GRID; 
+                m_sceneAnimState = SAS_ENTERING_GRID;
             }
         }
     }
@@ -516,42 +619,52 @@ void CSceneCardList::DrawCardGrid(const smart_ptr<ISurface>& lp) {
                 // Only draw cards that are currently animating in/out or are idle (fully scaled)
                 if (card.m_bAnimationStarted || m_sceneAnimState == SAS_IDLE) {
                     // Pre-calculate card-specific animation values
-                    int currentYOffset = (int)card.m_nYOffsetAnimation;
-                    int scalePercent = (int)card.m_nScaleAnimation;
+                    int currentYOffset = (int)card.m_nYOffsetAnimation; // FIX: Revert to (int) cast
+                    int scalePercent = (int)card.m_nScaleAnimation;     // FIX: Revert to (int) cast
                     if (scalePercent < 0) scalePercent = 0; // Ensure no negative scale
                     if (scalePercent > 100) scalePercent = 100; // Ensure no over-scale
 
                     // Do not draw if scale is 0 (fully scaled out) AND we are in the exiting state.
                     // This prevents flickering a 0-scale card briefly during entry or idle.
                     if (scalePercent == 0 && m_sceneAnimState == SAS_EXITING_GRID) {
-                        continue; 
+                        continue;
                     }
 
                     int scaledWidth = (CARD_WIDTH * scalePercent) / 100;
                     if (scaledWidth < 1) scaledWidth = 1; // Ensure width is at least 1 pixel
+                    int scaledHeight = (CARD_HEIGHT * scalePercent) / 100;
+                    if (scaledHeight < 1) scaledHeight = 1; // Ensure height is at least 1 pixel
+
                     int xOffset = (CARD_WIDTH - scaledWidth) / 2; // Keep centered horizontally
+                    int yOffset = (CARD_HEIGHT - scaledHeight) / 2; // Keep centered vertically
 
                     // Calculate position on screen
                     int x = GRID_START_X + (col * (CARD_WIDTH + CARD_SPACING_X));
                     int y = GRID_START_Y + (row * (CARD_HEIGHT + CARD_SPACING_Y)) + currentYOffset;
 
-                    // Get the card texture from the cache
-                    std::map<int, smart_ptr<CFastPlane> >::iterator it = m_cardTextures.find(card.id);
-                    if (it != m_cardTextures.end() && it->second.get()) {
-                        smart_ptr<CFastPlane> cachedCardPlane = it->second;
 
-                        RECT srcRect = { 0, 0, CARD_WIDTH, CARD_HEIGHT };
-                        SIZE dstSize = { scaledWidth, CARD_HEIGHT };
+                    if (card.m_cardButton.get()) {
+                        // Set button position and size before drawing
+                        card.m_cardButton->SetXY(x + xOffset, y + yOffset);
+                        // Also set bounds for scaled button
+                        RECT buttonBounds = {0, 0, scaledWidth, scaledHeight};
+                        card.m_cardButton->SetBounds(buttonBounds);
 
-                        // Blit the card to the screen, applying scaling
-                        lp->BltFast(
-                            cachedCardPlane.get(), // Source surface
-                            x + xOffset, y,        // Destination coordinates
-                            &dstSize,              // Pointer to destination size (for scaling)
-                            &srcRect,              // Pointer to source rectangle
-                            NULL,                  // No destination clip
-                            0                      // No base point
-                        );
+                        // If the button has an internal plane, OnSimpleDraw will handle the blit
+                        // No need for manual BltFast here anymore for the card image itself.
+                        card.m_cardButton->OnSimpleDraw(lp.get());
+
+                        // Draw hover border if the button is hovered AND fully scaled in
+                        if (card.m_cardButton->IsIn() && scalePercent == 100 && m_cardHoverBorder) {
+                            // FIX: Use BltFast with pDstSize and pSrcRect for scaling
+                            SIZE dstSize = { scaledWidth, scaledHeight };
+                            RECT srcRect = {
+                                0, 0,
+                                m_cardHoverBorder->GetConstSurfaceInfo()->GetSize().cx, // FIX: Use GetConstSurfaceInfo()->GetSize().cx
+                                m_cardHoverBorder->GetConstSurfaceInfo()->GetSize().cy  // FIX: Use GetConstSurfaceInfo()->GetSize().cy
+                            };
+                            lp->BltNatural(m_cardHoverBorder.get(), x, y, &dstSize, &srcRect, NULL, 0);
+                        }
 
                         // Draw "NEW" indicator only if card is new and fully scaled in
                         if (card.isNew && scalePercent == 100) {
@@ -570,18 +683,27 @@ void CSceneCardList::DrawCardGrid(const smart_ptr<ISurface>& lp) {
 void CSceneCardList::DrawCardPreview(const smart_ptr<ISurface>& lp) {
     // Preview area starts at position from list_detail.txt
     const int PREVIEW_X = 11;
-    const int PREVIEW_Y = 381;
+    const int PREVIEW_Y = 88;
 
-    if (m_nPreviewCardId != 0) {
-        // Draw card preview
-        lp->BltFast(&m_cardPreviewImage, PREVIEW_X, PREVIEW_Y);
+    // Draw background for preview area
+    //lp->BltFast(&m_cardPreviewImage, PREVIEW_X, PREVIEW_Y);
+
+    if (m_nPreviewCardId != 0 && m_fullCardPreviewPlane.get()) {
+        // Draw the full-sized card image
+        // We need to scale this to fit the preview area (200x290)
+        // Original card is 200x290 so it should fit directly.
+        // For now, assume it fits perfectly.
+        lp->BltFast(m_fullCardPreviewPlane.get(), PREVIEW_X, PREVIEW_Y);
 
         // Draw detail line
         CPlane detailLine = m_vDetailPlaneLoader.GetPlane(3); // pap_line.bmp
         if (detailLine) {
             lp->BltFast(detailLine.get(), detailLine->GetPosX(), detailLine->GetPosY());
         }
-    }
+	} else
+	{
+		lp->BltFast(m_fullCardPreviewPlaneUra.get(), PREVIEW_X, PREVIEW_Y);
+	}
 }
 
 void CSceneCardList::DrawPagination(const smart_ptr<ISurface>& lp) {

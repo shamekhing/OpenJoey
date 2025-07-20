@@ -38,12 +38,15 @@ struct CardInfo {
     int templateId;
     bool isNew;
     std::string bmpName;  // Store the actual BMP filename (TODO: use bin DB for this later on)
-    
+
     // NEW: Per-card animation state
     yaneuraoGameSDK3rd::Math::CInteriorCounter m_nScaleAnimation;
     yaneuraoGameSDK3rd::Math::CInteriorCounter m_nYOffsetAnimation;
     bool m_bAnimationStarted;
     bool m_bAnimationCompleted;
+
+    // NEW: GUI Button for the card itself
+    smart_ptr<CGUIButton> m_cardButton; // Smart pointer to the button object
 };
 
 // Scene animation states
@@ -70,8 +73,8 @@ private:
 
     // Core components
     smart_ptr<ISurface> m_background;
-    CPlaneLoader m_vPlaneLoader;     // For scene elements
-    CPlaneLoader m_vDetailPlaneLoader;    // For detail elements
+    CPlaneLoader m_vPlaneLoader;       // For scene elements
+    CPlaneLoader m_vDetailPlaneLoader;   // For detail elements
 
     // Animation state
     yaneuraoGameSDK3rd::Math::CSaturationCounter m_nFade;
@@ -95,20 +98,22 @@ private:
     CPlane m_titlePlane;
     CPlane m_bgPlane;
     CPlane m_cardHoverBorder;
-    CFastPlane m_cardPreviewImage;
-    CGUIButton* m_backButton; // Will address this memory leak in .cpp for MSVC 2003
+    CFastPlane m_cardPreviewImage; // Still used for preview _area_ if not for the actual image.
+    CGUIButton* m_backButton;
     CGUIButton* m_prevPageButton;
     CGUIButton* m_nextPageButton;
 
     // Card preview state
     int m_nPreviewCardId;
     bool m_bPreviewCardIsMonster;
+    smart_ptr<CFastPlane> m_fullCardPreviewPlane; // NEW: Holds the full-size card graphic
+	smart_ptr<CFastPlane> m_fullCardPreviewPlaneUra;
 
     std::map<int, smart_ptr<CFastPlane> > m_cardTextures; // Stores raw card images as CFastPlane
 
     // Helper functions for diagonal step calculation based on origin
-    int GetDiagonalStep_FromTopRight(int col, int row);   // Wave starts Top-Right, propagates Bottom-Left
-    int GetDiagonalStep_FromTopLeft(int col, int row);    // Wave starts Top-Left, propagates Bottom-Right
+    int GetDiagonalStep_FromTopRight(int col, int row);    // Wave starts Top-Right, propagates Bottom-Left
+    int GetDiagonalStep_FromTopLeft(int col, int row);     // Wave starts Top-Left, propagates Bottom-Right
     int GetDiagonalStep_FromBottomLeft(int col, int row); // Wave starts Bottom-Left, propagates Top-Right
 
     // Private methods
@@ -117,14 +122,14 @@ private:
     void LoadCardData();
     void LoadCardTexturesForCurrentPage(); // New method to load textures for the current page
     void ClearCardTextures();            // New method to clear textures
-    void DrawCardGrid(const smart_ptr<ISurface>& lp);
+    void DrawCardGrid(const smart_ptr<ISurface>& lp); // Modified to draw buttons
     void DrawCardPreview(const smart_ptr<ISurface>& lp);
     void DrawPagination(const smart_ptr<ISurface>& lp);
     void DrawCollectionRate(const smart_ptr<ISurface>& lp);
-    void UpdateCardAnimations(); // Will be heavily modified
-    void ChangePage(bool forward); // Will be heavily modified
-    void ResetCardAnimations(bool forNewPage = true); // New helper to init/reset card counters
-    void SetHoverButtonPlane(CGUIButton* btn, int id, bool negativeOrder); 
+    void UpdateCardAnimations();
+    void ChangePage(bool forward);
+    void ResetCardAnimations(bool forNewPage = true);
+    void SetHoverButtonPlane(CGUIButton* btn, int id, bool negativeOrder);
 };
 
 #endif // CSCENECARDLIST_H
