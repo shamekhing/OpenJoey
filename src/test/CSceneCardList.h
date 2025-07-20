@@ -22,7 +22,7 @@ const int CARD_HEIGHT = 72;
 
 // Original, working animation speeds for individual counters (Adjusted for faster animation based on video)
 // These values control how many frames an individual card takes to animate from start to end.
-const int ORIGINAL_CARD_ANIM_SPEED = 6;        // Speed for individual card entry/exit (Y-offset) - e.g., 6 frames for the drop
+const int ORIGINAL_CARD_ANIM_SPEED = 4;        // Speed for individual card entry/exit (Y-offset) - e.g., 6 frames for the drop
 const int ORIGINAL_CARD_ANIM_SCALE_SPEED = 5;  // Speed for individual card scaling - e.g., 5 frames for the scale
 
 // Delay for diagonal staggering (adjust this for wave speed)
