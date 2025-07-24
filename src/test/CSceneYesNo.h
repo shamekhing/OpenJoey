@@ -9,6 +9,7 @@
 #include "../CApp.h"
 #include "../system/CJoeySceneFactory.h"
 #include "../system/backport/yaneGUIButton.h"
+#include "../system/backport/yaneGUITextBox.h"
 
 class CSceneYesNo : public CBaseScene {
 public:
@@ -36,6 +37,9 @@ private:
     int m_nButton;            // Selected button (0=none, 1=yes, 2=no)
     CRootCounter m_nFade;     // Fade effect counter
 	bool IsSetLeva;
+
+	// Create a smart_ptr for your textbox
+	smart_ptr<CGUITextBox> myTextBox;
 };
 
 #endif // CSCENEYESNO_H

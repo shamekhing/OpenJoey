@@ -217,6 +217,12 @@
 					RelativePath=".\system\backport\yaneGUISlider.h">
 				</File>
 				<File
+					RelativePath=".\system\backport\yaneGUITextBox.cpp">
+				</File>
+				<File
+					RelativePath=".\system\backport\yaneGUITextBox.h">
+				</File>
+				<File
 					RelativePath=".\system\effects\yanePlaneEffectBlt.cpp">
 				</File>
 				<File

@@ -166,6 +166,41 @@ void CSceneYesNo::OnInit() {
         m_vCards[i].SetXY(64 + (64 * i), 128);
     }
 
+	// setup textbox
+		// Assuming you have an initialized ISurface* lp (your main rendering surface)
+	// and a smart_ptr<CFixMouse> mouse_ptr (for mouse input).
+
+	// 2. Instantiate and create the textbox
+	// Example: at screen coordinates (50, 50), 300 width, 200 height, with a vertical slider.
+	myTextBox = smart_ptr<yaneuraoGameSDK3rd::Draw::CGUITextBox>(new yaneuraoGameSDK3rd::Draw::CGUITextBox());
+	myTextBox->Create(50, 50, 300, 200, yaneuraoGameSDK3rd::Draw::CGUITextBox::VERTICAL_SLIDER);
+
+	// 3. Set the text content
+	myTextBox->SetText("Hello world! This is a simple example of a multi-line textbox "
+					"with a vertical scrollbar. You can add much more text here "
+					"to test the scrolling functionality. Line 1.\nLine 2.\nLine 3.\n"
+					"Line 4.\nLine 5.\nLine 6.\nLine 7.\nLine 8.\nLine 9.\nLine 10.\n"
+					"Line 11.\nLine 12.\nLine 13.\nLine 14.\nLine 15.\nLine 16.\n"
+					"Line 17.\nLine 18.\nLine 19.\nLine 20. End of text.");
+
+	// Optional: Set custom font (assuming you have a CFont object available)
+	// smart_ptr<yaneuraoGameSDK3rd::Draw::CFont> customFont(new yaneuraoGameSDK3rd::Draw::CFont());
+	// customFont->Create("Arial", 14, false, false); // Example: Arial, 14pt, not bold, not italic
+	// myTextBox->SetFont(customFont);
+
+	// Optional: Set text color (e.g., red)
+	// myTextBox->SetTextColor(yaneuraoGameSDK3rd::Draw::ISurface::makeRGB(255, 0, 0, 0));
+
+	// Optional: Set a background plane (assuming you have a loaded ISurface)
+	// smart_ptr<yaneuraoGameSDK3rd::Draw::ISurface> bgSurface;
+	// // ... load your background image into bgSurface ...
+	CPlane plnTEST = m_vPlaneLoader.GetPlane(0);
+	//pln->SetPos(0,0);
+	smart_ptr<ISurface> plnPtrBG(plnTEST.get(), false); // no ownership
+	myTextBox->SetBackgroundPlane(plnPtrBG);
+	//CPlane loadedThumbPlane = m_vPlaneLoader.GetPlane(13); // Assuming ID 13 for slider thumb
+	//myTextBox->m_vSliderThumbGraphic = plnPtrBG;
+
     m_nButton = 0;
     m_nFade.Set(0, 16, 1);  // 16 frames fade
 }
@@ -270,6 +305,23 @@ void CSceneYesNo::OnDraw(const smart_ptr<ISurface>& lp) {
         //BYTE fadeAlpha = (BYTE)(255 - ((int)m_nFade * 16));
         //lp->BlendBltFast(m_vBackground.get(), 0, 0, fadeAlpha);
     }
+
+	// 4. Update the textbox state (e.g., mouse interaction, scrolling)
+	// This should be called once per frame or when input occurs.
+	if (myTextBox.get()) {
+		myTextBox->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false)); // Pass the current mouse state
+		myTextBox->OnSimpleMove(lp.get());    // Process mouse input and update internal state
+	}
+
+	// 5. Draw the textbox
+	// This should be called during your rendering phase.
+	if (myTextBox.get()) {
+		myTextBox->OnSimpleDraw(lp.get()); // Draw the textbox to your main surface 'lp'
+	}
+
+	// --- When the textbox is no longer needed, its smart_ptr will handle cleanup ---
+	// myTextBox = NULL; // Explicitly release if necessary, otherwise it will be cleaned up
+					// when it goes out of scope or the program ends.
 
 
 	// Apply text to scene surface
