@@ -37,6 +37,7 @@ struct CardInfo {
     int id;
     int templateId;
     bool isNew;
+	const Card* cardData;
     std::string bmpName;  // Store the actual BMP filename (TODO: use bin DB for this later on)
 
     // NEW: Per-card animation state
@@ -75,18 +76,19 @@ private:
     smart_ptr<ISurface> m_background;
     CPlaneLoader m_vPlaneLoader;       // For scene elements
     CPlaneLoader m_vDetailPlaneLoader;   // For detail elements
+	CBinSystem* m_bin; // Card bin system (CAPP)
 
     // Animation state
     yaneuraoGameSDK3rd::Math::CSaturationCounter m_nFade;
     yaneuraoGameSDK3rd::Math::CSaturationCounter nFadeBG;
     CTimer m_timerMain;
 
-    // NEW: Scene-wide animation state
+    // Scene-wide animation state
     SceneAnimState m_sceneAnimState;
     bool m_bPageChangeRequested;
     bool m_bForwardPageChange; // True if moving to next page, false for previous
 
-    // NEW: Scene-wide frame counter for staggered animation timing
+    // Scene-wide frame counter for staggered animation timing
     int m_currentSceneFrameCount; // Increments every OnMove frame.
 
     // Card grid and selection
@@ -104,8 +106,8 @@ private:
     CGUIButton* m_nextPageButton;
 
     // Card preview state
+	const Card* m_nPreviewCard;
     int m_nPreviewCardId;
-    bool m_bPreviewCardIsMonster;
     smart_ptr<CFastPlane> m_fullCardPreviewPlane; // NEW: Holds the full-size card graphic
 	smart_ptr<CFastPlane> m_fullCardPreviewPlaneUra;
 

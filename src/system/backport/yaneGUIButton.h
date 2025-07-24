@@ -25,6 +25,7 @@ public:
     virtual void OnLBDown(void){}
     virtual void OnRBUp(void){}
     virtual void OnLBUp(void){}
+	virtual ISurface* GetDrawSurface(bool bPush, bool bIn) = 0;
 
     virtual bool IsButton(int px, int py){ return true; }
 	virtual bool IsButtonNoGFX(int px, int py, RECT& b){ return true; }
@@ -69,6 +70,8 @@ public:
     virtual void SetReverse(bool bReverse) { m_bReverse = bReverse; }
     virtual bool GetReverse() { return m_bReverse; }
 
+	virtual ISurface* GetDrawSurface(bool bPush, bool bIn);
+
     virtual void SetBlinkSpeed(int n) { m_nBlink.SetEnd(n); }
     virtual void SetImageOffset(int n) { m_nImageOffset = n; }
     virtual int  GetImageOffset(void) { return m_nImageOffset; }
@@ -109,6 +112,11 @@ public:
     void SetRightClick(bool b) { m_bRightClick = b; }
 	void SetBounds(RECT b) { m_bounds = b; m_boundsMode = true; }
 	void ResetBounds(RECT b) { m_bounds = RECT(); m_boundsMode = false; }
+
+	void SetScaleSize(int width, int height) { m_drawWidth = width; m_drawHeight = height; }
+    void SetScaleSizeOnce(int width, int height) { m_oneShotDrawWidth = width; m_oneShotDrawHeight = height; }
+	void ResetScaleSize() { m_drawWidth = 0; m_drawHeight = 0; } // Resets persistent size
+
 	void SetID(int i) { m_id = i; }
 	int  GetID() { return  m_id; }
 
@@ -124,9 +132,11 @@ public:
 
     virtual LRESULT OnSimpleMove(ISurface* lp);
     virtual LRESULT OnSimpleDraw(ISurface* lp);
+	virtual LRESULT OnSimpleScaleDraw(ISurface* lp);
 
     virtual void Reset();
     virtual void GetXY(int &x, int &y);
+	virtual void GetScaleXY(int &x, int &y);
 
     CGUIButton();
     virtual ~CGUIButton() {}
@@ -145,6 +155,11 @@ private:
 	bool m_boundsMode;
 	RECT m_bounds;
 	int m_id;
+
+    int m_drawWidth;
+    int m_drawHeight;
+    int m_oneShotDrawWidth;
+    int m_oneShotDrawHeight;
 };
 
 } // namespace Draw

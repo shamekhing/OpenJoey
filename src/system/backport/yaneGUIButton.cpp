@@ -29,6 +29,23 @@ void CGUINormalButtonListener::SetPlane(smart_ptr<ISurface> pv) {
     m_bHasPlane = (pv.get() != NULL);
 }
 
+ISurface* CGUINormalButtonListener::GetDrawSurface(bool bPush, bool bIn) {
+    if (m_nType == 0) return NULL;
+
+    bool bUsePushState;
+    if (m_nType & 16) { // Blink type
+        bUsePushState = (m_nBlink.Get() % 2) == 0;
+        m_nBlink++; // Advance blink counter
+    } else if (m_nType & 8) { // Hover type
+        bUsePushState = bIn;
+    } else { // Normal push type
+        bUsePushState = bPush && bIn;
+    }
+
+    // Returns the surface based on the button's state for drawing
+    return GetMyPlane(bUsePushState);
+}
+
 void CGUINormalButtonListener::SetType(int nType) {
     m_nType = nType;
     if (m_nType & 16) m_nBlink.Reset();
@@ -136,6 +153,10 @@ CGUIButton::CGUIButton(void) {
     m_bLeftClick = true;
     m_bRightClick = false;
 	m_id = -1;
+	m_drawWidth = 0;
+    m_drawHeight = 0;
+    m_oneShotDrawWidth = 0;
+    m_oneShotDrawHeight = 0;
     Reset();
 }
 
@@ -202,6 +223,44 @@ LRESULT CGUIButton::OnSimpleDraw(ISurface* lp) {
     return m_pvButtonEvent->OnDraw(lp, m_nX, m_nY, m_bPushed, m_bIn);
 }
 
+LRESULT CGUIButton::OnSimpleScaleDraw(ISurface* lp) {
+    if (m_pvButtonEvent.get() == NULL) return -1;
+
+    int actualDrawWidth = 0;
+    int actualDrawHeight = 0;
+    bool useCustomScale = false;
+
+    // 1. Prioritize one-shot draw size (SetScaleSizeOnce)
+    if (m_oneShotDrawWidth > 0 && m_oneShotDrawHeight > 0) {
+        actualDrawWidth = m_oneShotDrawWidth;
+        actualDrawHeight = m_oneShotDrawHeight;
+        useCustomScale = true;
+        // IMPORTANT: Reset one-shot dimensions immediately after use
+        m_oneShotDrawWidth = 0;
+        m_oneShotDrawHeight = 0;
+    }
+    // 2. Fallback to persistent draw size (SetScaleSize)
+    else if (m_drawWidth > 0 && m_drawHeight > 0) {
+        actualDrawWidth = m_drawWidth;
+        actualDrawHeight = m_drawHeight;
+        useCustomScale = true;
+    }
+
+    // If a custom scale is active, use BltFast with the source surface
+    if (useCustomScale) {
+        ISurface* sourcePlane = m_pvButtonEvent->GetDrawSurface(m_bPushed, m_bIn);
+        if (sourcePlane) {
+            SIZE dstSize = { actualDrawWidth, actualDrawHeight };
+            RECT srcRect = { 0, 0, sourcePlane->GetConstSurfaceInfo()->GetSize().cx, sourcePlane->GetConstSurfaceInfo()->GetSize().cy };
+            return lp->BltFast(sourcePlane, m_nX, m_nY, &dstSize, &srcRect, NULL, 0);
+        }
+        return 0; // If sourcePlane is null, nothing to draw
+    } else {
+        // Otherwise, fallback to the listener's default OnDraw (which uses natural size)
+        return m_pvButtonEvent->OnDraw(lp, m_nX, m_nY, m_bPushed, m_bIn);
+    }
+}
+
 ISurface* CGUIButton::GetPlane() {
 	if (m_pvButtonEvent.get() == NULL) return NULL;
 	//CGUINormalButtonListener* pListener = static_cast<CGUINormalButtonListener*>(m_pvButtonEvent.get());
@@ -234,6 +293,10 @@ void CGUIButton::Reset() {
 
 	m_boundsMode = false;
 	m_bounds = RECT();
+	m_drawWidth = 0;          // Reset persistent custom draw size
+    m_drawHeight = 0;         // Reset persistent custom draw size
+    m_oneShotDrawWidth = 0;   // Reset one-shot custom draw size
+    m_oneShotDrawHeight = 0;  // Reset one-shot custom draw size
 }
 
 void CGUIButton::GetXY(int &x, int &y) {
@@ -250,6 +313,37 @@ void CGUIButton::GetXY(int &x, int &y) {
             y += sy;
         }
     }
+}
+
+/// Special GetXY that accounts for the plane scale
+void CGUIButton::GetScaleXY(int &x, int &y) {
+    // Determine the size to use for coordinate calculation
+    int currentWidth = m_drawWidth;
+    int currentHeight = m_drawHeight;
+
+    // If a one-shot scale is active, prioritize it for current size calculation
+    if (m_oneShotDrawWidth > 0 && m_oneShotDrawHeight > 0) {
+        currentWidth = m_oneShotDrawWidth;
+        currentHeight = m_oneShotDrawHeight;
+    }
+    // If no explicit scaled size (persistent or one-shot) is set, get natural size
+    else if (currentWidth <= 0 || currentHeight <= 0) {
+        // Note: GetPlane() here might not return the state-specific plane (pushed/in)
+        // This is a limitation if precise bounds are needed for dynamic images,
+        // but it's consistent with how GetPlane() was likely used before.
+        ISurface* plane = GetPlane();
+        if (plane && plane->GetSize(currentWidth, currentHeight) != 0) {
+             currentWidth = 0; // Failed to get size
+             currentHeight = 0;
+        }
+    }
+
+    x = m_nX; // Base X position
+    y = m_nY; // Base Y position
+    
+    // Add dimensions to get bottom-right corner (or for other uses of this GetXY)
+    x += currentWidth;
+    y += currentHeight;
 }
 
 } // namespace Draw

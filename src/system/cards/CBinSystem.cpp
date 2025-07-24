@@ -171,6 +171,8 @@ BOOL CBinSystem::LoadCardRealIds(const char* path)
 
 BOOL CBinSystem::LoadCardInternalIds(const char* path)
 {
+	// TODO: something is off with the data, could it be that its just garbage in game files? verify
+	// this file doesnt make sense, it can be build at runtime
     DWORD size;
     BYTE* data = DecompressFile(path, size);
     if(!data) return FALSE;
@@ -179,15 +181,17 @@ BOOL CBinSystem::LoadCardInternalIds(const char* path)
     m_cards[0].internalId.id = 0xFFFF;
 
     // Copy remaining internal IDs
-    const size_t bytesToCopy = (m_cardCount - 1) * sizeof(CardInternalId);
-    if(size < bytesToCopy)
-    {
-        delete[] data;
-        return FALSE;
-    }
+    //const size_t bytesToCopy = (m_cardCount - 1) * sizeof(CardInternalId);
+    //if(size < bytesToCopy)
+    //{
+    //    delete[] data;
+    //    return FALSE;
+    //}
     
+	// TODO: its faster this way, any undesired behaviour?
     for(DWORD i = 1; i < m_cardCount; i++) {
-        memcpy(&m_cards[i].internalId, &((CardInternalId*)data)[i-1], sizeof(CardInternalId));
+        //memcpy(&m_cards[i].internalId, &((CardInternalId*)data)[i-1], sizeof(CardInternalId));
+		m_cards[i].internalId.id = i;
     }
 
     delete[] data;
@@ -369,16 +373,24 @@ const char* CBinSystem::GetCardName(DWORD cardId)
     return m_cards[cardId].name.name;
 }
 
+
 WORD CBinSystem::GetCardRealId(DWORD internalId)
 {
-    if(internalId >= m_cardCount) return 0xFFFF;
+    if(internalId >= m_cardCount) return 0;
     return m_cards[internalId].realId.id;
 }
 
-WORD CBinSystem::GetCardInternalId(DWORD cardId)
+/// SLOW, try to not use. We dont have a lookup table for this relation because its rarely used.
+WORD CBinSystem::GetCardInternalId(DWORD realId)
 {
-    if(cardId >= m_cardCount) return 0;
-    return m_cards[cardId].internalId.id;
+	for (DWORD rc = 0; rc < m_cardCount; ++rc)
+	{
+		if (m_cards[rc].realId.id == realId)
+		{
+			return m_cards[rc].internalId.id;
+		}
+	}
+	return 0;
 }
 
 const char* CBinSystem::GetCardDescription(DWORD cardId)

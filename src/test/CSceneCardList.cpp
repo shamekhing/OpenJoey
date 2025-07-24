@@ -22,6 +22,9 @@ void CSceneCardList::OnInit() {
     m_mouse.Flush();
     m_mouse.SetGuardTime(1);
 
+	// Load card bin system
+	m_bin = app->GetBinSystem();
+
     // Init counters and timers
     m_nFade = yaneuraoGameSDK3rd::Math::CSaturationCounter(0, 255, 8);
     nFadeBG.Set(0, 255, 16);
@@ -46,8 +49,8 @@ void CSceneCardList::OnInit() {
 
     // Initialize page tracking
     m_nCurrentPage = 1;
+	m_nPreviewCard = NULL;
     m_nPreviewCardId = 0; // Initialize to 0, means no card is previewed
-    m_bPreviewCardIsMonster = false;
 
     // Load scene layout data
     m_vPlaneLoader.SetLang(app->GetLang());
@@ -125,6 +128,7 @@ void CSceneCardList::OnMove(const smart_ptr<ISurface>& lp) {
             m_bPageChangeRequested = true;
             m_bForwardPageChange = false;
             m_sceneAnimState = SAS_EXITING_GRID; // Start exit animation
+			m_nPreviewCard = NULL;
             m_nPreviewCardId = 0; // Clear preview on page change
             m_fullCardPreviewPlane = smart_ptr<CFastPlane>(); // FIX: Clear full card preview
         }
@@ -137,6 +141,7 @@ void CSceneCardList::OnMove(const smart_ptr<ISurface>& lp) {
             m_bPageChangeRequested = true;
             m_bForwardPageChange = true;
             m_sceneAnimState = SAS_EXITING_GRID; // Start exit animation
+			m_nPreviewCard = NULL;
             m_nPreviewCardId = 0; // Clear preview on page change
             m_fullCardPreviewPlane = smart_ptr<CFastPlane>(); // FIX: Clear full card preview
         }
@@ -160,9 +165,11 @@ void CSceneCardList::OnMove(const smart_ptr<ISurface>& lp) {
                     if (currentCard.m_cardButton.get()) {
                         currentCard.m_cardButton->OnSimpleMove(lp.get()); // Update card button state
 
-                        if (currentCard.m_cardButton->IsLClick()) {
-                            m_nPreviewCardId = currentCard.id; // Set the clicked card's ID for preview
-                            m_bPreviewCardIsMonster = true; // For now, assume all are monsters
+						if (currentCard.m_cardButton->IsLClick() || currentCard.m_cardButton->IsIn()) {
+							
+							m_nPreviewCardId = currentCard.id; // Set the clicked card's ID for preview
+							m_nPreviewCard = currentCard.cardData;
+
                             // Load the full card graphic
                             char fullCardPath[256];
                             sprintf(fullCardPath, "data/card/%s.bmp", currentCard.bmpName.c_str());
@@ -315,6 +322,7 @@ void CSceneCardList::LoadCardData() {
 
         // Check if it's an ID line (starts with // and contains [ID])
         if (line.substr(0, 2) == "//") {
+			// TODO: we should parse the internal id from txt, not the real id (better perfomance, no lookup loop)
             size_t idStart = line.find("[");
             size_t idEnd = line.find("]");
             if (idStart != std::string::npos && idEnd != std::string::npos && idEnd > idStart) {
@@ -335,6 +343,10 @@ void CSceneCardList::LoadCardData() {
                             card.isNew = false;
                             card.bmpName = currentBmp.substr(0, currentBmp.length() - 4); // Remove .bmp extension
 
+							// Match database entry with list entry
+							WORD intId = m_bin->GetCardInternalId(currentId); // We parse only the internal id from the txt list so...
+							card.cardData = m_bin->GetCard(intId); // load card metadata from db
+							
                             // Initialize new animation members for each card with ORIGINAL speeds
                             card.m_nScaleAnimation.Set(0, 100, ORIGINAL_CARD_ANIM_SCALE_SPEED);
                             // Subtler Y-offset start value for the "drop-in" effect
@@ -642,7 +654,6 @@ void CSceneCardList::DrawCardGrid(const smart_ptr<ISurface>& lp) {
                     int x = GRID_START_X + (col * (CARD_WIDTH + CARD_SPACING_X));
                     int y = GRID_START_Y + (row * (CARD_HEIGHT + CARD_SPACING_Y)) + currentYOffset;
 
-
                     if (card.m_cardButton.get()) {
                         // Set button position and size before drawing
                         card.m_cardButton->SetXY(x + xOffset, y + yOffset);
@@ -650,9 +661,9 @@ void CSceneCardList::DrawCardGrid(const smart_ptr<ISurface>& lp) {
                         RECT buttonBounds = {0, 0, scaledWidth, scaledHeight};
                         card.m_cardButton->SetBounds(buttonBounds);
 
-                        // If the button has an internal plane, OnSimpleDraw will handle the blit
-                        // No need for manual BltFast here anymore for the card image itself.
-                        card.m_cardButton->OnSimpleDraw(lp.get());
+                        // Use special scale draw operation
+						card.m_cardButton->SetScaleSize(scaledWidth, CARD_HEIGHT);
+                        card.m_cardButton->OnSimpleScaleDraw(lp.get());
 
                         // Draw hover border if the button is hovered AND fully scaled in
                         if (card.m_cardButton->IsIn() && scalePercent == 100 && m_cardHoverBorder) {
