@@ -75,6 +75,14 @@ CGUITextBox::~CGUITextBox() {
     // Smart pointers handle deallocation
 }
 
+void CGUITextBox::SetSliderGFX(smart_ptr<ISurface> sliderThumbGraphic){
+    m_vSliderThumbGraphic = sliderThumbGraphic;
+    if (m_vSlider.get() && m_vSliderListener.get() && m_vSliderThumbGraphic.get()) {
+        CGUINormalSliderListener* pSliderListener = static_cast<CGUINormalSliderListener*>(m_vSliderListener.get());
+        pSliderListener->SetPlane(m_vSliderThumbGraphic);
+    }
+}
+
 void CGUITextBox::Create(int x, int y, int width, int height, SliderMode mode) {
     // Set base IGUIParts coordinates. This also updates the base class m_rcRect.
     SetXY(x, y);
@@ -87,12 +95,11 @@ void CGUITextBox::Create(int x, int y, int width, int height, SliderMode mode) {
     ::SetRect(&m_rcTextBoxClip, x, y, x + width, y + height);
 
     // Initialize text plane
-    m_vTextFastPlane = YTL::smart_ptr<CTextFastPlane>(new CTextFastPlane());
-    // Correct CPlane construction: pass raw pointer
-    m_vTextPlane = CPlane(m_vTextFastPlane.get());
+    m_vTextFastPlane = new CTextFastPlane;
+    m_vTextPlane = CPlane(m_vTextFastPlane);
 
     // Default font setup (can be overridden by SetFont)
-    if (m_vTextFastPlane.get()) {
+    if (m_vTextFastPlane != NULL) {
         m_vTextFastPlane->GetFont()->SetColor(m_textColor);
         m_vTextFastPlane->GetFont()->SetSize(16); // Default font size
     }
@@ -143,7 +150,7 @@ void CGUITextBox::Create(int x, int y, int width, int height, SliderMode mode) {
         m_vSlider->SetRect(&sliderMovementRect);
     }
 
-    UpdateTextPlane(); // Render initial text (if any)
+    //UpdateTextPlane(); // Render initial text (if any)
 }
 
 void CGUITextBox::SetText(const string& text) {
@@ -158,19 +165,19 @@ string CGUITextBox::GetText() const {
 }
 
 void CGUITextBox::SetFont(YTL::smart_ptr<CFont> font) {
-    if (m_vTextFastPlane.get()) {
+    if (m_vTextFastPlane != NULL) {
         *(m_vTextFastPlane->GetFont()) = *font; // Copy font properties
         UpdateTextPlane();
     }
 }
 
 CFont* CGUITextBox::GetFont() {
-    return m_vTextFastPlane.get() ? m_vTextFastPlane->GetFont() : NULL;
+    return m_vTextFastPlane != NULL ? m_vTextFastPlane->GetFont() : NULL;
 }
 
 void CGUITextBox::SetTextColor(ISurfaceRGB color) {
     m_textColor = color; // Direct assignment of the DWORD color value
-    if (m_vTextFastPlane.get()) {
+    if (m_vTextFastPlane != NULL) {
         m_vTextFastPlane->GetFont()->SetColor(m_textColor);
         UpdateTextPlane();
     }
@@ -188,7 +195,7 @@ void CGUITextBox::SetBackgroundPlane(YTL::smart_ptr<ISurface> pv) {
 }
 
 void CGUITextBox::UpdateTextPlane() {
-    if (m_vTextFastPlane.get()) {
+    if (m_vTextFastPlane != NULL) {
         m_vTextFastPlane->GetFont()->SetText(m_strCurrentText);
         m_vTextFastPlane->SetTextPos(0, 0); // Text position relative to its own plane
         m_vTextFastPlane->UpdateTextAA(); // Render with anti-aliasing
@@ -223,7 +230,7 @@ void CGUITextBox::UpdateTextPlane() {
 }
 
 void CGUITextBox::CalculateVisibleContentSize() {
-    if (m_vTextFastPlane.get()) {
+    if (m_vTextFastPlane != NULL) {
         m_vTextFastPlane->GetSize(m_nContentWidth, m_nContentHeight);
     } else {
         m_nContentWidth = 0;
@@ -287,8 +294,7 @@ LRESULT CGUITextBox::OnSimpleDraw(ISurface* lp) {
         // 7. Base Point: 0 (typically top-left alignment)
         lp->BltNatural(m_vBackgroundPlane.get(), drawX, drawY, &destSize, NULL, &m_rcTextBoxClip, 0);
     } else {
-        // If no background plane is set, you might want to draw a solid color background
-        // or simply do nothing. For now, it's empty as per previous discussion.
+        // If no background plane is set, you might want to draw a solid color background  or simply do nothing.
     }
 
     // Draw the text plane
@@ -345,7 +351,7 @@ void CGUITextBox::Reset() {
     m_nContentHeight = 0;
 
     // Reset internal text plane and slider
-    if (m_vTextFastPlane.get()) {
+    if (m_vTextFastPlane != NULL) {
         m_vTextFastPlane->GetFont()->SetText("");
         m_vTextFastPlane->UpdateTextAA();
     }

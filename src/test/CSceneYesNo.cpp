@@ -172,8 +172,9 @@ void CSceneYesNo::OnInit() {
 
 	// 2. Instantiate and create the textbox
 	// Example: at screen coordinates (50, 50), 300 width, 200 height, with a vertical slider.
-	myTextBox = smart_ptr<yaneuraoGameSDK3rd::Draw::CGUITextBox>(new yaneuraoGameSDK3rd::Draw::CGUITextBox());
+	myTextBox = smart_ptr<yaneuraoGameSDK3rd::Draw::CGUITextBox>(new yaneuraoGameSDK3rd::Draw::CGUITextBox(), false);
 	myTextBox->Create(50, 50, 300, 200, yaneuraoGameSDK3rd::Draw::CGUITextBox::VERTICAL_SLIDER);
+	myTextBox->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false)); // Pass the current mouse state
 
 	// 3. Set the text content
 	myTextBox->SetText("Hello world! This is a simple example of a multi-line textbox "
@@ -182,14 +183,15 @@ void CSceneYesNo::OnInit() {
 					"Line 4.\nLine 5.\nLine 6.\nLine 7.\nLine 8.\nLine 9.\nLine 10.\n"
 					"Line 11.\nLine 12.\nLine 13.\nLine 14.\nLine 15.\nLine 16.\n"
 					"Line 17.\nLine 18.\nLine 19.\nLine 20. End of text.");
+	//myTextBox->SetText("TEST 123");
 
 	// Optional: Set custom font (assuming you have a CFont object available)
-	// smart_ptr<yaneuraoGameSDK3rd::Draw::CFont> customFont(new yaneuraoGameSDK3rd::Draw::CFont());
-	// customFont->Create("Arial", 14, false, false); // Example: Arial, 14pt, not bold, not italic
-	// myTextBox->SetFont(customFont);
+	//smart_ptr<yaneuraoGameSDK3rd::Draw::CFont> customFont(new yaneuraoGameSDK3rd::Draw::CFont());
+	//customFont->Create("Arial", 14, false, false); // Example: Arial, 14pt, not bold, not italic
+	//myTextBox->SetFont(customFont);
 
-	// Optional: Set text color (e.g., red)
-	// myTextBox->SetTextColor(yaneuraoGameSDK3rd::Draw::ISurface::makeRGB(255, 0, 0, 0));
+	// Optional: Set text color (e.g., green)
+	myTextBox->SetTextColor(yaneuraoGameSDK3rd::Draw::ISurface::makeRGB(0, 255, 0, 0));
 
 	// Optional: Set a background plane (assuming you have a loaded ISurface)
 	// smart_ptr<yaneuraoGameSDK3rd::Draw::ISurface> bgSurface;
@@ -198,6 +200,8 @@ void CSceneYesNo::OnInit() {
 	//pln->SetPos(0,0);
 	smart_ptr<ISurface> plnPtrBG(plnTEST.get(), false); // no ownership
 	myTextBox->SetBackgroundPlane(plnPtrBG);
+	myTextBox->SetSliderGFX(plnPtrBG);
+	//myTextBox->UpdateTextPlane();
 	//CPlane loadedThumbPlane = m_vPlaneLoader.GetPlane(13); // Assuming ID 13 for slider thumb
 	//myTextBox->m_vSliderThumbGraphic = plnPtrBG;
 
@@ -228,6 +232,12 @@ void CSceneYesNo::OnMove(const smart_ptr<ISurface>& lp) {
 			//p->SetImageOffset(2);
         }
     }
+
+	// 4. Update the textbox state (e.g., mouse interaction, scrolling)
+	// This should be called once per frame or when input occurs.
+	if (myTextBox.get()) {
+		myTextBox->OnSimpleMove(lp.get());    // Process mouse input and update internal state
+	}
 }
 
 void CSceneYesNo::OnDraw(const smart_ptr<ISurface>& lp) {
@@ -306,12 +316,13 @@ void CSceneYesNo::OnDraw(const smart_ptr<ISurface>& lp) {
         //lp->BlendBltFast(m_vBackground.get(), 0, 0, fadeAlpha);
     }
 
-	// 4. Update the textbox state (e.g., mouse interaction, scrolling)
-	// This should be called once per frame or when input occurs.
-	if (myTextBox.get()) {
-		myTextBox->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false)); // Pass the current mouse state
-		myTextBox->OnSimpleMove(lp.get());    // Process mouse input and update internal state
-	}
+	// Apply text to scene surface
+	CTextFastPlane* pTextPtr = new CTextFastPlane;
+    pTextPtr->GetFont()->SetText("This is a fastcall test scene.\nPress YES to return to the scene that called this or NO to exit the app.");
+    pTextPtr->GetFont()->SetSize(20);
+    pTextPtr->UpdateTextAA();
+    CPlane pText = CPlane(pTextPtr);
+	lp->BltNatural(pText,20,100);
 
 	// 5. Draw the textbox
 	// This should be called during your rendering phase.
@@ -322,13 +333,4 @@ void CSceneYesNo::OnDraw(const smart_ptr<ISurface>& lp) {
 	// --- When the textbox is no longer needed, its smart_ptr will handle cleanup ---
 	// myTextBox = NULL; // Explicitly release if necessary, otherwise it will be cleaned up
 					// when it goes out of scope or the program ends.
-
-
-	// Apply text to scene surface
-	CTextFastPlane* pTextPtr = new CTextFastPlane;
-    pTextPtr->GetFont()->SetText("This is a fastcall test scene.\nPress YES to return to the scene that called this or NO to exit the app.");
-    pTextPtr->GetFont()->SetSize(20);
-    pTextPtr->UpdateTextAA();
-    CPlane pText = CPlane(pTextPtr);
-	lp->BltNatural(pText,20,100);
 }

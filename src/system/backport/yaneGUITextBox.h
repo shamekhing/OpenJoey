@@ -43,6 +43,7 @@ public:
 
     // Textbox initialization and setup
     void Create(int x, int y, int width, int height, SliderMode mode = NO_SLIDER); //, smart_ptr<ISurface> sliderThumbGraphic = smart_ptr<ISurface>()
+	void SetSliderGFX(smart_ptr<ISurface> sliderThumbGraphic);
 
     // Text content management
     void SetText(const string& text);
@@ -69,12 +70,14 @@ public:
     // Get current scroll positions
     void GetScrollPos(int& x, int& y) const { x = m_nScrollX; y = m_nScrollY; }
 
+	void UpdateTextPlane(); // Renders the text onto m_vTextPlane
+
 protected:
-    void UpdateTextPlane(); // Renders the text onto m_vTextPlane
     void CalculateVisibleContentSize(); // Calculates the actual content size after text rendering
 
-    smart_ptr<CTextFastPlane> m_vTextFastPlane; // Plane for rendered text
+    CTextFastPlane* m_vTextFastPlane; // Plane for rendered text
     CPlane m_vTextPlane; // Wrapper for m_vTextFastPlane
+
     string m_strCurrentText;
     ISurfaceRGB m_textColor; // Changed to ISurfaceRGB type, assuming it's a struct with .r, .g, .b members
     int m_nTextOffsetX;
