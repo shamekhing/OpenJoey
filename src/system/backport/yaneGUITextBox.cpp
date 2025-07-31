@@ -17,6 +17,29 @@ namespace yaneuraoGameSDK3rd {
 namespace Draw {
 
 ///////////////////////////////////////////////////////////////////////////////
+// CGUITextBoxArrowButtonListener Implementation
+///////////////////////////////////////////////////////////////////////////////
+
+CGUITextBoxArrowButtonListener::CGUITextBoxArrowButtonListener(ScrollDirection direction)
+    : m_direction(direction) {}
+
+void CGUITextBoxArrowButtonListener::SetTextBox(YTL::smart_ptr<CGUITextBox> textBox) {
+    m_vTextBox = textBox;
+}
+
+// No longer need SetPlaneLoader or GetDrawSurface here; CGUINormalButtonListener handles it.
+void CGUITextBoxArrowButtonListener::OnLBClick(void) {
+    if (m_vTextBox.get() && m_vTextBox->GetFont()) {
+        int lineHeight = m_vTextBox->GetFont()->GetHeight();
+        if (m_direction == SCROLL_UP) {
+            m_vTextBox->ScrollContent(0, -lineHeight);
+        } else {
+            m_vTextBox->ScrollContent(0, lineHeight);
+        }
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
 // CGUITextBoxSliderListener Implementation
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -125,6 +148,10 @@ void CGUITextBox::SetSliderGFX(smart_ptr<ISurface> sliderThumbGraphic){
             sliderMovementRect.left = m_nWidth - m_nSliderStripWidth; 
             sliderMovementRect.right = m_nWidth; // Its right boundary is the textbox's full width.
             
+            int buttonSize = m_nSliderStripWidth;
+            sliderMovementRect.top = buttonSize;
+            sliderMovementRect.bottom = m_nHeight - buttonSize;
+
             if (m_sliderMode == BOTH_SLIDERS) {
                 // If both sliders are present, the vertical track needs to stop before the horizontal one.
                 sliderMovementRect.bottom -= m_nSliderStripHeight; 
@@ -143,6 +170,42 @@ void CGUITextBox::SetSliderGFX(smart_ptr<ISurface> sliderThumbGraphic){
         }
         // This is the crucial step: apply the newly calculated, precise movement rectangle to the slider.
         m_vSlider->SetRect(&sliderMovementRect);
+    }
+}
+
+void CGUITextBox::SetArrowGFX(smart_ptr<CPlaneLoader> pv, int upIndex, int downIndex) {
+    if (m_vScrollUpButton.get() && m_vScrollDownButton.get() && pv.get()) {
+        YTL::smart_ptr<CGUITextBox> this_ptr(this, false); // Temp smart_ptr for 'this'
+
+        // Instantiate listeners if not already done
+        if (m_vScrollUpButtonListener.isNull()) {
+            m_vScrollUpButtonListener = YTL::smart_ptr<CGUITextBoxArrowButtonListener>(new CGUITextBoxArrowButtonListener(SCROLL_UP));
+            m_vScrollUpButtonListener->SetTextBox(this_ptr);
+            m_vScrollUpButton->SetEvent(YTL::smart_ptr_static_cast<CGUIButtonEventListener>(m_vScrollUpButtonListener));
+        }
+
+        if (m_vScrollDownButtonListener.isNull()) {
+            m_vScrollDownButtonListener = YTL::smart_ptr<CGUITextBoxArrowButtonListener>(new CGUITextBoxArrowButtonListener(SCROLL_DOWN));
+            m_vScrollDownButtonListener->SetTextBox(this_ptr);
+            m_vScrollDownButton->SetEvent(YTL::smart_ptr_static_cast<CGUIButtonEventListener>(m_vScrollDownButtonListener));
+        }
+
+        // Now set the plane loaders on the listeners.
+        // CGUINormalButtonListener has a SetPlaneLoader, so we just call that.
+        CGUINormalButtonListener* upListener = static_cast<CGUINormalButtonListener*>(m_vScrollUpButtonListener.get());
+        CGUINormalButtonListener* downListener = static_cast<CGUINormalButtonListener*>(m_vScrollDownButtonListener.get());
+		pv->SetColorKey(ISurface::makeRGB(255, 255, 255, 0)); // gfx have while alpha value offset
+        upListener->SetPlaneLoader(pv, upIndex);
+        downListener->SetPlaneLoader(pv, downIndex);
+
+		int buttonWidth = 0;
+		int buttonHeight = 0;
+		CPlane upPlane = pv->GetPlane(upIndex); // Get graphic for the up button
+		upPlane->GetSize(buttonWidth, buttonHeight); // Get its actual size
+		int arrowButtonHeight = buttonHeight; // Store its actual height
+
+		m_vScrollUpButton->SetXY(m_nX + m_nWidth - m_nSliderStripWidth, m_nY);
+        m_vScrollDownButton->SetXY(m_nX + m_nWidth - m_nSliderStripWidth, m_nY + m_nHeight - arrowButtonHeight);
     }
 }
 
@@ -172,72 +235,55 @@ void CGUITextBox::SetSliderLoader(string folder, string path){
 
 
 void CGUITextBox::Create(int x, int y, int width, int height, SliderMode mode) {
-    // Set base IGUIParts coordinates. This also updates the base class m_rcRect.
     SetXY(x, y);
 
     m_nWidth = width;
     m_nHeight = height;
     m_sliderMode = mode;
 
-    // Update the clipping rectangle for text rendering, relative to screen coordinates
     ::SetRect(&m_rcTextBoxClip, x, y, x + width, y + height);
 
-    // Initialize text plane
     m_vTextFastPlane = new CTextFastPlane;
     m_vTextPlane = CPlane(m_vTextFastPlane);
 
-    // Default font setup (can be overridden by SetFont)
     if (m_vTextFastPlane != NULL) {
         m_vTextFastPlane->GetFont()->SetColor(m_textColor);
-        m_vTextFastPlane->GetFont()->SetSize(16); // Default font size
+        m_vTextFastPlane->GetFont()->SetSize(16);
     }
 
-    // Initialize slider if mode requires it
     if (m_sliderMode != NO_SLIDER) {
         m_vSlider = YTL::smart_ptr<CGUISlider>(new CGUISlider());
         m_vSliderListener = YTL::smart_ptr<CGUITextBoxSliderListener>(new CGUITextBoxSliderListener());
 
-        // Use smart_ptr_static_cast for safe upcasting from CGUITextBox* to smart_ptr<CGUITextBox>
-        // and from CGUITextBoxSliderListener* to smart_ptr<CGUISliderEventListener>.
-        // Create a temporary smart_ptr for 'this' to perform the cast.
-        YTL::smart_ptr<CGUITextBox> this_ptr(this, false); // 'this' is not owned by this temp smart_ptr
-        m_vSliderListener->SetTextBox(YTL::smart_ptr_static_cast<CGUITextBox>(this_ptr));
+        YTL::smart_ptr<CGUITextBox> this_ptr(this, false);
+        m_vSliderListener->SetTextBox(this_ptr);
 
         m_vSlider->SetEvent(YTL::smart_ptr_static_cast<CGUISliderEventListener>(m_vSliderListener));
         m_vSlider->SetType(m_sliderMode);
-
-        // Set slider's drawing coordinates to align with textbox
-        // Slider's internal logic expects its SetXY to be its top-left screen coord
         m_vSlider->SetXY(m_nX, m_nY);
 
-        // slider RECT initialization
-        // Provide a temporary/default RECT for the slider's movement area.
-        // This will be overridden later by SetSliderGFX once the actual thumb graphic's size is known.
-        RECT tempSliderRect;
-        
-        // A common default for a scrollbar strip width/height is often 15px.
-        // This is a placeholder until the true graphic size is determined in SetSliderGFX.
-        const int defaultSliderStripSize = 15; 
-
-        // Set the default rect based on the slider mode
+        // ONLY initialize the CGUIButton objects here.
+        // Their listeners and events will be set in SetArrowGFX.
         if (m_sliderMode == VERTICAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
-            // For a vertical slider, place the default strip at the right edge
-            ::SetRect(&tempSliderRect, m_nWidth - defaultSliderStripSize, 0, m_nWidth, m_nHeight); 
-            if (m_sliderMode == BOTH_SLIDERS) {
-                tempSliderRect.bottom -= defaultSliderStripSize; // Adjust for corner if both sliders
-            }
-        } else if (m_sliderMode == HORIZONTAL_SLIDER) { // Only horizontal slider
-            // For a horizontal slider, place the default strip at the bottom edge
+            m_vScrollUpButton = YTL::smart_ptr<CGUIButton>(new CGUIButton());
+            m_vScrollDownButton = YTL::smart_ptr<CGUIButton>(new CGUIButton());
+        }
+
+        RECT tempSliderRect;
+        const int defaultSliderStripSize = 15;
+        
+        if (m_sliderMode == VERTICAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
+            ::SetRect(&tempSliderRect, m_nWidth - defaultSliderStripSize, 0 + defaultSliderStripSize, m_nWidth, m_nHeight - defaultSliderStripSize);
+            RECT upButtonBounds = { m_nWidth - defaultSliderStripSize, 0, m_nWidth, defaultSliderStripSize };
+            m_vScrollUpButton->SetBounds(upButtonBounds);
+            RECT downButtonBounds = { m_nWidth - defaultSliderStripSize, m_nHeight - defaultSliderStripSize, m_nWidth, m_nHeight };
+            m_vScrollDownButton->SetBounds(downButtonBounds);
+        } else if (m_sliderMode == HORIZONTAL_SLIDER) {
             ::SetRect(&tempSliderRect, 0, m_nHeight - defaultSliderStripSize, m_nWidth, m_nHeight);
         }
-        // If NO_SLIDER mode, or some other unexpected mode, tempSliderRect might not be fully set.
-        // However, this block is within `if (m_sliderMode != NO_SLIDER) { ... }`
-        // so one of the above conditions should be met.
 
-        m_vSlider->SetRect(&tempSliderRect); // Set the temporary/default rect
+        m_vSlider->SetRect(&tempSliderRect);
     }
-
-    //UpdateTextPlane(); // Render initial text (if any)
 }
 
 void CGUITextBox::SetText(const string& text) {
@@ -338,6 +384,9 @@ void CGUITextBox::CalculateVisibleContentSize() {
 LRESULT CGUITextBox::OnSimpleMove(ISurface* lp) {
     LRESULT result = 0;
 
+    // Check if vertical scrolling is needed
+    bool needsVerticalScroll = m_nContentHeight > m_nHeight;
+
     // First, process mouse input for the slider
     if (m_vSlider.get() && m_pvMouse.get()) {
         result |= m_vSlider->OnSimpleMove(lp); // Process slider's own movement logic
@@ -362,27 +411,38 @@ LRESULT CGUITextBox::OnSimpleMove(ISurface* lp) {
         GetMouse()->GetXY(mouseX, mouseY); // Get current mouse coordinates
         POINT currentMousePos = { mouseX, mouseY };
 
-		// Mouse wheel operation (needs to be happen there because it shall work when mouse is anywhere in the box, not only at slider event)
-        if (::PtInRect(&m_rcTextBoxClip, currentMousePos)) {
-            CGUINormalSliderListener* pSliderListener = static_cast<CGUINormalSliderListener*>(m_vSliderListener.get());
-            int sx, sy;
-            pSliderListener->GetMinSize(sx, sy); // Get the scroll step amount (slider thumb height)
+		// Only process events for the scroll buttons and slider if they are displayed
+		if (m_sliderMode == VERTICAL_SLIDER && needsVerticalScroll) {
+			// Process mouse input for scroll buttons first
+			if (m_vScrollUpButton.get()) {
+				result |= m_vScrollUpButton->OnSimpleMove(lp);
+			}
+			if (m_vScrollDownButton.get()) {
+				result |= m_vScrollDownButton->OnSimpleMove(lp);
+			}
 
-            int scrollDeltaY = 0; // Initialize scroll delta
+			// Mouse wheel operation (needs to be happen there because it shall work when mouse is anywhere in the box, not only at slider event)
+			if (::PtInRect(&m_rcTextBoxClip, currentMousePos)) {
+				CGUINormalSliderListener* pSliderListener = static_cast<CGUINormalSliderListener*>(m_vSliderListener.get());
+				int sx, sy;
+				pSliderListener->GetMinSize(sx, sy); // Get the scroll step amount (slider thumb height)
 
-            // Determine scroll direction and amount
-            if (GetMouse()->IsWheelUp()) {
-                scrollDeltaY = -sy; // Scroll up (negative Y)
-            } else if (GetMouse()->IsWheelDown()) {
-                scrollDeltaY = sy;  // Scroll down (positive Y)
-            }
+				int scrollDeltaY = 0; // Initialize scroll delta
 
-            // If a scroll event occurred, apply it
-            if (scrollDeltaY != 0) {
-                ScrollContent(0, scrollDeltaY);
-                result |= 1; // Indicate a change has occurred
-            }
-        }
+				// Determine scroll direction and amount
+				if (GetMouse()->IsWheelUp()) {
+					scrollDeltaY = -sy; // Scroll up (negative Y)
+				} else if (GetMouse()->IsWheelDown()) {
+					scrollDeltaY = sy;  // Scroll down (positive Y)
+				}
+
+				// If a scroll event occurred, apply it
+				if (scrollDeltaY != 0) {
+					ScrollContent(0, scrollDeltaY);
+					result |= 1; // Indicate a change has occurred
+				}
+			}
+		}
 
         // Only update if scroll position actually changes to avoid unnecessary re-draws
         if (targetScrollX != m_nScrollX || targetScrollY != m_nScrollY) {
@@ -464,12 +524,21 @@ LRESULT CGUITextBox::OnSimpleDraw(ISurface* lp) {
                        0);
     }
 
-    // Draw the slider if it exists
-    if (m_vSlider.get()) {
-        // The slider's OnSimpleDraw handles its own positioning relative to its SetXY
-        // (which was set to the textbox's m_nX, m_nY in Create).
-        m_vSlider->OnSimpleDraw(lp);
+    // Draw the scroll buttons and slider only if they are needed
+    bool needsVerticalScroll = m_nContentHeight > m_nHeight;
+    if (m_sliderMode == VERTICAL_SLIDER && needsVerticalScroll) {
+        if (m_vScrollUpButton.get()) {
+            m_vScrollUpButton->OnSimpleDraw(lp);
+        }
+        if (m_vScrollDownButton.get()) {
+            m_vScrollDownButton->OnSimpleDraw(lp);
+        }
+        if (m_vSlider.get()) {
+            m_vSlider->OnSimpleDraw(lp);
+        }
     }
+    // TODO: Add similar logic for horizontal scrollbars if needed
+    // if (m_sliderMode == HORIZONTAL_SLIDER && m_nContentWidth > m_nWidth) { ... }
 
     return 0;
 }
@@ -494,12 +563,28 @@ void CGUITextBox::Reset() {
     if (m_vSlider.get()) {
         m_vSlider->Reset();
     }
+
+	// Reset scroll buttons
+    if (m_vScrollUpButton.get()) {
+        m_vScrollUpButton->Reset();
+    }
+    if (m_vScrollDownButton.get()) {
+        m_vScrollDownButton->Reset();
+    }
 }
 
 void CGUITextBox::SetMouse(YTL::smart_ptr<CFixMouse> pv) {
     IGUIParts::SetMouse(pv); // Pass mouse to base
     if (m_vSlider.get()) {
         m_vSlider->SetMouse(pv); // Also pass mouse to slider
+    }
+
+	// Pass mouse to scroll buttons
+    if (m_vScrollUpButton.get()) {
+        m_vScrollUpButton->SetMouse(pv);
+    }
+    if (m_vScrollDownButton.get()) {
+        m_vScrollDownButton->SetMouse(pv);
     }
 }
 

@@ -213,6 +213,7 @@ void CSceneYesNo::OnInit() {
 	CPlane sliderPlusPress = m_vPlaneScrollLoader.GetPlane(9);
 	smart_ptr<ISurface> sliderSmartPtr(sliderBox.get(), false); // no ownership
 	myTextBox->SetSliderGFX(sliderSmartPtr);
+	myTextBox->SetArrowGFX(smart_ptr<CPlaneLoader>(&m_vPlaneScrollLoader, false), 5, 8);
 
 	//myTextBox->SetSliderGFX(plnPtrBG, m_vPlaneScrollLoader);
 		// Load scroll data resources (test)

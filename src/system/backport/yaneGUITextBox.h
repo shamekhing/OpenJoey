@@ -3,6 +3,7 @@
 
 #include "../../stdafx.h" // Corrected path
 #include "yaneGUIParts.h"      // For IGUIParts base class
+#include "yaneGUIButton.h"
 #include "yaneGUISlider.h"     // For CGUISlider and its base classes
 // CTextFastPlane is already part of the SDK via stdafx.h, so no direct include needed here.
 
@@ -34,7 +35,25 @@ protected:
     smart_ptr<CGUITextBox> m_vTextBox;
 };
 
+// Define an enum to distinguish the up and down buttons for the listener
+enum ScrollDirection {
+    SCROLL_UP,
+    SCROLL_DOWN
+};
 
+// Custom button listener for the textbox's scroll buttons
+class CGUITextBoxArrowButtonListener : public CGUINormalButtonListener {
+public:
+    CGUITextBoxArrowButtonListener(ScrollDirection direction);
+    void SetTextBox(YTL::smart_ptr<CGUITextBox> textBox);
+    virtual void OnLBClick(void);
+
+private:
+    ScrollDirection m_direction;
+    YTL::smart_ptr<CGUITextBox> m_vTextBox;
+};
+
+// Main Textbox class
 class CGUITextBox : public IGUIParts {
 public:
     enum SliderMode {
@@ -50,6 +69,7 @@ public:
     // Textbox initialization and setup
     void Create(int x, int y, int width, int height, SliderMode mode = NO_SLIDER); //, smart_ptr<ISurface> sliderThumbGraphic = smart_ptr<ISurface>()
 	void SetSliderGFX(smart_ptr<ISurface> sliderThumbGraphic);
+	void SetArrowGFX(smart_ptr<CPlaneLoader> pv, int upIndex, int downIndex);
 	void SetSliderLoader(string data, string path);
 
     // Text content management
@@ -98,8 +118,13 @@ protected:
     SliderMode m_sliderMode;
     smart_ptr<CGUISlider> m_vSlider;
     smart_ptr<CGUITextBoxSliderListener> m_vSliderListener;
-
 	smart_ptr<ISurface> m_vSliderThumbGraphic;
+
+    // Scroll button members
+    smart_ptr<CGUIButton> m_vScrollUpButton;
+    smart_ptr<CGUIButton> m_vScrollDownButton;
+    smart_ptr<CGUITextBoxArrowButtonListener> m_vScrollUpButtonListener;
+    smart_ptr<CGUITextBoxArrowButtonListener> m_vScrollDownButtonListener;
 
     int m_nWidth;  // Width of the textbox display area
     int m_nHeight; // Height of the textbox display area

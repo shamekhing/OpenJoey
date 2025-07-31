@@ -106,9 +106,10 @@ void CSceneCardList::OnMove(const smart_ptr<ISurface>& lp) {
 
     if (m_timerMain.Get() < 500) return;
 
-    // Handle back button
+    // DEBUG ONLY: Increase font size (for scrolling debug)
     if (key.IsKeyPush(5)) { // Space key
-        GetSceneControl()->ReturnScene();
+		m_cardTextBox->GetFont()->SetHeight(50); 
+		m_cardTextBox->GetFont()->SetSize(30);
     }
 
     // Update buttons
@@ -291,8 +292,8 @@ void CSceneCardList::InitializeUI() {
         OutputDebugStringA("Error: Failed to load data/y/list/detail_scroll.txt\n");
     }
 	m_cardTextBox = smart_ptr<yaneuraoGameSDK3rd::Draw::CGUITextBox>(new yaneuraoGameSDK3rd::Draw::CGUITextBox(), false);
-	int paddingBoxOffset = 2;
-	m_cardTextBox->Create(12+paddingBoxOffset, 382+paddingBoxOffset, 198, 205, yaneuraoGameSDK3rd::Draw::CGUITextBox::VERTICAL_SLIDER);
+	int paddingBoxOffset = 0;
+	m_cardTextBox->Create(12+paddingBoxOffset, 382+paddingBoxOffset, 202, 205, yaneuraoGameSDK3rd::Draw::CGUITextBox::VERTICAL_SLIDER);
 	m_cardTextBox->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false)); // Pass the current mouse state
 	//m_cardTextBox->SetTextColor(yaneuraoGameSDK3rd::Draw::ISurface::makeRGB(0, 0, 0, 0));
 	smart_ptr<yaneuraoGameSDK3rd::Draw::CFont> customFont(new yaneuraoGameSDK3rd::Draw::CFont());
@@ -310,6 +311,7 @@ void CSceneCardList::InitializeUI() {
 	CPlane sliderBox = m_cardTextBoxPLoader.GetPlane(1);
 	smart_ptr<ISurface> sliderSmartPtr(sliderBox.get(), false); // no ownership
 	m_cardTextBox->SetSliderGFX(sliderSmartPtr);
+	m_cardTextBox->SetArrowGFX(smart_ptr<CPlaneLoader>(&m_cardTextBoxPLoader, false), 5, 8);
 
 	// DEBUG BACKGROUND TEXTBOX
 	//CPlane plnTEST = m_cardTextBoxPLoader.GetPlane(0);
