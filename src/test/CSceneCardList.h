@@ -10,7 +10,7 @@
 #include "../CApp.h"
 #include "../system/CJoeySceneFactory.h"
 #include "../system/backport/yaneGUIButton.h"
-#include "../system/backport/yaneGUISlider.h"
+#include "../system/backport/yaneGUITextBox.h"
 #include <map> // For card texture caching
 
 // Constants
@@ -104,6 +104,8 @@ private:
     CGUIButton* m_backButton;
     CGUIButton* m_prevPageButton;
     CGUIButton* m_nextPageButton;
+	smart_ptr<CGUITextBox> m_cardTextBox;
+	CPlaneLoader m_cardTextBoxPLoader;
 
     // Card preview state
 	const Card* m_nPreviewCard;

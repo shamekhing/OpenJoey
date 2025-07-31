@@ -195,6 +195,11 @@ void CSceneCardList::OnMove(const smart_ptr<ISurface>& lp) {
 
     // Update card animations based on scene state
     UpdateCardAnimations();
+
+	// Update the textbox draw state (e.g., mouse interaction, scrolling)
+	if (m_cardTextBox.get()) {
+		m_cardTextBox->OnSimpleMove(lp.get());
+	}
 }
 
 void CSceneCardList::OnDraw(const smart_ptr<ISurface>& lp) {
@@ -234,6 +239,11 @@ void CSceneCardList::OnDraw(const smart_ptr<ISurface>& lp) {
 
         // Draw collection rate
         DrawCollectionRate(lp);
+
+		// Draw the card textbox
+		if (m_cardTextBox.get()) {
+			m_cardTextBox->OnSimpleDraw(lp.get());
+		}
     }
 
     m_nFade.Inc();
@@ -274,6 +284,37 @@ void CSceneCardList::InitializeUI() {
 
     // Create page navigation arrows
     InitializePageControls();
+
+	// Create card textbox
+	m_cardTextBoxPLoader.SetReadDir("data/y/list/");  // Base directory
+    if (m_cardTextBoxPLoader.Set("data/y/list/detail_scroll.txt", false) != 0) {  // Relative to SetReadDir
+        OutputDebugStringA("Error: Failed to load data/y/list/detail_scroll.txt\n");
+    }
+	m_cardTextBox = smart_ptr<yaneuraoGameSDK3rd::Draw::CGUITextBox>(new yaneuraoGameSDK3rd::Draw::CGUITextBox(), false);
+	int paddingBoxOffset = 2;
+	m_cardTextBox->Create(12+paddingBoxOffset, 382+paddingBoxOffset, 198, 205, yaneuraoGameSDK3rd::Draw::CGUITextBox::VERTICAL_SLIDER);
+	m_cardTextBox->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false)); // Pass the current mouse state
+	//m_cardTextBox->SetTextColor(yaneuraoGameSDK3rd::Draw::ISurface::makeRGB(0, 0, 0, 0));
+	smart_ptr<yaneuraoGameSDK3rd::Draw::CFont> customFont(new yaneuraoGameSDK3rd::Draw::CFont());
+	customFont->SetFont("Arial");
+	customFont->SetSize(13);
+	customFont->SetWeight(FW_NORMAL);
+	customFont->SetItalic(false);
+	customFont->SetShadowOffset(0, 0);
+	customFont->SetLetterSpacing(-1);
+	//customFont->SetColor(ISurface::makeRGB(0, 0, 0, 0)); // Black text (assuming last 0 is alpha for opaque)
+	customFont->SetColor(ISurface::makeRGB(26, 47, 75, 0)); // Dark brown text (BGR)
+	customFont->SetHeight(18); // Adjust for desired line spacing, e.g., 15-17 for 12pt font
+	m_cardTextBox->SetFont(customFont);
+
+	CPlane sliderBox = m_cardTextBoxPLoader.GetPlane(1);
+	smart_ptr<ISurface> sliderSmartPtr(sliderBox.get(), false); // no ownership
+	m_cardTextBox->SetSliderGFX(sliderSmartPtr);
+
+	// DEBUG BACKGROUND TEXTBOX
+	//CPlane plnTEST = m_cardTextBoxPLoader.GetPlane(0);
+	//smart_ptr<ISurface> plnPtrBG(plnTEST.get(), false); // no ownership
+	//m_cardTextBox->SetBackgroundPlane(plnPtrBG);
 }
 
 void CSceneCardList::InitializePageControls() {
@@ -675,6 +716,9 @@ void CSceneCardList::DrawCardGrid(const smart_ptr<ISurface>& lp) {
                                 m_cardHoverBorder->GetConstSurfaceInfo()->GetSize().cy  // FIX: Use GetConstSurfaceInfo()->GetSize().cy
                             };
                             lp->BltNatural(m_cardHoverBorder.get(), x, y, &dstSize, &srcRect, NULL, 0);
+
+							// Card TextBox
+							m_cardTextBox->SetText(card.cardData->description);
                         }
 
                         // Draw "NEW" indicator only if card is new and fully scaled in

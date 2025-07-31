@@ -110,6 +110,12 @@ public:
 	void	SetVerticalFont(bool b) { m_bVerticalFont = b; }
 	bool	IsVerticalFont() const { return m_bVerticalFont; }
 
+#ifdef OPENJOEY_ENGINE_FIXES
+	/// Letter spacing between characters (default: 0)
+	void SetLetterSpacing(int nSpacing);
+	int GetLetterSpacing() const { return m_nLetterSpacing; }
+#endif
+
 	CFont();
 	virtual ~CFont();
 
@@ -131,8 +137,12 @@ protected:
 	int		m_nShadowOffsetX;	//	影のオフセットX座標
 	int		m_nShadowOffsetY;	//	影のオフセットY座標
 
+#ifdef OPENJOEY_ENGINE_FIXES // Changed from LETTER_SPACING_FEATURE
+	int m_nLetterSpacing; // Stores the letter spacing value
+#endif
+
 	//	Auxiliary
-	void	TextOut(HDC hdc,int x,int y,const string& s);
+	void TextOut(HDC hdc,int x,int y,const string& s);
 };
 
 } // end of namespace Draw

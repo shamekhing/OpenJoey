@@ -79,6 +79,8 @@ public:
     void GetScrollPos(int& x, int& y) const { x = m_nScrollX; y = m_nScrollY; }
 
 	void UpdateTextPlane(); // Renders the text onto m_vTextPlane
+	std::string WrapText(const std::string& rawText, int availableWidth);
+	std::string TrimLeadingSpaces(const std::string& s);
 
 protected:
     void CalculateVisibleContentSize(); // Calculates the actual content size after text rendering
@@ -101,7 +103,8 @@ protected:
 
     int m_nWidth;  // Width of the textbox display area
     int m_nHeight; // Height of the textbox display area
-
+    int m_nSliderStripWidth;  // Stores the width of the scrollbar graphic (thumb)
+    int m_nSliderStripHeight; // Stores the height of the scrollbar graphic (thumb)
     int m_nContentWidth;  // Actual width of the rendered text content
     int m_nContentHeight; // Actual height of the rendered text content
 

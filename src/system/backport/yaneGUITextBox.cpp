@@ -69,7 +69,9 @@ void CGUITextBoxSliderListener::OnPageRight() {
 CGUITextBox::CGUITextBox()
     : m_nWidth(0), m_nHeight(0), m_nContentWidth(0), m_nContentHeight(0),
       m_nScrollX(0), m_nScrollY(0), m_sliderMode(NO_SLIDER),
-      m_nTextOffsetX(0), m_nTextOffsetY(0)
+      m_nTextOffsetX(0), m_nTextOffsetY(0),
+	  m_nSliderStripWidth(15),  // Initialize with a default, will be updated in SetSliderGFX
+      m_nSliderStripHeight(15) // Initialize with a default, will be updated in SetSliderGFX
 {
     // Default text color. Use ISurface::makeRGB since ISurfaceRGB is a DWORD typedef.
     // Assuming 0 for alpha (fully opaque) for common text rendering, adjust if different blend mode needed.
@@ -85,14 +87,62 @@ CGUITextBox::~CGUITextBox() {
 
 void CGUITextBox::SetSliderGFX(smart_ptr<ISurface> sliderThumbGraphic){
     m_vSliderThumbGraphic = sliderThumbGraphic;
+    
+    // Ensure all necessary components are available before proceeding with updates.
+    // m_vSlider and m_vSliderListener should have been created in CGUITextBox::Create().
+    // m_vSliderThumbGraphic must be valid to get its size.
     if (m_vSlider.get() && m_vSliderListener.get() && m_vSliderThumbGraphic.get()) {
+        // Cast listener to its specific type to access SetPlane or GetMinSize if needed.
         CGUINormalSliderListener* pSliderListener = static_cast<CGUINormalSliderListener*>(m_vSliderListener.get());
-        
-		// Set the min size of the listener based on the graphic's actual size
-        m_vSliderListener->SetMinSizeFromGraphic(m_vSliderThumbGraphic.get()); // Pass the raw pointer to the graphic
+       
+        // This call is important: it tells the listener the actual dimensions of the graphic,
+        // which might be used for its own internal logic or for drawing.
+        m_vSliderListener->SetMinSizeFromGraphic(m_vSliderThumbGraphic.get()); 
 
-		// TODO: do the real gfx here
-		pSliderListener->SetPlane(m_vSliderThumbGraphic);
+        // TODO: (As per your original code) Do the real graphic setup here.
+        // This typically involves associating the graphic with the listener or slider for rendering.
+        pSliderListener->SetPlane(m_vSliderThumbGraphic);
+
+        // Recalculate and re-set slider's movement RECT ---
+        // This ensures the slider's operational boundaries (m_rcRect) match the actual thumb graphic.
+        int actualThumbWidth = 0;
+        int actualThumbHeight = 0;
+        
+        // Get the true size directly from the graphic now that it's successfully set.
+        m_vSliderThumbGraphic->GetSize(actualThumbWidth, actualThumbHeight); 
+
+        // These constants represent the actual dimensions of the scrollbar strip (the thumb).
+        m_nSliderStripWidth = actualThumbWidth;
+        m_nSliderStripHeight = actualThumbHeight;
+
+        RECT sliderMovementRect;
+        // Start with the full textbox area, relative to the slider's own (m_nX, m_nY) origin.
+        ::SetRect(&sliderMovementRect, 0, 0, m_nWidth, m_nHeight); 
+
+        if (m_sliderMode == VERTICAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
+            // For a vertical slider, its track is at the right side of the textbox.
+            // Its left boundary is the textbox's total width minus the width of the slider strip itself.
+            sliderMovementRect.left = m_nWidth - m_nSliderStripWidth; 
+            sliderMovementRect.right = m_nWidth; // Its right boundary is the textbox's full width.
+            
+            if (m_sliderMode == BOTH_SLIDERS) {
+                // If both sliders are present, the vertical track needs to stop before the horizontal one.
+                sliderMovementRect.bottom -= m_nSliderStripHeight; 
+            }
+        }
+        if (m_sliderMode == HORIZONTAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
+            // For a horizontal slider, its track is at the bottom side of the textbox.
+            // Its top boundary is the textbox's total height minus the height of the slider strip.
+            sliderMovementRect.top = m_nHeight - m_nSliderStripHeight;
+            sliderMovementRect.bottom = m_nHeight; // Its bottom boundary is the textbox's full height.
+            
+            if (m_sliderMode == BOTH_SLIDERS) {
+                // If both sliders are present, the horizontal track needs to stop before the vertical one.
+                sliderMovementRect.right -= m_nSliderStripWidth; 
+            }
+        }
+        // This is the crucial step: apply the newly calculated, precise movement rectangle to the slider.
+        m_vSlider->SetRect(&sliderMovementRect);
     }
 }
 
@@ -160,32 +210,31 @@ void CGUITextBox::Create(int x, int y, int width, int height, SliderMode mode) {
         // Slider's internal logic expects its SetXY to be its top-left screen coord
         m_vSlider->SetXY(m_nX, m_nY);
 
-        // Adjust slider's movement rectangle based on textbox dimensions
-        // This rect defines the *relative* area within the slider's own (m_nX, m_nY) for its thumb movement.
-        RECT sliderMovementRect;
-        ::SetRect(&sliderMovementRect, 0, 0, m_nWidth, m_nHeight); // Default to full textbox area
+        // slider RECT initialization
+        // Provide a temporary/default RECT for the slider's movement area.
+        // This will be overridden later by SetSliderGFX once the actual thumb graphic's size is known.
+        RECT tempSliderRect;
+        
+        // A common default for a scrollbar strip width/height is often 15px.
+        // This is a placeholder until the true graphic size is determined in SetSliderGFX.
+        const int defaultSliderStripSize = 15; 
 
-        // Define standard padding for where the actual slider button moves, typically narrower/shorter than full textbox
-        const int sliderVisualWidth = 15;
-        const int sliderVisualHeight = 15;
-
+        // Set the default rect based on the slider mode
         if (m_sliderMode == VERTICAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
-            // Vertical slider movement area (right edge of textbox)
-            sliderMovementRect.left = m_nWidth - sliderVisualWidth;
-            sliderMovementRect.right = m_nWidth;
+            // For a vertical slider, place the default strip at the right edge
+            ::SetRect(&tempSliderRect, m_nWidth - defaultSliderStripSize, 0, m_nWidth, m_nHeight); 
             if (m_sliderMode == BOTH_SLIDERS) {
-                sliderMovementRect.bottom -= sliderVisualHeight; // Shrink for horizontal slider corner
+                tempSliderRect.bottom -= defaultSliderStripSize; // Adjust for corner if both sliders
             }
+        } else if (m_sliderMode == HORIZONTAL_SLIDER) { // Only horizontal slider
+            // For a horizontal slider, place the default strip at the bottom edge
+            ::SetRect(&tempSliderRect, 0, m_nHeight - defaultSliderStripSize, m_nWidth, m_nHeight);
         }
-        if (m_sliderMode == HORIZONTAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
-            // Horizontal slider movement area (bottom edge of textbox)
-            sliderMovementRect.top = m_nHeight - sliderVisualHeight;
-            sliderMovementRect.bottom = m_nHeight;
-            if (m_sliderMode == BOTH_SLIDERS) {
-                sliderMovementRect.right -= sliderVisualWidth; // Shrink for vertical slider corner
-            }
-        }
-        m_vSlider->SetRect(&sliderMovementRect);
+        // If NO_SLIDER mode, or some other unexpected mode, tempSliderRect might not be fully set.
+        // However, this block is within `if (m_sliderMode != NO_SLIDER) { ... }`
+        // so one of the above conditions should be met.
+
+        m_vSlider->SetRect(&tempSliderRect); // Set the temporary/default rect
     }
 
     //UpdateTextPlane(); // Render initial text (if any)
@@ -234,9 +283,19 @@ void CGUITextBox::SetBackgroundPlane(YTL::smart_ptr<ISurface> pv) {
 
 void CGUITextBox::UpdateTextPlane() {
     if (m_vTextFastPlane != NULL) {
-        m_vTextFastPlane->GetFont()->SetText(m_strCurrentText);
+        int textAvailableWidth = m_nWidth; // Start with full textbox width
+
+        // If a vertical slider is present, reduce the width available for text
+        if (m_sliderMode == VERTICAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
+            textAvailableWidth -= m_nSliderStripWidth;
+        }
+        // Ensure minimum width for text if slider takes up too much space
+        if (textAvailableWidth < 0) textAvailableWidth = 0;
+
+        std::string wrappedContent = WrapText(m_strCurrentText, textAvailableWidth);
+        m_vTextFastPlane->GetFont()->SetText(wrappedContent);
         m_vTextFastPlane->SetTextPos(0, 0); // Text position relative to its own plane
-        m_vTextFastPlane->UpdateTextAA(); // Render with anti-aliasing
+        m_vTextFastPlane->UpdateText(); // Render without anti-aliasing
 
         CalculateVisibleContentSize(); // Recalculate content size after text update
     }
@@ -374,6 +433,18 @@ LRESULT CGUITextBox::OnSimpleDraw(ISurface* lp) {
         // This prevents reading beyond the bounds of the text plane if content is smaller
         srcRect.right = min(srcRect.right, m_nContentWidth);
         srcRect.bottom = min(srcRect.bottom, m_nContentHeight);
+		RECT textClippingRect = m_rcTextBoxClip; // Start with the overall textbox clip
+
+        // Adjust text clipping if sliders are present
+        if (m_sliderMode == VERTICAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
+            textClippingRect.right -= m_nSliderStripWidth;
+        }
+        if (m_sliderMode == HORIZONTAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
+            textClippingRect.bottom -= m_nSliderStripHeight;
+        }
+        // Ensure valid clipping rect in case of very small textbox or large slider
+        if (textClippingRect.left > textClippingRect.right) textClippingRect.right = textClippingRect.left;
+        if (textClippingRect.top > textClippingRect.bottom) textClippingRect.bottom = textClippingRect.top;
 
         // Call BltNatural to draw the text content.
         // Parameters:
@@ -389,7 +460,7 @@ LRESULT CGUITextBox::OnSimpleDraw(ISurface* lp) {
                        drawY + m_nTextOffsetY,
                        NULL,
                        &srcRect,
-                       &m_rcTextBoxClip,
+                       &textClippingRect,
                        0);
     }
 
@@ -454,6 +525,120 @@ void CGUITextBox::ScrollContent(int dx, int dy) {
 			m_vSlider->SetSelectedItem(m_nScrollX, m_nScrollY);
         }
     }
+}
+
+std::string CGUITextBox::TrimLeadingSpaces(const std::string& s) {
+	size_t first = s.find_first_not_of(" \t\n\r\f\v");
+	if (std::string::npos == first) {
+		return s; // Or "" if you want empty string for all spaces
+	}
+	return s.substr(first);
+}
+
+std::string yaneuraoGameSDK3rd::Draw::CGUITextBox::WrapText(const std::string& rawText, int availableWidth) {
+    if (rawText.empty() || availableWidth <= 0) {
+        return "";
+    }
+
+    std::string finalWrappedText; // This will accumulate all wrapped lines, separated by '\n'
+    CFont* font = m_vTextFastPlane->GetFont(); // Get the font object for measurement
+
+    // Save current font text, as SetText will modify internal m_String.
+    // This is crucial if m_Font is a shared resource or used for other text simultaneously.
+    std::string originalFontText = font->GetText(); 
+
+    // --- Pass 1: Split rawText by existing newlines ('\n') ---
+    size_t lineStart = 0;
+    
+    while (lineStart < rawText.length()) {
+        size_t lineEnd = rawText.find('\n', lineStart);
+        std::string segmentToWrap;
+        bool endsWithExplicitNewline = false;
+
+        if (lineEnd == std::string::npos) {
+            // No more explicit newlines, this is the last "paragraph"
+            segmentToWrap = rawText.substr(lineStart);
+            lineStart = rawText.length(); // Advance to end to exit loop
+        } else {
+            // Found an explicit newline. Process the segment up to it.
+            segmentToWrap = rawText.substr(lineStart, lineEnd - lineStart);
+            lineStart = lineEnd + 1; // Move cursor past the newline character
+            endsWithExplicitNewline = true; // Mark that this segment was terminated by an explicit newline
+        }
+
+        // --- Pass 2: Apply word wrapping to the current 'segmentToWrap' ---
+        std::string wrappedSegmentResult; // Result of wrapping the current paragraph/segment
+        std::string currentLineInSegment; // Builds one line within the current paragraph
+        size_t wordCurrentPos = 0;
+        int tempWidth, tempHeight; // For GetSize measurements
+
+        while (wordCurrentPos < segmentToWrap.length()) {
+            // Find the start of the next word (skip leading spaces/tabs within this segment)
+            size_t wordSegmentStart = segmentToWrap.find_first_not_of(" \t\r\f\v", wordCurrentPos);
+            if (std::string::npos == wordSegmentStart) {
+                break; // No more non-whitespace characters in this segment
+            }
+
+            // Find the end of the current word (first whitespace after wordSegmentStart)
+            size_t wordSegmentEnd = segmentToWrap.find_first_of(" \t\r\f\v", wordSegmentStart);
+            std::string word;
+            if (std::string::npos == wordSegmentEnd) { // Last word in this segment
+                word = segmentToWrap.substr(wordSegmentStart);
+                wordCurrentPos = segmentToWrap.length(); // Advance to end of segment
+            } else {
+                word = segmentToWrap.substr(wordSegmentStart, wordSegmentEnd - wordSegmentStart);
+                wordCurrentPos = wordSegmentEnd; // Advance to the space after the word
+            }
+            
+            // Build the test line to measure
+            std::string testLine;
+            if (!currentLineInSegment.empty()) {
+                testLine = currentLineInSegment + " " + word; // Add word with a space
+            } else {
+                testLine = word; // First word on a new line in this segment
+            }
+
+            // Measure the potential new line's width
+            font->SetText(testLine);
+            font->GetSize(tempWidth, tempHeight);
+
+            // Check if adding this word would exceed the available width
+            if (tempWidth > availableWidth && !currentLineInSegment.empty()) {
+                // The current line (currentLineInSegment) is full, add it to the result
+                wrappedSegmentResult += currentLineInSegment + "\n";
+                // Start a new line with the current word
+                currentLineInSegment = word; 
+            } else {
+                // The word fits, append it to the current line in this segment
+                currentLineInSegment = testLine;
+            }
+        }
+
+        // Add the very last line of the current segment (if any text remains)
+        if (!currentLineInSegment.empty()) {
+            wrappedSegmentResult += currentLineInSegment;
+        }
+
+        // Append the wrapped segment to the final result
+        finalWrappedText += wrappedSegmentResult;
+        
+        // Preserve the original explicit newline
+        if (endsWithExplicitNewline) {
+            finalWrappedText += "\n"; 
+        }
+    }
+
+    // Restore original font text (important if font is shared or used elsewhere)
+    font->SetText(originalFontText); 
+
+    // Optional: Trim a trailing newline if the original rawText didn't end with one,
+    // but the wrapping logic might have added one after the last line.
+    if (!rawText.empty() && rawText[rawText.length()-1] != '\n' &&
+        !finalWrappedText.empty() && finalWrappedText[finalWrappedText.length()-1] == '\n') {
+        finalWrappedText.erase(finalWrappedText.length()-1);
+    }
+
+    return finalWrappedText;
 }
 
 } // namespace Draw

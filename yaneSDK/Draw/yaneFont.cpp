@@ -10,7 +10,7 @@ namespace Draw {
 CFont::CFont(){
 	SetSize(16);
 	SetHeight(20);
-	SetFont(0);	// MS ゴシック
+	SetFont(0);	// MS ???? (MS Gothic) - Japanese font names in comments
 //	SetColor(RGB(128,192,128));
 //	SetBackColor(RGB(64,128,64));
 	SetColor(RGB(255,255,255));
@@ -23,6 +23,9 @@ CFont::CFont(){
 	SetUnderLine(false);
 	SetStrikeOut(false);
 	SetShadowOffset(2,2);
+#ifdef OPENJOEY_ENGINE_FIXES
+    m_nLetterSpacing = 0; // Initialize member directly in constructor
+#endif
 }
 
 CFont::~CFont(){
@@ -43,7 +46,7 @@ void	CFont::SetQuality(int nQuality){
 
 void	CFont::SetSize(int nSize){
 	m_nSize = nSize;
-	m_nHeight = nSize;	//	こいつも更新する価値がある？
+	m_nHeight = nSize;	// This value may also need to be updated.
 }
 
 void	CFont::SetColor(COLORREF rgb){
@@ -62,12 +65,18 @@ void	CFont::SetHeight(int nHeight){
 	m_nHeight = nHeight;
 }
 
+#ifdef OPENJOEY_ENGINE_FIXES
+void	CFont::SetLetterSpacing(int nSpacing) {
+    m_nLetterSpacing = nSpacing;
+}
+#endif
+
 void	CFont::SetWeight(int nWeight){
 	m_nWeight = nWeight;
 }
 
 ////////////////////////////////////////////////////////////////////
-//	font設定～取得
+//	font settings / get
 
 void	CFont::SetFont(int nFontNo){
 	string name;
@@ -90,9 +99,9 @@ string	CFont::GetFont() const {
 	if (!IsVerticalFont()){
 	} else {
 		if (!m_FontName.empty() && m_FontName[0]=='@'){
-			//	最初から縦書きフォントなので何もしない
+			// Already a vertical font, do nothing
 		} else {
-			return '@' + m_FontName;
+			return '@' + m_FontName; // Add '@' prefix for vertical font
 		}
 	}
 	return m_FontName;
@@ -106,7 +115,10 @@ void	CFont::SetText(const string& s){
 
 void	__cdecl CFont::SetText(LPSTR fmt, ... ){
 	CHAR buf[512];
-	wvsprintf(buf,fmt,(LPSTR)(&fmt+1));
+	va_list args; // Declare a va_list variable
+    va_start(args, fmt); // Initialize it
+	wvsprintf(buf,fmt,args); // Use wvsprintf with va_list
+    va_end(args); // Clean up
 	SetText((string)buf);
 }
 
@@ -139,36 +151,40 @@ void	CFont::SetShadowOffset(int nOx,int nOy){
 
 void	CFont::OnDraw(HDC hdc,int x,int y){
 
-	//	文字列が設定されていなければ帰る
+	// If text string is not set, return
 	if (m_String.empty()) return ;
 
 	string strFontName = GetFont();
 	HFONT hFont = ::CreateFont(m_nSize,0,0,0,m_nWeight,m_bItalic,m_bUnderLine,m_bStrikeOut,SHIFTJIS_CHARSET,
 		OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, m_nQuality,FF_MODERN,strFontName.c_str());
 
-	if (hFont==NULL) return ; // メモリ足りんのだがや！？
+	if (hFont==NULL) return ; // Memory allocation failure
 
 	HFONT hFontLast = (HFONT)::SelectObject(hdc,hFont);
 
-	//	もし背景色付きで描画するならば、
-	//	最初の一回はopaque,二回目以降がtransparent,
+#ifdef OPENJOEY_ENGINE_FIXES
+    int iOldCharExtra = 0;
+    if (m_nLetterSpacing != 0) {
+        iOldCharExtra = ::SetTextCharacterExtra(hdc, m_nLetterSpacing);
+    }
+#endif
+
+	// If drawing with background color, first draw opaque, then transparent
 	bool bFirst = true;
 
 	if (m_nBkRgb!=CLR_INVALID){
-		//	これ、重ねる価値がなさそう．．
+		// This does not seem to overlap (shadow effect?)
 		POINT point[5] = {
 			{m_nShadowOffsetX,m_nShadowOffsetY},		// 1
-//			{2,2},		// 1
 			{0,1},
 			{2,1},		// 2
 			{1,2},
 			{2,2}		// 3
 		};
 
-		::SetTextColor(hdc,m_nBkRgb);
-		//	色の変更
+		::SetTextColor(hdc,m_nBkRgb); // Set shadow/background color
 
-		//	背景色の設定
+		// Set background mode
 		if (m_nBGRgb==CLR_INVALID) {
 			::SetBkMode(hdc, TRANSPARENT);
 		} else {
@@ -177,13 +193,14 @@ void	CFont::OnDraw(HDC hdc,int x,int y){
 		}
 		bFirst = false;
 
+		// The loop for shadow, currently only runs once (i=0)
 		for(int i=0;i<1 /* 5 */;i++){
 			TextOut(hdc,x + point[i].x,y + point[i].y,m_String);
-			//	文字の表示（WIN32APIではなく、このクラスのstatic関数であることに注意）
 		}
 	}
+
 	if (m_nRgb!=CLR_INVALID){
-		//	背景色の設定
+		// Set background mode for foreground text
 		if (bFirst){
 			if (m_nBGRgb==CLR_INVALID) {
 				::SetBkMode(hdc, TRANSPARENT);
@@ -192,76 +209,101 @@ void	CFont::OnDraw(HDC hdc,int x,int y){
 				::SetBkColor(hdc,m_nBGRgb);
 			}
 		} else if (m_nBGRgb!=CLR_INVALID) {
-			//	２回目以降の描画なので透過設定に戻しておかなくては．．
+			// If it's a second drawing pass (for foreground), revert to transparent if background was opaque
 			::SetBkMode(hdc, TRANSPARENT);
 		}
 
-		::SetTextColor(hdc,m_nRgb);
-		TextOut(hdc,x,y,m_String);	//	文字の表示
+		::SetTextColor(hdc,m_nRgb); // Set foreground text color
+		TextOut(hdc,x,y,m_String);	// Display text
 	}
-	::SelectObject(hdc,hFontLast);
-	::DeleteObject(hFont);		// これ一回でええんか？
+
+#ifdef OPENJOEY_ENGINE_FIXES
+    if (m_nLetterSpacing != 0) {
+        ::SetTextCharacterExtra(hdc, iOldCharExtra); // Reset to original value
+    }
+#endif
+
+	::SelectObject(hdc,hFontLast); // Select back old font
+	::DeleteObject(hFont);		// Delete created font
 }
 
 LRESULT	CFont::GetSize(int& sx,int& sy){
-	sx = 0; sy = 0;	// fail safe対策
+	sx = 0; sy = 0;	// fail safe
 
-	//	文字列が設定されていなければ帰る
+	// If text string is not set, return
 	if (m_String.empty()) return 1;
 
 	string strFontName = GetFont();
 	HFONT hFont = ::CreateFont(m_nSize,0,0,0,m_nWeight,m_bItalic,m_bUnderLine,m_bStrikeOut,SHIFTJIS_CHARSET,
 		OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, m_nQuality,FF_MODERN,strFontName.c_str());
-	if (hFont==NULL) return 1; // あじゃー
+	if (hFont==NULL) return 1;
 
 	SIZE size;
 	HDC hdc = ::CreateCompatibleDC(NULL);
 	HFONT hFontLast = (HFONT)::SelectObject(hdc,hFont);
 
+#ifdef OPENJOEY_ENGINE_FIXES
+    int iOldCharExtra = 0;
+    if (m_nLetterSpacing != 0) {
+        iOldCharExtra = ::SetTextCharacterExtra(hdc, m_nLetterSpacing);
+    }
+#endif
+
 	LPCSTR p = m_String.c_str();
-	CHAR buf[256];	//	この長さまでしか計測不可＾＾；
+	CHAR buf[256];	// Limited by this buffer size for text measurement
 	LPSTR q=buf;
 	size.cx=0; size.cy=0;
 	SIZE size2;
 	for(;;){
 		*q = *(p++);
 		if (*q=='\n') {
-			*q=0;	// 改行コードならば潰す 
+			*q=0;	// Null-terminate line
 			::GetTextExtentPoint32(hdc,buf,::lstrlen(buf),&size2);
-			//GetTextExtentPointは特定の状況で１ドットずれが発生するそうな^^;
-//			size.cy+=size2.cy;
-			size.cy+=m_nHeight;	//	fixed by あきら
-			if (m_bItalic) size2.cx+=m_nSize/4;	//	APIが斜体のサイズ測定を誤るbug対策
-			if (size.cx<size2.cx) size.cx=size2.cx;
+            // This GetTextExtentPoint32 call WILL reflect SetTextCharacterExtra from above.
+            
+            // For italic fonts, API can miscalculate width (bug workaround)
+			if (m_bItalic) size2.cx+=m_nSize/4;
+
+			size.cy+=m_nHeight;	// Fixed by akira (line height)
+			if (size.cx<size2.cx) size.cx=size2.cx; // Update max width
 			q=buf;
-			continue;	//	このときはqを加算されては困る
+			continue;
 		} else if (*q=='\0') {
 			::GetTextExtentPoint32(hdc,buf,::lstrlen(buf),&size2);
-			//GetTextExtentPointは特定の状況で１ドットずれが発生するそうな^^;
-			size.cy+=size2.cy;
-			if (m_bItalic) size2.cx+=m_nSize/4;	//	APIが斜体のサイズ測定を誤るbug対策
-			if (size.cx<size2.cx) size.cx=size2.cx;
-			break;	// これにて終了～
+            // This GetTextExtentPoint32 call WILL reflect SetTextCharacterExtra from above.
+
+            // For italic fonts, API can miscalculate width (bug workaround)
+			if (m_bItalic) size2.cx+=m_nSize/4;
+			size.cy+=size2.cy; // Add height of the last line
+			if (size.cx<size2.cx) size.cx=size2.cx; // Update max width
+			break;
 		}
 		q++;
 	}
-	sx = size.cx + 3;	//	文字には影があるので
-	sy = size.cy + 3;	//
+
+#ifdef OPENJOEY_ENGINE_FIXES
+    if (m_nLetterSpacing != 0) {
+        ::SetTextCharacterExtra(hdc, iOldCharExtra); // Reset to original value
+    }
+#endif
+
+	sx = size.cx + 3;	// Add padding/shadow allowance
+	sy = size.cy + 3;	// Add padding/shadow allowance
 
 	::SelectObject(hdc,hFontLast);
-	::DeleteObject(hFont);	// これ一回でええんか？
+	::DeleteObject(hFont);
 
-	::DeleteDC(hdc);	//	これ最後にせんとあかんで！(by TearDrop_Stone)
+	::DeleteDC(hdc); // Delete the DC
 
 	return 0;
 }
 
+// NOTE: This TextOut function (CFont::TextOut) is an internal helper.
+// It relies on the HDC having the character extra already set by CFont::OnDraw.
 void	CFont::TextOut(HDC hdc,int x,int y,const string& s){
 
-	//	文字列が設定されていなければ帰る
-	if (m_String.empty()) return ;
-
-	//	最大の利点は、文字列中に\nを埋め込むことで改行が出来ることである。
+	// If text string is not set, return
+	if (s.empty()) return ; // Changed from m_String.empty() to s.empty() as this draws 's'
 
 	CHAR buf[256];
 	LPCSTR p = s.c_str();
@@ -269,14 +311,14 @@ void	CFont::TextOut(HDC hdc,int x,int y,const string& s){
 	for(;;){
 		*q = *(p++);
 		if (*q=='\n') {
-			*q=0;	// 改行コードならば潰す 
-			::TextOut(hdc,x,y,buf,::lstrlen(buf));
-			y+=m_nHeight;
+			*q=0;	// Null-terminate line
+			::TextOut(hdc,x,y,buf,::lstrlen(buf)); // Draw the line
+			y+=m_nHeight; // Advance Y for next line
 			q=buf;
-			continue;	//	このときはqを加算されては困る
+			continue;
 		} else if (*q=='\0') {
-			::TextOut(hdc,x,y,buf,::lstrlen(buf));
-			break;	// これにて終了～
+			::TextOut(hdc,x,y,buf,::lstrlen(buf)); // Draw the last line
+			break;
 		}
 		q++;
 	}
