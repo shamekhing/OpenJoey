@@ -46,8 +46,8 @@ LRESULT CGUINormalSliderListener::OnDraw(ISurface* lp, int x, int y, int nX, int
 
     // Display the plane from plane loader stretched
     ISurface* plane0 = m_vPlaneLoader->GetPlane(0).get();
-    ISurface* plane1 = m_vPlaneLoader->GetPlane(1).get();
-    ISurface* plane2 = m_vPlaneLoader->GetPlane(2).get();
+    ISurface* plane1 = m_vPlaneLoader->GetPlane(0).get();
+    ISurface* plane2 = m_vPlaneLoader->GetPlane(0).get();
 
     if (!plane0 || !plane1 || !plane2) {
         WARNING(true, "CGUINormalSliderListener::Plane is NULL");
@@ -138,23 +138,30 @@ void CGUISlider::SetEvent(smart_ptr<CGUISliderEventListener> pv) {
 }
 
 void CGUISlider::CalcSliderPos(int& x, int& y, int& nSLX, int& nSLY, int& w, int& h) {
-    // Calculate slider position
-    // Determine slider position and button size
-    int nXX = m_nX + m_nXOffset + m_rcRect.left;
-    int nYY = m_nY + m_nYOffset + m_rcRect.top;
+    int trackStartX = m_nX + m_nXOffset + m_rcRect.left;
+    int trackStartY = m_nY + m_nYOffset + m_rcRect.top;
+
     m_pvSliderEvent->GetSliderSize(m_nItemNumX, m_nItemNumY, nSLX, nSLY);
     
+    // w and h are the total draggable lengths, not the textbox's width/height.
+    // These should be the dimensions of the track *within* m_rcRect.
     w = m_rcRect.right - m_rcRect.left - nSLX;
     h = m_rcRect.bottom - m_rcRect.top - nSLY;
-    
+
+    // Calculate the thumb's final position based on selected item and track dimensions
+    // The thumb's x, y will be relative to trackStartX, trackStartY
+    int thumbOffsetX = 0;
+    int thumbOffsetY = 0;
+
     if (m_nItemNumX >= 2) {
-        nXX += (w * m_nSelectedItemX) / (m_nItemNumX - 1);
+        thumbOffsetX = (w * m_nSelectedItemX) / (m_nItemNumX - 1);
     }
     if (m_nItemNumY >= 2) {
-        nYY += (h * m_nSelectedItemY) / (m_nItemNumY - 1);
+        thumbOffsetY = (h * m_nSelectedItemY) / (m_nItemNumY - 1);
     }
-    x = nXX;
-    y = nYY;
+
+    x = trackStartX + thumbOffsetX; // Final screen X for the thumb
+    y = trackStartY + thumbOffsetY; // Final screen Y for the thumb
 }
 
 LRESULT CGUISlider::OnSimpleMove(ISurface* lp) {
@@ -171,6 +178,14 @@ LRESULT CGUISlider::OnSimpleMove(ISurface* lp) {
     // Slider virtual coordinates with (0,0) at top-left
     int mmx = mx - m_nX - m_nXOffset;
     int mmy = my - m_nY - m_nYOffset;
+
+    // Calculate the Y position of the thumb relative to the same origin as 'mmy'.
+    // nYY is the thumb's absolute Y. (m_nY + m_nYOffset) is the absolute Y of mmy's origin.
+    int thumbYRelativeToSliderOrigin = nYY - (m_nY + m_nYOffset);
+
+    // Calculate the X position of the thumb relative to the same origin as 'mmx'.
+    // nXX is the thumb's absolute X. (m_nX + m_nXOffset) is the absolute X of mmx's origin.
+    int thumbXRelativeToSliderOrigin = nXX - (m_nX + m_nXOffset);
 
     // Guard frame input rejection mechanism
     bool bNGuard = !m_pvMouse->IsGuardTime();
@@ -204,7 +219,7 @@ LRESULT CGUISlider::OnSimpleMove(ISurface* lp) {
     if (!bIn && m_nInSlider && bNGuard) {
         switch (m_nType) {
         case 0: // Vertical slider
-            if (mmy < nYY) {
+            if (mmy < thumbYRelativeToSliderOrigin) {
                 m_pvSliderEvent->OnPageUp();
             }
             else {
@@ -212,7 +227,7 @@ LRESULT CGUISlider::OnSimpleMove(ISurface* lp) {
             }
             break;
         case 1: // Horizontal slider 
-            if (mmx < nXX) {
+            if (mmx < thumbXRelativeToSliderOrigin) {
                 m_pvSliderEvent->OnPageLeft();
             }
             else {
@@ -220,13 +235,13 @@ LRESULT CGUISlider::OnSimpleMove(ISurface* lp) {
             }
             break;
         case 2: // Both
-            if (mmy < nYY) {
+            if (mmy < thumbYRelativeToSliderOrigin) {
                 m_pvSliderEvent->OnPageUp();
             }
             else {
                 m_pvSliderEvent->OnPageDown();
             }
-            if (mmx < nXX) {
+            if (mmx < thumbXRelativeToSliderOrigin) {
                 m_pvSliderEvent->OnPageLeft();
             }
             else {

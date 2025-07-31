@@ -28,29 +28,37 @@ CGUITextBoxSliderListener::CGUITextBoxSliderListener() {
 
 void CGUITextBoxSliderListener::OnPageUp() {
     if (m_vTextBox.get()) {
-        m_vTextBox->ScrollContent(0, -m_nMinY); // Scroll up by min slider height
-        ResetEventFlag(); // Reset event flag after handling
+		if (m_vTextBox->GetSlider()->GetButton() == 2) //m_vTextBox->GetSlider()->GetButton() != 0 && m_vTextBox->GetMouse()->IsPushLButton()
+		{
+			m_vTextBox->ScrollContent(0, -m_nMinY); // Scroll up by min slider height
+			//ResetEventFlag(); // Reset event flag after handling
+		}
     }
 }
 
 void CGUITextBoxSliderListener::OnPageDown() {
     if (m_vTextBox.get()) {
-        m_vTextBox->ScrollContent(0, m_nMinY); // Scroll down by min slider height
-        ResetEventFlag(); // Reset event flag after handling
+		if (m_vTextBox->GetSlider()->GetButton() == 2) //m_vTextBox->GetSlider()->GetButton() != 0 && m_vTextBox->GetMouse()->IsPushLButton()
+		{
+			m_vTextBox->ScrollContent(0, m_nMinY); // Scroll down by min slider height
+			//ResetEventFlag(); // Reset event flag after handling
+		}
     }
 }
 
 void CGUITextBoxSliderListener::OnPageLeft() {
+	// TODO: not working
     if (m_vTextBox.get()) {
         m_vTextBox->ScrollContent(-m_nMinX, 0); // Scroll left by min slider width
-        ResetEventFlag(); // Reset event flag after handling
+        //ResetEventFlag(); // Reset event flag after handling
     }
 }
 
 void CGUITextBoxSliderListener::OnPageRight() {
+	// TODO: not working
     if (m_vTextBox.get()) {
         m_vTextBox->ScrollContent(m_nMinX, 0); // Scroll right by min slider width
-        ResetEventFlag(); // Reset event flag after handling
+        //ResetEventFlag(); // Reset event flag after handling
     }
 }
 
@@ -79,9 +87,39 @@ void CGUITextBox::SetSliderGFX(smart_ptr<ISurface> sliderThumbGraphic){
     m_vSliderThumbGraphic = sliderThumbGraphic;
     if (m_vSlider.get() && m_vSliderListener.get() && m_vSliderThumbGraphic.get()) {
         CGUINormalSliderListener* pSliderListener = static_cast<CGUINormalSliderListener*>(m_vSliderListener.get());
-        pSliderListener->SetPlane(m_vSliderThumbGraphic);
+        
+		// Set the min size of the listener based on the graphic's actual size
+        m_vSliderListener->SetMinSizeFromGraphic(m_vSliderThumbGraphic.get()); // Pass the raw pointer to the graphic
+
+		// TODO: do the real gfx here
+		pSliderListener->SetPlane(m_vSliderThumbGraphic);
     }
 }
+
+void CGUITextBox::SetSliderLoader(string folder, string path){
+    //m_vSliderThumbGraphic = loader.GetPlane(0);
+    //if (m_vSlider.get() && m_vSliderListener.get() && m_vSliderThumbGraphic.get()) {
+        CGUINormalSliderListener* pSliderListener = static_cast<CGUINormalSliderListener*>(m_vSliderListener.get());
+        
+		CPlaneLoader m_vPlaneScrollLoader;
+		m_vPlaneScrollLoader.SetReadDir(folder);  // Base directory
+		if (m_vPlaneScrollLoader.Set(path, false) != 0) {  // Relative to SetReadDir
+			OutputDebugStringA("Error: Failed to load\n");
+		}
+
+		// TODO: do the real gfx here
+		CPlane pln = m_vPlaneScrollLoader.GetPlane(5);
+		//POINT pos = m_vPlaneScrollLoader.GetXY(5);
+		//pln->SetPos(pos); // rendering pos
+		smart_ptr<ISurface> plnPtr(pln.get(), false); // no ownership
+		m_vSliderThumbGraphic = plnPtr;
+		pSliderListener->SetPlane(m_vSliderThumbGraphic);
+
+		//smart_ptr<CPlaneLoader> smartLdr(loader.get(), false); // no ownership
+		//pSliderListener->SetPlaneLoader(smartLdr);
+    //}
+}
+
 
 void CGUITextBox::Create(int x, int y, int width, int height, SliderMode mode) {
     // Set base IGUIParts coordinates. This also updates the base class m_rcRect.
@@ -243,7 +281,6 @@ LRESULT CGUITextBox::OnSimpleMove(ISurface* lp) {
 
     // First, process mouse input for the slider
     if (m_vSlider.get() && m_pvMouse.get()) {
-        m_vSlider->SetMouse(m_pvMouse); // Pass mouse state to slider
         result |= m_vSlider->OnSimpleMove(lp); // Process slider's own movement logic
 
         // Update textbox scroll position based on slider's selected item
@@ -260,6 +297,33 @@ LRESULT CGUITextBox::OnSimpleMove(ISurface* lp) {
         int maxScrollY = max(0, m_nContentHeight - m_nHeight);
         targetScrollX = max(0, min(targetScrollX, maxScrollX));
         targetScrollY = max(0, min(targetScrollY, maxScrollY));
+
+        // Mouse wheel operation: Check if mouse is inside the textbox
+        int mouseX, mouseY;
+        GetMouse()->GetXY(mouseX, mouseY); // Get current mouse coordinates
+        POINT currentMousePos = { mouseX, mouseY };
+
+		// Mouse wheel operation (needs to be happen there because it shall work when mouse is anywhere in the box, not only at slider event)
+        if (::PtInRect(&m_rcTextBoxClip, currentMousePos)) {
+            CGUINormalSliderListener* pSliderListener = static_cast<CGUINormalSliderListener*>(m_vSliderListener.get());
+            int sx, sy;
+            pSliderListener->GetMinSize(sx, sy); // Get the scroll step amount (slider thumb height)
+
+            int scrollDeltaY = 0; // Initialize scroll delta
+
+            // Determine scroll direction and amount
+            if (GetMouse()->IsWheelUp()) {
+                scrollDeltaY = -sy; // Scroll up (negative Y)
+            } else if (GetMouse()->IsWheelDown()) {
+                scrollDeltaY = sy;  // Scroll down (positive Y)
+            }
+
+            // If a scroll event occurred, apply it
+            if (scrollDeltaY != 0) {
+                ScrollContent(0, scrollDeltaY);
+                result |= 1; // Indicate a change has occurred
+            }
+        }
 
         // Only update if scroll position actually changes to avoid unnecessary re-draws
         if (targetScrollX != m_nScrollX || targetScrollY != m_nScrollY) {
@@ -387,7 +451,7 @@ void CGUITextBox::ScrollContent(int dx, int dy) {
             // Map current scroll position back to slider item
             // Since SetItemNum now sets items to pixel count for fine control,
             // we can directly set selected item to current scroll position.
-            m_vSlider->SetSelectedItem(m_nScrollX, m_nScrollY);
+			m_vSlider->SetSelectedItem(m_nScrollX, m_nScrollY);
         }
     }
 }

@@ -128,7 +128,7 @@ void CSceneMainMenu::OnMove(const smart_ptr<ISurface>& lp) {
 			ButtonClicked = true;
 			break;
 		case 3:
-			app->OnPreClose(); // TODO: placeholder
+			GetSceneControl()->CallSceneFast(SCENE_CARDLIST);
 			ButtonClicked = true;
 			break;
 		case 4:

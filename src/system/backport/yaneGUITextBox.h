@@ -19,6 +19,12 @@ public:
     CGUITextBoxSliderListener();
     void SetTextBox(smart_ptr<CGUITextBox> pv) { m_vTextBox = pv; }
 
+    void SetMinSizeFromGraphic(ISurface* graphic) {
+		int sx, sy;
+		graphic->GetSize(sx, sy); // Get the actual dimensions of the graphic
+		SetMinSize(sx, sy); // Call the base class method to set m_nMinX and m_nMinY
+	}
+
     virtual void OnPageUp();
     virtual void OnPageDown();
     virtual void OnPageLeft();
@@ -44,6 +50,7 @@ public:
     // Textbox initialization and setup
     void Create(int x, int y, int width, int height, SliderMode mode = NO_SLIDER); //, smart_ptr<ISurface> sliderThumbGraphic = smart_ptr<ISurface>()
 	void SetSliderGFX(smart_ptr<ISurface> sliderThumbGraphic);
+	void SetSliderLoader(string data, string path);
 
     // Text content management
     void SetText(const string& text);
@@ -66,6 +73,7 @@ public:
 
     // Slider specific access for listener
     void ScrollContent(int dx, int dy); // Method to be called by slider listener
+	smart_ptr<CGUISlider> GetSlider(){ return m_vSlider; }
 
     // Get current scroll positions
     void GetScrollPos(int& x, int& y) const { x = m_nScrollX; y = m_nScrollY; }

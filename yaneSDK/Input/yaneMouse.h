@@ -25,6 +25,11 @@ public:
     virtual void ResetButton()=0;
     virtual LRESULT SetXY(int x,int y)=0;
     virtual void SetOutScreenInput(bool bEnable)=0;
+#ifdef OPENJOEY_ENGINE_FIXES
+    // New virtual methods for mouse wheel
+    virtual int GetWheelDelta() const = 0;
+    virtual void ResetWheelDelta() = 0;
+#endif
 
     virtual ~IMouse(){}
 };
@@ -69,14 +74,23 @@ public:
     CMouse();
     virtual ~CMouse();
 
+#ifdef OPENJOEY_ENGINE_FIXES
+    // New public methods for mouse wheel
+    virtual int GetWheelDelta() const;
+    virtual void ResetWheelDelta();
+#endif
+
 protected:
     LRESULT WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam); // Message callback
 
-    bool m_bRB;              // Mouse button state
+    bool m_bRB;             // Mouse button state
     bool m_bLB;
-    bool m_bHistRB;          // History
+    bool m_bHistRB;         // History
     bool m_bHistLB;
     bool m_bOutScreenInput;  // Input outside screen
+#ifdef OPENJOEY_ENGINE_FIXES
+    int m_nWheelDelta; // Store the accumulated wheel delta from WM_MOUSEWHEEL messages
+#endif
 };
 
 class CFixMouse : public IMouse {
@@ -139,16 +153,27 @@ public:
     CFixMouse();
     virtual ~CFixMouse();
 
-protected:
-    bool m_bRBN;           // Mouse button state at time of Flush
-    bool m_bLBN;
-    int m_nRLBN;          // Mouse button state at time of Flush
-    int m_nX,m_nY;        // Mouse position at time of Flush
-    int m_nGuardTime;     // Guard time
-    bool m_bHistRB;       // History
-    bool m_bHistLB;
+#ifdef OPENJOEY_ENGINE_FIXES
+    // New public methods for mouse wheel
+    virtual int GetWheelDelta() const;
+    virtual void ResetWheelDelta();
+    bool IsWheelUp() const;
+    bool IsWheelDown() const;
+#endif
 
-    CMouse m_vMouse;      // Delegate to this
+protected:
+    bool m_bRBN;            // Mouse button state at time of Flush
+    bool m_bLBN;
+    int m_nRLBN;            // Mouse button state at time of Flush
+    int m_nX,m_nY;          // Mouse position at time of Flush
+    int m_nGuardTime;       // Guard time
+    bool m_bHistRB;         // History
+    bool m_bHistLB;
+#ifdef OPENJOEY_ENGINE_FIXES
+    int m_nFixedWheelDelta; // Store the wheel delta after processing by Flush
+#endif
+
+    CMouse m_vMouse;         // Delegate to this
     CMouse* GetMouse() { return &m_vMouse; }
 };
 

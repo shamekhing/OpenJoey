@@ -173,7 +173,7 @@ void CSceneYesNo::OnInit() {
 	// 2. Instantiate and create the textbox
 	// Example: at screen coordinates (50, 50), 300 width, 200 height, with a vertical slider.
 	myTextBox = smart_ptr<yaneuraoGameSDK3rd::Draw::CGUITextBox>(new yaneuraoGameSDK3rd::Draw::CGUITextBox(), false);
-	myTextBox->Create(50, 50, 300, 200, yaneuraoGameSDK3rd::Draw::CGUITextBox::VERTICAL_SLIDER);
+	myTextBox->Create(50, 350, 300, 200, yaneuraoGameSDK3rd::Draw::CGUITextBox::VERTICAL_SLIDER);
 	myTextBox->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false)); // Pass the current mouse state
 
 	// 3. Set the text content
@@ -200,7 +200,24 @@ void CSceneYesNo::OnInit() {
 	//pln->SetPos(0,0);
 	smart_ptr<ISurface> plnPtrBG(plnTEST.get(), false); // no ownership
 	myTextBox->SetBackgroundPlane(plnPtrBG);
-	myTextBox->SetSliderGFX(plnPtrBG);
+	
+	m_vPlaneScrollLoader.SetReadDir("data/y/list/");  // Base directory
+    if (m_vPlaneScrollLoader.Set("data/y/list/detail_scroll.txt", false) != 0) {  // Relative to SetReadDir
+        OutputDebugStringA("Error: Failed to load test/yesno/list.txt\n");
+    }
+	
+	CPlane sliderBox = m_vPlaneScrollLoader.GetPlane(1);
+	CPlane sliderMinus = m_vPlaneScrollLoader.GetPlane(4);
+	CPlane sliderMinusPress = m_vPlaneScrollLoader.GetPlane(6);
+	CPlane sliderPlus = m_vPlaneScrollLoader.GetPlane(7);
+	CPlane sliderPlusPress = m_vPlaneScrollLoader.GetPlane(9);
+	smart_ptr<ISurface> sliderSmartPtr(sliderBox.get(), false); // no ownership
+	myTextBox->SetSliderGFX(sliderSmartPtr);
+
+	//myTextBox->SetSliderGFX(plnPtrBG, m_vPlaneScrollLoader);
+		// Load scroll data resources (test)
+
+	//myTextBox->SetSliderLoader("data/y/list/", "data/y/list/detail_scroll.txt");
 	//myTextBox->UpdateTextPlane();
 	//CPlane loadedThumbPlane = m_vPlaneLoader.GetPlane(13); // Assuming ID 13 for slider thumb
 	//myTextBox->m_vSliderThumbGraphic = plnPtrBG;

@@ -26,6 +26,8 @@ private:
 	CFastPlane m_vFastBackground;      // Background capture1
 	CFastPlane* m_vFastBackground1;
     CPlaneLoader m_vPlaneLoader;
+	CPlaneLoader m_vPlaneScrollLoader;
+	
     CPlane m_pMessageSurface;  // "Exit?" message surface
     
 	CFastPlane* m_lastFrameFB;
