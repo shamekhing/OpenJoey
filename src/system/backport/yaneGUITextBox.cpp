@@ -96,7 +96,10 @@ CGUITextBox::CGUITextBox()
 	  m_nSliderStripWidth(15),  // Initialize with a default, will be updated in SetSliderGFX
       m_nSliderStripHeight(15), // Initialize with a default, will be updated in SetSliderGFX
       m_nMarginX(0), // Initialize new member
-      m_nMarginY(0)  // Initialize new member
+      m_nMarginY(0),  // Initialize new member
+      m_vTitleTextFastPlane(NULL), // Initialize new title plane
+      m_vFooterTextFastPlane(NULL), // Initialize new footer plane
+      m_nFooterHeight(0) // Initialize footer height
 {
     // Default text color. Use ISurface::makeRGB since ISurfaceRGB is a DWORD typedef.
     // Assuming 0 for alpha (fully opaque) for common text rendering, adjust if different blend mode needed.
@@ -107,16 +110,19 @@ CGUITextBox::CGUITextBox()
 }
 
 CGUITextBox::~CGUITextBox() {
-    // Smart pointers handle deallocation
+    // Smart pointers handle deallocation, but raw CTextFastPlane pointers need delete
+    if (m_vTextFastPlane) delete m_vTextFastPlane;
+    if (m_vTitleTextFastPlane) delete m_vTitleTextFastPlane;
+    if (m_vFooterTextFastPlane) delete m_vFooterTextFastPlane;
 }
 
 // --- New Margin Methods Implementation ---
 void CGUITextBox::SetMargins(int x, int y) {
     m_nMarginX = max(0, x); // Margins shouldn't be negative
     m_nMarginY = max(0, y);
-    UpdateTextPlane(); // Recalculate and redraw text with new margins
-    // No explicit ResetScrollBars method in this version,
-    // so `UpdateTextPlane` (which calls `SetItemNum` on slider) handles range updates.
+    // Recalculate everything that depends on dimensions
+    UpdateTextPlane();
+    UpdateTitleAndFooterPlanes();
 }
 
 void CGUITextBox::GetMargins(int& x, int& y) const {
@@ -124,6 +130,24 @@ void CGUITextBox::GetMargins(int& x, int& y) const {
     y = m_nMarginY;
 }
 // --- End New Margin Methods ---
+
+// --- NEW: Title and Footer Text methods implementation ---
+void CGUITextBox::SetTextTitle(const string& text) {
+    if (m_strTitleText != text) {
+        m_strTitleText = text;
+        UpdateTitleAndFooterPlanes(); // Update title rendering
+        UpdateTextPlane(); // Re-evaluate main text area and scroll bars
+    }
+}
+
+void CGUITextBox::SetTextFooter(const string& text) {
+    if (m_strFooterText != text) {
+        m_strFooterText = text;
+        UpdateTitleAndFooterPlanes(); // Update footer rendering
+        UpdateTextPlane(); // Re-evaluate main text area and scroll bars
+    }
+}
+// --- END NEW ---
 
 void CGUITextBox::SetSliderGFX(smart_ptr<ISurface> sliderThumbGraphic){
     m_vSliderThumbGraphic = sliderThumbGraphic;
@@ -160,6 +184,8 @@ void CGUITextBox::SetSliderGFX(smart_ptr<ISurface> sliderThumbGraphic){
         // The textbox size minus margins
         int effectiveWidth = m_nWidth - (m_nMarginX * 2); // Consider horizontal margins
         int effectiveHeight = m_nHeight - (m_nMarginY * 2); // Consider vertical margins
+        // Also account for footer height for the main scrollable area
+        effectiveHeight -= m_nFooterHeight;
 
         ::SetRect(&sliderMovementRect, 0, 0, effectiveWidth, effectiveHeight); 
 
@@ -225,9 +251,10 @@ void CGUITextBox::SetArrowGFX(smart_ptr<CPlaneLoader> pv, int upIndex, int downI
 		upPlane->GetSize(buttonWidth, buttonHeight); // Get its actual size
 		int arrowButtonHeight = buttonHeight; // Store its actual height
 
-        // Position arrow buttons considering margins
+        // Position arrow buttons considering margins and potential footer height
 		m_vScrollUpButton->SetXY(m_nX + m_nWidth - m_nSliderStripWidth - m_nMarginX, m_nY + m_nMarginY);
-        m_vScrollDownButton->SetXY(m_nX + m_nWidth - m_nSliderStripWidth - m_nMarginX, m_nY + m_nHeight - arrowButtonHeight - m_nMarginY);
+        // The down button should be above the footer if it exists.
+        m_vScrollDownButton->SetXY(m_nX + m_nWidth - m_nSliderStripWidth - m_nMarginX, m_nY + m_nHeight - arrowButtonHeight - m_nMarginY - m_nFooterHeight);
     }
 }
 
@@ -263,16 +290,38 @@ void CGUITextBox::Create(int x, int y, int width, int height, SliderMode mode) {
     m_nHeight = height;
     m_sliderMode = mode;
 
-    // Adjust clipping rectangle to account for margins
+    // Adjust clipping rectangle to account for margins. Footer height will be factored in UpdateTextPlane/OnSimpleDraw
     ::SetRect(&m_rcTextBoxClip, x + m_nMarginX, y + m_nMarginY,
                              x + width - m_nMarginX, y + height - m_nMarginY);
 
     m_vTextFastPlane = new CTextFastPlane;
     m_vTextPlane = CPlane(m_vTextFastPlane);
 
+    // Initialize title and footer text planes
+    m_vTitleTextFastPlane = new CTextFastPlane;
+    m_vTitleTextPlane = CPlane(m_vTitleTextFastPlane);
+
+    m_vFooterTextFastPlane = new CTextFastPlane;
+    m_vFooterTextPlane = CPlane(m_vFooterTextFastPlane);
+
     if (m_vTextFastPlane != NULL) {
         m_vTextFastPlane->GetFont()->SetColor(m_textColor);
         m_vTextFastPlane->GetFont()->SetSize(16);
+    }
+
+    // Set default font properties for title (bold, black)
+    if (m_vTitleTextFastPlane != NULL) {
+        CFont* titleFont = m_vTitleTextFastPlane->GetFont();
+        titleFont->SetColor(ISurface::makeRGB(0, 0, 0, 0)); // Black, opaque
+        titleFont->SetSize(18); // Slightly larger
+        titleFont->SetWeight(FW_BOLD); // Bold
+    }
+
+    // Set default font properties for footer (same as main text, but will be right aligned)
+    if (m_vFooterTextFastPlane != NULL) {
+        CFont* footerFont = m_vFooterTextFastPlane->GetFont();
+        footerFont->SetColor(m_textColor); // Same as main text initially
+        footerFont->SetSize(16); // Same size as main text initially
     }
 
     if (m_sliderMode != NO_SLIDER) {
@@ -285,7 +334,7 @@ void CGUITextBox::Create(int x, int y, int width, int height, SliderMode mode) {
         m_vSlider->SetEvent(YTL::smart_ptr_static_cast<CGUISliderEventListener>(m_vSliderListener));
         m_vSlider->SetType(m_sliderMode);
         
-        // Position slider relative to textbox, adjusted for margins
+        // Position slider relative to textbox, adjusted for margins. Footer height will be dynamic.
         m_vSlider->SetXY(m_nX + m_nMarginX, m_nY + m_nMarginY);
 
         // ONLY initialize the CGUIButton objects here.
@@ -298,7 +347,8 @@ void CGUITextBox::Create(int x, int y, int width, int height, SliderMode mode) {
         RECT tempSliderRect;
         const int defaultSliderStripSize = 15;
         
-        // Calculate slider bounds based on effective (margin-adjusted) textbox area
+        // Calculate slider bounds based on effective (margin-adjusted) textbox area.
+        // Footer height will be subtracted from effective height when the slider rect is finalized.
         int effectiveWidth = m_nWidth - (m_nMarginX * 2);
         int effectiveHeight = m_nHeight - (m_nMarginY * 2);
 
@@ -313,15 +363,19 @@ void CGUITextBox::Create(int x, int y, int width, int height, SliderMode mode) {
         } else if (m_sliderMode == HORIZONTAL_SLIDER) {
             ::SetRect(&tempSliderRect, 0, effectiveHeight - defaultSliderStripSize, effectiveWidth, effectiveHeight);
         }
-
+        
+        // This initial SetRect might be slightly off if footer is present, but UpdateTextPlane will correct it.
         m_vSlider->SetRect(&tempSliderRect);
     }
+    // Perform initial updates for title/footer and main text to ensure correct layout on creation
+    UpdateTitleAndFooterPlanes();
+    UpdateTextPlane();
 }
 
 void CGUITextBox::SetText(const string& text) {
     if (m_strCurrentText != text) {
         m_strCurrentText = text;
-        UpdateTextPlane();
+        UpdateTextPlane(); // This will recalculate content size and scroll ranges
     }
 }
 
@@ -346,6 +400,11 @@ void CGUITextBox::SetTextColor(ISurfaceRGB color) {
         m_vTextFastPlane->GetFont()->SetColor(m_textColor);
         UpdateTextPlane();
     }
+    // Also update footer color to match if not explicitly set separately later
+    if (m_vFooterTextFastPlane != NULL) {
+        m_vFooterTextFastPlane->GetFont()->SetColor(m_textColor);
+        UpdateTitleAndFooterPlanes(); // Re-render footer with new color
+    }
 }
 
 void CGUITextBox::SetTextOffset(int x, int y) {
@@ -359,17 +418,66 @@ void CGUITextBox::SetBackgroundPlane(YTL::smart_ptr<ISurface> pv) {
     m_vBackgroundPlane = pv;
 }
 
+void CGUITextBox::UpdateTitleAndFooterPlanes() {
+    // Render Title Text
+    if (m_vTitleTextFastPlane != NULL) {
+        if (!m_strTitleText.empty()) {
+            CFont* titleFont = m_vTitleTextFastPlane->GetFont();
+            // Available width for title is total width minus horizontal margins
+            int titleAvailableWidth = m_nWidth - (m_nMarginX * 2);
+            if (m_sliderMode == VERTICAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
+                titleAvailableWidth -= m_nSliderStripWidth; // Reduce if vertical slider is present
+            }
+            titleAvailableWidth = max(0, titleAvailableWidth);
+
+            std::string wrappedTitle = WrapText(m_strTitleText, titleAvailableWidth);
+            titleFont->SetText(wrappedTitle);
+            m_vTitleTextFastPlane->SetTextPos(0, 0); // Position within its own plane
+            m_vTitleTextFastPlane->UpdateText(); // Render
+        } else {
+            m_vTitleTextFastPlane->GetFont()->SetText(""); // Clear text
+            m_vTitleTextFastPlane->UpdateText(); // Clear rendering
+        }
+    }
+
+    // Render Footer Text
+    if (m_vFooterTextFastPlane != NULL) {
+        if (!m_strFooterText.empty()) {
+            CFont* footerFont = m_vFooterTextFastPlane->GetFont();
+            // Available width for footer is total width minus horizontal margins
+            int footerAvailableWidth = m_nWidth - (m_nMarginX * 2);
+            if (m_sliderMode == VERTICAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
+                footerAvailableWidth -= m_nSliderStripWidth; // Reduce if vertical slider is present
+            }
+            footerAvailableWidth = max(0, footerAvailableWidth);
+
+            // Footer is right-aligned, so we don't wrap it with WrapText for now,
+            // but just set the text and calculate its dimensions to know its height.
+            // If wrapping is desired, it needs custom logic for right alignment.
+            footerFont->SetText(m_strFooterText);
+            m_vFooterTextFastPlane->SetTextPos(0, 0); // Position within its own plane for calculation
+            m_vFooterTextFastPlane->UpdateText(); // Render
+
+            int tempFooterWidth, tempFooterHeight;
+            m_vFooterTextFastPlane->GetSize(tempFooterWidth, tempFooterHeight);
+            m_nFooterHeight = tempFooterHeight; // Store rendered height
+        } else {
+            m_vFooterTextFastPlane->GetFont()->SetText(""); // Clear text
+            m_vFooterTextFastPlane->UpdateText(); // Clear rendering
+            m_nFooterHeight = 0; // No footer, so height is 0
+        }
+    }
+}
+
+
 void CGUITextBox::UpdateTextPlane() {
     if (m_vTextFastPlane != NULL) {
-        // Calculate available width for text, considering both textbox width and margins.
+        // Calculate available width for main text, considering textbox width, margins, and slider.
         int textAvailableWidth = m_nWidth - (m_nMarginX * 2);
-
-        // If a vertical slider is present, reduce the width available for text further.
         if (m_sliderMode == VERTICAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
             textAvailableWidth -= m_nSliderStripWidth;
         }
-        // Ensure minimum width for text if slider takes up too much space.
-        if (textAvailableWidth < 0) textAvailableWidth = 0;
+        textAvailableWidth = max(0, textAvailableWidth);
 
         std::string wrappedContent = WrapText(m_strCurrentText, textAvailableWidth);
         m_vTextFastPlane->GetFont()->SetText(wrappedContent);
@@ -381,20 +489,31 @@ void CGUITextBox::UpdateTextPlane() {
 
     if (m_vSlider.get()) {
         // Adjust slider's total scrollable range based on content size vs effective textbox display size.
-        // The effective display size is the textbox size minus margins.
+        // The effective display size for main text is the textbox size minus margins, title height, and footer height.
         int effectiveDisplayWidth = m_nWidth - (m_nMarginX * 2);
         int effectiveDisplayHeight = m_nHeight - (m_nMarginY * 2);
 
-        int itemsX = 1; // Default to 1 if no scroll needed or horizontal not enabled
-        int itemsY = 1; // Default to 1 if no scroll needed or vertical not enabled
+        int titleRenderedHeight = 0;
+        if (!m_strTitleText.empty() && m_vTitleTextFastPlane) {
+            int w, h;
+            m_vTitleTextFastPlane->GetSize(w, h);
+            titleRenderedHeight = h;
+        }
+        effectiveDisplayHeight -= titleRenderedHeight; // Subtract title height
+        effectiveDisplayHeight -= m_nFooterHeight; // Subtract footer height
 
-        // Set item numbers for the slider. If content fits, 1 item. Otherwise,
-        // use the difference in pixels as the number of items for fine-grained control.
+        // Clamp effectiveDisplayHeight/Width to ensure positive values if text box is too small
+        effectiveDisplayWidth = max(0, effectiveDisplayWidth);
+        effectiveDisplayHeight = max(0, effectiveDisplayHeight);
+
+        int itemsX = 1;
+        int itemsY = 1;
+
         if (m_sliderMode == HORIZONTAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
-            itemsX = max(1, m_nContentWidth - effectiveDisplayWidth + 1); // Each pixel as an item for fine control
+            itemsX = max(1, m_nContentWidth - effectiveDisplayWidth + 1); // Content width already includes title width
         }
         if (m_sliderMode == VERTICAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
-            itemsY = max(1, m_nContentHeight - effectiveDisplayHeight + 1); // Each pixel as an item for fine control
+            itemsY = max(1, m_nContentHeight - effectiveDisplayHeight + 1); // Content height already includes title height
         }
         m_vSlider->SetItemNum(itemsX, itemsY);
 
@@ -403,27 +522,76 @@ void CGUITextBox::UpdateTextPlane() {
         m_nScrollY = max(0, min(m_nScrollY, max(0, m_nContentHeight - effectiveDisplayHeight)));
 
         // Update slider's visual position to match the clamped scroll
-        // Since SetItemNum now sets items to pixel count for fine control,
-        // we can directly set selected item to current scroll position.
         m_vSlider->SetSelectedItem(m_nScrollX, m_nScrollY);
+
+        // Re-position slider based on updated effective height for its track
+        RECT sliderMovementRect;
+        int sliderTrackWidth = m_nSliderStripWidth; // Use actual thumb width
+        int sliderTrackHeight = m_nSliderStripHeight; // Use actual thumb height
+
+        // Account for margins and footer in slider's vertical range
+        int sliderAreaTop = m_nMarginY;
+        int sliderAreaBottom = m_nHeight - m_nMarginY - m_nFooterHeight;
+
+        if (m_sliderMode == VERTICAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
+            // Vertical slider track: right edge of effective content area
+            sliderMovementRect.left = m_nWidth - m_nMarginX - sliderTrackWidth;
+            sliderMovementRect.right = m_nWidth - m_nMarginX;
+            sliderMovementRect.top = sliderAreaTop + sliderTrackHeight; // Below top arrow
+            sliderMovementRect.bottom = sliderAreaBottom - sliderTrackHeight; // Above bottom arrow
+
+            if (m_sliderMode == BOTH_SLIDERS) {
+                sliderMovementRect.bottom -= sliderTrackHeight; // Reduce if horizontal slider also present
+            }
+        }
+        // TODO: Implement similar logic for horizontal slider positioning if needed
+        // based on effectiveDisplayWidth and effectiveDisplayHeight.
+
+        m_vSlider->SetRect(&sliderMovementRect); // Apply the new slider track rect
     }
+    // Removed: SetArrowGFX(m_vScrollUpButton->GetPlaneLoader(), 0, 0); // This was the problematic line for buttons.
+    // Button positioning should be handled elsewhere if dynamic updates are needed,
+    // or assume SetArrowGFX handles initial setup only.
 }
 
 void CGUITextBox::CalculateVisibleContentSize() {
+    int mainTextWidth = 0;
+    int mainTextHeight = 0;
     if (m_vTextFastPlane != NULL) {
-        m_vTextFastPlane->GetSize(m_nContentWidth, m_nContentHeight);
-    } else {
-        m_nContentWidth = 0;
-        m_nContentHeight = 0;
+        m_vTextFastPlane->GetSize(mainTextWidth, mainTextHeight);
     }
+
+    int titleRenderedHeight = 0;
+    int titleRenderedWidth = 0;
+    if (!m_strTitleText.empty() && m_vTitleTextFastPlane != NULL) {
+        m_vTitleTextFastPlane->GetSize(titleRenderedWidth, titleRenderedHeight);
+    }
+
+    // The total content width is determined by the widest of the main text or title.
+    // Assuming title is not meant to scroll horizontally independently.
+    m_nContentWidth = max(mainTextWidth, titleRenderedWidth);
+
+    // The total content height is the sum of title height and main text height.
+    m_nContentHeight = titleRenderedHeight + mainTextHeight;
 }
 
 LRESULT CGUITextBox::OnSimpleMove(ISurface* lp) {
     LRESULT result = 0;
 
     // Calculate effective height for content to determine if vertical scrolling is needed.
-    int effectiveDisplayHeight = m_nHeight - (m_nMarginY * 2);
-    bool needsVerticalScroll = m_nContentHeight > effectiveDisplayHeight;
+    // This is the available height for *main text*, after margins, title, and footer.
+    int effectiveMainTextDisplayHeight = m_nHeight - (m_nMarginY * 2);
+    int titleRenderedHeight = 0;
+    if (!m_strTitleText.empty() && m_vTitleTextFastPlane) {
+        int w, h;
+        m_vTitleTextFastPlane->GetSize(w, h);
+        titleRenderedHeight = h;
+    }
+    effectiveMainTextDisplayHeight -= titleRenderedHeight;
+    effectiveMainTextDisplayHeight -= m_nFooterHeight;
+    effectiveMainTextDisplayHeight = max(0, effectiveMainTextDisplayHeight); // Ensure non-negative
+
+    bool needsVerticalScroll = m_nContentHeight > effectiveMainTextDisplayHeight;
 
     // First, process mouse input for the slider
     if (m_vSlider.get() && m_pvMouse.get()) {
@@ -440,8 +608,13 @@ LRESULT CGUITextBox::OnSimpleMove(ISurface* lp) {
 
         // Clamp target scroll positions to valid range
         int effectiveDisplayWidth = m_nWidth - (m_nMarginX * 2);
+        if (m_sliderMode == VERTICAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
+            effectiveDisplayWidth -= m_nSliderStripWidth; // If vertical slider present
+        }
+        effectiveDisplayWidth = max(0, effectiveDisplayWidth);
+
         int maxScrollX = max(0, m_nContentWidth - effectiveDisplayWidth);
-        int maxScrollY = max(0, m_nContentHeight - effectiveDisplayHeight);
+        int maxScrollY = max(0, m_nContentHeight - effectiveMainTextDisplayHeight);
         targetScrollX = max(0, min(targetScrollX, maxScrollX));
         targetScrollY = max(0, min(targetScrollY, maxScrollY));
 
@@ -504,73 +677,129 @@ LRESULT CGUITextBox::OnSimpleDraw(ISurface* lp) {
     int drawY = m_nY + m_nYOffset;
 
     // Draw background plane if it has been set and is valid
-    if (!m_vBackgroundPlane.isNull()) { // The crash point: ensure m_vBackgroundPlane is valid here.
-        // Create a SIZE struct for the destination dimensions
+    if (!m_vBackgroundPlane.isNull()) {
         SIZE destSize = { m_nWidth, m_nHeight };
-        
-        // Call BltNatural to draw the background.
-        // Parameters:
-        // 1. Source Surface: The background plane itself (raw pointer from smart_ptr)
-        // 2. Destination X: Top-left X coordinate on the target surface 'lp'
-        // 3. Destination Y: Top-left Y coordinate on the target surface 'lp'
-        // 4. Destination Size: Pointer to SIZE struct for stretching the source to this size
-        // 5. Source Rectangle: NULL, meaning use the entire source surface
-        // 6. Destination Clip: Pointer to the textbox's clipping rectangle (m_rcTextBoxClip)
-        // 7. Base Point: 0 (typically top-left alignment)
-        lp->BltNatural(m_vBackgroundPlane.get(), drawX, drawY, &destSize, NULL, &m_rcTextBoxClip, 0);
+        // Clipping rect for background uses the full textbox area
+        RECT backgroundClipRect = {drawX, drawY, drawX + m_nWidth, drawY + m_nHeight};
+        lp->BltNatural(m_vBackgroundPlane.get(), drawX, drawY, &destSize, NULL, &backgroundClipRect, 0);
     } else {
-        // If no background plane is set, you might want to draw a solid color background  or simply do nothing.
+        // If no background plane is set, you might want to draw a solid color background or simply do nothing.
     }
 
-    // Draw the text plane
+    // Calculate effective height for the main text and title rendering area
+    // This is the textbox height minus the top/bottom margins and the footer height.
+    int mainContentDisplayHeight = m_nHeight - (m_nMarginY * 2) - m_nFooterHeight;
+    mainContentDisplayHeight = max(0, mainContentDisplayHeight);
+
+    // Calculate clipping rectangle for scrolling content (title + main text)
+    RECT contentClipRect = {
+        drawX + m_nMarginX,
+        drawY + m_nMarginY,
+        drawX + m_nWidth - m_nMarginX,
+        drawY + m_nHeight - m_nMarginY - m_nFooterHeight
+    };
+    // Adjust clip rect if vertical slider is present
+    if (m_sliderMode == VERTICAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
+        contentClipRect.right -= m_nSliderStripWidth;
+    }
+    // Ensure valid clipping rect
+    if (contentClipRect.left > contentClipRect.right) contentClipRect.right = contentClipRect.left;
+    if (contentClipRect.top > contentClipRect.bottom) contentClipRect.bottom = contentClipRect.top;
+
+
+    // Draw the Title Plane (if set)
+    int titleRenderedHeight = 0;
+    if (!m_strTitleText.empty() && m_vTitleTextPlane.get()) {
+        int w, h;
+        m_vTitleTextPlane->GetSize(w, h); // Get size from the plane itself
+        titleRenderedHeight = h;
+
+        RECT titleSrcRect = {0, 0, w, h}; // Entire title plane
+        // Title position is relative to textbox origin + margins, and scrolls with content.
+        lp->BltNatural(m_vTitleTextPlane.get(),
+                         drawX + m_nMarginX + m_nTextOffsetX - m_nScrollX, // X pos with margin, offset, and scroll
+                         drawY + m_nMarginY + m_nTextOffsetY - m_nScrollY, // Y pos with margin, offset, and scroll
+                         NULL,
+                         &titleSrcRect,
+                         &contentClipRect, // Clip to main content area
+                         0);
+    }
+
+    // Draw the main text plane
     if (m_vTextPlane.get()) {
         RECT srcRect;
         // Define the "window" into the m_vTextPlane (the entire rendered text content)
-        // that we want to display. This window is shifted by m_nScrollX and m_nScrollY
-        // to implement scrolling.
-        ::SetRect(&srcRect, m_nScrollX, m_nScrollY,
-                                     m_nScrollX + m_nWidth - (m_nMarginX * 2), // Adjust source width by margins
-                                     m_nScrollY + m_nHeight - (m_nMarginY * 2)); // Adjust source height by margins
+        // This window starts after the title (if any)
+        int mainTextSrcY = m_nScrollY - titleRenderedHeight; // Adjust scroll for title height
+        mainTextSrcY = max(0, mainTextSrcY); // Ensure it doesn't go negative
+
+        // Get the actual rendered height and width of the main text plane
+        int mainTextPlaneRenderedWidth = 0;
+        int mainTextPlaneRenderedHeight = 0;
+        m_vTextPlane->GetSize(mainTextPlaneRenderedWidth, mainTextPlaneRenderedHeight);
+
+        ::SetRect(&srcRect, m_nScrollX, mainTextSrcY,
+                                     m_nScrollX + (contentClipRect.right - contentClipRect.left), // Width of display area
+                                     mainTextSrcY + (contentClipRect.bottom - contentClipRect.top)); // Height of display area
 
         // Clamp the source rectangle to the actual dimensions of the rendered text content
-        // This prevents reading beyond the bounds of the text plane if content is smaller
-        srcRect.right = min(srcRect.right, m_nContentWidth);
-        srcRect.bottom = min(srcRect.bottom, m_nContentHeight);
-		
-        RECT textClippingRect = m_rcTextBoxClip; // Start with the overall textbox clip, already adjusted for margins in Create()
+        srcRect.right = min(srcRect.right, mainTextPlaneRenderedWidth);
+        srcRect.bottom = min(srcRect.bottom, mainTextPlaneRenderedHeight); // Use actual rendered height of m_vTextPlane
 
-        // Further adjust text clipping if sliders are present
-        if (m_sliderMode == VERTICAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
-            textClippingRect.right -= m_nSliderStripWidth;
-        }
-        if (m_sliderMode == HORIZONTAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
-            textClippingRect.bottom -= m_nSliderStripHeight;
-        }
-        // Ensure valid clipping rect in case of very small textbox or large slider
-        if (textClippingRect.left > textClippingRect.right) textClippingRect.right = textClippingRect.left;
-        if (textClippingRect.top > textClippingRect.bottom) textClippingRect.bottom = textClippingRect.top;
-
-        // Call BltNatural to draw the text content.
-        // Parameters:
-        // 1. Source Surface: The text content plane (raw pointer from smart_ptr)
-        // 2. Destination X: Top-left X coordinate on 'lp' where text starts, with internal offsets and margins
-        // 3. Destination Y: Top-left Y coordinate on 'lp' where text starts, with internal offsets and margins
-        // 4. Destination Size: NULL, meaning draw at original size as defined by srcRect (no additional scaling)
-        // 5. Source Rectangle: Pointer to the srcRect, defining the scrolled view of the text content
-        // 6. Destination Clip: Pointer to the effective text clipping rectangle (textClippingRect)
-        // 7. Base Point: 0 (top-left alignment)
+        // Main text drawing position: after margins, after title (if present), plus internal offsets.
         lp->BltNatural(m_vTextPlane.get(),
-                         drawX + m_nTextOffsetX + m_nMarginX, // Add margin to draw position
-                         drawY + m_nTextOffsetY + m_nMarginY, // Add margin to draw position
+                         drawX + m_nTextOffsetX + m_nMarginX,
+                         drawY + m_nTextOffsetY + m_nMarginY + titleRenderedHeight, // Shift down by title height
                          NULL,
                          &srcRect,
-                         &textClippingRect,
+                         &contentClipRect, // Clip to main content area
+                         0);
+    }
+
+    // Draw the Footer Plane (if set) - static at the bottom, right-aligned
+    if (!m_strFooterText.empty() && m_vFooterTextPlane.get()) {
+        int footerWidth, footerHeight;
+        m_vFooterTextPlane->GetSize(footerWidth, footerHeight);
+
+        // Footer draw X: right-aligned within the textbox, accounting for right margin and potential slider width
+        int footerDrawX = drawX + m_nWidth - m_nMarginX - footerWidth;
+        if (m_sliderMode == VERTICAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
+            footerDrawX -= m_nSliderStripWidth;
+        }
+        
+        // Footer draw Y: at the bottom of the textbox, accounting for bottom margin.
+        int footerDrawY = drawY + m_nHeight - m_nMarginY - footerHeight;
+
+        RECT footerSrcRect = {0, 0, footerWidth, footerHeight};
+        RECT footerClipRect = {
+            drawX + m_nMarginX,
+            drawY + m_nHeight - m_nMarginY - footerHeight, // Clip from its start Y position
+            drawX + m_nWidth - m_nMarginX,
+            drawY + m_nHeight - m_nMarginY // To the bottom margin
+        };
+        // Adjust clip rect if vertical slider is present
+        if (m_sliderMode == VERTICAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
+            footerClipRect.right -= m_nSliderStripWidth;
+        }
+        // Ensure valid clipping rect
+        if (footerClipRect.left > footerClipRect.right) footerClipRect.right = footerClipRect.left;
+        if (footerClipRect.top > footerClipRect.bottom) footerClipRect.bottom = footerClipRect.top;
+
+
+        lp->BltNatural(m_vFooterTextPlane.get(),
+                         footerDrawX,
+                         footerDrawY,
+                         NULL,
+                         &footerSrcRect,
+                         &footerClipRect,
                          0);
     }
 
     // Draw the scroll buttons and slider only if they are needed
-    int effectiveDisplayHeight = m_nHeight - (m_nMarginY * 2);
-    bool needsVerticalScroll = m_nContentHeight > effectiveDisplayHeight;
+    int effectiveMainTextDisplayHeightForSlider = m_nHeight - (m_nMarginY * 2) - m_nFooterHeight;
+    effectiveMainTextDisplayHeightForSlider = max(0, effectiveMainTextDisplayHeightForSlider); // Ensure non-negative
+
+    bool needsVerticalScroll = m_nContentHeight > effectiveMainTextDisplayHeightForSlider;
     if (m_sliderMode == VERTICAL_SLIDER && needsVerticalScroll) {
         if (m_vScrollUpButton.get()) {
             m_vScrollUpButton->OnSimpleDraw(lp);
@@ -594,18 +823,28 @@ void CGUITextBox::Reset() {
 
     // Reset textbox specific state
     m_strCurrentText = "";
+    m_strTitleText = ""; // Reset title text
+    m_strFooterText = ""; // Reset footer text
     m_nScrollX = 0;
     m_nScrollY = 0;
     m_nContentWidth = 0;
     m_nContentHeight = 0;
     m_nMarginX = 0; // Reset margins to default
     m_nMarginY = 0; // Reset margins to default
-
+    m_nFooterHeight = 0; // Reset footer height
 
     // Reset internal text plane and slider
     if (m_vTextFastPlane != NULL) {
         m_vTextFastPlane->GetFont()->SetText("");
         m_vTextFastPlane->UpdateTextAA();
+    }
+    if (m_vTitleTextFastPlane != NULL) {
+        m_vTitleTextFastPlane->GetFont()->SetText("");
+        m_vTitleTextFastPlane->UpdateText();
+    }
+    if (m_vFooterTextFastPlane != NULL) {
+        m_vFooterTextFastPlane->GetFont()->SetText("");
+        m_vFooterTextFastPlane->UpdateText();
     }
 
     if (m_vSlider.get()) {
@@ -645,12 +884,24 @@ void CGUITextBox::ScrollContent(int dx, int dy) {
 
     // Clamp scroll positions using min/max macros (or std:: equivalents if resolved)
     // Ensure scroll position does not go beyond the content boundaries.
-    // The maximum scroll is (content_size - effective_textbox_display_size).
+    // The maximum scroll is (content_size - effective_textbox_display_size for main text).
     int effectiveDisplayWidth = m_nWidth - (m_nMarginX * 2);
-    int effectiveDisplayHeight = m_nHeight - (m_nMarginY * 2);
+    if (m_sliderMode == VERTICAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
+        effectiveDisplayWidth -= m_nSliderStripWidth; // If vertical slider present
+    }
+    effectiveDisplayWidth = max(0, effectiveDisplayWidth);
+
+    int titleRenderedHeight = 0;
+    if (!m_strTitleText.empty() && m_vTitleTextFastPlane) {
+        int w, h;
+        m_vTitleTextFastPlane->GetSize(w, h);
+        titleRenderedHeight = h;
+    }
+    int effectiveMainTextDisplayHeight = m_nHeight - (m_nMarginY * 2) - titleRenderedHeight - m_nFooterHeight;
+    effectiveMainTextDisplayHeight = max(0, effectiveMainTextDisplayHeight);
 
     m_nScrollX = max(0, min(m_nScrollX, max(0, m_nContentWidth - effectiveDisplayWidth)));
-    m_nScrollY = max(0, min(m_nScrollY, max(0, m_nContentHeight - effectiveDisplayHeight)));
+    m_nScrollY = max(0, min(m_nScrollY, max(0, m_nContentHeight - effectiveMainTextDisplayHeight)));
 
     // Update slider position if scroll changed
     if (oldScrollX != m_nScrollX || oldScrollY != m_nScrollY) {

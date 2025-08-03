@@ -78,14 +78,18 @@ public:
     void SetFont(smart_ptr<CFont> font); // Set custom font
     CFont* GetFont(); // Get font for direct manipulation
 
+    // --- NEW: Title and Footer Text methods ---
+    void SetTextTitle(const string& text);
+    void SetTextFooter(const string& text);
+    // --- END NEW ---
+
     // Text drawing properties
     void SetTextColor(ISurfaceRGB color);
     void SetTextOffset(int x, int y); // Offset for text within the textbox content plane
 
-    // --- NEW: Margin methods ---
+    // Margins for text within the textbox
     void SetMargins(int x, int y);
     void GetMargins(int& x, int& y) const;
-    // --- END NEW ---
 
     // Background plane for the textbox
     void SetBackgroundPlane(smart_ptr<ISurface> pv);
@@ -109,19 +113,29 @@ public:
 
 protected:
     void CalculateVisibleContentSize(); // Calculates the actual content size after text rendering
+    void UpdateTitleAndFooterPlanes(); // NEW: Renders title and footer
 
-    CTextFastPlane* m_vTextFastPlane; // Plane for rendered text
+    CTextFastPlane* m_vTextFastPlane; // Plane for rendered main text
     CPlane m_vTextPlane; // Wrapper for m_vTextFastPlane
+
+    // --- NEW: Title and Footer members ---
+    std::string m_strTitleText;
+    CTextFastPlane* m_vTitleTextFastPlane; // Plane for rendered title text
+    CPlane m_vTitleTextPlane; // Wrapper for m_vTitleTextFastPlane
+
+    std::string m_strFooterText;
+    CTextFastPlane* m_vFooterTextFastPlane; // Plane for rendered footer text
+    CPlane m_vFooterTextPlane; // Wrapper for m_vFooterTextFastPlane
+    int m_nFooterHeight; // Height of the rendered footer, 0 if not shown
+    // --- END NEW ---
 
     string m_strCurrentText;
     ISurfaceRGB m_textColor;
     int m_nTextOffsetX;
     int m_nTextOffsetY;
 
-    // --- NEW: Margin members ---
     int m_nMarginX;
     int m_nMarginY;
-    // --- END NEW ---
 
     smart_ptr<ISurface> m_vBackgroundPlane; // Background for the textbox
 
@@ -140,8 +154,8 @@ protected:
     int m_nHeight; // Height of the textbox display area
     int m_nSliderStripWidth;  // Stores the width of the scrollbar graphic (thumb)
     int m_nSliderStripHeight; // Stores the height of the scrollbar graphic (thumb)
-    int m_nContentWidth;  // Actual width of the rendered text content
-    int m_nContentHeight; // Actual height of the rendered text content
+    int m_nContentWidth;  // Actual width of the rendered text content (main text + title)
+    int m_nContentHeight; // Actual height of the rendered text content (main text + title)
 
     int m_nScrollX; // Current X scroll position of the text content
     int m_nScrollY; // Current Y scroll position of the text content
