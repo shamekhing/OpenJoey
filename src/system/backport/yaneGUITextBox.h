@@ -2,9 +2,9 @@
 #define __yaneGUITextBox_h__
 
 #include "../../stdafx.h" // Corrected path
-#include "yaneGUIParts.h"     // For IGUIParts base class
+#include "yaneGUIParts.h"      // For IGUIParts base class
 #include "yaneGUIButton.h"
-#include "yaneGUISlider.h"    // For CGUISlider and its base classes
+#include "yaneGUISlider.h"     // For CGUISlider and its base classes
 // CTextFastPlane is already part of the SDK via stdafx.h, so no direct include needed here.
 
 namespace yaneuraoGameSDK3rd {
@@ -21,10 +21,10 @@ public:
     void SetTextBox(smart_ptr<CGUITextBox> pv) { m_vTextBox = pv; }
 
     void SetMinSizeFromGraphic(ISurface* graphic) {
-		int sx, sy;
-		graphic->GetSize(sx, sy); // Get the actual dimensions of the graphic
-		SetMinSize(sx, sy); // Call the base class method to set m_nMinX and m_nMinY
-	}
+        int sx, sy;
+        graphic->GetSize(sx, sy); // Get the actual dimensions of the graphic
+        SetMinSize(sx, sy); // Call the base class method to set m_nMinX and m_nMinY
+    }
 
     virtual void OnPageUp();
     virtual void OnPageDown();
@@ -68,9 +68,9 @@ public:
 
     // Textbox initialization and setup
     void Create(int x, int y, int width, int height, SliderMode mode = NO_SLIDER);
-	void SetSliderGFX(smart_ptr<ISurface> sliderThumbGraphic);
-	void SetArrowGFX(smart_ptr<CPlaneLoader> pv, int upIndex, int downIndex);
-	void SetSliderLoader(string data, string path);
+    void SetSliderGFX(smart_ptr<ISurface> sliderThumbGraphic);
+    void SetArrowGFX(smart_ptr<CPlaneLoader> pv, int upIndex, int downIndex);
+    void SetSliderLoader(string data, string path);
 
     // Text content management
     void SetText(const string& text);
@@ -78,18 +78,21 @@ public:
     void SetFont(smart_ptr<CFont> font); // Set custom font
     CFont* GetFont(); // Get font for direct manipulation
 
-    // --- NEW: Title and Footer Text methods ---
-    void SetTextTitle(const string& text);
-    void SetTextFooter(const string& text);
-    // --- END NEW ---
-
     // Text drawing properties
     void SetTextColor(ISurfaceRGB color);
     void SetTextOffset(int x, int y); // Offset for text within the textbox content plane
 
-    // Margins for text within the textbox
+    // --- NEW: Margin methods ---
     void SetMargins(int x, int y);
     void GetMargins(int& x, int& y) const;
+    // --- END NEW ---
+
+    // --- NEW: Title and Footer Text ---
+    void SetTextTitle(const string& title);
+    string GetTextTitle() const;
+    void SetTextFooter(const string& footer);
+    string GetTextFooter() const;
+    // --- END NEW ---
 
     // Background plane for the textbox
     void SetBackgroundPlane(smart_ptr<ISurface> pv);
@@ -102,47 +105,48 @@ public:
 
     // Slider specific access for listener
     void ScrollContent(int dx, int dy); // Method to be called by slider listener
-	smart_ptr<CGUISlider> GetSlider(){ return m_vSlider; }
+    smart_ptr<CGUISlider> GetSlider(){ return m_vSlider; }
 
     // Get current scroll positions
     void GetScrollPos(int& x, int& y) const { x = m_nScrollX; y = m_nScrollY; }
 
-	void UpdateTextPlane(); // Renders the text onto m_vTextPlane
-	std::string WrapText(const std::string& rawText, int availableWidth);
-	std::string TrimLeadingSpaces(const std::string& s);
+    void UpdateTextPlane(); // Renders the text onto m_vTextPlane
+    std::string WrapText(const std::string& rawText, int availableWidth);
+    std::string TrimLeadingSpaces(const std::string& s);
 
 protected:
     void CalculateVisibleContentSize(); // Calculates the actual content size after text rendering
-    void UpdateTitleAndFooterPlanes(); // NEW: Renders title and footer
 
-    CTextFastPlane* m_vTextFastPlane; // Plane for rendered main text
+    CTextFastPlane* m_vTextFastPlane; // Plane for rendered text
     CPlane m_vTextPlane; // Wrapper for m_vTextFastPlane
-
-    // --- NEW: Title and Footer members ---
-    std::string m_strTitleText;
-    CTextFastPlane* m_vTitleTextFastPlane; // Plane for rendered title text
-    CPlane m_vTitleTextPlane; // Wrapper for m_vTitleTextFastPlane
-
-    std::string m_strFooterText;
-    CTextFastPlane* m_vFooterTextFastPlane; // Plane for rendered footer text
-    CPlane m_vFooterTextPlane; // Wrapper for m_vFooterTextFastPlane
-    int m_nFooterHeight; // Height of the rendered footer, 0 if not shown
-    // --- END NEW ---
 
     string m_strCurrentText;
     ISurfaceRGB m_textColor;
     int m_nTextOffsetX;
     int m_nTextOffsetY;
 
+    // --- NEW: Margin members ---
     int m_nMarginX;
     int m_nMarginY;
+    // --- END NEW ---
+
+    // --- NEW: Title and Footer members ---
+    string m_strTitleText;
+    string m_strFooterText;
+    CTextFastPlane* m_vTitleFastPlane; // Plane for rendered title text
+    CPlane m_vTitlePlane; // Wrapper for m_vTitleFastPlane
+    CTextFastPlane* m_vFooterFastPlane; // Plane for rendered footer text
+    CPlane m_vFooterPlane; // Wrapper for m_vFooterFastPlane
+    int m_nTitleHeight; // Cached height of the rendered title
+    int m_nFooterHeight; // Cached height of the rendered footer
+    // --- END NEW ---
 
     smart_ptr<ISurface> m_vBackgroundPlane; // Background for the textbox
 
     SliderMode m_sliderMode;
     smart_ptr<CGUISlider> m_vSlider;
     smart_ptr<CGUITextBoxSliderListener> m_vSliderListener;
-	smart_ptr<ISurface> m_vSliderThumbGraphic;
+    smart_ptr<ISurface> m_vSliderThumbGraphic;
 
     // Scroll button members
     smart_ptr<CGUIButton> m_vScrollUpButton;

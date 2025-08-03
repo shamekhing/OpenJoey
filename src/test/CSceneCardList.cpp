@@ -332,8 +332,6 @@ void CSceneCardList::InitializeUI() {
 	m_cardTextBox->SetSliderGFX(sliderSmartPtr);
 	m_cardTextBox->SetArrowGFX(smart_ptr<CPlaneLoader>(&m_cardTextBoxPLoader, false), 5, 8);
 	m_cardTextBox->SetMargins(14,4);
-	m_cardTextBox->SetTextTitle("HEADER TEST");
-	m_cardTextBox->SetTextFooter("FOOTER TEST");
 	// DEBUG BACKGROUND TEXTBOX
 	//CPlane plnTEST = m_cardTextBoxPLoader.GetPlane(0);
 	//smart_ptr<ISurface> plnPtrBG(plnTEST.get(), false); // no ownership
@@ -741,7 +739,18 @@ void CSceneCardList::DrawCardGrid(const smart_ptr<ISurface>& lp) {
                             lp->BltNatural(m_cardHoverBorder.get(), x, y, &dstSize, &srcRect, NULL, 0);
 
 							// Card TextBox
+							m_cardTextBox->SetTextTitle(card.cardData->name.name);
 							m_cardTextBox->SetText(card.cardData->description);
+							MonsterType ctype = card.cardData->properties.GetMonsterType();
+							if (ctype == TYPE_SPELLCARD || ctype == TYPE_TRAPCARD)
+							{
+								m_cardTextBox->SetTextFooter(""); // empty (hides the footer)
+							} 
+							else
+							{
+								m_cardTextBox->SetTextFooter("ATK 1337 TEST");
+							}
+
                         }
 
                         // Draw "NEW" indicator only if card is new and fully scaled in
