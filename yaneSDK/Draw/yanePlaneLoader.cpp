@@ -57,6 +57,16 @@ POINT	CPlaneLoader::GetXY(int nNo){
 
 	return (smart_ptr_static_cast<CLoadCacheInfo>(obj))->pObjPos;
 }
+
+std::string	CPlaneLoader::GetXYRaw(int nNo){
+
+	smart_obj obj;
+	if (GetIDObjectManager()->getObject(nNo,obj)!=0){
+		return "";
+	}
+
+	return (smart_ptr_static_cast<CLoadCacheInfo>(obj))->pObjPosRaw;
+}
 #endif
 
 //////////////////////////////////////////////////////////////////////////////

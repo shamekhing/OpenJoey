@@ -197,18 +197,20 @@ string CStringScanner::GetStrFileName(LPCSTR &lp){
 }
 
 #ifdef OPENJOEY_ENGINE_FIXES
-int ConvertToInt(const std::string& str) {
+int CStringScanner::ConvertToInt(const std::string& str) {
     // std::stoi backport - uses strtol for conversion, 10 is numerical base
     return static_cast<int>(std::strtol(str.c_str(), NULL, 10));
 }
 
 // Updated GetStrResolution function
-POINT CStringScanner::GetStrResolution(LPCSTR& lp) {
-    std::string str;
+TxtResolutionData CStringScanner::GetStrResolution(LPCSTR& lp) {
+    TxtResolutionData result;
+	result.resolution.x = 0;
+	result.resolution.y = 0;
+    result.originalString.clear();
 
     // Skip non-digit characters safely
     while (*lp) {
-        // Only proceed if the character is a valid digit (ASCII range '0'-'9')
         if (::isdigit(static_cast<unsigned char>(*lp))) {
             break; // Stop skipping when a digit is found
         }
@@ -216,29 +218,26 @@ POINT CStringScanner::GetStrResolution(LPCSTR& lp) {
     }
 
     // Collect digits safely
-    std::string digits;
     while (*lp && ::isdigit(static_cast<unsigned char>(*lp))) {
-        digits += *lp;
+        result.originalString += *lp;
         lp++;
     }
 
     // Handle cases where no valid digits were found
-    POINT res = {0, 0};
-    if (digits.empty()) {
-        // No digits found, return default POINT values
-        return res;
+    if (result.originalString.empty()) {
+        return result;  // Return default struct with {0,0} and empty string
     }
 
     // Handle 6 or 8 digit numbers
-    if (digits.length() == 6) {
-        res.x = ConvertToInt(digits.substr(0, 3)); // Use ConvertToInt
-        res.y = ConvertToInt(digits.substr(3, 3)); // Use ConvertToInt
-    } else if (digits.length() == 8) {
-        res.x = ConvertToInt(digits.substr(0, 4)); // Use ConvertToInt
-        res.y = ConvertToInt(digits.substr(4, 4)); // Use ConvertToInt
+    if (result.originalString.length() == 6) {
+        result.resolution.x = ConvertToInt(result.originalString.substr(0, 3));
+        result.resolution.y = ConvertToInt(result.originalString.substr(3, 3));
+    } else if (result.originalString.length() == 8) {
+        result.resolution.x = ConvertToInt(result.originalString.substr(0, 4));
+        result.resolution.y = ConvertToInt(result.originalString.substr(4, 4));
     }
 
-    return res;
+    return result;
 }
 #endif
 

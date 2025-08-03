@@ -291,9 +291,30 @@ void CSceneCardList::InitializeUI() {
     if (m_cardTextBoxPLoader.Set("data/y/list/detail_scroll.txt", false) != 0) {  // Relative to SetReadDir
         OutputDebugStringA("Error: Failed to load data/y/list/detail_scroll.txt\n");
     }
+
+	CPlane sliderBox = m_cardTextBoxPLoader.GetPlane(1);
+	smart_ptr<ISurface> sliderSmartPtr(sliderBox.get(), false); // no ownership
+	CPlane separatorLine = m_vDetailPlaneLoader.GetPlane(3);
+	smart_ptr<ISurface> separatorLineSmartPtr(sliderBox.get(), false); // no ownership
 	m_cardTextBox = smart_ptr<yaneuraoGameSDK3rd::Draw::CGUITextBox>(new yaneuraoGameSDK3rd::Draw::CGUITextBox(), false);
-	int paddingBoxOffset = 0;
-	m_cardTextBox->Create(12+paddingBoxOffset, 382+paddingBoxOffset, 202, 205, yaneuraoGameSDK3rd::Draw::CGUITextBox::VERTICAL_SLIDER);
+
+	POINT topLeftBox = m_vDetailPlaneLoader.GetXY(1);
+	POINT botRightBox = m_vDetailPlaneLoader.GetXY(2);
+	int sliderX, sliderY;
+	sliderBox->GetSize(sliderX, sliderY);
+
+	// INFO: our textbox widget works different so we dont really need those (but left here for authenticity reasons)
+	//std::string rawScrollData = m_cardTextBoxPLoader.GetXYRaw(0);
+	//int thicknessData = CStringScanner::ConvertToInt(rawScrollData.substr(0,2)); // Thickness (2 digits)
+	//int buttonData = CStringScanner::ConvertToInt(rawScrollData.substr(2,2)); // Button (2 digits)
+	//int boxData = CStringScanner::ConvertToInt(rawScrollData.substr(4,2)); // Box (2 digits)
+	//int barData = CStringScanner::ConvertToInt(rawScrollData.substr(6,3)); // Bar length (3 digits)
+	
+	int boxScaleX = (botRightBox.x - topLeftBox.x) + sliderX;
+	int boxScaleY = (botRightBox.y - topLeftBox.y);
+
+	// TODO: create signature with two XY points and calulate anything else from this
+	m_cardTextBox->Create(topLeftBox.x, topLeftBox.y, boxScaleX, boxScaleY, yaneuraoGameSDK3rd::Draw::CGUITextBox::VERTICAL_SLIDER);
 	m_cardTextBox->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false)); // Pass the current mouse state
 	//m_cardTextBox->SetTextColor(yaneuraoGameSDK3rd::Draw::ISurface::makeRGB(0, 0, 0, 0));
 	smart_ptr<yaneuraoGameSDK3rd::Draw::CFont> customFont(new yaneuraoGameSDK3rd::Draw::CFont());
@@ -308,8 +329,6 @@ void CSceneCardList::InitializeUI() {
 	customFont->SetHeight(18); // Adjust for desired line spacing, e.g., 15-17 for 12pt font
 	m_cardTextBox->SetFont(customFont);
 
-	CPlane sliderBox = m_cardTextBoxPLoader.GetPlane(1);
-	smart_ptr<ISurface> sliderSmartPtr(sliderBox.get(), false); // no ownership
 	m_cardTextBox->SetSliderGFX(sliderSmartPtr);
 	m_cardTextBox->SetArrowGFX(smart_ptr<CPlaneLoader>(&m_cardTextBoxPLoader, false), 5, 8);
 

@@ -9,6 +9,13 @@
 namespace yaneuraoGameSDK3rd {
 namespace Auxiliary {
 
+#ifdef OPENJOEY_ENGINE_FIXES
+struct TxtResolutionData {
+    POINT resolution;  // Contains x and y values
+    std::string originalString;  // The original digit string that was parsed
+};
+#endif
+
 class CStringScanner {
 /**
 	文字列の解析のサポートをします。
@@ -56,7 +63,8 @@ static	string GetStrFileName(LPCSTR &lp);
 	///	タブ、改行に遭遇するまでの文字列を返す
 
 #ifdef OPENJOEY_ENGINE_FIXES
-static	POINT GetStrResolution(LPCSTR &lp);
+static int ConvertToInt(const std::string& str);
+static	TxtResolutionData GetStrResolution(LPCSTR &lp);
 #endif
 
 static	string GetNextStr(LPCSTR &lp);

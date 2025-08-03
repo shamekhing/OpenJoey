@@ -228,6 +228,12 @@
 				<File
 					RelativePath=".\system\effects\yanePlaneEffectBlt.h">
 				</File>
+				<File
+					RelativePath=".\system\backport\yaneTextFastPlaneEx.cpp">
+				</File>
+				<File
+					RelativePath=".\system\backport\yaneTextFastPlaneEx.h">
+				</File>
 				<Filter
 					Name="cards"
 					Filter="">

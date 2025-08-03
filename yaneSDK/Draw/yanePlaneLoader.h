@@ -40,6 +40,7 @@ public:
 	string	GetFileName(int nNo );
 #ifdef OPENJOEY_ENGINE_FIXES
 	POINT	GetXY(int nNo);
+	std::string	GetXYRaw(int nNo);
 #endif
 
 	/**

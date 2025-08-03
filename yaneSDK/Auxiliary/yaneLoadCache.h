@@ -47,6 +47,7 @@ struct CLoadCacheInfo
 	string		strFileName;// “Ç‚Ýž‚Þ‚×‚«ƒtƒ@ƒCƒ‹–¼
 #ifdef OPENJOEY_ENGINE_FIXES
 	POINT		pObjPos;
+	std::string pObjPosRaw;
 #endif
 };
 
@@ -204,8 +205,9 @@ public:
 #ifdef OPENJOEY_ENGINE_FIXES
 			pInfo->strFileName = m_strReadDir + CStringScanner::GetStrFileName(lp);
 			// INFO: this code adds together pos numbers that are following after and resets when none is there? AND thats also how the real game works!?
-			POINT coords = CStringScanner::GetStrResolution(lp); // parse the X/Y pos of the asset in own properties
-			pInfo->pObjPos = coords;
+			TxtResolutionData coords = CStringScanner::GetStrResolution(lp); // parse the X/Y pos of the asset in own properties
+			pInfo->pObjPos = coords.resolution;
+			pInfo->pObjPosRaw = coords.originalString;
 			char langChar = m_langId[0]; // Get the first character of the langid string (i think its always only one char for lang setup?)
 
 			// replace all '?' characters in strFileName with runtime lang character
