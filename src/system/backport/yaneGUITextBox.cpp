@@ -94,7 +94,9 @@ CGUITextBox::CGUITextBox()
       m_nScrollX(0), m_nScrollY(0), m_sliderMode(NO_SLIDER),
       m_nTextOffsetX(0), m_nTextOffsetY(0),
 	  m_nSliderStripWidth(15),  // Initialize with a default, will be updated in SetSliderGFX
-      m_nSliderStripHeight(15) // Initialize with a default, will be updated in SetSliderGFX
+      m_nSliderStripHeight(15), // Initialize with a default, will be updated in SetSliderGFX
+      m_nMarginX(0), // Initialize new member
+      m_nMarginY(0)  // Initialize new member
 {
     // Default text color. Use ISurface::makeRGB since ISurfaceRGB is a DWORD typedef.
     // Assuming 0 for alpha (fully opaque) for common text rendering, adjust if different blend mode needed.
@@ -108,6 +110,21 @@ CGUITextBox::~CGUITextBox() {
     // Smart pointers handle deallocation
 }
 
+// --- New Margin Methods Implementation ---
+void CGUITextBox::SetMargins(int x, int y) {
+    m_nMarginX = max(0, x); // Margins shouldn't be negative
+    m_nMarginY = max(0, y);
+    UpdateTextPlane(); // Recalculate and redraw text with new margins
+    // No explicit ResetScrollBars method in this version,
+    // so `UpdateTextPlane` (which calls `SetItemNum` on slider) handles range updates.
+}
+
+void CGUITextBox::GetMargins(int& x, int& y) const {
+    x = m_nMarginX;
+    y = m_nMarginY;
+}
+// --- End New Margin Methods ---
+
 void CGUITextBox::SetSliderGFX(smart_ptr<ISurface> sliderThumbGraphic){
     m_vSliderThumbGraphic = sliderThumbGraphic;
     
@@ -117,7 +134,7 @@ void CGUITextBox::SetSliderGFX(smart_ptr<ISurface> sliderThumbGraphic){
     if (m_vSlider.get() && m_vSliderListener.get() && m_vSliderThumbGraphic.get()) {
         // Cast listener to its specific type to access SetPlane or GetMinSize if needed.
         CGUINormalSliderListener* pSliderListener = static_cast<CGUINormalSliderListener*>(m_vSliderListener.get());
-       
+        
         // This call is important: it tells the listener the actual dimensions of the graphic,
         // which might be used for its own internal logic or for drawing.
         m_vSliderListener->SetMinSizeFromGraphic(m_vSliderThumbGraphic.get()); 
@@ -140,17 +157,21 @@ void CGUITextBox::SetSliderGFX(smart_ptr<ISurface> sliderThumbGraphic){
 
         RECT sliderMovementRect;
         // Start with the full textbox area, relative to the slider's own (m_nX, m_nY) origin.
-        ::SetRect(&sliderMovementRect, 0, 0, m_nWidth, m_nHeight); 
+        // The textbox size minus margins
+        int effectiveWidth = m_nWidth - (m_nMarginX * 2); // Consider horizontal margins
+        int effectiveHeight = m_nHeight - (m_nMarginY * 2); // Consider vertical margins
+
+        ::SetRect(&sliderMovementRect, 0, 0, effectiveWidth, effectiveHeight); 
 
         if (m_sliderMode == VERTICAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
             // For a vertical slider, its track is at the right side of the textbox.
             // Its left boundary is the textbox's total width minus the width of the slider strip itself.
-            sliderMovementRect.left = m_nWidth - m_nSliderStripWidth; 
-            sliderMovementRect.right = m_nWidth; // Its right boundary is the textbox's full width.
+            sliderMovementRect.left = effectiveWidth - m_nSliderStripWidth; 
+            sliderMovementRect.right = effectiveWidth; // Its right boundary is the textbox's full width.
             
             int buttonSize = m_nSliderStripWidth;
             sliderMovementRect.top = buttonSize;
-            sliderMovementRect.bottom = m_nHeight - buttonSize;
+            sliderMovementRect.bottom = effectiveHeight - buttonSize;
 
             if (m_sliderMode == BOTH_SLIDERS) {
                 // If both sliders are present, the vertical track needs to stop before the horizontal one.
@@ -160,8 +181,8 @@ void CGUITextBox::SetSliderGFX(smart_ptr<ISurface> sliderThumbGraphic){
         if (m_sliderMode == HORIZONTAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
             // For a horizontal slider, its track is at the bottom side of the textbox.
             // Its top boundary is the textbox's total height minus the height of the slider strip.
-            sliderMovementRect.top = m_nHeight - m_nSliderStripHeight;
-            sliderMovementRect.bottom = m_nHeight; // Its bottom boundary is the textbox's full height.
+            sliderMovementRect.top = effectiveHeight - m_nSliderStripHeight;
+            sliderMovementRect.bottom = effectiveHeight; // Its bottom boundary is the textbox's full height.
             
             if (m_sliderMode == BOTH_SLIDERS) {
                 // If both sliders are present, the horizontal track needs to stop before the vertical one.
@@ -204,8 +225,9 @@ void CGUITextBox::SetArrowGFX(smart_ptr<CPlaneLoader> pv, int upIndex, int downI
 		upPlane->GetSize(buttonWidth, buttonHeight); // Get its actual size
 		int arrowButtonHeight = buttonHeight; // Store its actual height
 
-		m_vScrollUpButton->SetXY(m_nX + m_nWidth - m_nSliderStripWidth, m_nY);
-        m_vScrollDownButton->SetXY(m_nX + m_nWidth - m_nSliderStripWidth, m_nY + m_nHeight - arrowButtonHeight);
+        // Position arrow buttons considering margins
+		m_vScrollUpButton->SetXY(m_nX + m_nWidth - m_nSliderStripWidth - m_nMarginX, m_nY + m_nMarginY);
+        m_vScrollDownButton->SetXY(m_nX + m_nWidth - m_nSliderStripWidth - m_nMarginX, m_nY + m_nHeight - arrowButtonHeight - m_nMarginY);
     }
 }
 
@@ -241,7 +263,9 @@ void CGUITextBox::Create(int x, int y, int width, int height, SliderMode mode) {
     m_nHeight = height;
     m_sliderMode = mode;
 
-    ::SetRect(&m_rcTextBoxClip, x, y, x + width, y + height);
+    // Adjust clipping rectangle to account for margins
+    ::SetRect(&m_rcTextBoxClip, x + m_nMarginX, y + m_nMarginY,
+                             x + width - m_nMarginX, y + height - m_nMarginY);
 
     m_vTextFastPlane = new CTextFastPlane;
     m_vTextPlane = CPlane(m_vTextFastPlane);
@@ -260,7 +284,9 @@ void CGUITextBox::Create(int x, int y, int width, int height, SliderMode mode) {
 
         m_vSlider->SetEvent(YTL::smart_ptr_static_cast<CGUISliderEventListener>(m_vSliderListener));
         m_vSlider->SetType(m_sliderMode);
-        m_vSlider->SetXY(m_nX, m_nY);
+        
+        // Position slider relative to textbox, adjusted for margins
+        m_vSlider->SetXY(m_nX + m_nMarginX, m_nY + m_nMarginY);
 
         // ONLY initialize the CGUIButton objects here.
         // Their listeners and events will be set in SetArrowGFX.
@@ -272,14 +298,20 @@ void CGUITextBox::Create(int x, int y, int width, int height, SliderMode mode) {
         RECT tempSliderRect;
         const int defaultSliderStripSize = 15;
         
+        // Calculate slider bounds based on effective (margin-adjusted) textbox area
+        int effectiveWidth = m_nWidth - (m_nMarginX * 2);
+        int effectiveHeight = m_nHeight - (m_nMarginY * 2);
+
         if (m_sliderMode == VERTICAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
-            ::SetRect(&tempSliderRect, m_nWidth - defaultSliderStripSize, 0 + defaultSliderStripSize, m_nWidth, m_nHeight - defaultSliderStripSize);
-            RECT upButtonBounds = { m_nWidth - defaultSliderStripSize, 0, m_nWidth, defaultSliderStripSize };
+            ::SetRect(&tempSliderRect, effectiveWidth - defaultSliderStripSize, 0 + defaultSliderStripSize, effectiveWidth, effectiveHeight - defaultSliderStripSize);
+            
+            // Adjust button bounds for margins
+            RECT upButtonBounds = { effectiveWidth - defaultSliderStripSize, 0, effectiveWidth, defaultSliderStripSize };
             m_vScrollUpButton->SetBounds(upButtonBounds);
-            RECT downButtonBounds = { m_nWidth - defaultSliderStripSize, m_nHeight - defaultSliderStripSize, m_nWidth, m_nHeight };
+            RECT downButtonBounds = { effectiveWidth - defaultSliderStripSize, effectiveHeight - defaultSliderStripSize, effectiveWidth, effectiveHeight };
             m_vScrollDownButton->SetBounds(downButtonBounds);
         } else if (m_sliderMode == HORIZONTAL_SLIDER) {
-            ::SetRect(&tempSliderRect, 0, m_nHeight - defaultSliderStripSize, m_nWidth, m_nHeight);
+            ::SetRect(&tempSliderRect, 0, effectiveHeight - defaultSliderStripSize, effectiveWidth, effectiveHeight);
         }
 
         m_vSlider->SetRect(&tempSliderRect);
@@ -329,13 +361,14 @@ void CGUITextBox::SetBackgroundPlane(YTL::smart_ptr<ISurface> pv) {
 
 void CGUITextBox::UpdateTextPlane() {
     if (m_vTextFastPlane != NULL) {
-        int textAvailableWidth = m_nWidth; // Start with full textbox width
+        // Calculate available width for text, considering both textbox width and margins.
+        int textAvailableWidth = m_nWidth - (m_nMarginX * 2);
 
-        // If a vertical slider is present, reduce the width available for text
+        // If a vertical slider is present, reduce the width available for text further.
         if (m_sliderMode == VERTICAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
             textAvailableWidth -= m_nSliderStripWidth;
         }
-        // Ensure minimum width for text if slider takes up too much space
+        // Ensure minimum width for text if slider takes up too much space.
         if (textAvailableWidth < 0) textAvailableWidth = 0;
 
         std::string wrappedContent = WrapText(m_strCurrentText, textAvailableWidth);
@@ -347,23 +380,27 @@ void CGUITextBox::UpdateTextPlane() {
     }
 
     if (m_vSlider.get()) {
-        // Adjust slider's total scrollable range based on content size vs textbox size
+        // Adjust slider's total scrollable range based on content size vs effective textbox display size.
+        // The effective display size is the textbox size minus margins.
+        int effectiveDisplayWidth = m_nWidth - (m_nMarginX * 2);
+        int effectiveDisplayHeight = m_nHeight - (m_nMarginY * 2);
+
         int itemsX = 1; // Default to 1 if no scroll needed or horizontal not enabled
         int itemsY = 1; // Default to 1 if no scroll needed or vertical not enabled
 
         // Set item numbers for the slider. If content fits, 1 item. Otherwise,
         // use the difference in pixels as the number of items for fine-grained control.
         if (m_sliderMode == HORIZONTAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
-            itemsX = max(1, m_nContentWidth - m_nWidth + 1); // Each pixel as an item for fine control
+            itemsX = max(1, m_nContentWidth - effectiveDisplayWidth + 1); // Each pixel as an item for fine control
         }
         if (m_sliderMode == VERTICAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
-            itemsY = max(1, m_nContentHeight - m_nHeight + 1); // Each pixel as an item for fine control
+            itemsY = max(1, m_nContentHeight - effectiveDisplayHeight + 1); // Each pixel as an item for fine control
         }
         m_vSlider->SetItemNum(itemsX, itemsY);
 
         // Reset scroll position if content shrinks, to avoid out-of-bounds scrolling
-        m_nScrollX = max(0, min(m_nScrollX, max(0, m_nContentWidth - m_nWidth)));
-        m_nScrollY = max(0, min(m_nScrollY, max(0, m_nContentHeight - m_nHeight)));
+        m_nScrollX = max(0, min(m_nScrollX, max(0, m_nContentWidth - effectiveDisplayWidth)));
+        m_nScrollY = max(0, min(m_nScrollY, max(0, m_nContentHeight - effectiveDisplayHeight)));
 
         // Update slider's visual position to match the clamped scroll
         // Since SetItemNum now sets items to pixel count for fine control,
@@ -384,8 +421,9 @@ void CGUITextBox::CalculateVisibleContentSize() {
 LRESULT CGUITextBox::OnSimpleMove(ISurface* lp) {
     LRESULT result = 0;
 
-    // Check if vertical scrolling is needed
-    bool needsVerticalScroll = m_nContentHeight > m_nHeight;
+    // Calculate effective height for content to determine if vertical scrolling is needed.
+    int effectiveDisplayHeight = m_nHeight - (m_nMarginY * 2);
+    bool needsVerticalScroll = m_nContentHeight > effectiveDisplayHeight;
 
     // First, process mouse input for the slider
     if (m_vSlider.get() && m_pvMouse.get()) {
@@ -401,8 +439,9 @@ LRESULT CGUITextBox::OnSimpleMove(ISurface* lp) {
         int targetScrollY = sliderSelectedItemY;
 
         // Clamp target scroll positions to valid range
-        int maxScrollX = max(0, m_nContentWidth - m_nWidth);
-        int maxScrollY = max(0, m_nContentHeight - m_nHeight);
+        int effectiveDisplayWidth = m_nWidth - (m_nMarginX * 2);
+        int maxScrollX = max(0, m_nContentWidth - effectiveDisplayWidth);
+        int maxScrollY = max(0, m_nContentHeight - effectiveDisplayHeight);
         targetScrollX = max(0, min(targetScrollX, maxScrollX));
         targetScrollY = max(0, min(targetScrollY, maxScrollY));
 
@@ -422,7 +461,10 @@ LRESULT CGUITextBox::OnSimpleMove(ISurface* lp) {
 			}
 
 			// Mouse wheel operation (needs to be happen there because it shall work when mouse is anywhere in the box, not only at slider event)
-			if (::PtInRect(&m_rcTextBoxClip, currentMousePos)) {
+            // Adjust the clipping rect for mouse wheel check to include margins if desired,
+            // or just check against the content area within margins.
+            RECT mouseCheckRect = {m_nX, m_nY, m_nX + m_nWidth, m_nY + m_nHeight}; // Use full textbox area for wheel
+			if (::PtInRect(&mouseCheckRect, currentMousePos)) {
 				CGUINormalSliderListener* pSliderListener = static_cast<CGUINormalSliderListener*>(m_vSliderListener.get());
 				int sx, sy;
 				pSliderListener->GetMinSize(sx, sy); // Get the scroll step amount (slider thumb height)
@@ -433,7 +475,7 @@ LRESULT CGUITextBox::OnSimpleMove(ISurface* lp) {
 				if (GetMouse()->IsWheelUp()) {
 					scrollDeltaY = -sy; // Scroll up (negative Y)
 				} else if (GetMouse()->IsWheelDown()) {
-					scrollDeltaY = sy;  // Scroll down (positive Y)
+					scrollDeltaY = sy;	// Scroll down (positive Y)
 				}
 
 				// If a scroll event occurred, apply it
@@ -487,15 +529,17 @@ LRESULT CGUITextBox::OnSimpleDraw(ISurface* lp) {
         // that we want to display. This window is shifted by m_nScrollX and m_nScrollY
         // to implement scrolling.
         ::SetRect(&srcRect, m_nScrollX, m_nScrollY,
-                                m_nScrollX + m_nWidth, m_nScrollY + m_nHeight);
+                                     m_nScrollX + m_nWidth - (m_nMarginX * 2), // Adjust source width by margins
+                                     m_nScrollY + m_nHeight - (m_nMarginY * 2)); // Adjust source height by margins
 
         // Clamp the source rectangle to the actual dimensions of the rendered text content
         // This prevents reading beyond the bounds of the text plane if content is smaller
         srcRect.right = min(srcRect.right, m_nContentWidth);
         srcRect.bottom = min(srcRect.bottom, m_nContentHeight);
-		RECT textClippingRect = m_rcTextBoxClip; // Start with the overall textbox clip
+		
+        RECT textClippingRect = m_rcTextBoxClip; // Start with the overall textbox clip, already adjusted for margins in Create()
 
-        // Adjust text clipping if sliders are present
+        // Further adjust text clipping if sliders are present
         if (m_sliderMode == VERTICAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
             textClippingRect.right -= m_nSliderStripWidth;
         }
@@ -509,23 +553,24 @@ LRESULT CGUITextBox::OnSimpleDraw(ISurface* lp) {
         // Call BltNatural to draw the text content.
         // Parameters:
         // 1. Source Surface: The text content plane (raw pointer from smart_ptr)
-        // 2. Destination X: Top-left X coordinate on 'lp' where text starts, with internal offsets
-        // 3. Destination Y: Top-left Y coordinate on 'lp' where text starts, with internal offsets
+        // 2. Destination X: Top-left X coordinate on 'lp' where text starts, with internal offsets and margins
+        // 3. Destination Y: Top-left Y coordinate on 'lp' where text starts, with internal offsets and margins
         // 4. Destination Size: NULL, meaning draw at original size as defined by srcRect (no additional scaling)
         // 5. Source Rectangle: Pointer to the srcRect, defining the scrolled view of the text content
-        // 6. Destination Clip: Pointer to the textbox's clipping rectangle (m_rcTextBoxClip)
+        // 6. Destination Clip: Pointer to the effective text clipping rectangle (textClippingRect)
         // 7. Base Point: 0 (top-left alignment)
         lp->BltNatural(m_vTextPlane.get(),
-                       drawX + m_nTextOffsetX,
-                       drawY + m_nTextOffsetY,
-                       NULL,
-                       &srcRect,
-                       &textClippingRect,
-                       0);
+                         drawX + m_nTextOffsetX + m_nMarginX, // Add margin to draw position
+                         drawY + m_nTextOffsetY + m_nMarginY, // Add margin to draw position
+                         NULL,
+                         &srcRect,
+                         &textClippingRect,
+                         0);
     }
 
     // Draw the scroll buttons and slider only if they are needed
-    bool needsVerticalScroll = m_nContentHeight > m_nHeight;
+    int effectiveDisplayHeight = m_nHeight - (m_nMarginY * 2);
+    bool needsVerticalScroll = m_nContentHeight > effectiveDisplayHeight;
     if (m_sliderMode == VERTICAL_SLIDER && needsVerticalScroll) {
         if (m_vScrollUpButton.get()) {
             m_vScrollUpButton->OnSimpleDraw(lp);
@@ -553,6 +598,9 @@ void CGUITextBox::Reset() {
     m_nScrollY = 0;
     m_nContentWidth = 0;
     m_nContentHeight = 0;
+    m_nMarginX = 0; // Reset margins to default
+    m_nMarginY = 0; // Reset margins to default
+
 
     // Reset internal text plane and slider
     if (m_vTextFastPlane != NULL) {
@@ -597,9 +645,12 @@ void CGUITextBox::ScrollContent(int dx, int dy) {
 
     // Clamp scroll positions using min/max macros (or std:: equivalents if resolved)
     // Ensure scroll position does not go beyond the content boundaries.
-    // The maximum scroll is (content_size - textbox_display_size).
-    m_nScrollX = max(0, min(m_nScrollX, max(0, m_nContentWidth - m_nWidth)));
-    m_nScrollY = max(0, min(m_nScrollY, max(0, m_nContentHeight - m_nHeight)));
+    // The maximum scroll is (content_size - effective_textbox_display_size).
+    int effectiveDisplayWidth = m_nWidth - (m_nMarginX * 2);
+    int effectiveDisplayHeight = m_nHeight - (m_nMarginY * 2);
+
+    m_nScrollX = max(0, min(m_nScrollX, max(0, m_nContentWidth - effectiveDisplayWidth)));
+    m_nScrollY = max(0, min(m_nScrollY, max(0, m_nContentHeight - effectiveDisplayHeight)));
 
     // Update slider position if scroll changed
     if (oldScrollX != m_nScrollX || oldScrollY != m_nScrollY) {

@@ -2,9 +2,9 @@
 #define __yaneGUITextBox_h__
 
 #include "../../stdafx.h" // Corrected path
-#include "yaneGUIParts.h"      // For IGUIParts base class
+#include "yaneGUIParts.h"     // For IGUIParts base class
 #include "yaneGUIButton.h"
-#include "yaneGUISlider.h"     // For CGUISlider and its base classes
+#include "yaneGUISlider.h"    // For CGUISlider and its base classes
 // CTextFastPlane is already part of the SDK via stdafx.h, so no direct include needed here.
 
 namespace yaneuraoGameSDK3rd {
@@ -67,7 +67,7 @@ public:
     virtual ~CGUITextBox();
 
     // Textbox initialization and setup
-    void Create(int x, int y, int width, int height, SliderMode mode = NO_SLIDER); //, smart_ptr<ISurface> sliderThumbGraphic = smart_ptr<ISurface>()
+    void Create(int x, int y, int width, int height, SliderMode mode = NO_SLIDER);
 	void SetSliderGFX(smart_ptr<ISurface> sliderThumbGraphic);
 	void SetArrowGFX(smart_ptr<CPlaneLoader> pv, int upIndex, int downIndex);
 	void SetSliderLoader(string data, string path);
@@ -81,6 +81,11 @@ public:
     // Text drawing properties
     void SetTextColor(ISurfaceRGB color);
     void SetTextOffset(int x, int y); // Offset for text within the textbox content plane
+
+    // --- NEW: Margin methods ---
+    void SetMargins(int x, int y);
+    void GetMargins(int& x, int& y) const;
+    // --- END NEW ---
 
     // Background plane for the textbox
     void SetBackgroundPlane(smart_ptr<ISurface> pv);
@@ -109,9 +114,14 @@ protected:
     CPlane m_vTextPlane; // Wrapper for m_vTextFastPlane
 
     string m_strCurrentText;
-    ISurfaceRGB m_textColor; // Changed to ISurfaceRGB type, assuming it's a struct with .r, .g, .b members
+    ISurfaceRGB m_textColor;
     int m_nTextOffsetX;
     int m_nTextOffsetY;
+
+    // --- NEW: Margin members ---
+    int m_nMarginX;
+    int m_nMarginY;
+    // --- END NEW ---
 
     smart_ptr<ISurface> m_vBackgroundPlane; // Background for the textbox
 
