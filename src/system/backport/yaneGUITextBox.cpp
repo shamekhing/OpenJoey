@@ -507,20 +507,23 @@ void CGUITextBox::UpdateTextPlane() {
         m_nFooterHeight = 0; // Hide footer if text is empty
     }
 
-    // Calculate available height for the main text content
-    int contentAreaHeight = m_nHeight - (m_nMarginY * 2);
-    int mainTextAvailableHeight = contentAreaHeight;
-
+    // Calculate available height for the main text content, THIS IS THE SCROLLABLE AREA HEIGHT
+    // This needs to be carefully calculated to reflect the actual display area for the main text.
+    int mainTextDisplayAreaHeight = m_nHeight - (m_nMarginY * 2);
     if (m_nTitleHeight > 0) {
-        mainTextAvailableHeight -= (m_nTitleHeight + 4); // +4 for spacing between elements
+        mainTextDisplayAreaHeight -= (m_nTitleHeight + 4); // +4 for spacing between elements
     }
-    // **NEW LABEL**: Account for title type height in main text area calculation
     if (m_nTitleTypeHeight > 0) {
-        mainTextAvailableHeight -= (m_nTitleTypeHeight + 4); // +4 for spacing
+        mainTextDisplayAreaHeight -= (m_nTitleTypeHeight + 4); // +4 for spacing
     }
     if (m_nFooterHeight > 0) {
-        mainTextAvailableHeight -= m_nFooterHeight;
+        mainTextDisplayAreaHeight -= m_nFooterHeight;
     }
+    if (m_sliderMode == HORIZONTAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
+        mainTextDisplayAreaHeight -= m_nSliderStripHeight; // Also consider horizontal slider if present
+    }
+
+    if (mainTextDisplayAreaHeight < 0) mainTextDisplayAreaHeight = 0;
 
     if (m_vTextFastPlane != NULL) {
         std::string wrappedContent = WrapText(m_strCurrentText, textAvailableWidth);
@@ -529,26 +532,16 @@ void CGUITextBox::UpdateTextPlane() {
         m_vTextFastPlane->UpdateText();
 
         CalculateVisibleContentSize(); // This will recalculate m_nContentHeight and m_nContentWidth
+                                       // m_nContentHeight here is the FULL height of the main text plane.
     }
 
     // Update Slider ItemNum and SelectedItem based on new content dimensions
     if (m_vSlider.get()) {
         int effectiveDisplayWidth = m_nWidth - (m_nMarginX * 2);
-        // This effective display height calculation must match the one in CalculateVisibleContentSize
-        // for consistent scrollable height.
-        int effectiveScrollableHeight = m_nHeight - (m_nMarginY * 2);
-        if (m_nTitleHeight > 0) {
-             effectiveScrollableHeight -= (m_nTitleHeight + 4);
+        if (m_sliderMode == VERTICAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
+             effectiveDisplayWidth -= m_nSliderStripWidth;
         }
-        // **NEW LABEL**: Account for title type height in effective scrollable height
-        if (m_nTitleTypeHeight > 0) {
-            effectiveScrollableHeight -= (m_nTitleTypeHeight + 4);
-        }
-        if (m_nFooterHeight > 0) {
-             effectiveScrollableHeight -= m_nFooterHeight;
-        }
-        if (effectiveScrollableHeight < 0) effectiveScrollableHeight = 0;
-
+        if (effectiveDisplayWidth < 0) effectiveDisplayWidth = 0;
 
         int itemsX = 1; // Default to 1 item if no horizontal scroll
         int itemsY = 1; // Default to 1 item if no vertical scroll
@@ -558,15 +551,16 @@ void CGUITextBox::UpdateTextPlane() {
             itemsX = max(1, m_nContentWidth - effectiveDisplayWidth + 1);
         }
         if (m_sliderMode == VERTICAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
-            // If content height exceeds effective scrollable height, we need to scroll vertically
-            itemsY = max(1, m_nContentHeight - effectiveScrollableHeight + 1);
+            // The scrollable range for Y should be the total height of the main text content
+            // minus the height of the area *displaying* the main text.
+            itemsY = max(1, m_nContentHeight - mainTextDisplayAreaHeight + 1);
         }
         m_vSlider->SetItemNum(itemsX, itemsY);
 
         // Clamp scroll positions to ensure they are within valid range
         m_nScrollX = max(0, min(m_nScrollX, max(0, m_nContentWidth - effectiveDisplayWidth)));
-        m_nScrollY = max(0, min(m_nScrollY, max(0, m_nContentHeight - effectiveScrollableHeight)));
-
+        m_nScrollY = max(0, min(m_nScrollY, max(0, m_nContentHeight - mainTextDisplayAreaHeight))); // Use mainTextDisplayAreaHeight here
+        
         // Update the slider's position to reflect the current scroll
         m_vSlider->SetSelectedItem(m_nScrollX, m_nScrollY);
     }
@@ -578,18 +572,10 @@ void CGUITextBox::CalculateVisibleContentSize() {
         m_vTextFastPlane->GetFont()->GetSize(mainTextWidth, mainTextHeight);
     }
 
-    // Total content height now includes title, title type, and footer
+    // m_nContentHeight here represents the total required height to display ALL main text.
     m_nContentHeight = mainTextHeight;
-    if (m_nTitleHeight > 0) {
-        m_nContentHeight += (m_nTitleHeight + 4); // +4 for spacing
-    }
-    // **NEW LABEL**: Add title type height to total content height
-    if (m_nTitleTypeHeight > 0) {
-        m_nContentHeight += (m_nTitleTypeHeight + 4); // +4 for spacing
-    }
-    if (m_nFooterHeight > 0) {
-        m_nContentHeight += m_nFooterHeight;
-    }
+    // We do NOT add title/footer height here, as m_nContentHeight is specifically for the scrollable main text.
+    // The total height of the textbox, including title/footer, is handled by the effective display area calculations.
 
     m_nContentWidth = mainTextWidth; // Assuming main text dictates overall width for now
                                      // (can be adjusted if title/footer width also contributes to max content width)
@@ -598,26 +584,27 @@ void CGUITextBox::CalculateVisibleContentSize() {
 LRESULT CGUITextBox::OnSimpleMove(ISurface* lp) {
     LRESULT result = 0;
 
-    // Declare and calculate effectiveScrollableHeight at the beginning of the function
-    int effectiveScrollableHeight = m_nHeight - (m_nMarginY * 2);
+    // Calculate the height available for the main text, accounting for margins, title, title type, and footer
+    // This is the actual visible area where the main text content will be drawn.
+    int mainTextDisplayAreaHeight = m_nHeight - (m_nMarginY * 2);
     if (m_nTitleHeight > 0) {
-        effectiveScrollableHeight -= (m_nTitleHeight + 4);
+        mainTextDisplayAreaHeight -= (m_nTitleHeight + 4); // +4 for spacing between elements
     }
-    // **NEW LABEL**: Account for title type height
     if (m_nTitleTypeHeight > 0) {
-        effectiveScrollableHeight -= (m_nTitleTypeHeight + 4);
+        mainTextDisplayAreaHeight -= (m_nTitleTypeHeight + 4); // +4 for spacing
     }
     if (m_nFooterHeight > 0) {
-        effectiveScrollableHeight -= m_nFooterHeight;
+        mainTextDisplayAreaHeight -= m_nFooterHeight;
     }
-    // Ensure effectiveScrollableHeight is not negative
-    if (effectiveScrollableHeight < 0) {
-        effectiveScrollableHeight = 0;
+    if (m_sliderMode == HORIZONTAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
+        mainTextDisplayAreaHeight -= m_nSliderStripHeight; // Also consider horizontal slider if present
     }
+    if (mainTextDisplayAreaHeight < 0) mainTextDisplayAreaHeight = 0;
 
-    // Now calculate needsVerticalScroll based on the adjusted content height
-    // m_nContentHeight includes Title, TitleType, and Footer heights
-    bool needsVerticalScroll = m_nContentHeight > effectiveScrollableHeight;
+
+    // Now calculate needsVerticalScroll based on whether the main text content
+    // exceeds its dedicated display area.
+    bool needsVerticalScroll = m_nContentHeight > mainTextDisplayAreaHeight;
 
     if (m_vSlider.get() && m_pvMouse.get()) {
         result |= m_vSlider->OnSimpleMove(lp);
@@ -629,8 +616,15 @@ LRESULT CGUITextBox::OnSimpleMove(ISurface* lp) {
         int targetScrollY = sliderSelectedItemY;
 
         int effectiveDisplayWidth = m_nWidth - (m_nMarginX * 2);
+        if (m_sliderMode == VERTICAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
+            effectiveDisplayWidth -= m_nSliderStripWidth;
+        }
+        if (effectiveDisplayWidth < 0) effectiveDisplayWidth = 0;
+
         int maxScrollX = max(0, m_nContentWidth - effectiveDisplayWidth);
-        int maxScrollY = max(0, m_nContentHeight - effectiveScrollableHeight); // Now effectiveScrollableHeight is defined
+        // maxScrollY should be the full height of the main text content MINUS the display area height.
+        int maxScrollY = max(0, m_nContentHeight - mainTextDisplayAreaHeight);
+        
         targetScrollX = max(0, min(targetScrollX, maxScrollX));
         targetScrollY = max(0, min(targetScrollY, maxScrollY));
 
@@ -755,11 +749,22 @@ LRESULT CGUITextBox::OnSimpleDraw(ISurface* lp) {
     if (m_vTextFastPlane != NULL) {
         RECT srcRect;
         // Calculate the height available for the main text, accounting for margins, title, title type, and footer
-        int mainTextDisplayHeight = m_nHeight - (m_nMarginY * 2) - m_nTitleHeight - m_nTitleTypeHeight - m_nFooterHeight - (m_nTitleHeight > 0 ? 4 : 0) - (m_nTitleTypeHeight > 0 ? 4 : 0);
-        if (m_sliderMode == HORIZONTAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
-            mainTextDisplayHeight -= m_nSliderStripHeight; // Subtract space for horizontal slider if present
+        // This should be consistent with the mainTextDisplayAreaHeight calculated in UpdateTextPlane/OnSimpleMove
+        int mainTextDisplayAreaHeight = m_nHeight - (m_nMarginY * 2);
+        if (m_nTitleHeight > 0) {
+            mainTextDisplayAreaHeight -= (m_nTitleHeight + 4);
         }
-        if (mainTextDisplayHeight < 0) mainTextDisplayHeight = 0;
+        if (m_nTitleTypeHeight > 0) {
+            mainTextDisplayAreaHeight -= (m_nTitleTypeHeight + 4);
+        }
+        if (m_nFooterHeight > 0) {
+            mainTextDisplayAreaHeight -= m_nFooterHeight;
+        }
+        if (m_sliderMode == HORIZONTAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
+            mainTextDisplayAreaHeight -= m_nSliderStripHeight;
+        }
+        if (mainTextDisplayAreaHeight < 0) mainTextDisplayAreaHeight = 0;
+
 
         int textContentWidth_main, textContentHeight_main;
         m_vTextFastPlane->GetFont()->GetSize(textContentWidth_main, textContentHeight_main);
@@ -767,7 +772,7 @@ LRESULT CGUITextBox::OnSimpleDraw(ISurface* lp) {
         // Source rectangle for the main text, based on current scroll position and available display area
         ::SetRect(&srcRect, m_nScrollX, m_nScrollY,
                                          m_nScrollX + (m_nWidth - (m_nMarginX * 2) - ( (m_sliderMode == VERTICAL_SLIDER || m_sliderMode == BOTH_SLIDERS) ? m_nSliderStripWidth : 0)),
-                                         m_nScrollY + mainTextDisplayHeight);
+                                         m_nScrollY + mainTextDisplayAreaHeight);
 
         // Clamp source rectangle to actual content dimensions
         srcRect.right = min(srcRect.right, textContentWidth_main);
@@ -776,7 +781,7 @@ LRESULT CGUITextBox::OnSimpleDraw(ISurface* lp) {
         // Clipping rectangle for the main text
         RECT textClippingRect = m_rcTextBoxClip; // Start with overall clip
         textClippingRect.top = drawY + currentYOffset;
-        textClippingRect.bottom = drawY + m_nHeight - m_nMarginY - m_nFooterHeight;
+        textClippingRect.bottom = drawY + currentYOffset + mainTextDisplayAreaHeight; // Clip to its own display area.
 
         if (m_sliderMode == VERTICAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
             textClippingRect.right = min(textClippingRect.right, drawX + m_nWidth - m_nMarginX - m_nSliderStripWidth);
@@ -797,7 +802,7 @@ LRESULT CGUITextBox::OnSimpleDraw(ISurface* lp) {
                        &textClippingRect,
                        0);
         // currentYOffset is not incremented here for the main text as its height is dynamic and used for scrolling.
-        // It's already factored into mainTextDisplayHeight and m_nContentHeight.
+        // It's already factored into mainTextDisplayAreaHeight.
     }
 
     // Draw Footer Text
@@ -822,10 +827,11 @@ LRESULT CGUITextBox::OnSimpleDraw(ISurface* lp) {
         m_vFooterFastPlane->GetFont()->GetSize(textWidth_footer, textHeight_footer);
         
         // Calculate footerDrawX for right alignment, accounting for slider width
+        // The effectiveRightBound already factors in m_nX, m_nWidth, m_nMarginX, and m_nSliderStripWidth
+        // So we just need to subtract the text width from it.
         footerDrawX = effectiveRightBound - textWidth_footer;
-        // Also subtract drawX from footerDrawX if drawX is not 0 (relative to overall window origin)
-        // This makes it relative to the textbox's top-left corner
-        footerDrawX = (m_nX + m_nXOffset) + (effectiveRightBound - textWidth_footer - (m_nX + m_nXOffset));
+        // This adjustment ensures `footerDrawX` is relative to the screen origin (like m_nX, m_nY)
+        // and positions the text correctly without needing to subtract `drawX` later.
 
 
         lp->BltNatural(m_vFooterPlane.get(),
@@ -837,23 +843,28 @@ LRESULT CGUITextBox::OnSimpleDraw(ISurface* lp) {
                        0);
     }
 
-    // Recalculate effectiveDisplayHeight for rendering scrollbar, ensuring consistency
-    int effectiveDisplayHeight = m_nHeight - (m_nMarginY * 2);
+    // Recalculate mainTextDisplayAreaHeight for rendering scrollbar, ensuring consistency
+    // This variable represents the height of the area where the *main scrollable text* is displayed.
+    int mainTextDisplayAreaHeight = m_nHeight - (m_nMarginY * 2);
     if (m_nTitleHeight > 0) {
-        effectiveDisplayHeight -= (m_nTitleHeight + 4);
+        mainTextDisplayAreaHeight -= (m_nTitleHeight + 4);
     }
-    // **NEW LABEL**: Account for title type height in effectiveDisplayHeight
     if (m_nTitleTypeHeight > 0) {
-        effectiveDisplayHeight -= (m_nTitleTypeHeight + 4);
+        mainTextDisplayAreaHeight -= (m_nTitleTypeHeight + 4);
     }
     if (m_nFooterHeight > 0) {
-        effectiveDisplayHeight -= m_nFooterHeight;
+        mainTextDisplayAreaHeight -= m_nFooterHeight;
     }
-    if (effectiveDisplayHeight < 0) {
-        effectiveDisplayHeight = 0;
+    if (m_sliderMode == HORIZONTAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
+        mainTextDisplayAreaHeight -= m_nSliderStripHeight; // Also consider horizontal slider if present
+    }
+    if (mainTextDisplayAreaHeight < 0) {
+        mainTextDisplayAreaHeight = 0;
     }
 
-    bool needsVerticalScroll = m_nContentHeight > effectiveDisplayHeight;
+    // needsVerticalScroll depends on whether the total main text content height
+    // exceeds the dedicated area for it.
+    bool needsVerticalScroll = m_nContentHeight > mainTextDisplayAreaHeight;
 
     // Draw Scrollbar and Buttons
     if ((m_sliderMode == VERTICAL_SLIDER || m_sliderMode == BOTH_SLIDERS) && needsVerticalScroll) {
@@ -942,27 +953,34 @@ void CGUITextBox::ScrollContent(int dx, int dy) {
     m_nScrollY += dy;
 
     int effectiveDisplayWidth = m_nWidth - (m_nMarginX * 2);
-
-    // Declare and calculate effectiveScrollableHeight here, consistent with OnSimpleMove and UpdateTextPlane
-    int effectiveScrollableHeight = m_nHeight - (m_nMarginY * 2);
-    if (m_nTitleHeight > 0) {
-        effectiveScrollableHeight -= (m_nTitleHeight + 4);
+    if (m_sliderMode == VERTICAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
+        effectiveDisplayWidth -= m_nSliderStripWidth;
     }
-    // **NEW LABEL**: Account for title type height
+    if (effectiveDisplayWidth < 0) effectiveDisplayWidth = 0;
+
+
+    // Calculate the height available for the main text, accounting for margins, title, title type, and footer
+    // This is the actual visible area where the main text content will be drawn.
+    int mainTextDisplayAreaHeight = m_nHeight - (m_nMarginY * 2);
+    if (m_nTitleHeight > 0) {
+        mainTextDisplayAreaHeight -= (m_nTitleHeight + 4);
+    }
     if (m_nTitleTypeHeight > 0) {
-        effectiveScrollableHeight -= (m_nTitleTypeHeight + 4);
+        mainTextDisplayAreaHeight -= (m_nTitleTypeHeight + 4);
     }
     if (m_nFooterHeight > 0) {
-        effectiveScrollableHeight -= m_nFooterHeight;
+        mainTextDisplayAreaHeight -= m_nFooterHeight;
     }
-    // Ensure effectiveScrollableHeight is not negative
-    if (effectiveScrollableHeight < 0) {
-        effectiveScrollableHeight = 0;
+    if (m_sliderMode == HORIZONTAL_SLIDER || m_sliderMode == BOTH_SLIDERS) {
+        mainTextDisplayAreaHeight -= m_nSliderStripHeight;
     }
+    if (mainTextDisplayAreaHeight < 0) mainTextDisplayAreaHeight = 0;
+
 
     // Clamp scroll positions to ensure they are within valid range
     m_nScrollX = max(0, min(m_nScrollX, max(0, m_nContentWidth - effectiveDisplayWidth)));
-    m_nScrollY = max(0, min(m_nScrollY, max(0, m_nContentHeight - effectiveScrollableHeight)));
+    // Clamp Y scroll based on the actual height of the main text content and its dedicated display area.
+    m_nScrollY = max(0, min(m_nScrollY, max(0, m_nContentHeight - mainTextDisplayAreaHeight)));
 
     if (oldScrollX != m_nScrollX || oldScrollY != m_nScrollY) {
         if (m_vSlider.get()) {
