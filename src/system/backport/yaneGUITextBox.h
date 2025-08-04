@@ -2,9 +2,9 @@
 #define __yaneGUITextBox_h__
 
 #include "../../stdafx.h" // Corrected path
-#include "yaneGUIParts.h"      // For IGUIParts base class
+#include "yaneGUIParts.h"       // For IGUIParts base class
 #include "yaneGUIButton.h"
-#include "yaneGUISlider.h"     // For CGUISlider and its base classes
+#include "yaneGUISlider.h"      // For CGUISlider and its base classes
 // CTextFastPlane is already part of the SDK via stdafx.h, so no direct include needed here.
 
 namespace yaneuraoGameSDK3rd {
@@ -87,9 +87,11 @@ public:
     void GetMargins(int& x, int& y) const;
     // --- END NEW ---
 
-    // --- NEW: Title and Footer Text ---
+    // --- NEW: Title, TitleType and Footer Text ---
     void SetTextTitle(const string& title);
     string GetTextTitle() const;
+    void SetTextTitleType(const string& titleType); // **NEW LABEL METHOD**
+    string GetTextTitleType() const; // **NEW LABEL METHOD**
     void SetTextFooter(const string& footer);
     string GetTextFooter() const;
     // --- END NEW ---
@@ -130,14 +132,18 @@ protected:
     int m_nMarginY;
     // --- END NEW ---
 
-    // --- NEW: Title and Footer members ---
+    // --- NEW: Title, TitleType and Footer members ---
     string m_strTitleText;
+    string m_strTitleTypeText; // **NEW LABEL MEMBER**
     string m_strFooterText;
     CTextFastPlane* m_vTitleFastPlane; // Plane for rendered title text
     CPlane m_vTitlePlane; // Wrapper for m_vTitleFastPlane
+    CTextFastPlane* m_vTitleTypeFastPlane; // **NEW LABEL PLANE**
+    CPlane m_vTitleTypePlane; // **NEW LABEL PLANE**
     CTextFastPlane* m_vFooterFastPlane; // Plane for rendered footer text
     CPlane m_vFooterPlane; // Wrapper for m_vFooterFastPlane
     int m_nTitleHeight; // Cached height of the rendered title
+    int m_nTitleTypeHeight; // **NEW LABEL HEIGHT**
     int m_nFooterHeight; // Cached height of the rendered footer
     // --- END NEW ---
 
@@ -171,4 +177,4 @@ protected:
 } // namespace Draw
 } // namespace yaneuraoGameSDK3rd
 
-#endif // __yaneGUITextBox_h__
+#endif // __yaneGUITextBox_h__"

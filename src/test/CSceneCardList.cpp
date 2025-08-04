@@ -748,6 +748,7 @@ void CSceneCardList::DrawCardGrid(const smart_ptr<ISurface>& lp) {
 							} 
 							else
 							{
+								m_cardTextBox->SetTextTitleType("[MONSTER]");
 								m_cardTextBox->SetTextFooter("ATK 1337 TEST");
 							}
 
