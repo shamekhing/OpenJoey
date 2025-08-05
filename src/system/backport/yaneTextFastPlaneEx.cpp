@@ -75,7 +75,7 @@ LRESULT CTextFastPlaneEx::UpdateRichText(bool bAntialias, bool bBlend) {
     CRichTextSegment segment;
     int currentLineHeight = 0;
     int totalLayoutHeight = 0;
-    
+
     // Loop through all text segments to measure and lay them out.
     while (m_parser.GetNextSegment(segment) == 0) {
         // Handle explicit line breaks.
@@ -97,17 +97,18 @@ LRESULT CTextFastPlaneEx::UpdateRichText(bool bAntialias, bool bBlend) {
             totalLayoutHeight += currentLineHeight;
             currentLine = CRichTextLine();
             currentLineHeight = 0;
-            
+
             CRichTextLine hrLine;
             hrLine.totalHeight = 5; // A simple height for the rule.
             m_vLines.push_back(hrLine);
             totalLayoutHeight += 5;
             continue;
         }
-        
+
         // Create a temporary CFont object to measure the segment's size.
         CFont tempFont;
         tempFont.SetSize(segment.context.m_nFontSize);
+		tempFont.SetFont(segment.context.m_nFontNo);
         tempFont.SetColor(segment.context.m_rgbColor);
         tempFont.SetWeight(segment.context.m_bBold ? 700 : 300);
         tempFont.SetItalic(segment.context.m_bItalic);
@@ -124,11 +125,11 @@ LRESULT CTextFastPlaneEx::UpdateRichText(bool bAntialias, bool bBlend) {
 
         // Check if the segment fits on the current line. If not, start a new line.
         if (currentLine.totalWidth + segmentWidth > m_nWrapWidth && !currentLine.segments.empty()) {
-            currentLine.alignment = m_parser.GetContext().m_nAlign;
             currentLine.totalHeight = currentLineHeight;
             m_vLines.push_back(currentLine);
             totalLayoutHeight += currentLineHeight;
             currentLine = CRichTextLine();
+			currentLine.alignment = m_parser.GetContext().m_nAlign;
             currentLineHeight = 0;
         }
         
@@ -196,6 +197,7 @@ void CTextFastPlaneEx::DrawLayout(bool antialias, bool blend) {
 			tempFont->SetStrikeOut(segment.context.m_bStrikeOut);
 			tempFont->SetText(segment.text);
 			tempFont->SetShadowOffset(segment.context.m_nShadowOffset.cx, segment.context.m_nShadowOffset.cy);
+			tempFont->SetFont(segment.context.m_nFontNo);
 
 			if(antialias == false && blend == false)
 				pTextPtr->UpdateText();
@@ -207,7 +209,6 @@ void CTextFastPlaneEx::DrawLayout(bool antialias, bool blend) {
 				printf("wtf");
 
 			BltFast(pTextPtr, currentX, currentY);
-
             currentX += segment.width;
         }
         currentY += line.totalHeight;
@@ -244,142 +245,166 @@ void CRichTextParser::SetText(const std::string& text) {
 // Parses and returns the next text segment or tag.
 LRESULT CRichTextParser::GetNextSegment(CRichTextSegment& segment) {
     segment.text.clear();
-    segment.context = m_context;
+    // Do NOT assign segment.context here. It will be assigned after parsing.
     
     if (*m_lpStr == '\0') {
-        return 3; // End of text.
+        return 3;
     }
     
-    // Check for a tag.
+    // Process newlines as explicit line breaks FIRST.
+    if (*m_lpStr == '\n' || *m_lpStr == '\r') {
+        segment.text = "<BR>";
+        while (*m_lpStr == '\n' || *m_lpStr == '\r') {
+            m_lpStr++;
+        }
+        segment.context = m_context; // Assign current context for <BR>
+        return 0;
+    }
+
+    // Now, handle any other leading whitespace before tags or words.
+    SkipSpace(m_lpStr);
+    
+    // Check for tags
     if (*m_lpStr == '<') {
         LPCSTR start = m_lpStr + 1;
-        
-        // Handle closing tags (e.g., </FONT>).
-        if (*start == '/') {
-            start++;
-            if (IsToken(start, "FONT>")) {
-                m_lpStr = start;
-                if (m_contextStack.size() > 1) { m_contextStack.pop(); m_context = m_contextStack.top(); }
-                return 0;
-            }
-            if (IsToken(start, "BOLD>")) {
-                m_lpStr = start;
-                if (m_contextStack.size() > 1) { m_contextStack.pop(); m_context = m_contextStack.top(); }
-                return 0;
-            }
-            if (IsToken(start, "ITALIC>")) {
-                m_lpStr = start;
-                if (m_contextStack.size() > 1) { m_contextStack.pop(); m_context = m_contextStack.top(); }
-                return 0;
-            }
-            if (IsToken(start, "U>")) {
-                m_lpStr = start;
-                if (m_contextStack.size() > 1) { m_contextStack.pop(); m_context = m_contextStack.top(); }
-                return 0;
-            }
-            if (IsToken(start, "S>")) {
-                m_lpStr = start;
-                if (m_contextStack.size() > 1) { m_contextStack.pop(); m_context = m_contextStack.top(); }
-                return 0;
-            }
-            if (IsToken(start, "CENTER>")) {
-                m_lpStr = start;
-                if (m_contextStack.size() > 1) { m_contextStack.pop(); m_context = m_contextStack.top(); }
-                return 0;
-            }
-            if (IsToken(start, "RIGHT>")) {
-                m_lpStr = start;
-                if (m_contextStack.size() > 1) { m_contextStack.pop(); m_context = m_contextStack.top(); }
-                return 0;
+        LPCSTR end = strchr(start, '>');
+        if (end == NULL) {
+            m_lpStr = m_text.c_str() + m_text.length();
+            return 1;
+        }
+
+        std::string tagContent(start, end - start);
+        m_lpStr = end + 1;
+
+        if (tagContent[0] == '/') {
+            if (m_contextStack.size() > 1) {
+                m_contextStack.pop();
+                m_context = m_contextStack.top();
             }
         } else {
-            // Handle opening tags (e.g., <FONT>, <BR>, <HR>).
-            if (IsToken(start, "FONT")) {
-                m_lpStr = start;
-                m_contextStack.push(m_context);
-                
-                int fontSizeRate = 0;
-                if (IsToken(m_lpStr, "SIZE=")) {
-                    GetStrNum(m_lpStr, fontSizeRate);
-                    m_context.m_nFontSize = m_nBaseSize + fontSizeRate * 4;
-                }
-                
-                if (IsToken(m_lpStr, "COLOR=")) {
-                    GetStrColor(m_lpStr, m_context.m_rgbColor);
-                }
-
-                SkipTo(m_lpStr, ">");
-                m_lpStr++;
-                
-                return 0;
-            } else if (IsToken(start, "BR>")) {
-                m_lpStr = start;
-                segment.text = "<BR>";
-                return 0;
-            } else if (IsToken(start, "HR>")) {
-                m_lpStr = start;
-                segment.text = "<HR>";
-                return 0;
-            } else if (IsToken(start, "BOLD>")) {
-                m_lpStr = start;
-                m_contextStack.push(m_context);
-                m_context.m_bBold = true;
-                return 0;
-            } else if (IsToken(start, "ITALIC>")) {
-                m_lpStr = start;
-                m_contextStack.push(m_context);
-                m_context.m_bItalic = true;
-                return 0;
-            } else if (IsToken(start, "U>")) {
-                m_lpStr = start;
-                m_contextStack.push(m_context);
-                m_context.m_bUnderLine = true;
-                return 0;
-            } else if (IsToken(start, "S>")) {
-                m_lpStr = start;
-                m_contextStack.push(m_context);
-                m_context.m_bStrikeOut = true;
-                return 0;
-            } else if (IsToken(start, "CENTER>")) {
-                m_lpStr = start;
-                m_contextStack.push(m_context);
-                m_context.m_nAlign = 1; // Center alignment
-                return 0;
-            } else if (IsToken(start, "RIGHT>")) {
-                m_lpStr = start;
-                m_contextStack.push(m_context);
-                m_context.m_nAlign = 2; // Right alignment
-                return 0;
-            }
+			LPCSTR lpAttr = tagContent.c_str();
+	        
+			// Use direct checks for alignment tags to ensure robustness
+			if (stricmp(lpAttr, "CENTER") == 0) {
+				m_context.m_nAlign = 1;
+			} else if (stricmp(lpAttr, "RIGHT") == 0) {
+				m_context.m_nAlign = 2;
+			} else if (stricmp(lpAttr, "LEFT") == 0) {
+				m_context.m_nAlign = 0;
+			} 
+	        
+			// All other tags must push to the stack to be correctly nested
+			else if (IsToken(lpAttr, "FONT=")) { 
+				m_contextStack.push(m_context);
+				int nFontNo;
+				if (GetStrNum(lpAttr, nFontNo) != 0) return 3;
+				m_context.m_nFontNo = nFontNo;
+			} 
+			else if (IsToken(lpAttr, "SIZE=")) { 
+				m_contextStack.push(m_context);
+				int fontSizeRate = 0;
+				GetStrNum(lpAttr, fontSizeRate);
+				m_context.m_nFontSize = m_nBaseSize + fontSizeRate;
+			} else if (IsToken(lpAttr, "COLOR=")) { 
+				m_contextStack.push(m_context);
+				GetStrColor(lpAttr, m_context.m_rgbColor);
+			} else if (IsToken(lpAttr, "BOLD")) { 
+				m_contextStack.push(m_context);
+				m_context.m_bBold = true;
+			} else if (IsToken(lpAttr, "ITALIC")) {
+				m_contextStack.push(m_context);
+				m_context.m_bItalic = true;
+			} else if (IsToken(lpAttr, "U")) {
+				m_contextStack.push(m_context);
+				m_context.m_bUnderLine = true;
+			} else if (IsToken(lpAttr, "S")) {
+				m_contextStack.push(m_context);
+				m_context.m_bStrikeOut = true;
+			} else if (IsToken(lpAttr, "BR")) { segment.text = "<BR>"; } 
+			else if (IsToken(lpAttr, "HR")) { segment.text = "<HR>"; }
         }
-        
-        SkipTo(m_lpStr, ">");
-        m_lpStr++;
+        segment.context = m_context; // Assign the LATEST context after tag processing
         return 0;
     }
     
-    // Parse normal text segments (words).
+    // Correctly parse a single word including punctuation.
     std::string word;
-    while (*m_lpStr != '\0' && *m_lpStr != '<' && *m_lpStr != ' ' && *m_lpStr != '\n') {
-        word += *m_lpStr;
+    LPCSTR start = m_lpStr;
+    
+    while (*m_lpStr != '\0' && *m_lpStr != '<' && !isspace(*m_lpStr)) {
         m_lpStr++;
     }
     
-    // Handle spaces after words.
-    if (*m_lpStr == ' ') {
-        //word += *m_lpStr; // this causes double spaces for whatever reasons
-        m_lpStr++;
-		segment.trailingSpace = true;
-	} else{
-		segment.trailingSpace = false;
-	}
-
-    if (!word.empty()) {
-        segment.text = word;
+    if (m_lpStr > start) {
+        segment.text.assign(start, m_lpStr - start);
+        
+        // After parsing the word, check if it is followed by a space.
+        if (*m_lpStr == ' ' || *m_lpStr == '\t') {
+            segment.trailingSpace = true;
+            m_lpStr++; // Consume the space
+        } else {
+            segment.trailingSpace = false;
+        }
+        segment.context = m_context;
         return 0;
     }
     
-    return 1; // Error or unexpected state.
+    return 1;
+}
+
+// New helper function to parse attributes within a tag string.
+void CRichTextParser::ParseTagAttributes(const std::string& tagContent, CRichTextContext& context) {
+    std::string::size_type pos = 0;
+    std::string::size_type end = tagContent.length();
+
+    // The tag name is the first word
+    std::string::size_type tagNameEnd = tagContent.find_first_of(" \t");
+    std::string tagName;
+    if (tagNameEnd != std::string::npos) {
+        tagName = tagContent.substr(0, tagNameEnd);
+        pos = tagContent.find_first_not_of(" \t", tagNameEnd);
+    } else {
+        tagName = tagContent;
+    }
+
+    // Process single-attribute tags
+    if (stricmp(tagName.c_str(), "BOLD") == 0) {
+        context.m_bBold = true;
+    } else if (stricmp(tagName.c_str(), "ITALIC") == 0) {
+        context.m_bItalic = true;
+    } else if (stricmp(tagName.c_str(), "U") == 0) {
+        context.m_bUnderLine = true;
+    } else if (stricmp(tagName.c_str(), "S") == 0) {
+        context.m_bStrikeOut = true;
+    } else if (stricmp(tagName.c_str(), "CENTER") == 0) {
+        context.m_nAlign = 1;
+    } else if (stricmp(tagName.c_str(), "RIGHT") == 0) {
+        context.m_nAlign = 2;
+    }
+
+    // Now parse attributes for multi-attribute tags like FONT
+    if (stricmp(tagName.c_str(), "FONT") == 0 && pos != std::string::npos) {
+        std::string attributes = tagContent.substr(pos);
+        LPCSTR lpAttr = attributes.c_str();
+
+        while (*lpAttr != '\0') {
+            SkipSpace(lpAttr);
+            if (*lpAttr == '\0') break;
+            
+            if (IsToken(lpAttr, "SIZE=")) {
+                int fontSizeRate = 0;
+                GetStrNum(lpAttr, fontSizeRate);
+                context.m_nFontSize = m_nBaseSize + fontSizeRate;
+            } else if (IsToken(lpAttr, "COLOR=")) {
+                GetStrColor(lpAttr, context.m_rgbColor);
+            }
+            // Add other attribute parsers here
+            // e.g., else if (IsToken(lpAttr, "BGCOLOR=")) { ... }
+            
+            // Skip to the next potential attribute
+            SkipTo(lpAttr, " ");
+        }
+    }
 }
 
 // CStringScanner helper function implementations
@@ -454,21 +479,39 @@ LRESULT CRichTextParser::GetStrNum(LPCSTR& lp, int& nRate) {
 
 LRESULT CRichTextParser::GetStrColor(LPCSTR& lp, COLORREF& nFontColor) {
     SkipSpace(lp);
-    if (*lp != '#') return 1;
-    lp++;
-    
-    char hex[7];
-    for (int i = 0; i < 6; ++i) {
-        if (!isxdigit(*lp)) return 1;
-        hex[i] = *lp;
+
+    if (*lp == '#') {
+        // Handle hex variant
         lp++;
+        
+        char hex[7];
+        for (int i = 0; i < 6; ++i) {
+            if (!isxdigit(*lp)) return 1;
+            hex[i] = *lp;
+            lp++;
+        }
+        hex[6] = '\0';
+        
+        unsigned long value = strtoul(hex, NULL, 16);
+        nFontColor = RGB((value >> 16) & 0xFF, (value >> 8) & 0xFF, value & 0xFF);
+        
+        return 0;
+    } else if (isdigit(*lp)) {
+        // Handle comma-separated variant
+        int r = 0, g = 0, b = 0;
+        if (GetNum(lp, r) != 0) return 1;
+        if (*lp != ',') return 1;
+        lp++;
+        if (GetNum(lp, g) != 0) return 1;
+        if (*lp != ',') return 1;
+        lp++;
+        if (GetNum(lp, b) != 0) return 1;
+        
+        nFontColor = RGB(r, g, b);
+        return 0;
     }
-    hex[6] = '\0';
-    
-    unsigned long value = strtoul(hex, NULL, 16);
-    nFontColor = RGB((value >> 16) & 0xFF, (value >> 8) & 0xFF, value & 0xFF);
-    
-    return 0;
+
+    return 1; // Return an error if the format is not recognized
 }
 
 LRESULT CRichTextParser::GetNum(LPCSTR& lp, int& nVal) {

@@ -1,7 +1,8 @@
 //
 // yaneTextFastPlaneEx.h
 //
-// Inherits from CTextFastPlane to add rich text functionality.
+// Blits multiple CTextFastPlane objects (that are stylized by HTML tags & text wrap) onto one big CFastPlane surface.
+// based on the yaneTextDraw from yaneSDK2nd but with own flavour and heavily rewritten
 //
 
 #ifndef __yaneTextFastPlaneEx_h__
@@ -65,6 +66,7 @@ public:
 	CRichTextParser();
 	void SetText(const std::string& text);
 	LRESULT GetNextSegment(CRichTextSegment& segment);
+	void ParseTagAttributes(const std::string& tagContent, CRichTextContext& context);
 	CRichTextContext GetContext() const { return m_context; }
 	void SetBaseFontSize(int nSize) { m_nBaseSize = nSize; }
 	int GetBaseFontSize() { return m_nBaseSize; }

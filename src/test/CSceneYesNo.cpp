@@ -344,20 +344,33 @@ void CSceneYesNo::OnDraw(const smart_ptr<ISurface>& lp) {
 
 	// EX
 	CTextFastPlaneEx* pRichTextPtr = new CTextFastPlaneEx;
-	pRichTextPtr->SetWrapWidth(100);
-	pRichTextPtr->SetBaseFontSize(13);
+	pRichTextPtr->SetWrapWidth(300);
+	pRichTextPtr->SetBaseFontSize(12);
 
+	// Unit test 1
 	//std::string richText = 
-	//	"<FONT=1><SIZE=18><COLOR=255,255,255><BOLD>Welcome!</BOLD></COLOR></SIZE></FONT>\n"
+	//	"<FONT=1><SIZE=3><COLOR=255,255,255><BOLD>Welcome!</BOLD></COLOR></SIZE></FONT>\n"
 	//	"Press <COLOR=0,255,0><BOLD>YES</BOLD></COLOR> or <COLOR=255,0,0><BOLD>NO</BOLD></COLOR>.";
-	std::string richText = "<BOLD>TEST 1</BOLD><BR><BOLD>ASDT</BOLD>1OT BOLD WRAPPING TEST";
+
+	// Unit test 2
+	//std::string richText = "<BOLD>TEST 1</BOLD><BR><BOLD>ASDT</BOLD>1OT BOLD WRAPPING TEST";
+
+	// Unit test 3
+	std::string richText = 
+    "<FONT=2><SIZE=4><COLOR=255,255,255><BOLD>WELCOME!</BOLD></COLOR></SIZE></FONT>\n"
+    "<FONT=4>This is a test</FONT> of <COLOR=255,255,0><BOLD>rich text</BOLD></COLOR> capabilities.\n"
+    "<HR>\n"
+    "<CENTER>Centered Text</CENTER>\n"
+    "<RIGHT>Right-aligned text with <COLOR=0,255,255>color</COLOR>.<U> And underline.</U></RIGHT>\n"
+    "Press <COLOR=0,255,0><BOLD>YES</BOLD></COLOR> or <COLOR=255,0,0><BOLD>NO.</BOLD></COLOR>.\n"
+    "Some <ITALIC>italic</ITALIC> text and <U>underlined</U> text. You can also <S>strikethrough</S> text.\n"
+    "<BOLD>This is a very long line to test wrapping.</BOLD> It should break automatically when it reaches the specified wrap width.";
 
 	pRichTextPtr->SetTextRich(richText);
 	pRichTextPtr->UpdateText();
 
 	CPlane richPlane(pRichTextPtr);
-	lp->BltNatural(richPlane, 50, 150);
-
+	lp->BltNatural(richPlane, 500, 200);
 
 	// 5. Draw the textbox
 	// This should be called during your rendering phase.
