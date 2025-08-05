@@ -16,7 +16,7 @@ namespace Draw {
 
 // Constructor: Initializes the base class and other members.
 CTextFastPlaneEx::CTextFastPlaneEx(CFastDraw* pFastDraw)
-    : CTextFastPlane(pFastDraw), m_nWrapWidth(0) {
+    : CFastPlane(pFastDraw), m_nWrapWidth(0) {
     // The rich text parser and other members are constructed automatically.
     // Base class members (m_Font, m_nTextX, m_nTextY) are also initialized.
 }
@@ -69,21 +69,8 @@ LRESULT CTextFastPlaneEx::UpdateRichText(bool bAntialias, bool bBlend) {
     // Clear previous layout data before generating a new layout.
     m_vLines.clear();
     m_parser.SetText(m_strRichText);
-    m_parser.SetBaseFontSize(m_Font.GetSize());
-    
-    // We will measure text, but we need a valid DC from the base class for this.
-    // The surface will be created/resized later. For now, let's just get a temporary DC.
-    HDC hdc = GetDC();
-    if (!hdc) {
-        // If the DC is not available, we can't measure text.
-        // This might happen if the surface hasn't been created yet.
-        // We'll create it with a temporary size to get a DC for measurement.
-        SetSize(m_nWrapWidth, 1);
-        hdc = GetDC();
-        if (!hdc)
-			return 1;
-    }
-    
+    m_parser.SetBaseFontSize(m_parser.GetBaseFontSize());
+        
     CRichTextLine currentLine;
     CRichTextSegment segment;
     int currentLineHeight = 0;
@@ -130,6 +117,10 @@ LRESULT CTextFastPlaneEx::UpdateRichText(bool bAntialias, bool bBlend) {
         
         int segmentWidth, segmentHeight;
         tempFont.GetSize(segmentWidth, segmentHeight);
+		//Optional trailing space adjustment (i disabled this because its buggy atm, fix in future)
+		//if (segment.trailingSpace) {
+		//	segmentWidth += 1;
+		//}
 
         // Check if the segment fits on the current line. If not, start a new line.
         if (currentLine.totalWidth + segmentWidth > m_nWrapWidth && !currentLine.segments.empty()) {
@@ -163,37 +154,27 @@ LRESULT CTextFastPlaneEx::UpdateRichText(bool bAntialias, bool bBlend) {
 
     // Now that we know the final size, we can resize the actual surface.
     SetSize(m_nWrapWidth, totalLayoutHeight);
-    
-    // Re-acquire the DC for the newly sized surface.
-    ReleaseDC();
-    hdc = GetDC();
-    if (!hdc) {
-        return 1;
-    }
-    
+	bool createAlphaSurface = bAntialias || bBlend;
+	CreateSurface(m_nWrapWidth,totalLayoutHeight, createAlphaSurface);
+
     // Clear the surface with the background color from the parser context.
     SetFillColor(m_parser.GetContext().m_rgbColorBk);
     Clear();
 
     // Call the final drawing function.
-    DrawLayout(hdc);
-
-    // Release the DC.
-    ReleaseDC();
+    DrawLayout(bAntialias, bBlend);
     
     return 0;
 }
 
 // Draws the laid-out lines onto the surface.
-void CTextFastPlaneEx::DrawLayout(HDC hdc) {
-    if (!hdc) return;
-    
-    int currentY = m_nTextY;
-    
+void CTextFastPlaneEx::DrawLayout(bool antialias, bool blend) {
+    int currentY = 0; //m_nTextY
+
     for (size_t i = 0; i < m_vLines.size(); ++i) {
         const CRichTextLine& line = m_vLines[i];
-        int currentX = m_nTextX;
-        
+		int currentX = 0; //m_nTextX
+
         // Adjust horizontal position based on alignment.
         if (line.alignment == 1) { // Center
             currentX += (m_nWrapWidth - line.totalWidth) / 2;
@@ -205,19 +186,28 @@ void CTextFastPlaneEx::DrawLayout(HDC hdc) {
         for (size_t j = 0; j < line.segments.size(); ++j) {
             const CRichTextSegment& segment = line.segments[j];
             
-            // Create a temporary font object for drawing this specific segment.
-            CFont tempFont;
-            tempFont.SetSize(segment.context.m_nFontSize);
-            tempFont.SetColor(segment.context.m_rgbColor);
-            tempFont.SetWeight(segment.context.m_bBold ? 700 : 300);
-            tempFont.SetItalic(segment.context.m_bItalic);
-            tempFont.SetUnderLine(segment.context.m_bUnderLine);
-            tempFont.SetStrikeOut(segment.context.m_bStrikeOut);
-            tempFont.SetText(segment.text);
-            
-            // Draw the text segment.
-            tempFont.OnDraw(hdc, currentX, currentY);
-            
+			CTextFastPlane* pTextPtr = new CTextFastPlane;
+			CFont* tempFont = pTextPtr->GetFont();
+			tempFont->SetSize(segment.context.m_nFontSize);
+			tempFont->SetColor(segment.context.m_rgbColor);
+			tempFont->SetWeight(segment.context.m_bBold ? 700 : 300);
+			tempFont->SetItalic(segment.context.m_bItalic);
+			tempFont->SetUnderLine(segment.context.m_bUnderLine);
+			tempFont->SetStrikeOut(segment.context.m_bStrikeOut);
+			tempFont->SetText(segment.text);
+			tempFont->SetShadowOffset(segment.context.m_nShadowOffset.cx, segment.context.m_nShadowOffset.cy);
+
+			if(antialias == false && blend == false)
+				pTextPtr->UpdateText();
+			if(antialias && blend == false)
+				pTextPtr->UpdateTextA();
+			if(antialias && blend)
+				pTextPtr->UpdateTextAA();
+			if(antialias == false && blend)
+				printf("wtf");
+
+			BltFast(pTextPtr, currentX, currentY);
+
             currentX += segment.width;
         }
         currentY += line.totalHeight;
@@ -233,14 +223,14 @@ void CTextFastPlaneEx::DrawLayout(HDC hdc) {
 // =======================================================================================
 
 // Constructor: Initializes the parser's state.
-CTextFastPlaneEx::CRichTextParser::CRichTextParser()
+CRichTextParser::CRichTextParser()
     : m_lpStr(NULL), m_lpTextAdr(NULL), m_nBaseSize(12) {
     m_contextStack.push(CRichTextContext());
     m_context = m_contextStack.top();
 }
 
 // Sets the rich text string and resets the parser state.
-void CTextFastPlaneEx::CRichTextParser::SetText(const std::string& text) {
+void CRichTextParser::SetText(const std::string& text) {
     m_text = text;
     m_lpStr = m_text.c_str();
     m_lpTextAdr = m_text.c_str();
@@ -252,7 +242,7 @@ void CTextFastPlaneEx::CRichTextParser::SetText(const std::string& text) {
 }
 
 // Parses and returns the next text segment or tag.
-LRESULT CTextFastPlaneEx::CRichTextParser::GetNextSegment(CRichTextSegment& segment) {
+LRESULT CRichTextParser::GetNextSegment(CRichTextSegment& segment) {
     segment.text.clear();
     segment.context = m_context;
     
@@ -377,9 +367,12 @@ LRESULT CTextFastPlaneEx::CRichTextParser::GetNextSegment(CRichTextSegment& segm
     
     // Handle spaces after words.
     if (*m_lpStr == ' ') {
-        word += *m_lpStr;
+        //word += *m_lpStr; // this causes double spaces for whatever reasons
         m_lpStr++;
-    }
+		segment.trailingSpace = true;
+	} else{
+		segment.trailingSpace = false;
+	}
 
     if (!word.empty()) {
         segment.text = word;
@@ -390,7 +383,7 @@ LRESULT CTextFastPlaneEx::CRichTextParser::GetNextSegment(CRichTextSegment& segm
 }
 
 // CStringScanner helper function implementations
-bool CTextFastPlaneEx::CRichTextParser::IsToken(LPCSTR& lp, LPCSTR lp2) {
+bool CRichTextParser::IsToken(LPCSTR& lp, LPCSTR lp2) {
     LPCSTR temp = lp;
     while (*lp2 != '\0' && toupper(*temp) == toupper(*lp2)) {
         temp++;
@@ -403,7 +396,7 @@ bool CTextFastPlaneEx::CRichTextParser::IsToken(LPCSTR& lp, LPCSTR lp2) {
     return false;
 }
 
-LRESULT CTextFastPlaneEx::CRichTextParser::SkipTo(LPCSTR& lp, LPCSTR lp2) {
+LRESULT CRichTextParser::SkipTo(LPCSTR& lp, LPCSTR lp2) {
     LPCSTR temp = lp;
     while (*temp != '\0' && !IsToken(temp, lp2)) {
         temp++;
@@ -416,7 +409,7 @@ LRESULT CTextFastPlaneEx::CRichTextParser::SkipTo(LPCSTR& lp, LPCSTR lp2) {
     return 0;
 }
 
-LRESULT CTextFastPlaneEx::CRichTextParser::SkipTo2(LPCSTR& lp, LPCSTR lp2, char* lp3, size_t buf_size) {
+LRESULT CRichTextParser::SkipTo2(LPCSTR& lp, LPCSTR lp2, char* lp3, size_t buf_size) {
     LPCSTR start = lp;
     if (SkipTo(lp, lp2) != 0) {
         return 1;
@@ -433,14 +426,14 @@ LRESULT CTextFastPlaneEx::CRichTextParser::SkipTo2(LPCSTR& lp, LPCSTR lp2, char*
     return 0;
 }
 
-LRESULT CTextFastPlaneEx::CRichTextParser::SkipSpace(LPCSTR& lp) {
+LRESULT CRichTextParser::SkipSpace(LPCSTR& lp) {
     while (*lp == ' ' || *lp == '\t' || *lp == '\n' || *lp == '\r') {
         lp++;
     }
     return (*lp == '\0') ? 1 : 0;
 }
 
-LRESULT CTextFastPlaneEx::CRichTextParser::GetStrNum(LPCSTR& lp, int& nRate) {
+LRESULT CRichTextParser::GetStrNum(LPCSTR& lp, int& nRate) {
     SkipSpace(lp);
     bool bNegative = false;
     if (*lp == '-') {
@@ -459,7 +452,7 @@ LRESULT CTextFastPlaneEx::CRichTextParser::GetStrNum(LPCSTR& lp, int& nRate) {
     return 0;
 }
 
-LRESULT CTextFastPlaneEx::CRichTextParser::GetStrColor(LPCSTR& lp, COLORREF& nFontColor) {
+LRESULT CRichTextParser::GetStrColor(LPCSTR& lp, COLORREF& nFontColor) {
     SkipSpace(lp);
     if (*lp != '#') return 1;
     lp++;
@@ -478,7 +471,7 @@ LRESULT CTextFastPlaneEx::CRichTextParser::GetStrColor(LPCSTR& lp, COLORREF& nFo
     return 0;
 }
 
-LRESULT CTextFastPlaneEx::CRichTextParser::GetNum(LPCSTR& lp, int& nVal) {
+LRESULT CRichTextParser::GetNum(LPCSTR& lp, int& nVal) {
     SkipSpace(lp);
     nVal = 0;
     while (isdigit(*lp)) {

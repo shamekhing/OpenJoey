@@ -331,7 +331,7 @@ void CSceneCardList::InitializeUI() {
 
 	m_cardTextBox->SetSliderGFX(sliderSmartPtr);
 	m_cardTextBox->SetArrowGFX(smart_ptr<CPlaneLoader>(&m_cardTextBoxPLoader, false), 5, 8);
-	m_cardTextBox->SetMargins(14,4);
+	m_cardTextBox->SetMargins(4,4);
 	// DEBUG BACKGROUND TEXTBOX
 	//CPlane plnTEST = m_cardTextBoxPLoader.GetPlane(0);
 	//smart_ptr<ISurface> plnPtrBG(plnTEST.get(), false); // no ownership

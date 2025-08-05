@@ -342,6 +342,23 @@ void CSceneYesNo::OnDraw(const smart_ptr<ISurface>& lp) {
     CPlane pText = CPlane(pTextPtr);
 	lp->BltNatural(pText,20,100);
 
+	// EX
+	CTextFastPlaneEx* pRichTextPtr = new CTextFastPlaneEx;
+	pRichTextPtr->SetWrapWidth(100);
+	pRichTextPtr->SetBaseFontSize(13);
+
+	//std::string richText = 
+	//	"<FONT=1><SIZE=18><COLOR=255,255,255><BOLD>Welcome!</BOLD></COLOR></SIZE></FONT>\n"
+	//	"Press <COLOR=0,255,0><BOLD>YES</BOLD></COLOR> or <COLOR=255,0,0><BOLD>NO</BOLD></COLOR>.";
+	std::string richText = "<BOLD>TEST 1</BOLD><BR><BOLD>ASDT</BOLD>1OT BOLD WRAPPING TEST";
+
+	pRichTextPtr->SetTextRich(richText);
+	pRichTextPtr->UpdateText();
+
+	CPlane richPlane(pRichTextPtr);
+	lp->BltNatural(richPlane, 50, 150);
+
+
 	// 5. Draw the textbox
 	// This should be called during your rendering phase.
 	if (myTextBox.get()) {

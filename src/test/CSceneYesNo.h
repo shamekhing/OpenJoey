@@ -10,6 +10,7 @@
 #include "../system/CJoeySceneFactory.h"
 #include "../system/backport/yaneGUIButton.h"
 #include "../system/backport/yaneGUITextBox.h"
+#include "../system/backport/yaneTextFastPlaneEx.h"
 
 class CSceneYesNo : public CBaseScene {
 public:
