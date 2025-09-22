@@ -245,10 +245,14 @@ BOOL CBinSystem::LoadDialogTexts(const char* path, const char* indexPath)
     m_dialogIndexes = (DWORD*)indexData;
     m_dialogTexts = (char*)textData;
 
-    // Allocate and setup dialog entries
+    //Allocate and setup dialog entries
+	//char buf[512];
     m_dialogs = new DialogEntry[m_dialogCount];
     for(DWORD i = 0; i < m_dialogCount; i++) {
         m_dialogs[i].text = &m_dialogTexts[m_dialogIndexes[i]];
+		// Debug dump ids to console
+		//sprintf(buf, "%d DialogTextId: %s\n", i, m_dialogs[i].text);
+		//OutputDebugStringA(buf);
     }
 
     return TRUE;

@@ -11,7 +11,6 @@
 #include "../system/CJoeySceneFactory.h"
 #include "../system/backport/yaneGUIButton.h"
 #include "../system/backport/yaneGUITextBox.h"
-#include <map> // For card texture caching
 
 // Constants
 const int CARD_ROWS = 5;

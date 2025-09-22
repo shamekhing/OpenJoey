@@ -19,6 +19,7 @@ CTextFastPlaneEx::CTextFastPlaneEx(CFastDraw* pFastDraw)
     : CFastPlane(pFastDraw), m_nWrapWidth(0) {
     // The rich text parser and other members are constructed automatically.
     // Base class members (m_Font, m_nTextX, m_nTextY) are also initialized.
+	SetDefaultColor(RGB(1,1,1)); // default black
 }
 
 // Destructor.
@@ -34,6 +35,11 @@ void CTextFastPlaneEx::SetTextRich(const std::string& text) {
 // Sets the base font size for the parser.
 void CTextFastPlaneEx::SetBaseFontSize(int nFontSize) {
     m_parser.SetBaseFontSize(nFontSize);
+}
+
+// Set default color
+void CTextFastPlaneEx::SetDefaultColor(COLORREF rgb) {
+    m_parser.SetDefaultColor(rgb);
 }
 
 // Update the text and redraw the surface (standard drawing).
@@ -191,13 +197,18 @@ void CTextFastPlaneEx::DrawLayout(bool antialias, bool blend) {
 			CFont* tempFont = pTextPtr->GetFont();
 			tempFont->SetSize(segment.context.m_nFontSize);
 			tempFont->SetColor(segment.context.m_rgbColor);
-			tempFont->SetWeight(segment.context.m_bBold ? 700 : 300);
+			tempFont->SetWeight(segment.context.m_bBold ? FW_BOLD : FW_NORMAL);
 			tempFont->SetItalic(segment.context.m_bItalic);
 			tempFont->SetUnderLine(segment.context.m_bUnderLine);
 			tempFont->SetStrikeOut(segment.context.m_bStrikeOut);
 			tempFont->SetText(segment.text);
 			tempFont->SetShadowOffset(segment.context.m_nShadowOffset.cx, segment.context.m_nShadowOffset.cy);
 			tempFont->SetFont(segment.context.m_nFontNo);
+
+			// TODO: DUMMY MOCKUP (DO IT PROPERLY LATER)
+			tempFont->SetLetterSpacing(-1);
+			//tempFont->SetHeight(18); // Adjust for desired line spacing, e.g., 15-17 for 12pt font
+			//tempFont->SetSize(13);
 
 			if(antialias == false && blend == false)
 				pTextPtr->UpdateText();
@@ -238,7 +249,12 @@ void CRichTextParser::SetText(const std::string& text) {
     
     // Clear the context stack and push the default context.
     while (!m_contextStack.empty()) m_contextStack.pop();
-    m_contextStack.push(CRichTextContext());
+
+    // Use the stored default color when initializing the context.
+    CRichTextContext defaultContext;
+    defaultContext.m_rgbColor = m_defaultColor;
+    
+    m_contextStack.push(defaultContext);
     m_context = m_contextStack.top();
 }
 

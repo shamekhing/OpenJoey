@@ -739,17 +739,27 @@ void CSceneCardList::DrawCardGrid(const smart_ptr<ISurface>& lp) {
                             lp->BltNatural(m_cardHoverBorder.get(), x, y, &dstSize, &srcRect, NULL, 0);
 
 							// Card TextBox
-							m_cardTextBox->SetTextTitle(card.cardData->name.name);
-							m_cardTextBox->SetText(card.cardData->description);
+							//m_cardTextBox->SetTextTitle(card.cardData->name.name);
+							// TODO: this needs some work
+							const DialogEntry* cardTypeDialog = m_bin->GetDialog(card.cardData->properties.GetMonsterTypeTextId());
+							std::string formattedText = 
+								"<SIZE=-1><BOLD>" + std::string(card.cardData->name.name) + "</BOLD></SIZE>" +
+								"<HR>" +
+								"<COLOR=#4A2C00><SIZE=0>[" + cardTypeDialog->text + "]</SIZE></COLOR>" +
+								"<HR>" +
+								"<COLOR=#4A2C00><SIZE=0>" + std::string(card.cardData->description) + "</SIZE></COLOR>"
+								;
+
+							m_cardTextBox->SetText(formattedText);
 							MonsterType ctype = card.cardData->properties.GetMonsterType();
 							if (ctype == TYPE_SPELLCARD || ctype == TYPE_TRAPCARD)
 							{
-								m_cardTextBox->SetTextFooter(""); // empty (hides the footer)
+								//m_cardTextBox->SetTextFooter(""); // empty (hides the footer)
 							} 
 							else
 							{
-								m_cardTextBox->SetTextTitleType("[MONSTER]");
-								m_cardTextBox->SetTextFooter("ATK 1337 TEST");
+								//m_cardTextBox->SetTextTitleType("[MONSTER]");
+								//m_cardTextBox->SetTextFooter("ATK 1337 TEST");
 							}
 
                         }

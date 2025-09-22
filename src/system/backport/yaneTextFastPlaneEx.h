@@ -70,7 +70,8 @@ public:
 	CRichTextContext GetContext() const { return m_context; }
 	void SetBaseFontSize(int nSize) { m_nBaseSize = nSize; }
 	int GetBaseFontSize() { return m_nBaseSize; }
-
+	void SetDefaultColor(COLORREF rgb) { m_defaultColor = rgb; }
+	COLORREF GetDefaultColor() { return m_defaultColor; }
 private:
 	std::string m_text;
 	LPCSTR m_lpStr;
@@ -78,6 +79,7 @@ private:
 	std::stack<CRichTextContext> m_contextStack;
 	CRichTextContext m_context;
 	int m_nBaseSize;
+	COLORREF m_defaultColor;
 
 	bool IsToken(LPCSTR& lp, LPCSTR lp2);
 	LRESULT SkipTo(LPCSTR& lp, LPCSTR lp2);
@@ -95,6 +97,7 @@ public:
 
     void SetTextRich(const std::string& text);
     void SetBaseFontSize(int nFontSize);
+	void SetDefaultColor(COLORREF rgb);
     void SetWrapWidth(int nWidth) { m_nWrapWidth = nWidth; }
 
     LRESULT UpdateText();    // Standard drawing

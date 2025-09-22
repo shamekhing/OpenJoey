@@ -25,6 +25,7 @@ CFont::CFont(){
 	SetShadowOffset(2,2);
 #ifdef OPENJOEY_ENGINE_FIXES
     m_nLetterSpacing = 0; // Initialize member directly in constructor
+	m_nCharSet = SHIFTJIS_CHARSET; //ANSI_CHARSET
 #endif
 }
 
@@ -81,10 +82,17 @@ void	CFont::SetWeight(int nWeight){
 void	CFont::SetFont(int nFontNo){
 	string name;
 	switch (nFontNo) {
+#ifdef OPENJOEY_ENGINE_FIXES
+	case 0: name ="Arial"; break;
+	case 1: name ="Comic Sans MS"; break;
+	case 2: name ="Times New Roman"; break;
+	case 3: name ="Tahoma"; break;
+#else
 	case 0: name ="‚l‚r ƒSƒVƒbƒN"; break;
 	case 1: name ="‚l‚r ‚oƒSƒVƒbƒN"; break;
 	case 2: name ="‚l‚r –¾’©"; break;
 	case 3: name ="‚l‚r ‚o–¾’©"; break;
+#endif
 	default: name="";
 	}
 	if (m_FontName==name) return ;
@@ -155,7 +163,7 @@ void	CFont::OnDraw(HDC hdc,int x,int y){
 	if (m_String.empty()) return ;
 
 	string strFontName = GetFont();
-	HFONT hFont = ::CreateFont(m_nSize,0,0,0,m_nWeight,m_bItalic,m_bUnderLine,m_bStrikeOut,SHIFTJIS_CHARSET,
+	HFONT hFont = ::CreateFont(m_nSize,0,0,0,m_nWeight,m_bItalic,m_bUnderLine,m_bStrikeOut,m_nCharSet,
 		OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, m_nQuality,FF_MODERN,strFontName.c_str());
 
 	if (hFont==NULL) return ; // Memory allocation failure
@@ -234,7 +242,7 @@ LRESULT	CFont::GetSize(int& sx,int& sy){
 	if (m_String.empty()) return 1;
 
 	string strFontName = GetFont();
-	HFONT hFont = ::CreateFont(m_nSize,0,0,0,m_nWeight,m_bItalic,m_bUnderLine,m_bStrikeOut,SHIFTJIS_CHARSET,
+	HFONT hFont = ::CreateFont(m_nSize,0,0,0,m_nWeight,m_bItalic,m_bUnderLine,m_bStrikeOut,m_nCharSet,
 		OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, m_nQuality,FF_MODERN,strFontName.c_str());
 	if (hFont==NULL) return 1;
 

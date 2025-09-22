@@ -362,7 +362,7 @@ void CSceneYesNo::OnDraw(const smart_ptr<ISurface>& lp) {
     "<HR>\n"
     "<CENTER>Centered Text</CENTER>\n"
     "<RIGHT>Right-aligned text with <COLOR=0,255,255>color</COLOR>.<U> And underline.</U></RIGHT>\n"
-    "Press <COLOR=0,255,0><BOLD>YES</BOLD></COLOR> or <COLOR=255,0,0><BOLD>NO.</BOLD></COLOR>.\n"
+    "Press <COLOR=0,255,0>YES</COLOR> or <COLOR=255,0,0><BOLD>NO.</BOLD></COLOR>.\n"
     "Some <ITALIC>italic</ITALIC> text and <U>underlined</U> text. You can also <S>strikethrough</S> text.\n"
     "<BOLD>This is a very long line to test wrapping.</BOLD> It should break automatically when it reaches the specified wrap width.";
 

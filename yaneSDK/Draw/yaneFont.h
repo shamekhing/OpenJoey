@@ -139,6 +139,7 @@ protected:
 
 #ifdef OPENJOEY_ENGINE_FIXES // Changed from LETTER_SPACING_FEATURE
 	int m_nLetterSpacing; // Stores the letter spacing value
+	int m_nCharSet;
 #endif
 
 	//	Auxiliary

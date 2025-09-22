@@ -33,6 +33,36 @@ enum MonsterType {
 	TYPE_DIVINE_BEAST		= 0x18
 };
 
+static DWORD GetDialogIdForMonsterType(MonsterType type) {
+    switch (type) {
+        case TYPE_DRAGON:         return 501;
+        case TYPE_ZOMBIE:         return 502;
+        case TYPE_FIEND:          return 503;
+        case TYPE_PYRO:           return 504;
+        case TYPE_SEA_SERPENT:    return 505;
+        case TYPE_ROCK:           return 506;
+        case TYPE_MACHINE:        return 507;
+        case TYPE_FISH:           return 508;
+        case TYPE_DINOSAUR:       return 509;
+        case TYPE_INSECT:         return 510;
+        case TYPE_BEAST:          return 511;
+        case TYPE_BEAST_WARRIOR:  return 512;
+        case TYPE_PLANT:          return 513;
+        case TYPE_AQUA:           return 514;
+        case TYPE_WARRIOR:        return 515;
+        case TYPE_WINGED_BEAST:   return 516;
+        case TYPE_FAIRY:          return 517;
+        case TYPE_SPELLCASTER:    return 518;
+        case TYPE_THUNDER:        return 519;
+        case TYPE_REPTILE:        return 520;
+        case TYPE_TRAPCARD:       return 521;
+        case TYPE_SPELLCARD:      return 522;
+        case TYPE_NON_GAME_CARD:  return 523;
+        case TYPE_DIVINE_BEAST:   return 524;
+        default:                  return 0; // Reserved or Unknown
+    }
+}
+
 enum CardCategory {
     CATEGORY_NORMAL = 0x00,		// Includes 0,1,2,3
     CATEGORY_EFFECT = 0x04,		// Includes 4,5,6,7
@@ -106,6 +136,12 @@ struct CardProperties {
 			return (MonsterType)(0x10 | typeIdx);
 		}
 		return (MonsterType)typeIdx;
+	}
+
+	DWORD GetMonsterTypeTextId() const {
+		MonsterType type = GetMonsterType(); // Detect type via bitfield
+		DWORD dialogId = GetDialogIdForMonsterType(type); // Map enum to ID
+		return dialogId; // Fetch text by ID
 	}
 
 	CardCategory GetCardCategory() const {
