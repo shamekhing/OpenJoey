@@ -1,3 +1,4 @@
+#include "../../stdafx.h"
 #include "yaneGUISlider.h"
 
 namespace yaneuraoGameSDK3rd {
@@ -8,35 +9,28 @@ namespace Draw {
 CGUISliderEventListener::CGUISliderEventListener() {
     m_nMinX = 5;
     m_nMinY = 5;
-	ResetEventFlag();
+    ResetEventFlag();
 }
 
 void CGUINormalSliderListener::GetSliderSize(int nX, int nY, int& sx, int& sy) {
-    // Calculate movable area
     LPRECT lprc = GetSlider()->GetRect();
     int w = lprc->right - lprc->left;
     int h = lprc->bottom - lprc->top;
 
-    if (nX == 0) {
-        sx = w;
-    } else {
+    if (nX == 0) sx = w;
+    else {
         sx = w / nX;
-        // If below minimum size, use minimum size
         if (sx < m_nMinX) sx = m_nMinX;
     }
-    if (nY == 0) {
-        sy = h;
-    } else {
+    if (nY == 0) sy = h;
+    else {
         sy = h / nY;
-        // If below minimum size, use minimum size
         if (sy < m_nMinY) sy = m_nMinY;
     }
 }
 
 LRESULT CGUINormalSliderListener::OnDraw(ISurface* lp, int x, int y, int nX, int nY) {
     int nType = GetSlider()->GetType();
-
-    // Get total slider size
     int nSx, nSy;
     GetSliderSize(nX, nY, nSx, nSy);
 
@@ -44,7 +38,6 @@ LRESULT CGUINormalSliderListener::OnDraw(ISurface* lp, int x, int y, int nX, int
         return lp->BltNatural(m_vPlane.get(), x, y);
     }
 
-    // Display the plane from plane loader stretched
     ISurface* plane0 = m_vPlaneLoader->GetPlane(0).get();
     ISurface* plane1 = m_vPlaneLoader->GetPlane(0).get();
     ISurface* plane2 = m_vPlaneLoader->GetPlane(0).get();
@@ -59,47 +52,34 @@ LRESULT CGUINormalSliderListener::OnDraw(ISurface* lp, int x, int y, int nX, int
     plane1->GetSize(nSx2, nSy2);
     plane2->GetSize(nSx3, nSy3);
 
-    // Slider type
     switch (nType) {
-    case 0: { // Vertical movement
+    case 0: { // Vertical
         lp->BltNatural(plane0, x, y);
         lp->BltNatural(plane2, x, y + nSy - nSy3);
-        
-        // Calculate slider center part
         nSy -= (nSy1 + nSy3);
         y += nSy1;
-        
         for (; nSy >= nSy2; nSy -= nSy2, y += nSy2) {
             lp->BltNatural(plane1, x, y);
         }
-        
-        // Draw remaining slider center part
         if (nSy != 0) {
             SIZE sz = { nSx2, nSy };
             lp->BltNatural(plane1, x, y, &sz);
         }
         } break;
-
-    case 1: { // Horizontal movement
+    case 1: { // Horizontal
         lp->BltNatural(plane0, x, y);
         lp->BltNatural(plane2, x + nSx - nSx3, y);
-        
-        // Calculate slider center part
         nSx -= (nSx1 + nSx3);
         x += nSx1;
-        
         for (; nSx >= nSx2; nSx -= nSx2, x += nSx2) {
             lp->BltNatural(plane1, x, y);
         }
-        
-        // Draw remaining slider center part
         if (nSx != 0) {
             SIZE sz = { nSx, nSy2 };
             lp->BltNatural(plane1, x, y, &sz);
         }
         } break;
-
-    case 2: { // Both vertical and horizontal movement
+    case 2: { // Both
         lp->BltNatural(plane0, x, y);
         } break;
     }
@@ -119,7 +99,7 @@ CGUISlider::CGUISlider() {
 void CGUISlider::Reset() {
     m_bDraged = false;
     m_nButton = 0;
-    m_bIn = false;    // Prevent immediate press when first displaying
+    m_bIn = false;    
     m_bFocusing = false;
     m_bUpdate = false;
     m_nSelectedItemX = 0;
@@ -143,68 +123,55 @@ void CGUISlider::CalcSliderPos(int& x, int& y, int& nSLX, int& nSLY, int& w, int
 
     m_pvSliderEvent->GetSliderSize(m_nItemNumX, m_nItemNumY, nSLX, nSLY);
     
-    // w and h are the total draggable lengths, not the textbox's width/height.
-    // These should be the dimensions of the track *within* m_rcRect.
     w = m_rcRect.right - m_rcRect.left - nSLX;
     h = m_rcRect.bottom - m_rcRect.top - nSLY;
 
-    // Calculate the thumb's final position based on selected item and track dimensions
-    // The thumb's x, y will be relative to trackStartX, trackStartY
     int thumbOffsetX = 0;
     int thumbOffsetY = 0;
 
-    if (m_nItemNumX >= 2) {
-        thumbOffsetX = (w * m_nSelectedItemX) / (m_nItemNumX - 1);
+    if (m_nItemNumX >= 2 && w > 0) {
+        long long num = (long long)m_nSelectedItemX * w;
+        long long den = (long long)m_nItemNumX - 1;
+        thumbOffsetX = (int)(num / den);
     }
-    if (m_nItemNumY >= 2) {
-        thumbOffsetY = (h * m_nSelectedItemY) / (m_nItemNumY - 1);
+    if (m_nItemNumY >= 2 && h > 0) {
+        long long num = (long long)m_nSelectedItemY * h;
+        long long den = (long long)m_nItemNumY - 1;
+        thumbOffsetY = (int)(num / den);
     }
 
-    x = trackStartX + thumbOffsetX; // Final screen X for the thumb
-    y = trackStartY + thumbOffsetY; // Final screen Y for the thumb
+    x = trackStartX + thumbOffsetX;
+    y = trackStartY + thumbOffsetY;
 }
 
 LRESULT CGUISlider::OnSimpleMove(ISurface* lp) {
     if (m_pvMouse.get() == NULL) return -1;
 
     int nXX, nYY, nSLX, nSLY, w, h;
-    CalcSliderPos(nXX, nYY, nSLX, nSLY, w, h);
+    CalcSliderPos(nXX, nYY, nSLX, nSLY, w, h); // nXX/nYY are Absolute Screen Coordinates of Thumb
 
     int mx, my, mb;
     m_pvMouse->GetInfo(mx, my, mb);
 
     GetXY(m_nX, m_nY);
-    
-    // Slider virtual coordinates with (0,0) at top-left
     int mmx = mx - m_nX - m_nXOffset;
     int mmy = my - m_nY - m_nYOffset;
 
-    // Calculate the Y position of the thumb relative to the same origin as 'mmy'.
-    // nYY is the thumb's absolute Y. (m_nY + m_nYOffset) is the absolute Y of mmy's origin.
-    int thumbYRelativeToSliderOrigin = nYY - (m_nY + m_nYOffset);
-
-    // Calculate the X position of the thumb relative to the same origin as 'mmx'.
-    // nXX is the thumb's absolute X. (m_nX + m_nXOffset) is the absolute X of mmx's origin.
-    int thumbXRelativeToSliderOrigin = nXX - (m_nX + m_nXOffset);
-
-    // Guard frame input rejection mechanism
     bool bNGuard = !m_pvMouse->IsGuardTime();
 
-    // Is mouse over slider button?
+    // Hit Testing
     bool bIn;
-    // Is mouse over slider area?
     LPRECT prc = GetRect();
     m_nInSlider = (prc->left <= mmx) && (mmx < prc->right) &&
                     (prc->top <= mmy) && (mmy < prc->bottom);
 
     if (m_bDraged) {
-        bIn = true; // Always true while dragging
+        bIn = true; 
     }
     else if (!m_nInSlider) {
         bIn = false;
     }
     else {
-        // Check if over slider button and valid button position
         if ((nXX <= mx) && (mx < nXX + nSLX) &&
             (nYY <= my) && (my < nYY + nSLY) &&
             m_pvSliderEvent->IsButton(mmx - nXX, mmy - nYY)) {
@@ -215,62 +182,69 @@ LRESULT CGUISlider::OnSimpleMove(ISurface* lp) {
         }
     }
 
-    // Handle slider button clicks
-    if (!bIn && m_nInSlider && bNGuard) {
+    // --- REFACTORED SCROLL LOGIC FOR CENTER ALIGNMENT ---
+    
+    // Determine if we are clicking/holding
+    bool bIsDown = (mb & 1) || (mb & 2);
+    bool bWasDown = (m_nButton & 1) || (m_nButton & 2);
+    bool bJustClicked = bIsDown && !bWasDown;
+
+    // Determine if we are in "Track Scroll" mode
+    // We are scrolling if mouse is down, we are in the slider rect, AND we aren't dragging the handle.
+    // Crucially: If we just clicked, we must NOT have clicked the thumb (bIn must be false).
+    // If we are holding, we continue scrolling even if the thumb moves under the mouse (bIn becomes true).
+    bool bExecuteTrackScroll = false;
+
+    if (bIsDown && m_nInSlider && !m_bDraged) {
+        if (bJustClicked) {
+             if (!bIn) bExecuteTrackScroll = true;
+        } else {
+             bExecuteTrackScroll = true;
+        }
+    }
+
+    if (bExecuteTrackScroll && bNGuard) {
+        // Calculate Absolute Center of the Thumb
+        int thumbCenterX = nXX + (nSLX / 2);
+        int thumbCenterY = nYY + (nSLY / 2);
+
+        // Logic pivot: Use Center instead of Top-Left
         switch (m_nType) {
-        case 0: // Vertical slider
-            if (mmy < thumbYRelativeToSliderOrigin) {
-                m_pvSliderEvent->OnPageUp();
-            }
-            else {
-                m_pvSliderEvent->OnPageDown();
-            }
+        case 0: // Vertical
+            if (my < thumbCenterY) m_pvSliderEvent->OnPageUp();
+            else if (my > thumbCenterY) m_pvSliderEvent->OnPageDown();
             break;
-        case 1: // Horizontal slider 
-            if (mmx < thumbXRelativeToSliderOrigin) {
-                m_pvSliderEvent->OnPageLeft();
-            }
-            else {
-                m_pvSliderEvent->OnPageRight();
-            }
+        case 1: // Horizontal  
+            if (mx < thumbCenterX) m_pvSliderEvent->OnPageLeft();
+            else if (mx > thumbCenterX) m_pvSliderEvent->OnPageRight();
             break;
         case 2: // Both
-            if (mmy < thumbYRelativeToSliderOrigin) {
-                m_pvSliderEvent->OnPageUp();
-            }
-            else {
-                m_pvSliderEvent->OnPageDown();
-            }
-            if (mmx < thumbXRelativeToSliderOrigin) {
-                m_pvSliderEvent->OnPageLeft();
-            }
-            else {
-                m_pvSliderEvent->OnPageRight();
-            }
+            if (my < thumbCenterY) m_pvSliderEvent->OnPageUp();
+            else if (my > thumbCenterY) m_pvSliderEvent->OnPageDown();
+            
+            if (mx < thumbCenterX) m_pvSliderEvent->OnPageLeft();
+            else if (mx > thumbCenterX) m_pvSliderEvent->OnPageRight();
             break;
         }
     }
 
-    // Start dragging on left click
+    // Start dragging on left click (Only if we clicked ON the thumb)
     if (m_bIn && bIn && !(m_nButton & 2) && (mb & 2)) {
         if (!m_bDraged) {
             m_bDraged = true;
             m_nDragPosX = mx - nXX;
-			m_nDragPosY = my - nYY;
-		}
-	}
+            m_nDragPosY = my - nYY;
+        }
+    }
 
-	if (m_bDraged) {
-		// Update selected item while dragging
-		//int x = mmx - m_nDragPosX;
-		//int y = mmy - m_nDragPosY;
-		int x = mmx - m_rcRect.left - m_nDragPosX;
-		int y = mmy - m_rcRect.top - m_nDragPosY;
+    if (m_bDraged) {
+        // Dragging Logic
+        int x = mmx - m_rcRect.left - m_nDragPosX;
+        int y = mmy - m_rcRect.top - m_nDragPosY;
 
-		if (m_nItemNumX >= 2 && w != 0) {
-			m_nSelectedItemX = (x * (m_nItemNumX - 1) + w / 2) / w;
-		}
-		else {
+        if (m_nItemNumX >= 2 && w != 0) {
+            m_nSelectedItemX = (x * (m_nItemNumX - 1) + w / 2) / w;
+        } else {
             m_nSelectedItemX = 0;
         }
 
@@ -279,15 +253,13 @@ LRESULT CGUISlider::OnSimpleMove(ISurface* lp) {
 
         if (m_nItemNumY >= 2 && h != 0) {
             m_nSelectedItemY = (y * (m_nItemNumY - 1) + h / 2) / h;
-        }
-        else {
+        } else {
             m_nSelectedItemY = 0;
         }
 
         if (m_nSelectedItemY < 0) m_nSelectedItemY = 0;
         if (m_nSelectedItemY >= m_nItemNumY) m_nSelectedItemY = m_nItemNumY - 1;
 
-        // Released from drag?
         if (mb == 0) {
             m_bDraged = false;
             CalcSliderPos(nXX, nYY, nSLX, nSLY, w, h);
@@ -302,27 +274,16 @@ LRESULT CGUISlider::OnSimpleMove(ISurface* lp) {
         m_pvMouse->ResetButton();
     }
 
+    // Display Logic
     if (m_bDraged) {
-        // During drag (display at arbitrary position)
         m_nPosX = mx - m_nDragPosX;
         m_nPosY = my - m_nDragPosY;
-
-        // Push position back into movable area
-        if (m_nPosX < prc->left + m_nX + m_nXOffset) {
-            m_nPosX = prc->left + m_nX + m_nXOffset;
-        }
-        if (m_nPosY < prc->top + m_nY + m_nYOffset) {
-            m_nPosY = prc->top + m_nY + m_nYOffset;
-        }
-        if (m_nPosX + nSLX > prc->right + m_nX + m_nXOffset) {
-            m_nPosX = prc->right + m_nX + m_nXOffset - nSLX;
-        }
-        if (m_nPosY + nSLY > prc->bottom + m_nY + m_nYOffset) {
-            m_nPosY = prc->bottom + m_nY + m_nYOffset - nSLY;
-        }
+        if (m_nPosX < prc->left + m_nX + m_nXOffset) m_nPosX = prc->left + m_nX + m_nXOffset;
+        if (m_nPosY < prc->top + m_nY + m_nYOffset) m_nPosY = prc->top + m_nY + m_nYOffset;
+        if (m_nPosX + nSLX > prc->right + m_nX + m_nXOffset) m_nPosX = prc->right + m_nX + m_nXOffset - nSLX;
+        if (m_nPosY + nSLY > prc->bottom + m_nY + m_nYOffset) m_nPosY = prc->bottom + m_nY + m_nYOffset - nSLY;
     }
     else {
-        // Not dragging (display at fixed position)
         m_nPosX = nXX;
         m_nPosY = nYY;
     }
@@ -332,6 +293,9 @@ LRESULT CGUISlider::OnSimpleMove(ISurface* lp) {
 
 LRESULT CGUISlider::OnSimpleDraw(ISurface* lp) {
     if (m_pvSliderEvent.get() == NULL) return -1;
+    
+    // Pass the calculated positions (m_nPosX, m_nPosY) to the listener for drawing
+    // We also pass the item counts (m_nItemNumX, m_nItemNumY) so the listener knows how to size the thumb
     return m_pvSliderEvent->OnDraw(lp, m_nPosX, m_nPosY, m_nItemNumX, m_nItemNumY);
 }
 

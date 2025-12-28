@@ -1,12 +1,11 @@
 #ifndef __yaneGUITextBox_h__
 #define __yaneGUITextBox_h__
 
-#include "../../stdafx.h" // Corrected path
+#include "../../stdafx.h"
 #include "yaneGUIParts.h"     // For IGUIParts base class
 #include "yaneGUIButton.h"
 #include "yaneGUISlider.h"    // For CGUISlider and its base classes
 #include "yaneTextFastPlaneEx.h"
-// CTextFastPlane is already part of the SDK via stdafx.h, so no direct include needed here.
 
 namespace yaneuraoGameSDK3rd {
 namespace Draw {
@@ -15,17 +14,19 @@ namespace Draw {
 class CGUITextBox;
 
 // Custom slider listener for the textbox
-// Derives from CGUISliderEventListener which is a base of CGUINormalSliderListener
 class CGUITextBoxSliderListener : public CGUINormalSliderListener {
 public:
     CGUITextBoxSliderListener();
     void SetTextBox(smart_ptr<CGUITextBox> pv) { m_vTextBox = pv; }
 
     void SetMinSizeFromGraphic(ISurface* graphic) {
-		int sx, sy;
-		graphic->GetSize(sx, sy); // Get the actual dimensions of the graphic
-		SetMinSize(sx, sy); // Call the base class method to set m_nMinX and m_nMinY
-	}
+        int sx, sy;
+        graphic->GetSize(sx, sy); 
+        SetMinSize(sx, sy); 
+    }
+
+    // --- ADDED THIS DECLARATION ---
+    virtual void GetSliderSize(int nX, int nY, int& sx, int& sy);
 
     virtual void OnPageUp();
     virtual void OnPageDown();
@@ -36,13 +37,11 @@ protected:
     smart_ptr<CGUITextBox> m_vTextBox;
 };
 
-// Define an enum to distinguish the up and down buttons for the listener
 enum ScrollDirection {
     SCROLL_UP,
     SCROLL_DOWN
 };
 
-// Custom button listener for the textbox's scroll buttons
 class CGUITextBoxArrowButtonListener : public CGUINormalButtonListener {
 public:
     CGUITextBoxArrowButtonListener(ScrollDirection direction);
@@ -54,11 +53,10 @@ private:
     YTL::smart_ptr<CGUITextBox> m_vTextBox;
 };
 
-// Main Textbox class
 class CGUITextBox : public IGUIParts {
 public:
     enum SliderMode {
-        NO_SLIDER = -1, // Custom value for no slider
+        NO_SLIDER = -1, 
         VERTICAL_SLIDER = 0,
         HORIZONTAL_SLIDER = 1,
         BOTH_SLIDERS = 2
@@ -67,88 +65,74 @@ public:
     CGUITextBox();
     virtual ~CGUITextBox();
 
-    // Textbox initialization and setup
     void Create(int x, int y, int width, int height, SliderMode mode = NO_SLIDER);
-	void SetSliderGFX(smart_ptr<ISurface> sliderThumbGraphic);
-	void SetArrowGFX(smart_ptr<CPlaneLoader> pv, int upIndex, int downIndex);
-	void SetSliderLoader(string data, string path);
+    void SetSliderGFX(smart_ptr<ISurface> sliderThumbGraphic);
+    void SetArrowGFX(smart_ptr<CPlaneLoader> pv, int upIndex, int downIndex);
+    void SetSliderLoader(string data, string path);
 
-    // Text content management
     void SetText(const string& text);
     string GetText() const;
-    void SetFont(smart_ptr<CFont> font); // Set custom font
-    CFont* GetFont(); // Get font for direct manipulation
+    void SetFont(smart_ptr<CFont> font); 
+    CFont* GetFont(); 
 
-    // Text drawing properties
     void SetTextColor(ISurfaceRGB color);
-    void SetTextOffset(int x, int y); // Offset for text within the textbox content plane
+    void SetTextOffset(int x, int y); 
 
-    // --- NEW: Margin methods ---
     void SetMargins(int x, int y);
     void GetMargins(int& x, int& y) const;
-    // --- END NEW ---
 
-    // Background plane for the textbox
     void SetBackgroundPlane(smart_ptr<ISurface> pv);
 
-    // IGUIParts overrides
     virtual LRESULT OnSimpleMove(ISurface* lp);
     virtual LRESULT OnSimpleDraw(ISurface* lp);
     virtual void Reset();
     virtual void SetMouse(smart_ptr<CFixMouse> pv);
 
-    // Slider specific access for listener
-    void ScrollContent(int dx, int dy); // Method to be called by slider listener
-	smart_ptr<CGUISlider> GetSlider(){ return m_vSlider; }
+    void ScrollContent(int dx, int dy); 
+    smart_ptr<CGUISlider> GetSlider(){ return m_vSlider; }
 
-    // Get current scroll positions
     void GetScrollPos(int& x, int& y) const { x = m_nScrollX; y = m_nScrollY; }
 
-	void UpdateTextPlane(); // Renders the text onto m_vTextPlane
-	std::string WrapText(const std::string& rawText, int availableWidth);
-	std::string TrimLeadingSpaces(const std::string& s);
+    void UpdateTextPlane(); 
+    std::string TrimLeadingSpaces(const std::string& s);
 
 protected:
-    void CalculateVisibleContentSize(); // Calculates the actual content size after text rendering
+    void CalculateVisibleContentSize(); 
 
-    CTextFastPlaneEx* m_vTextFastPlane; // Plane for rendered text
-    CPlane m_vTextPlane; // Wrapper for m_vTextFastPlane
+    CTextFastPlaneEx* m_vTextFastPlane; 
+    CPlane m_vTextPlane; 
 
     string m_strCurrentText;
     ISurfaceRGB m_textColor;
     int m_nTextOffsetX;
     int m_nTextOffsetY;
 
-    // --- NEW: Margin members ---
     int m_nMarginX;
     int m_nMarginY;
-    // --- END NEW ---
 
-    smart_ptr<ISurface> m_vBackgroundPlane; // Background for the textbox
+    smart_ptr<ISurface> m_vBackgroundPlane; 
 
     SliderMode m_sliderMode;
     smart_ptr<CGUISlider> m_vSlider;
     smart_ptr<CGUITextBoxSliderListener> m_vSliderListener;
-	smart_ptr<ISurface> m_vSliderThumbGraphic;
+    smart_ptr<ISurface> m_vSliderThumbGraphic;
 
-    // Scroll button members
     smart_ptr<CGUIButton> m_vScrollUpButton;
     smart_ptr<CGUIButton> m_vScrollDownButton;
     smart_ptr<CGUITextBoxArrowButtonListener> m_vScrollUpButtonListener;
     smart_ptr<CGUITextBoxArrowButtonListener> m_vScrollDownButtonListener;
 
-    int m_nWidth;  // Width of the textbox display area
-    int m_nHeight; // Height of the textbox display area
-    int m_nSliderStripWidth;  // Stores the width of the scrollbar graphic (thumb)
-    int m_nSliderStripHeight; // Stores the height of the scrollbar graphic (thumb)
-    int m_nContentWidth;  // Actual width of the rendered text content
-    int m_nContentHeight; // Actual height of the rendered text content
+    int m_nWidth;  
+    int m_nHeight; 
+    int m_nSliderStripWidth;  
+    int m_nSliderStripHeight; 
+    int m_nContentWidth;  
+    int m_nContentHeight; 
 
-    int m_nScrollX; // Current X scroll position of the text content
-    int m_nScrollY; // Current Y scroll position of the text content
+    int m_nScrollX; 
+    int m_nScrollY; 
 
-    // Internal helper for clipping rectangle
-    RECT m_rcTextBoxClip; // Used for drawing/clipping within the textbox
+    RECT m_rcTextBoxClip; 
 };
 
 } // namespace Draw
