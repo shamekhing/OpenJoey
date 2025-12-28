@@ -104,6 +104,7 @@ private:
     CGUIButton* m_prevPageButton;
     CGUIButton* m_nextPageButton;
 	smart_ptr<CGUITextBox> m_cardTextBox;
+	smart_ptr<CGUITextBox> m_cardTextBoxFooter;
 	CPlaneLoader m_cardTextBoxPLoader;
 
     // Card preview state

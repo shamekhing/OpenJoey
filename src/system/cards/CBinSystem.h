@@ -132,7 +132,8 @@ struct CardProperties {
 		BYTE y = (bytes.attrAndStars & 0x0F);            // Get Y value (using lower nibble)
 		BOOL useSecondary = ((y % 2) + 2) == 3;          // REST(Y,2) + 2 == 3 means secondary
 	    
-		if(useSecondary) {
+		// INFO: 0x10 seems unused so typeIdx check (in retail even with useSecondary value its always handled as 0x00!)
+		if(useSecondary && typeIdx != 0) {
 			return (MonsterType)(0x10 | typeIdx);
 		}
 		return (MonsterType)typeIdx;

@@ -201,6 +201,11 @@ void CSceneCardList::OnMove(const smart_ptr<ISurface>& lp) {
 	if (m_cardTextBox.get()) {
 		m_cardTextBox->OnSimpleMove(lp.get());
 	}
+
+	// Update the textbox draw state (e.g., mouse interaction, scrolling)
+	if (m_cardTextBoxFooter.get()) {
+		m_cardTextBox->OnSimpleMove(lp.get());
+	}
 }
 
 void CSceneCardList::OnDraw(const smart_ptr<ISurface>& lp) {
@@ -244,6 +249,11 @@ void CSceneCardList::OnDraw(const smart_ptr<ISurface>& lp) {
 		// Draw the card textbox
 		if (m_cardTextBox.get()) {
 			m_cardTextBox->OnSimpleDraw(lp.get());
+		}
+
+		// Draw the card textbox footer
+		if (m_cardTextBoxFooter.get()) {
+			m_cardTextBoxFooter->OnSimpleDraw(lp.get());
 		}
     }
 
@@ -297,6 +307,7 @@ void CSceneCardList::InitializeUI() {
 	CPlane separatorLine = m_vDetailPlaneLoader.GetPlane(3);
 	smart_ptr<ISurface> separatorLineSmartPtr(sliderBox.get(), false); // no ownership
 	m_cardTextBox = smart_ptr<yaneuraoGameSDK3rd::Draw::CGUITextBox>(new yaneuraoGameSDK3rd::Draw::CGUITextBox(), false);
+	m_cardTextBoxFooter = smart_ptr<yaneuraoGameSDK3rd::Draw::CGUITextBox>(new yaneuraoGameSDK3rd::Draw::CGUITextBox(), false);
 
 	POINT topLeftBox = m_vDetailPlaneLoader.GetXY(1);
 	POINT botRightBox = m_vDetailPlaneLoader.GetXY(2);
@@ -315,6 +326,7 @@ void CSceneCardList::InitializeUI() {
 
 	// TODO: create signature with two XY points and calulate anything else from this
 	m_cardTextBox->Create(topLeftBox.x, topLeftBox.y, boxScaleX, boxScaleY, yaneuraoGameSDK3rd::Draw::CGUITextBox::VERTICAL_SLIDER);
+
 	m_cardTextBox->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false)); // Pass the current mouse state
 	//m_cardTextBox->SetTextColor(yaneuraoGameSDK3rd::Draw::ISurface::makeRGB(0, 0, 0, 0));
 	smart_ptr<yaneuraoGameSDK3rd::Draw::CFont> customFont(new yaneuraoGameSDK3rd::Draw::CFont());
@@ -332,6 +344,23 @@ void CSceneCardList::InitializeUI() {
 	m_cardTextBox->SetSliderGFX(sliderSmartPtr);
 	m_cardTextBox->SetArrowGFX(smart_ptr<CPlaneLoader>(&m_cardTextBoxPLoader, false), 5, 8);
 	m_cardTextBox->SetMargins(4,4);
+
+	// footer
+	// TODO: +200 PLACEHOLDER - use real value from txt
+	m_cardTextBoxFooter->Create(topLeftBox.x, topLeftBox.y+200, boxScaleX, boxScaleY, yaneuraoGameSDK3rd::Draw::CGUITextBox::VERTICAL_SLIDER);
+	m_cardTextBoxFooter->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false));
+	smart_ptr<yaneuraoGameSDK3rd::Draw::CFont> customFontF(new yaneuraoGameSDK3rd::Draw::CFont());
+	customFontF->SetFont("Arial");
+	customFontF->SetSize(13);
+	customFontF->SetWeight(FW_NORMAL);
+	customFontF->SetItalic(false);
+	customFontF->SetShadowOffset(0, 0);
+	customFontF->SetLetterSpacing(-1);
+	//customFontF->SetColor(ISurface::makeRGB(0, 0, 0, 0)); // Black text (assuming last 0 is alpha for opaque)
+	customFontF->SetColor(ISurface::makeRGB(26, 47, 75, 0)); // Dark brown text (BGR)
+	customFontF->SetHeight(18); // Adjust for desired line spacing, e.g., 15-17 for 12pt font
+	m_cardTextBoxFooter->SetFont(customFontF);
+	m_cardTextBoxFooter->SetMargins(4,4);
 	// DEBUG BACKGROUND TEXTBOX
 	//CPlane plnTEST = m_cardTextBoxPLoader.GetPlane(0);
 	//smart_ptr<ISurface> plnPtrBG(plnTEST.get(), false); // no ownership
@@ -755,9 +784,11 @@ void CSceneCardList::DrawCardGrid(const smart_ptr<ISurface>& lp) {
 							if (ctype == TYPE_SPELLCARD || ctype == TYPE_TRAPCARD)
 							{
 								//m_cardTextBox->SetTextFooter(""); // empty (hides the footer)
+								m_cardTextBoxFooter->SetText("TRAP SPELL CARD");
 							} 
 							else
 							{
+								m_cardTextBoxFooter->SetText("[MONSTER]");
 								//m_cardTextBox->SetTextTitleType("[MONSTER]");
 								//m_cardTextBox->SetTextFooter("ATK 1337 TEST");
 							}
