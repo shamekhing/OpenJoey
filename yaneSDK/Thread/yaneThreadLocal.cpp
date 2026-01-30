@@ -19,18 +19,18 @@ void	ThreadLocalBaseHelper::erase(ThreadLocalBase*p){
 }
 
 void	ThreadLocalBaseHelper::OnThreadEnd(){
-	//	全てのThreadLocalのインスタンスに対してClearを呼び出す
+	//	?S???ThreadLocal??C???X?^???X??????Clear?????o??
 	CCriticalLock cl(GetCriticalSection());
-	GetChain()->for_each(ThreadLocalBase::Clear);
+	GetChain()->for_each(&ThreadLocalBase::Clear);
 }
 
 void	ThreadLocalBaseHelper::OnExit(){
-	//	全てのThreadLocalのインスタンスに対してSetExit(true)を呼び出す
+	//	?S???ThreadLocal??C???X?^???X??????SetExit(true)?????o??
 	CCriticalLock cl(GetCriticalSection());
-	GetChain()->for_each(ThreadLocalBase::SetExit,true);
+	GetChain()->for_each(&ThreadLocalBase::SetExit,true);
 }
 
-//	終了時コールバックを依頼
+//	?I?????R?[???o?b?N?????
 ThreadLocalBaseHelper::ThreadLocalBaseHelper(){
 	smart_ptr<function_callback> p(
 		function_callback_v::Create(&ThreadLocalBaseHelper::OnExit,this));

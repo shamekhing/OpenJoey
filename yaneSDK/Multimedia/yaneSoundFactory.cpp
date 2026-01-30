@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-//	Soundのインターフェース
+//	Sound??C???^?[?t?F?[?X
 #include "yaneSound.h"
 
 //	DirectSound, DirectMusic
@@ -9,9 +9,11 @@
 #include "yaneWaveOutput.h"
 #include "yaneSoundParameter.h"
 
-//	Soundの実装
+//	Sound?????
 #include "yaneMIDIOutputMCI.h"
+#if USE_DirectMusic
 #include "yaneMIDIOutputDM.h"
+#endif
 #include "yaneWaveSound.h"
 
 #include "yaneSoundFactory.h"
@@ -27,10 +29,10 @@ CSoundFactory::CSoundFactory()
 	// default parameter
 	m_pSoundParameter.Add();
 
-	// デフォルトでストリームしない
+	// ?f?t?H???g??X?g???[???????
 	m_bStreamPlay = false;
 
-	//	こいつをfactoryとして設定しておくのだ
+	//	???????factory???????????????
 	CSound::SetFactory(smart_ptr<ISoundFactory>(this,false));
 }
 
@@ -43,7 +45,7 @@ smart_ptr<ISound> CSoundFactory::Create(const string& filename)
 	string ext = CFile::GetSuffixOf(filename);
 	CFile::ToLower(ext);
 
-	// 投げやりな実装(笑)
+	// ???????????(??)
 	smart_ptr<ISound> p;
 	if (ext=="mid") {
 		p = CreateMIDI();
@@ -52,8 +54,8 @@ smart_ptr<ISound> CSoundFactory::Create(const string& filename)
 	}
 	if (p->Open(filename)!=0)
 		{ p.Add(new CSoundNullDevice); }
-	//	↑ここでOpenしたのでは、Openの成否がわからないので
-	//	LoaderでOpenすべき??
+	//	????????Open????????AOpen???????????????
+	//	Loader??Open???????
 
 	return p;
 }
@@ -84,27 +86,29 @@ smart_ptr<ISound> CSoundFactory::InnerCreate(int nDevice){
 				pSound = new CMIDIOutputMCI();
 			}
 			break;
+#if USE_DirectMusic
 	case 2 : if (CDirectMusic::CanUseDirectMusic()) {
-				// DirectMusic使うでー
+				// DirectMusic?g????[
 				IncRefDirectMusic();
 				pSound = new CMIDIOutputDM(GetDirectMusic());
 
-				// DirectMusicの参照カウントのデクリメントのために
-				// 特別な解体オブジェクトを孕ませて、smart_ptrを生成する
+				// DirectMusic??Q??J?E???g??f?N???????g??????
+				// ???????I?u?W?F?N?g??s?????Asmart_ptr????????
 				smart_ptr<function_callback>
 					fn(function_callback_v::Create(&CSoundFactory::InnerDeleteChainForDM, this, pSound));
 				p.Add(pSound, new nonarray_callback_ref_object<ISound>(pSound, fn));
-				//	chainに追加する
+				//	chain????????
 				GetSoundList()->insert(pSound);
 				return p;
 			}
 			break;
+#endif
 	case 3 :
 	case 4 :
 	case 5 :
 		{
 			if (CDirectSound::CanUseDirectSound()) {
-				// WaveOutput使うでー
+				// WaveOutput?g????[
 				IncRefWaveOutput();
 				GetWaveOutput()->SetSoundParameter(GetSoundParameter());
 				pSound = new CWaveSound(GetWaveOutput());
@@ -114,29 +118,29 @@ smart_ptr<ISound> CSoundFactory::InnerCreate(int nDevice){
 				else if (nDevice==4) bStreamPlay = false;
 				else if (nDevice==5) bStreamPlay = true;
 
-				// 泥臭いがここで設定
+				// ?D?L????????????
 				((CWaveSound*)pSound)->SetStreamPlay(bStreamPlay);
 
-				// WaveOutputの参照カウントのデクリメントのために
-				// 特別な解体オブジェクトを孕ませて、smart_ptrを生成する
+				// WaveOutput??Q??J?E???g??f?N???????g??????
+				// ???????I?u?W?F?N?g??s?????Asmart_ptr????????
 				smart_ptr<function_callback>
 					fn(function_callback_v::Create(&CSoundFactory::InnerDeleteChainForWO, this, pSound));
 				p.Add(pSound, new nonarray_callback_ref_object<ISound>(pSound, fn));
-				//	chainに追加する
+				//	chain????????
 				GetSoundList()->insert(pSound);
 				return p;
 			}
 		}
 			break;
-//	case 6 : break;	//	以下略
+//	case 6 : break;	//	?????
 	}
 
 	if (pSound!=NULL){
-		// 解体オブジェクトを孕ませて、smart_ptrを生成する
+		// ???I?u?W?F?N?g??s?????Asmart_ptr????????
 		smart_ptr<function_callback>
 			fn(function_callback_r<bool>::Create(&CSoundFactory::InnerDeleteChain,this,pSound));
 		p.Add(pSound,new nonarray_callback_ref_object<ISound>(pSound,fn));
-		// chainに追加する
+		// chain????????
 		GetSoundList()->insert(pSound);
 	} else {
 		p.Add(new CSoundNullDevice);
@@ -149,18 +153,20 @@ bool CSoundFactory::InnerDeleteChain(ISound* p){
 }
 
 void CSoundFactory::InnerDeleteChainForWO(ISound* p){
-	// DirectSound使い終わったでー
+	// DirectSound?g???I???????[
 	if (InnerDeleteChain(p)) {
 		DecRefWaveOutput();
 	}
 }
 
+#if USE_DirectMusic
 void CSoundFactory::InnerDeleteChainForDM(ISound* p){
-	// DirectMusic使い終わったでー
+	// DirectMusic?g???I???????[
 	if (InnerDeleteChain(p)) {
 		DecRefDirectMusic();
 	}
 }
+#endif
 
 void CSoundFactory::IncRefDirectSound()
 {
@@ -175,6 +181,7 @@ void CSoundFactory::DecRefDirectSound()
 	m_vDirectSound.dec_ref();
 }
 
+#if USE_DirectMusic
 void CSoundFactory::IncRefDirectMusic()
 {
 	m_vDirectSound.inc_ref();
@@ -190,6 +197,11 @@ void CSoundFactory::DecRefDirectMusic()
 	m_vDirectMusic.dec_ref();
 	m_vDirectSound.dec_ref();
 }
+#else
+void CSoundFactory::IncRefDirectMusic() {}
+void CSoundFactory::DecRefDirectMusic() {}
+CDirectMusic* CSoundFactory::GetDirectMusic() { return nullptr; }
+#endif
 
 void CSoundFactory::IncRefWaveOutput()
 {

@@ -771,12 +771,15 @@ void CSceneCardList::DrawCardGrid(const smart_ptr<ISurface>& lp) {
 							//m_cardTextBox->SetTextTitle(card.cardData->name.name);
 							// TODO: this needs some work
 							const DialogEntry* cardTypeDialog = m_bin->GetDialog(card.cardData->properties.GetMonsterTypeTextId());
+							const char* typeText = (cardTypeDialog && cardTypeDialog->text) ? cardTypeDialog->text : "";
+							const char* desc = card.cardData->description ? card.cardData->description : "";
+							const char* name = (card.cardData->name.name) ? card.cardData->name.name : "";
 							std::string formattedText = 
-								"<SIZE=-1><BOLD>" + std::string(card.cardData->name.name) + "</BOLD></SIZE>" +
+								"<SIZE=-1><BOLD>" + std::string(name) + "</BOLD></SIZE>" +
 								"<HR>" +
-								"<COLOR=#4A2C00><SIZE=0>[" + cardTypeDialog->text + "]</SIZE></COLOR>" +
+								"<COLOR=#4A2C00><SIZE=0>[" + std::string(typeText) + "]</SIZE></COLOR>" +
 								"<HR>" +
-								"<COLOR=#4A2C00><SIZE=0>" + std::string(card.cardData->description) + "</SIZE></COLOR>"
+								"<COLOR=#4A2C00><SIZE=0>" + std::string(desc) + "</SIZE></COLOR>"
 								;
 
 							m_cardTextBox->SetText(formattedText);

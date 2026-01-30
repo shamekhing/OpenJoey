@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <ProjectGuid>{ADE7FA7E-4B8C-40E0-924E-D4D2140E8975}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>17.0.35913.81</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>lib\</OutDir>
+    <IntDir>Debug\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>lib\</OutDir>
+    <IntDir>Release\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;USE_DirectMusic=0;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <ForceConformanceInForLoopScope>false</ForceConformanceInForLoopScope>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)yaneSDK_d.lib</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;USE_DirectMusic=0;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat />
+    </ClCompile>
+    <Lib>
+      <AdditionalOptions>/LTCG:STATUS %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)yaneSDK.lib</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\AppFrame\index.h" />
+    <ClInclude Include="..\..\AppFrame\yaneAppBase.h" />
+    <ClInclude Include="..\..\AppFrame\yaneAppDraw.h" />
+    <ClInclude Include="..\..\AppFrame\yaneAppFrame.h" />
+    <ClInclude Include="..\..\AppFrame\yaneAppInitializer.h" />
+    <ClInclude Include="..\..\AppFrame\yaneAppManager.h" />
+    <ClInclude Include="..\..\AppFrame\yaneFindWindow.h" />
+    <ClInclude Include="..\..\AppFrame\yaneObjectCreater.h" />
+    <ClInclude Include="..\..\AppFrame\yaneSingleApp.h" />
+    <ClInclude Include="..\..\Auxiliary\index.h" />
+    <ClInclude Include="..\..\Auxiliary\yaneAllocator.h" />
+    <ClInclude Include="..\..\Auxiliary\yaneCOMBase.h" />
+    <ClInclude Include="..\..\Auxiliary\yaneCPUID.h" />
+    <ClInclude Include="..\..\Auxiliary\yaneDir.h" />
+    <ClInclude Include="..\..\Auxiliary\yaneFile.h" />
+    <ClInclude Include="..\..\Auxiliary\yaneIMEWrapper.h" />
+    <ClInclude Include="..\..\Auxiliary\yaneLoadCache.h" />
+    <ClInclude Include="..\..\Auxiliary\yaneLZSS.h" />
+    <ClInclude Include="..\..\Auxiliary\yaneMemory.h" />
+    <ClInclude Include="..\..\Auxiliary\yaneSerialize.h" />
+    <ClInclude Include="..\..\Auxiliary\yaneShell.h" />
+    <ClInclude Include="..\..\Auxiliary\yaneStream.h" />
+    <ClInclude Include="..\..\Auxiliary\yaneStringMap.h" />
+    <ClInclude Include="..\..\Auxiliary\yaneStringScanner.h" />
+    <ClInclude Include="..\..\config\yaneConfig.h" />
+    <ClInclude Include="..\..\Draw\index.h" />
+    <ClInclude Include="..\..\Draw\yaneDIBitmap.h" />
+    <ClInclude Include="..\..\Draw\yaneDirectDraw.h" />
+    <ClInclude Include="..\..\Draw\yaneDirtyRect.h" />
+    <ClInclude Include="..\..\Draw\yaneFastDraw.h" />
+    <ClInclude Include="..\..\Draw\yaneFastPlane.h" />
+    <ClInclude Include="..\..\Draw\yaneFont.h" />
+    <ClInclude Include="..\..\Draw\yaneGraphicLoader.h" />
+    <ClInclude Include="..\..\Draw\yaneGTL.h" />
+    <ClInclude Include="..\..\Draw\yaneLayer.h" />
+    <ClInclude Include="..\..\Draw\yanePlane.h" />
+    <ClInclude Include="..\..\Draw\yanePlaneLoader.h" />
+    <ClInclude Include="..\..\Draw\yaneScene.h" />
+    <ClInclude Include="..\..\Draw\yaneSprite.h" />
+    <ClInclude Include="..\..\Draw\yaneSurface.h" />
+    <ClInclude Include="..\..\Draw\yaneSurfaceBltter.h" />
+    <ClInclude Include="..\..\Draw\yaneSurfaceCache.h" />
+    <ClInclude Include="..\..\Draw\yaneTextDIBitmap.h" />
+    <ClInclude Include="..\..\Draw\yaneTextFastPlane.h" />
+    <ClInclude Include="..\..\Input\index.h" />
+    <ClInclude Include="..\..\Input\yaneDirectInput.h" />
+    <ClInclude Include="..\..\Input\yaneJoyStick.h" />
+    <ClInclude Include="..\..\Input\yaneKey.h" />
+    <ClInclude Include="..\..\Input\yaneKeyBase.h" />
+    <ClInclude Include="..\..\Input\yaneKeyInput.h" />
+    <ClInclude Include="..\..\Input\yaneMIDIInput.h" />
+    <ClInclude Include="..\..\Input\yaneMouse.h" />
+    <ClInclude Include="..\..\Input\yaneVirtualKey.h" />
+    <ClInclude Include="..\..\Math\index.h" />
+    <ClInclude Include="..\..\Math\yaneCounter.h" />
+    <ClInclude Include="..\..\Math\yaneRand.h" />
+    <ClInclude Include="..\..\Math\yaneRound.h" />
+    <ClInclude Include="..\..\Math\yaneSinTable.h" />
+    <ClInclude Include="..\..\Multimedia\index.h" />
+    <ClInclude Include="..\..\Multimedia\yaneACMStream.h" />
+    <ClInclude Include="..\..\Multimedia\yaneAudioMixer.h" />
+    <ClInclude Include="..\..\Multimedia\yaneCDDA.h" />
+    <ClInclude Include="..\..\Multimedia\yaneDirectMusic.h" />
+    <ClInclude Include="..\..\Multimedia\yaneDirectSound.h" />
+    <ClInclude Include="..\..\Multimedia\yaneMIDIOutputDM.h" />
+    <ClInclude Include="..\..\Multimedia\yaneMIDIOutputMCI.h" />
+    <ClInclude Include="..\..\Multimedia\yaneSELoader.h" />
+    <ClInclude Include="..\..\Multimedia\yaneSound.h" />
+    <ClInclude Include="..\..\Multimedia\yaneSoundBuffer.h" />
+    <ClInclude Include="..\..\Multimedia\yaneSoundFactory.h" />
+    <ClInclude Include="..\..\Multimedia\yaneSoundLoader.h" />
+    <ClInclude Include="..\..\Multimedia\yaneSoundParameter.h" />
+    <ClInclude Include="..\..\Multimedia\yaneSoundStream.h" />
+    <ClInclude Include="..\..\Multimedia\yaneVolumeFader.h" />
+    <ClInclude Include="..\..\Multimedia\yaneWaveOutput.h" />
+    <ClInclude Include="..\..\Multimedia\yaneWaveSound.h" />
+    <ClInclude Include="..\..\Multimedia\yaneWaveStaticSound.h" />
+    <ClInclude Include="..\..\Multimedia\yaneWaveStream.h" />
+    <ClInclude Include="..\..\Multimedia\yaneWaveStreamSound.h" />
+    <ClInclude Include="..\..\stdafx.h" />
+    <ClInclude Include="..\..\Thread\index.h" />
+    <ClInclude Include="..\..\Thread\yaneCriticalSection.h" />
+    <ClInclude Include="..\..\Thread\yaneEvent.h" />
+    <ClInclude Include="..\..\Thread\yaneLockObject.h" />
+    <ClInclude Include="..\..\Thread\yaneMicroThread.h" />
+    <ClInclude Include="..\..\Thread\yaneMutex.h" />
+    <ClInclude Include="..\..\Thread\yaneThread.h" />
+    <ClInclude Include="..\..\Thread\yaneThreadLocal.h" />
+    <ClInclude Include="..\..\Thread\yaneThreadPooler.h" />
+    <ClInclude Include="..\..\Timer\index.h" />
+    <ClInclude Include="..\..\Timer\yaneFPSTimer.h" />
+    <ClInclude Include="..\..\Timer\yaneIntervalTimer.h" />
+    <ClInclude Include="..\..\Timer\yaneTimer.h" />
+    <ClInclude Include="..\..\Window\index.h" />
+    <ClInclude Include="..\..\Window\yaneDebugWindow.h" />
+    <ClInclude Include="..\..\Window\yaneHWndManager.h" />
+    <ClInclude Include="..\..\Window\yaneWindow.h" />
+    <ClInclude Include="..\..\Window\yaneWinHook.h" />
+    <ClInclude Include="..\..\Ytl\delegate.h" />
+    <ClInclude Include="..\..\Ytl\delegate\functor.hpp" />
+    <ClInclude Include="..\..\Ytl\delegate\is_compatible_function.hpp" />
+    <ClInclude Include="..\..\Ytl\delegate\is_convertible.hpp" />
+    <ClInclude Include="..\..\Ytl\delegate\is_same.hpp" />
+    <ClInclude Include="..\..\Ytl\delegate\select_type.hpp" />
+    <ClInclude Include="..\..\Ytl\delegate\type_test.hpp" />
+    <ClInclude Include="..\..\Ytl\delegate\yes_no_type.hpp" />
+    <ClInclude Include="..\..\YTL\exceptions.h" />
+    <ClInclude Include="..\..\YTL\factory_permutation.h" />
+    <ClInclude Include="..\..\YTL\fast_list.h" />
+    <ClInclude Include="..\..\YTL\function_callback.h" />
+    <ClInclude Include="..\..\YTL\index.h" />
+    <ClInclude Include="..\..\YTL\list_chain.h" />
+    <ClInclude Include="..\..\YTL\macro.h" />
+    <ClInclude Include="..\..\YTL\mediator.h" />
+    <ClInclude Include="..\..\YTL\proxy_ptr.h" />
+    <ClInclude Include="..\..\YTL\ref_callback_deleter.h" />
+    <ClInclude Include="..\..\YTL\ref_creater.h" />
+    <ClInclude Include="..\..\YTL\ref_deleter.h" />
+    <ClInclude Include="..\..\YTL\singleton.h" />
+    <ClInclude Include="..\..\YTL\smart_list_ptr.h" />
+    <ClInclude Include="..\..\YTL\smart_ptr.h" />
+    <ClInclude Include="..\..\YTL\smart_vector_ptr.h" />
+    <ClInclude Include="..\..\YTL\string.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\AppFrame\yaneAppBase.cpp" />
+    <ClCompile Include="..\..\AppFrame\yaneAppFrame.cpp" />
+    <ClCompile Include="..\..\AppFrame\yaneAppInitializer.cpp" />
+    <ClCompile Include="..\..\AppFrame\yaneAppManager.cpp" />
+    <ClCompile Include="..\..\AppFrame\yaneFindWindow.cpp" />
+    <ClCompile Include="..\..\AppFrame\yaneObjectCreater.cpp" />
+    <ClCompile Include="..\..\AppFrame\yaneSingleApp.cpp" />
+    <ClCompile Include="..\..\Auxiliary\yaneAllocator.cpp" />
+    <ClCompile Include="..\..\Auxiliary\yaneCOMBase.cpp" />
+    <ClCompile Include="..\..\Auxiliary\yaneCPUID.cpp" />
+    <ClCompile Include="..\..\Auxiliary\yaneDir.cpp" />
+    <ClCompile Include="..\..\Auxiliary\yaneFile.cpp" />
+    <ClCompile Include="..\..\Auxiliary\yaneIMEWrapper.cpp" />
+    <ClCompile Include="..\..\Auxiliary\yaneLoadCache.cpp" />
+    <ClCompile Include="..\..\Auxiliary\yaneLZSS.cpp" />
+    <ClCompile Include="..\..\Auxiliary\yaneMemory.cpp" />
+    <ClCompile Include="..\..\Auxiliary\yaneSerialize.cpp" />
+    <ClCompile Include="..\..\Auxiliary\yaneShell.cpp" />
+    <ClCompile Include="..\..\Auxiliary\yaneStream.cpp" />
+    <ClCompile Include="..\..\Auxiliary\yaneStringMap.cpp" />
+    <ClCompile Include="..\..\Auxiliary\yaneStringScanner.cpp" />
+    <ClCompile Include="..\..\Draw\yaneDIBitmap.cpp" />
+    <ClCompile Include="..\..\Draw\yaneDirectDraw.cpp" />
+    <ClCompile Include="..\..\Draw\yaneDirtyRect.cpp" />
+    <ClCompile Include="..\..\Draw\yaneFastDraw.cpp" />
+    <ClCompile Include="..\..\Draw\yaneFastPlane.cpp" />
+    <ClCompile Include="..\..\Draw\yaneFont.cpp" />
+    <ClCompile Include="..\..\Draw\yaneGraphicLoader.cpp" />
+    <ClCompile Include="..\..\Draw\yaneGTL.cpp">
+      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AnySuitable</InlineFunctionExpansion>
+      <DebugInformationFormat Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <ClCompile Include="..\..\Draw\yaneLayer.cpp" />
+    <ClCompile Include="..\..\Draw\yanePlane.cpp" />
+    <ClCompile Include="..\..\Draw\yanePlaneLoader.cpp" />
+    <ClCompile Include="..\..\Draw\yaneScene.cpp" />
+    <ClCompile Include="..\..\Draw\yaneSprite.cpp" />
+    <ClCompile Include="..\..\Draw\yaneSurface1.cpp" />
+    <ClCompile Include="..\..\Draw\yaneSurface2.cpp" />
+    <ClCompile Include="..\..\Draw\yaneSurface3.cpp" />
+    <ClCompile Include="..\..\Draw\yaneSurface4.cpp" />
+    <ClCompile Include="..\..\Draw\yaneSurfaceBltter.cpp" />
+    <ClCompile Include="..\..\Draw\yaneTextDIBitmap.cpp" />
+    <ClCompile Include="..\..\Draw\yaneTextFastPlane.cpp" />
+    <ClCompile Include="..\..\Input\yaneDirectInput.cpp" />
+    <ClCompile Include="..\..\Input\yaneJoyStick.cpp" />
+    <ClCompile Include="..\..\Input\yaneKey.cpp" />
+    <ClCompile Include="..\..\Input\yaneKeyBase.cpp" />
+    <ClCompile Include="..\..\Input\yaneKeyInput.cpp" />
+    <ClCompile Include="..\..\Input\yaneMIDIInput.cpp" />
+    <ClCompile Include="..\..\Input\yaneMouse.cpp" />
+    <ClCompile Include="..\..\Input\yaneVirtualKey.cpp" />
+    <ClCompile Include="..\..\Math\yaneCounter.cpp" />
+    <ClCompile Include="..\..\Math\yaneRand.cpp" />
+    <ClCompile Include="..\..\Math\yaneSinTable.cpp" />
+    <ClCompile Include="..\..\Multimedia\yaneACMStream.cpp" />
+    <ClCompile Include="..\..\Multimedia\yaneAudioMixer.cpp" />
+    <ClCompile Include="..\..\Multimedia\yaneCDDA.cpp" />
+    <ClCompile Include="..\..\Multimedia\yaneDirectMusic.cpp" />
+    <ClCompile Include="..\..\Multimedia\yaneDirectSound.cpp" />
+    <ClCompile Include="..\..\Multimedia\yaneMIDIOutputDM.cpp" />
+    <ClCompile Include="..\..\Multimedia\yaneMIDIOutputMCI.cpp" />
+    <ClCompile Include="..\..\Multimedia\yaneSELoader.cpp" />
+    <ClCompile Include="..\..\Multimedia\yaneSound.cpp" />
+    <ClCompile Include="..\..\Multimedia\yaneSoundBuffer.cpp" />
+    <ClCompile Include="..\..\Multimedia\yaneSoundFactory.cpp" />
+    <ClCompile Include="..\..\Multimedia\yaneSoundLoader.cpp" />
+    <ClCompile Include="..\..\Multimedia\yaneSoundParameter.cpp" />
+    <ClCompile Include="..\..\Multimedia\yaneSoundStream.cpp" />
+    <ClCompile Include="..\..\Multimedia\yaneVolumeFader.cpp" />
+    <ClCompile Include="..\..\Multimedia\yaneWaveOutput.cpp" />
+    <ClCompile Include="..\..\Multimedia\yaneWaveSound.cpp" />
+    <ClCompile Include="..\..\Multimedia\yaneWaveStaticSound.cpp" />
+    <ClCompile Include="..\..\Multimedia\yaneWaveStream.cpp" />
+    <ClCompile Include="..\..\Multimedia\yaneWaveStreamSound.cpp" />
+    <ClCompile Include="..\..\stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\Thread\yaneCriticalSection.cpp" />
+    <ClCompile Include="..\..\Thread\yaneEvent.cpp" />
+    <ClCompile Include="..\..\Thread\yaneLockObject.cpp" />
+    <ClCompile Include="..\..\Thread\yaneMicroThread.cpp" />
+    <ClCompile Include="..\..\Thread\yaneMutex.cpp" />
+    <ClCompile Include="..\..\Thread\yaneThread.cpp" />
+    <ClCompile Include="..\..\Thread\yaneThreadLocal.cpp" />
+    <ClCompile Include="..\..\Thread\yaneThreadPooler.cpp" />
+    <ClCompile Include="..\..\Timer\yaneFPSTimer.cpp" />
+    <ClCompile Include="..\..\Timer\yaneIntervalTimer.cpp" />
+    <ClCompile Include="..\..\Timer\yaneTimer.cpp" />
+    <ClCompile Include="..\..\Window\yaneDebugWindow.cpp" />
+    <ClCompile Include="..\..\Window\yaneHWndManager.cpp" />
+    <ClCompile Include="..\..\Window\yaneWindow.cpp" />
+    <ClCompile Include="..\..\Window\yaneWinHook.cpp" />
+    <ClCompile Include="..\..\YTL\function_callback.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

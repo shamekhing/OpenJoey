@@ -1,12 +1,14 @@
 
-//	サウンド関係のファイルのinclude
+//	ﾂサﾂウﾂδ督ドﾂ甘鳴係ﾂづ個フﾂァﾂイﾂδ仰づ景nclude
 
 #include "yaneSound.h"			//	for Sound-Base class
 
 //	MIDI,WAV..
 #include "yaneMIDIOutputMCI.h"	//	for MIDIOutput using MCI
-#include "yaneDirectMusic.h"	//	for DirectMusic
+#include "yaneDirectMusic.h"	//	for DirectMusic (stub when USE_DirectMusic 0)
+#if USE_DirectMusic
 #include "yaneMIDIOutputDM.h"	//	for MIDIOutput using DirectMusic
+#endif
 #include "yaneDirectSound.h"	//	for DirectSound
 #include "yaneSoundBuffer.h"	//	for SoundBuffer Creater
 #include "yaneSoundStream.h"	//	for SoundStream Creater

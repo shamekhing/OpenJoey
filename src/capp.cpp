@@ -12,10 +12,31 @@ void CApp::MainThread() {
     // Make this the main application (close all other windows when exiting)
     SetMainApp(true);
 
-	// Initialize BinSystem
-	if(!binSystem_.Initialize("data/bin#", GetLangFull().c_str()))
+	// Initialize BinSystem: look for data next to the executable
+	char exeDir[MAX_PATH];
+	if (GetModuleFileNameA(NULL, exeDir, MAX_PATH) == 0) {
+		MessageBox(NULL, "Failed to get executable path.", "Error", MB_OK | MB_ICONERROR);
+		return;
+	}
+	char* lastSlash = strrchr(exeDir, '\\');
+	if (lastSlash) *lastSlash = '\0';
+	char binBasePath[MAX_PATH];
+	sprintf_s(binBasePath, "%s\\data\\bin#", exeDir);
+
+	if(!binSystem_.Initialize(binBasePath, GetLangFull().c_str()))
     {
-        MessageBox(NULL, "Failed to initialize BinSystem!", "Error", MB_OK | MB_ICONERROR);
+        char msg[1024];
+        sprintf_s(msg,
+            "Failed to initialize BinSystem.\n\n"
+            "Card data is required but omitted from the repo to reduce legal risk.\n"
+            "Copy the data folder from a legally acquired Power of Chaos installation\n"
+            "(e.g. yu-gi-oh_mod_data_stock_template) into the executable directory.\n\n"
+            "Place card data in:\n%s\n\n"
+            "Required: card_prop.bin, card_name%s.bin, card_id.bin, card_intid.bin, "
+            "card_desc%s.bin, card_indx%s.bin, dlg_text%s.bin, dlg_indx%s.bin, card_pack.bin, "
+            "and ..\\card\\list_card.txt, ..\\mini\\list_card.txt",
+            binBasePath, GetLangFull().c_str(), GetLangFull().c_str(), GetLangFull().c_str(), GetLangFull().c_str(), GetLangFull().c_str());
+        MessageBox(NULL, msg, "Error", MB_OK | MB_ICONERROR);
         return;
     }
 
@@ -242,7 +263,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine
         //*/
 
         CAppInitializer init(hInstance,hPrevInstance,lpCmdLine,nCmdShow);
-        // ÅMust always write this
+        // ÔøΩMust always write this
 
         CSingleApp sapp;
         if (sapp.IsValid()) {

@@ -397,7 +397,10 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
-# Data
+# Card/game data: required at runtime but omitted from repo to reduce legal risk.
+# Place next to the executable: data\bin#, data\card, data\mini, data\y, data\cursor.
+# Obtain from a legally acquired Power of Chaos installation (e.g. game data folder)
+# or a mod data template (e.g. yu-gi-oh_mod_data_stock_template).
 data/
 
 # specific to CodeBlocks IDE

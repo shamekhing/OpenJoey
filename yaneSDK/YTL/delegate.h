@@ -20,7 +20,7 @@
 #include "delegate/is_compatible_function.hpp"
 #include "delegate/functor.hpp"
 
-//	If it is not a const reference, the overloaded function will fail to resolve (;´Д`)
+//	If it is not a const reference, the overloaded function will fail to resolve (;?L?D`)
 #if defined(_MSC_VER) && (_MSC_VER<=1300) || defined(__MWERKS__) && (__MWERKS__<0x2406)
 	#define DELEGATE_TARGET_FIX(Type) const Type &
 #else
@@ -30,9 +30,9 @@
 namespace yaneuraoGameSDK3rd {
 namespace YTL {
 namespace YTLdelegate {
-//	static assertion
-template<bool expression> struct static_assert;
-template<> struct static_assert<true> {};
+//	static assertion (custom name to avoid C++11 keyword conflict)
+template<bool expression> struct delegate_static_assert;
+template<> struct delegate_static_assert<true> {};
 
 //	tag-dispatch
 struct tag_unknown {};
@@ -57,13 +57,13 @@ struct tag_self {
 };
 struct tag_functor {
 	template<typename T> struct types {
-		typedef T* function_type;	//	意味はない
+		typedef T* function_type;	//	???????
 	};
 	enum { compatibility_check = false };
 };
 struct tag_functor_smart_ptr {
 	template<typename T> struct types {
-		typedef T* function_type;	//	意味はない
+		typedef T* function_type;	//	???????
 	};
 	enum { compatibility_check = false };
 };
@@ -89,7 +89,7 @@ struct delegate : public get_functor_type<R, args_type<A1,A2,A3,A4,A5,A6,A7,A8,A
 	When setting a function, whether the operator () of this delegate can call that function (compatibility)
 	Check at compile time. If an error occurs in the VC++ system, the location where the setting was performed is reported.
 
-	例)
+	??)
 		class CHoge {
 			void		TestFunction1();
 			int			TestFunction2();
@@ -104,20 +104,20 @@ struct delegate : public get_functor_type<R, args_type<A1,A2,A3,A4,A5,A6,A7,A8,A
 		delegate<void>
 		OnTestFunc2(&hoge, &CHoge::TestFunction2);	//	No error if callable
 		delegate<int, const char*>
-		OnTestFunc3(&hoge, &CHoge::TestFunction3);	//	const methodもset出来ます
-		OnTestFunc1();								//	CHoge::TestFunction1が呼ばれる
-		OnTestFunc2();								//	CHoge::TestFunction2が呼ばれ、戻り値は無視される
-		int ret = OnTestFunc3("ほげほげ");			//	const char*から変換されたstringを引数として
-													//	CHoge::TestFunction2が呼ばれ、戻り値も得られる
+		OnTestFunc3(&hoge, &CHoge::TestFunction3);	//	const method??set?o?????
+		OnTestFunc1();								//	CHoge::TestFunction1???????
+		OnTestFunc2();								//	CHoge::TestFunction2??????A???l??????????
+		int ret = OnTestFunc3("??????");			//	const char*??????????string???????????
+													//	CHoge::TestFunction2??????A???l????????
 		//	Static Method Delegate
 		delegate<void> OnTestFunc4(&CHoge::TestFunction4);
 		delegate<void> OnTestFunc5(&TestFunction5);
-		OnTestFunc3();								//	CHoge::TestFunction3が呼ばれる
-		OnTestFunc4();								//	TestFunction4が呼ばれる
+		OnTestFunc3();								//	CHoge::TestFunction3???????
+		OnTestFunc4();								//	TestFunction4???????
 
-		//	何もセットせずにoperator()を呼ぶ
+		//	?????Z?b?g??????operator()?????
 		delegate<void> OnTestFunc5;
-		OnTestFunc5();									//	何も起こらない
+		OnTestFunc5();									//	?????N??????
 */
 
 	typedef typename get_functor_type<R, args_type<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10> >::type base_type;
@@ -125,18 +125,18 @@ struct delegate : public get_functor_type<R, args_type<A1,A2,A3,A4,A5,A6,A7,A8,A
 
 	delegate() : base_type() {};
 
-	/**	コンストラクタによるセット
+	/**	?R???X?g???N?^????Z?b?g
 	 *	ex) delegate<void> f1(&method_name);
 	 *		delegate<void> f2(pointee_to_object, &class_name::method_name);
 	 *		delegate<void> f3(functor_object);
 	 *		delegate<void> f4(f1);
-	 *		delegate<void> f5(0);	//	clear()を呼ぶことと等価
+	 *		delegate<void> f5(0);	//	clear()????????????
 	 */
 	template<typename F>
 	delegate(DELEGATE_TARGET_FIX(F) f) : base_type()
 	{
-		//	F型が何の型なのかを分析する
-		enum {	//	BCCでは一旦enumに代入しないと即値と判断されない場合がある
+		//	F?^??????^???????????
+		enum {	//	BCC????Uenum?????????????l????f??????????????
 			b1 = is_same<F,self_type>::value,
 			b2 = is_function_ptr<F>::value,
 			b3 = false,				// TODO: is_smart_pointer<F>
@@ -146,18 +146,18 @@ struct delegate : public get_functor_type<R, args_type<A1,A2,A3,A4,A5,A6,A7,A8,A
 		typedef typename select_type<b2, tag_function_ptr, temp_type1>::type temp_type2;
 		typedef typename select_type<b3, tag_functor_smart_ptr, temp_type2>::type temp_type3;
 		typedef typename select_type<b4, tag_functor, temp_type3>::type tag_type;
-		//	tag_unknownが選択された場合、ここでコンパイルエラーになる
+		//	tag_unknown???I?????????A??????R???p?C???G???[????
 		typedef typename tag_type::template types<F>::function_type function_type;
 		enum { must_be_true = (tag_type::compatibility_check==false) || is_compatible_function<base_type::operator_type, function_type>::value };
-		static_assert<must_be_true>();	//	互換性のない関数だとコンパイルエラーになる
+		delegate_static_assert<must_be_true>();	//	????????????????R???p?C???G???[????
 
 		set_method(f, tag_type());
 	}
 	template<typename TPtr, typename F>
 	delegate(const TPtr& p, F f) {
 		enum { must_be_true = is_member_function_ptr<F>::value && is_compatible_function<base_type::operator_type, F>::value };
-		//	Fがメンバ関数ポインタでないか、互換性のないメンバ関数だとコンパイルエラーになる
-		static_assert<must_be_true>();
+		//	F???????o????|?C???^???????A??????????????o???????R???p?C???G???[????
+		delegate_static_assert<must_be_true>();
 
 		set_class_method(p,f);
 	};
@@ -165,18 +165,18 @@ struct delegate : public get_functor_type<R, args_type<A1,A2,A3,A4,A5,A6,A7,A8,A
 	delegate(const base_type& f) : base_type(f) {};
 	delegate(int must_be_zero) : base_type() {};
 
-	/**	代入演算子によるセット
+	/**	??????Z?q????Z?b?g
 	 *	ex) delegate<void> f1, f2;
 	 *		f1 = &method_name;
 	 *		f1 = std::make_pair(pointee_to_object, &class_name::method_name);
 	 *		f1 = functor_object;
 	 *		f1 = f2;
-	 *		f1 = 0;		//	clear()を呼ぶことと等価
+	 *		f1 = 0;		//	clear()????????????
 	 */
 	template<typename F>
 	self_type& operator=(DELEGATE_TARGET_FIX(F) f) {
-		//	F型が何の型なのかを分析する
-		enum {	//	BCCでは一旦enumに代入しないと即値と判断されない場合がある
+		//	F?^??????^???????????
+		enum {	//	BCC????Uenum?????????????l????f??????????????
 			b0 = is_pair<F>::value,
 			b1 = is_same<F,self_type>::value,
 			b2 = is_function_ptr<F>::value,
@@ -188,15 +188,15 @@ struct delegate : public get_functor_type<R, args_type<A1,A2,A3,A4,A5,A6,A7,A8,A
 		typedef typename select_type<b2, tag_function_ptr, temp_type1>::type temp_type2;
 		typedef typename select_type<b3, tag_functor_smart_ptr, temp_type2>::type temp_type3;
 		typedef typename select_type<b4, tag_functor, temp_type3>::type tag_type;
-		//	tag_unknownが選択された場合、ここでコンパイルエラーになる
+		//	tag_unknown???I?????????A??????R???p?C???G???[????
 		typedef typename tag_type::template types<F>::function_type function_type;
 		enum { must_be_true = (tag_type::compatibility_check==false) || is_compatible_function<base_type::operator_type, function_type>::value };
-		static_assert<must_be_true>();	//	互換性のない関数だとコンパイルエラーになる
+		delegate_static_assert<must_be_true>();	//	????????????????R???p?C???G???[????
 
 		set_method(f, tag_type());
 		return *this;
 	};
-	self_type& operator=(const self_type& f)	//	BCCでは↑が呼ばれてしまう
+	self_type& operator=(const self_type& f)	//	BCC???????????????
 	{
 		base_type::set(static_cast<const base_type&>(f));
 		return *this;
@@ -212,7 +212,7 @@ struct delegate : public get_functor_type<R, args_type<A1,A2,A3,A4,A5,A6,A7,A8,A
 		return *this;
 	}
 
-	/**	set関数によるセット
+	/**	set???????Z?b?g
 	 *	ex) delegate<void> f1, f2;
 	 *		f1.set(&method_name);
 	 *		f1.set(pointee_to_object, &class_name::method_name);
@@ -220,8 +220,8 @@ struct delegate : public get_functor_type<R, args_type<A1,A2,A3,A4,A5,A6,A7,A8,A
 	 */
 	template<typename F>
 	void set(DELEGATE_TARGET_FIX(F) f) {
-		//	F型が何の型なのかを分析する
-		enum {	//	BCCでは一旦enumに代入しないと即値と判断されない場合がある
+		//	F?^??????^???????????
+		enum {	//	BCC????Uenum?????????????l????f??????????????
 			b1 = is_same<F,self_type>::value,
 			b2 = is_function_ptr<F>::value,
 			b3 = false,				// TODO: is_smart_pointer<F>
@@ -231,28 +231,28 @@ struct delegate : public get_functor_type<R, args_type<A1,A2,A3,A4,A5,A6,A7,A8,A
 		typedef typename select_type<b2, tag_function_ptr, temp_type1>::type temp_type2;
 		typedef typename select_type<b3, tag_functor_smart_ptr, temp_type2>::type temp_type3;
 		typedef typename select_type<b4, tag_functor, temp_type3>::type tag_type;
-		//	tag_unknownが選択された場合、ここでコンパイルエラーになる
+		//	tag_unknown???I?????????A??????R???p?C???G???[????
 		typedef typename tag_type::template types<F>::function_type function_type;
 		enum { must_be_true = (tag_type::compatibility_check==false) || is_compatible_function<base_type::operator_type, function_type>::value };
-		static_assert<must_be_true>();	//	互換性のない関数だとコンパイルエラーになる
+		delegate_static_assert<must_be_true>();	//	????????????????R???p?C???G???[????
 
 		set_method(f, tag_type());
 	}
 	template<typename TPtr, typename F>
 	void set(const TPtr& p, F f) {
 		enum { must_be_true = is_member_function_ptr<F>::value && is_compatible_function<base_type::operator_type, F>::value };
-		//	Fがメンバ関数ポインタでないか、互換性のないメンバ関数だとコンパイルエラーになる
-		static_assert<must_be_true>();
+		//	F???????o????|?C???^???????A??????????????o???????R???p?C???G???[????
+		delegate_static_assert<must_be_true>();
 
 		set_class_method(p,f);
 	}
 
-	///	セットした関数を取り外す
+	///	?Z?b?g????????????O??
 	void clear() {
 		base_type::clear();
 	}
 
-	///	関数がセットされていないならtrue
+	///	??????Z?b?g????????????true
 	bool isNull() const {
 		return base_type::isNull();
 	}

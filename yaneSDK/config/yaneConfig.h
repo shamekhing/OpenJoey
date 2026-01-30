@@ -59,7 +59,7 @@
 	#define yaneSDK_CantUseInlineAssembler
 
 	//	Suppress strange warnings
-	#pragma	warn-8022 //Å@Hiding functions with overrides
+	#pragma	warn-8022 //?@Hiding functions with overrides
 
 #elif defined(__MWERKS__) && (__MWERKS__>=0x3003)
 //	Compile confirmed with CodeWarrior8.3
@@ -83,7 +83,7 @@
 	#define yaneSDK_CantUseInlineAssembler
 
 #else
-//	What a weird compiler ÅR(`ÑDÅL)Ém
+//	What a weird compiler ?R(`?D?L)?m
 	#error Sorry, yaneSDK3rd cannot be compiled by this compiler.
 
 #endif
@@ -93,7 +93,7 @@
 // -=-=-=-=-=-=-=-=- Elimination of plugin creation function -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 //#define COMPILE_YANE_PLUGIN_DLL	//	Create a plug-in DLL?
-	//	(Please enable only when creating Å™ DLL)
+	//	(Please enable only when creating ?? DLL)
 /**
 	However, all functions of yaneSDK3rd can be used on the DLL side.
 		There is no guarantee. For example, a non-local static object is
@@ -142,6 +142,13 @@
 	// Measures to stop on memory errors (only when debugging)
 #endif
 
+// --- DirectMusic (legacy DirectX SDK) ------------------------------------------
+// Set to 1 to use DirectMusic (requires June 2010 DirectX SDK include/lib paths).
+// Set to 0 to build without the legacy DirectX SDK (MIDI will use MCI only).
+#ifndef USE_DirectMusic
+#define USE_DirectMusic 0
+#endif
+
 // --- MIDI Output system  --------------------------------------------------------
 //
 
@@ -183,10 +190,10 @@
 // --- STL	--------------------------------------------------------------
 //	Choose the type of STL to use
 
-//#define USE_STL_OnVisualC
-//	Using Visual C++'s STL
+#define USE_STL_OnVisualC
+//	Using Visual C++'s STL (required for VS2022; avoids STLPort ABI mismatch)
 
-#define USE_STLPort
+//#define USE_STLPort
 /**
 	If you use STLPort, comment out USE_STL_OnVisualC above!
 
@@ -203,31 +210,31 @@
 			|---doc
 			|---etc
 			|---src
-			|---stlportÅ@Å©Specify this folder as the VC++ Åginclude pathÅh
+			|---stlport?@??Specify this folder as the VC++ ?ginclude path?h
 			|---test	(It must be specified first. It is too late after reading the standard header)
 						For VC++.NET, right click on the project in Solution Explorer
-						Specify in Configuration Properties ÅÀ C/C++ ÅÀ General ÅÀ Additional Include Directories
+						Specify in Configuration Properties ?? C/C++ ?? General ?? Additional Include Directories
 
 
-	libÇÕÅA
+	lib??A
 		Run command prompt
 			in the bin folder of the VC installation directory
 			VCVARS32.BAT
 		After running
 			C:\STLport-4.5.3\src
-		andÅA
-			nmake -f vc7.mak (VC++6Ç»ÇÁÇŒvc6.mak)
+		and?A
+			nmake -f vc7.mak (VC++6????vc6.mak)
 		and then specify
 			C:\STLport-4.5.3\lib
 		as the lib path
-		(Configuration Properties ÅÀ Linker ÅÀ General ÅÀ Additional Library Directories)
+		(Configuration Properties ?? Linker ?? General ?? Additional Library Directories)
 */
 
 // --- YTL	--------------------------------------------------------------
 //	The string class uses Yaneurao version
 //#define USE_yaneString
 /**
-	Å™Å™
+	????
 	When throwing a DLL file and an object with CObjectCreater,
 	If you don't define this, different versions of the compiler will change the implementation of string to
 	It's bad because it's different.

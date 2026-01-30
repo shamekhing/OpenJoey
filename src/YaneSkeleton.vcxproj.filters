@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{3d138de0-5765-4ce1-af2b-23443071775a}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="Source Files\examples">
+      <UniqueIdentifier>{f493d6b4-4193-4803-8d13-2e7fe4628725}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\system">
+      <UniqueIdentifier>{801fffa9-6447-4012-bc91-0396db814c35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\system\cards">
+      <UniqueIdentifier>{82757c5c-9c7e-4588-b466-b27eb7c7a50c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\test">
+      <UniqueIdentifier>{5568823c-f591-4e42-9c13-c81d0b7f21eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{4e3fcb2e-226f-440f-b88d-2fb396c35a95}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{18b0537e-7965-4c86-ade9-ba5e0afd9704}</UniqueIdentifier>
+      <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CApp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="system\CJoeySceneFactory.cpp">
+      <Filter>Source Files\system</Filter>
+    </ClCompile>
+    <ClCompile Include="system\backport\yaneGUIButton.cpp">
+      <Filter>Source Files\system</Filter>
+    </ClCompile>
+    <ClCompile Include="system\backport\yaneGUISlider.cpp">
+      <Filter>Source Files\system</Filter>
+    </ClCompile>
+    <ClCompile Include="system\backport\yaneGUITextBox.cpp">
+      <Filter>Source Files\system</Filter>
+    </ClCompile>
+    <ClCompile Include="system\effects\yanePlaneEffectBlt.cpp">
+      <Filter>Source Files\system</Filter>
+    </ClCompile>
+    <ClCompile Include="system\backport\yaneTextFastPlaneEx.cpp">
+      <Filter>Source Files\system</Filter>
+    </ClCompile>
+    <ClCompile Include="system\cards\CBinDecompress.cpp">
+      <Filter>Source Files\system\cards</Filter>
+    </ClCompile>
+    <ClCompile Include="system\cards\CBinSystem.cpp">
+      <Filter>Source Files\system\cards</Filter>
+    </ClCompile>
+    <ClCompile Include="test\CScene1.cpp">
+      <Filter>Source Files\test</Filter>
+    </ClCompile>
+    <ClCompile Include="test\CSceneCardList.cpp">
+      <Filter>Source Files\test</Filter>
+    </ClCompile>
+    <ClCompile Include="test\CSceneMainMenu.cpp">
+      <Filter>Source Files\test</Filter>
+    </ClCompile>
+    <ClCompile Include="test\CSceneSettings.cpp">
+      <Filter>Source Files\test</Filter>
+    </ClCompile>
+    <ClCompile Include="test\CSceneSplash.cpp">
+      <Filter>Source Files\test</Filter>
+    </ClCompile>
+    <ClCompile Include="test\CSceneYesNo.cpp">
+      <Filter>Source Files\test</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="system\CJoeyGameSettings.h">
+      <Filter>Source Files\system</Filter>
+    </ClInclude>
+    <ClInclude Include="system\CJoeySceneFactory.h">
+      <Filter>Source Files\system</Filter>
+    </ClInclude>
+    <ClInclude Include="system\backport\yaneGUIButton.h">
+      <Filter>Source Files\system</Filter>
+    </ClInclude>
+    <ClInclude Include="system\backport\yaneGUIParts.h">
+      <Filter>Source Files\system</Filter>
+    </ClInclude>
+    <ClInclude Include="system\backport\yaneGUISlider.h">
+      <Filter>Source Files\system</Filter>
+    </ClInclude>
+    <ClInclude Include="system\backport\yaneGUITextBox.h">
+      <Filter>Source Files\system</Filter>
+    </ClInclude>
+    <ClInclude Include="system\effects\yanePlaneEffectBlt.h">
+      <Filter>Source Files\system</Filter>
+    </ClInclude>
+    <ClInclude Include="system\backport\yaneTextFastPlaneEx.h">
+      <Filter>Source Files\system</Filter>
+    </ClInclude>
+    <ClInclude Include="system\cards\CBinDecompress.h">
+      <Filter>Source Files\system\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="system\cards\CBinSystem.h">
+      <Filter>Source Files\system\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="test\CScene1.h">
+      <Filter>Source Files\test</Filter>
+    </ClInclude>
+    <ClInclude Include="test\CSceneCardList.h">
+      <Filter>Source Files\test</Filter>
+    </ClInclude>
+    <ClInclude Include="test\CSceneMainMenu.h">
+      <Filter>Source Files\test</Filter>
+    </ClInclude>
+    <ClInclude Include="test\CSceneSettings.h">
+      <Filter>Source Files\test</Filter>
+    </ClInclude>
+    <ClInclude Include="test\CSceneSplash.h">
+      <Filter>Source Files\test</Filter>
+    </ClInclude>
+    <ClInclude Include="test\CSceneYesNo.h">
+      <Filter>Source Files\test</Filter>
+    </ClInclude>
+    <ClInclude Include="CApp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\yaneSDK\ProjectFiles\MSVC7.1\lib\yaneSDK.lib" />
+    <CustomBuild Include="..\yaneSDK\ProjectFiles\MSVC7.1\lib\yaneSDK_d.lib" />
+  </ItemGroup>
+</Project>

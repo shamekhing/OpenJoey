@@ -1,13 +1,15 @@
 
 #include "stdafx.h"
 
+#if USE_DirectMusic
+
 #include "yaneMIDIOutputDM.h"
 #include "yaneDirectMusic.h"
 
 namespace yaneuraoGameSDK3rd {
 namespace Multimedia {
 
-#define sign(val) (val>0?1:(val<0?-1:0))	//	符号を返す * yane
+#define sign(val) (val>0?1:(val<0?-1:0))	//	???????? * yane
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -26,7 +28,7 @@ CMIDIOutputDM::~CMIDIOutputDM()
 }
 
 ////////////////
-//	オープン
+//	?I?[?v??
 ///////////////
 LRESULT CMIDIOutputDM::Open(const string& sFileName)
 {
@@ -34,9 +36,9 @@ LRESULT CMIDIOutputDM::Open(const string& sFileName)
 
 	Close();
 
-	//	元のファイルを読み込み
+	//	????t?@?C?????????
 	if(m_File.Read(sFileName)!=0)	{
-		Err.Out("CMIDIOutputDM::Openで読み込むファイルが無い %s", sFileName.c_str());
+		Err.Out("CMIDIOutputDM::Open???????t?@?C???????? %s", sFileName.c_str());
 		return 1;
 	}
 
@@ -65,22 +67,22 @@ LRESULT CMIDIOutputDM::Open(const string& sFileName)
 }
 
 //////////
-//	クローズ
+//	?N???[?Y
 //////////
 LRESULT CMIDIOutputDM::Close()
 {
 	m_File.Close();	//	delete temporary file
-	Stop();	// stopしないとCloseできないよーん
+	Stop();	// stop???????Close????????[??
 
 	RELEASE_SAFE(m_lpDMSegmentState);
 
 	if (m_lpDMSegment!=NULL) {
-		//	参照の解放
+		//	?Q?????
 		//	GetDirectMusic()->GetDirectMusicLoader()->ReleaseObject((IDirectMusicObject*)m_lpDMSegment);
-		//	これが無いとバグる＾＾；
+		//	??????????o?O??O?O?G
 		GetDirectMusic()->GetDirectMusicLoader()->get()->ClearCache(CLSID_DirectMusicSegment);
 
-		//	DLSのアンロード
+		//	DLS??A?????[?h
 		m_lpDMSegment->SetParam(GUID_Unload,0xffffffff,0,0,(void*)GetDirectMusic()->GetDirectMusicPerformance()->get());
 		m_lpDMSegment->Release();
 	}
@@ -89,7 +91,7 @@ LRESULT CMIDIOutputDM::Close()
 }
 
 //////////
-//	演奏処理
+//	???t????
 /////////
 
 LRESULT CMIDIOutputDM::Play()
@@ -101,11 +103,11 @@ LRESULT CMIDIOutputDM::Play()
 
 	Stop();
 
-	//	再生開始
+	//	????J?n
 	if (!m_bLoopPlay) {
-		m_lpDMSegment->SetRepeats(0);	//	繰り返さない
+		m_lpDMSegment->SetRepeats(0);	//	?J???????
 	} else {
-		m_lpDMSegment->SetRepeats((DWORD)-1);	//	回数∞
+		m_lpDMSegment->SetRepeats((DWORD)-1);	//	????
 	}
 	m_mtPosition = 0;
 	m_lpDMSegment->SetStartPoint(m_mtPosition);
@@ -123,20 +125,20 @@ LRESULT CMIDIOutputDM::Replay()
 	if (!CDirectMusic::CanUseDirectMusic()) return -1;
 	if (m_lpDMSegment==NULL) return -2;
 
-	if (m_bPaused==0) return 0;		//	pauseしてへんて！
-	if (--m_bPaused!=0) return 0;	//	参照カウント方式
+	if (m_bPaused==0) return 0;		//	pause???????I
+	if (--m_bPaused!=0) return 0;	//	?Q??J?E???g????
 
-	//	なぜか再生中なので何もせずに帰る
+	//	???????????????????????A??
 	if (IsPlay()) return 0;
 
 	Stop();
 
-	//	再生再開
-	m_lpDMSegment->SetStartPoint(m_mtPosition);	//	m_mtPositionは前回Pauseした位置
+	//	?????J
+	m_lpDMSegment->SetStartPoint(m_mtPosition);	//	m_mtPosition??O??Pause??????u
 	if (!m_bLoopPlay) {
-		m_lpDMSegment->SetRepeats(0);	//	繰り返さない
+		m_lpDMSegment->SetRepeats(0);	//	?J???????
 	} else {
-		m_lpDMSegment->SetRepeats((DWORD)-1);	//	回数∞
+		m_lpDMSegment->SetRepeats((DWORD)-1);	//	????
 	}
 	HRESULT hr = GetDirectMusic()->GetDirectMusicPerformance()->
 		get()->PlaySegment(
@@ -152,17 +154,17 @@ LRESULT CMIDIOutputDM::Stop()
 {
 	if (!CDirectMusic::CanUseDirectMusic()) return -1;
 
-	m_bPaused += sign(m_bPaused);	//	必殺技:p
-	if (!IsPlay()) return 0;			//	すでに停止している
+	m_bPaused += sign(m_bPaused);	//	?K?E?Z:p
+	if (!IsPlay()) return 0;			//	??????~???????
 
-	//	再生中のをpauseしたならば
+	//	????????pause????????
 	m_bPaused = 1;
 
-	//	現在の状態読み出して停止
+	//	?????????o?????~
 	if (m_lpDMSegment!=NULL && m_lpDMSegmentState!=NULL) {
 		GetDirectMusic()->GetDirectMusicPerformance()->
 			get()->Stop(m_lpDMSegment,m_lpDMSegmentState,0,0);
-		if (FAILED(m_lpDMSegmentState->GetSeek(&m_mtPosition))) {	//	m_mtPositionは前回Pauseした位置
+		if (FAILED(m_lpDMSegmentState->GetSeek(&m_mtPosition))) {	//	m_mtPosition??O??Pause??????u
 			m_mtPosition = 0;
 		}
 		RELEASE_SAFE(m_lpDMSegmentState);
@@ -176,10 +178,10 @@ LONG	CMIDIOutputDM::GetCurrentPos() const {
 
 	if (m_lpDMSegmentState==NULL) return -2;
 
-	// 現在の再生ポジションを得る
+	// ????????|?W?V????????
 	MUSIC_TIME mt;
 	if (FAILED(m_lpDMSegmentState->GetSeek(&mt))) return -3;
-	//	↑ここで得たのは、テンポによる相対時刻なので↓で変換してやる必要がある
+	//	??????????????A?e???|????????????????????????K?v??????
 
 	REFERENCE_TIME rt;
 	if (FAILED(GetDirectMusic()->GetDirectMusicPerformance()->get()->MusicToReferenceTime(
@@ -187,10 +189,10 @@ LONG	CMIDIOutputDM::GetCurrentPos() const {
 	REFERENCE_TIME rt2;
 	if (FAILED(GetDirectMusic()->GetDirectMusicPerformance()->get()->MusicToReferenceTime(
 		0,&rt2))) return -4;
-	rt-=rt2;	//	恐ろしいことに、ベースからの値ではないので
-				//	このような補正項が必要になるDirectMusicのバグのような気がしなくもない。
+	rt-=rt2;	//	???????????A?x?[?X?????l????????
+				//	?????????????K?v????DirectMusic??o?O?????C?????????????B
 
-	return (LONG)(rt/10000);	//	これで[ms]単位（REFERENCE_TIMEは分解能ありすぎ！（笑））
+	return (LONG)(rt/10000);	//	?????[ms]?P??iREFERENCE_TIME?????\???????I?i??j?j
 }
 
 LRESULT CMIDIOutputDM::SetCurrentPos(LONG lPos){
@@ -200,9 +202,9 @@ LRESULT CMIDIOutputDM::SetCurrentPos(LONG lPos){
 	MUSIC_TIME mt;
 	LONG lLen = GetLength();
 	hr = m_lpDMSegment->GetLength(&mt);
-	if (lLen==0) return -2; // なんで０やねん．．
+	if (lLen==0) return -2; // ????O????D?D
 
-//	なんでだめなんだろう…
+//	????????????c
 //	REFERENCE_TIME rt = lPos*10000;
 //	hr = GetDirectMusic()->GetDirectMusicPerformance()->ReferenceToMusicTime(rt,&mt);
 	Pause();
@@ -269,3 +271,5 @@ LONG	CMIDIOutputDM::GetLength() const {
 
 } // end of namespace Multimedia
 } // end of namespace yaneuraoGameSDK3rd
+
+#endif // USE_DirectMusic

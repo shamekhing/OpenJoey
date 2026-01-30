@@ -47,38 +47,38 @@ smart_ptr<ISoundBuffer> CWaveNullOutput::CreateBuffer()
 CWaveOutputDirectSound::CWaveOutputDirectSound(CDirectSound* p) : m_pDirectSound(p)
 {
 #ifdef USE_EXCEPTION
-	// NULL�ɂ��Ă������Ă킯����Ȃ�
-	if (m_pDirectSound==NULL) { CSyntaxException("������NULL�Ȃ̂�CWaveOutputDirectSound�̃R���X�g���N�g���o���܂���"); }
+	// NULLÉµÄ¢¢ÁÄí¯¶áÈ¢
+	if (m_pDirectSound==NULL) { CSyntaxException("øªNULLÈÌÅCWaveOutputDirectSoundÌRXgNgªoÜ¹ñ"); }
 #endif
 
-	// �v���C�}�������(�������������͂��Ȃ�)
+	// vC}ðìé(½¾µú»ÍµÈ¢)
 	m_pPrimary.Add(new CDirectSoundPrimaryBuffer(GetDirectSound()));
 
-	// �v���C�}����Create���I����Ă��Ȃ�
+	// vC}ÌCreateªIíÁÄ¢È¢
 	m_nPrimaryType = -1;
 
-	// Hook�J�n
+	// HookJn
 	CAppManager::Hook(this);
 }
 
 CWaveOutputDirectSound::~CWaveOutputDirectSound()
 {
-	// Hook�I��
+	// HookI¹
 	CAppManager::Unhook(this);
 }
 
 LRESULT CWaveOutputDirectSound::ChangePrimaryFormat(int nFrequency, int nBit, bool bStereo)
 {
-	// �ύX�����Ȃ琬���ɂ��Ă���
+	// ÏX³µÈç¬÷ÉµÄ¨­
 	int nType = ((bStereo)?1:0) + nBit*2 + nFrequency*4;
 	if (m_nPrimaryType==nType) return 0;
 
 	if (GetDirectSound()->GetStatus()==0){
-		// �������x����ύX����
+		// ¦²xðÏX·é
 		if (GetDirectSound()->SetCooperativeLevel(DSSCL_PRIORITY)!=0) return 1;
-		// ���������ĂȂ������珉��������
+		// ú»µÄÈ©Á½çú»·é
 		if (m_nPrimaryType==-1) m_pPrimary->Create(NULL, 0, false);
-		// �v���C�}���̃t�H�[�}�b�g��ς���
+		// vC}ÌtH[}bgðÏ¦é
 		WAVEFORMATEX pcmwf = {0};
 		pcmwf.wFormatTag		= WAVE_FORMAT_PCM;
 		pcmwf.nChannels			= (bStereo) ? 2 : 1;		// 1 or 2 channel
@@ -89,11 +89,11 @@ LRESULT CWaveOutputDirectSound::ChangePrimaryFormat(int nFrequency, int nBit, bo
 		if (m_pPrimary->SetFormat(&pcmwf)!=0) return 2;
 		m_nPrimaryType = nType;
 
-		// �Z�J���_�������X�g����͂�
-		GetSoundList()->for_each(IWaveSound::Restore);
+		// ZJ_ªXg·éÍ¸
+		GetSoundList()->for_each(&IWaveSound::Restore);
 	}
 
-	// �ǂ�����A�f�t�H���g�Ŏ��s�ɂ��Ƃ���
+	// Ç¤µæAftHgÅ¸sÉµÆ±©
 	return 3;
 }
 
@@ -103,7 +103,7 @@ smart_ptr<ISoundBuffer> CWaveOutputDirectSound::CreateSecondery()
 	if (GetDirectSound()->GetStatus()==0){
 		p.Add(new CDirectSoundSeconderyBuffer(GetDirectSound()));
 	}
-	// �ʖڂȂ�NullDevice��������ł���
+	// ÊÚÈçNullDeviceðÂÁ±ñÅ¨­
 	if (p.isNull()){
 		p.Add(new CNullSoundBuffer);
 	}
@@ -118,7 +118,7 @@ LRESULT CWaveOutputDirectSound::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
 		{
 			UINT bActive = wParam;
 			if(bActive) {
-				GetSoundList()->for_each(IWaveSound::Restore);
+				GetSoundList()->for_each(&IWaveSound::Restore);
 			}
 			return 0;
 		}

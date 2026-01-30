@@ -31,8 +31,10 @@
 #include <dinput.h>			// DirectInput header
 #include <ddraw.h>			// DirectDraw header
 #include <dsound.h>			// DirectSound header
+#if USE_DirectMusic
 #include <dmusicc.h>		// DirectMusic header(Requires DirectX6 or newer SDK)
 #include <dmusici.h>
+#endif
 
 //	For DirectX-related GUID settings
 #if	defined(yaneSDK_MSVC_Mode)	//	BCC does not need to link to it because it is included in import32.lib
@@ -81,7 +83,7 @@ using namespace yaneuraoGameSDK3rd::Dll;
 #endif
 
 #if defined(USE_STL_OnVisualC) || defined(USE_STLPort)
-	//	«In the case of STLPort, it seems that you have to set it in the include path..
+	//	ÂÂ«In the case of STLPort, it seems that you have to set it in the include path..
 	#include <stdio.h>
 	// STL related
 	#include <set>
@@ -95,7 +97,7 @@ using namespace yaneuraoGameSDK3rd::Dll;
 	#include <cctype>
 
 	using std::set;
-	//	I'm sorry (;L„D`)
+	//	I'm sorry (;ÂLÂ„D`)
 	using std::list;
 	using std::vector;
 	using std::stack;
@@ -121,13 +123,13 @@ using namespace yaneuraoGameSDK3rd::Dll;
 	#include "YTL/string.h"				//	std::string compatible class
 	using namespace yaneuraoGameSDK3rd::YTL::YTLstring;
 	//	#define string YTL::string
-	//	ªThis definition, freezes in VS.NET IntelliSense, perhaps because it looks recursive.
+	//	ÂÂªThis definition, freezes in VS.NET IntelliSense, perhaps because it looks recursive.
 #endif
 
 
 #include <stdlib.h>		// _MAX_PATH,qsort,rand..
 
-// -------- ‚ ‚Á‚½‚ç•Ö—˜‚©‚È`OO ----------------------------------
+// -------- Â‚Â Â‚ÃÂ‚Â½Â‚Ã§Â•Ã–Â—Â˜Â‚Â©Â‚ÃˆÂ`ÂOÂO ----------------------------------
 //	Would YTL be useful if it were available?
 
 #include "YTL/index.h"				//	Yanurao Template Library

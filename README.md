@@ -33,6 +33,32 @@ It was also used by other japanese games in early 00's (way too many to count, m
 [Official YaneSDK Homepage](https://bm98.yaneu.com/yaneSDK.html).
 There is also a [gamedev programming book series](https://www.amazon.co.jp/Windowsプロフェッショナルゲームプログラミング-やね-うらお/dp/479800314X) on it how to use the engine (but in japanese only).
 
+## Runtime data (game data)
+
+Card/game data is required at runtime but is omitted from this repo to reduce legal risk.
+
+### Where to place data
+
+Next to the executable (e.g. in the same folder as `YaneSkeleton.exe`), create a `data` folder with:
+
+- `data\bin#\` — card .bin files
+- `data\card\` — list_card.txt and card images
+- `data\mini\` — list_card.txt and mini card images
+- `data\y\` — title, list, etc. (UI data)
+- `data\cursor\` — cursor/UI assets
+
+### Where to obtain data
+
+Copy the data folder from:
+
+- A legally acquired Power of Chaos installation (e.g. "Yu-Gi-Oh! Power of Chaos - The Ancient Duel", or the game's data folder), or
+- A mod data template (e.g. yu-gi-oh_mod_data_stock_template).
+
+### Required files
+
+**In `data\bin#`** (for English): `card_prop.bin`, `card_nameeng.bin`, `card_id.bin`, `card_intid.bin`, `card_desceng.bin`, `card_indxeng.bin`, `dlg_texteng.bin`, `dlg_indxeng.bin`, `card_pack.bin`.  
+Also **`data\card\list_card.txt`** and **`data\mini\list_card.txt`**.
+
 ## Legal disclaimers
 * This project is not affiliated with or endorsed by KONAMI or KABUSHIKI KAISHA SHUEISHA in any way. Yu-Gi-Oh! is a trademark of KABUSHIKI KAISHA SHUEISHA.
 * This project is non-commercial. The source code is available for free and always will be.

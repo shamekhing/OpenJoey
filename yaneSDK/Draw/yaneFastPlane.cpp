@@ -3,6 +3,7 @@
 
 #ifdef USE_FastDraw
 
+#include <stdexcept>
 #include "yaneFastPlane.h"
 #include "yaneFastDraw.h"
 #include "yaneDirectDraw.h"
@@ -34,25 +35,25 @@ CFastPlane::CFastPlane(CFastDraw* pFastDraw)
 	ResetColorKey();
 	m_hDC		=	NULL;
 
-	//	ƒVƒXƒeƒ€ƒƒ‚ƒŠã‚ÉŠm•Û‚·‚é‚Ì‚¾I
+	//	ÂƒVÂƒXÂƒeÂƒÂ€ÂƒÂÂƒÂ‚ÂƒÂŠÂÃ£Â‚Ã‰ÂŠmÂ•Ã›Â‚Â·Â‚Ã©Â‚ÃŒÂ‚Â¾ÂI
 	m_bUseSystemMemory	=	true;
 
 	m_bYGA			= false;
 	m_bYGAUse		= false;
 	m_bMySurface	= false;
 	m_bSecondary256 = false;
-	//	256Fƒ‚[ƒh‚È‚ç‚ÎA’ÊíRGB555‚ÌƒT[ƒtƒF[ƒX‚ğì¬‚·‚é‚Ì‚¾‚ªA
-	//	ƒZƒJƒ“ƒ_ƒŠ‚¾‚¯‚Í256FƒT[ƒtƒF[ƒX
+	//	256ÂFÂƒÂ‚Â[ÂƒhÂ‚ÃˆÂ‚Ã§Â‚ÃÂAÂ’ÃŠÂÃ­RGB555Â‚ÃŒÂƒTÂ[ÂƒtÂƒFÂ[ÂƒXÂ‚Ã°ÂÃ¬ÂÂ¬Â‚Â·Â‚Ã©Â‚ÃŒÂ‚Â¾Â‚ÂªÂA
+	//	ÂƒZÂƒJÂƒÂ“Âƒ_ÂƒÂŠÂ‚Â¾Â‚Â¯Â‚Ã256ÂFÂƒTÂ[ÂƒtÂƒFÂ[ÂƒX
 	m_bLoad256		= false;
 	m_bSecondary256DIB=false;
 
-	//	RGB555‚ÌMySurface‚É‘Î‚µ‚ÄADIB Section‚ğg—p‚·‚é‚Ì‚©H
+	//	RGB555Â‚ÃŒMySurfaceÂ‚Ã‰Â‘ÃÂ‚ÂµÂ‚Ã„ÂADIB SectionÂ‚Ã°ÂgÂ—pÂ‚Â·Â‚Ã©Â‚ÃŒÂ‚Â©ÂH
 	m_hBitmap		= NULL;
 	m_hDC			= NULL;
 
-	//	©“®C•œƒT[ƒtƒF[ƒX
+	//	ÂÂ©Â“Â®ÂCÂ•ÂœÂƒTÂ[ÂƒtÂƒFÂ[ÂƒX
 	m_bAutoRestore = false;
-	//	ƒI[ƒi[ƒhƒ[(Restore‚ªŒÄ‚Ño‚³‚ê‚È‚¢BPrimary,Secondary‚Í‚±‚ê)
+	//	ÂƒIÂ[ÂƒiÂ[ÂƒhÂƒÂÂ[(RestoreÂ‚ÂªÂŒÃ„Â‚Ã‘ÂoÂ‚Â³Â‚ÃªÂ‚ÃˆÂ‚Â¢ÂBPrimary,SecondaryÂ‚ÃÂ‚Â±Â‚Ãª)
 	m_bOwnerDraw	= false;
 	m_bPrimary		= false;
 
@@ -137,7 +138,7 @@ smart_ptr<ISurface> CFastPlane::cloneFull() {
 
 LRESULT	CFastPlane::Release(){
 	//	owner create surface
-	//	256Fƒ‚[ƒh‚Ì‰¼‘zƒZƒJƒ“ƒ_ƒŠ‚ÍDIB‚Æ‚µ‚Äì¬‚µ‚Ä‚½‚ñ‚©H
+	//	256ÂFÂƒÂ‚Â[ÂƒhÂ‚ÃŒÂ‰Â¼Â‘zÂƒZÂƒJÂƒÂ“Âƒ_ÂƒÂŠÂ‚ÃDIBÂ‚Ã†Â‚ÂµÂ‚Ã„ÂÃ¬ÂÂ¬Â‚ÂµÂ‚Ã„Â‚Â½Â‚Ã±Â‚Â©ÂH
 	if (m_hBitmap){
 		m_bMySurface = false;
 		if (m_hDC!=NULL){
@@ -183,7 +184,7 @@ LRESULT	CFastPlane::Release(){
 			CFastPlaneABGR8888* pdw = (CFastPlaneABGR8888*)GetSurfaceInfo()->GetPtr();
 			delete [] pdw; } break;
 		default:
-			Err.Out("CFastPlane::Release‚Å•s–¾ƒT[ƒtƒF[ƒX‚ÌƒŠƒŠ[ƒX");
+			Err.Out("CFastPlane::ReleaseÂ‚Ã…Â•sÂ–Â¾ÂƒTÂ[ÂƒtÂƒFÂ[ÂƒXÂ‚ÃŒÂƒÂŠÂƒÂŠÂ[ÂƒX");
 		}
 		m_bMySurface = false;
 	}
@@ -194,7 +195,7 @@ LRESULT	CFastPlane::Release(){
 	m_nSizeX	=	0;
 	m_nSizeY	=	0;
 	m_bLoad256	= false;
-	GetSurfaceInfo()->SetInit(false);	//	ƒT[ƒtƒF[ƒXî•ñ‚à‰Šú‰»
+	GetSurfaceInfo()->SetInit(false);	//	ÂƒTÂ[ÂƒtÂƒFÂ[ÂƒXÂÃ®Â•Ã±Â‚Ã ÂÂ‰ÂŠÃºÂ‰Â»
 
 	if (!m_bNowRestoring && GetMyFastDraw()!=NULL){
 		GetMyFastDraw()->GetFastPlaneList()->erase(this);
@@ -210,32 +211,32 @@ LRESULT	CFastPlane::GetSize(int &x,int &y) const {
 	return const_cast<CFastPlane*>(this)->GetSurfaceInfo()->IsInit()?0:1;
 }
 
-//	ƒT[ƒtƒF[ƒX‚ÌƒƒXƒg‚É‘Î‚·‚é•œ‹Aˆ—
+//	ÂƒTÂ[ÂƒtÂƒFÂ[ÂƒXÂ‚ÃŒÂƒÂÂƒXÂƒgÂ‚Ã‰Â‘ÃÂ‚Â·Â‚Ã©Â•ÂœÂ‹AÂÂˆÂ—Â
 LRESULT	CFastPlane::Restore(){
 	LRESULT lr = 0;
-	m_bNowRestoring = true;	//	ƒŠƒXƒgƒA’†‚É‚Â‚«ARelease‚ÅƒtƒbƒN‰ğœ‚·‚é‚Ì‹Ö~I
+	m_bNowRestoring = true;	//	ÂƒÂŠÂƒXÂƒgÂƒAÂ’Â†Â‚Ã‰Â‚Ã‚Â‚Â«ÂAReleaseÂ‚Ã…ÂƒtÂƒbÂƒNÂ‰Ã°ÂÂœÂ‚Â·Â‚Ã©Â‚ÃŒÂ‹Ã–Â~ÂI
 	int nType = GetSurfaceInfo()->GetSurfaceType();
-	if (nType!=0){	//	Surface‚ª‘¶İ‚·‚é‚©‚Ç‚¤‚©‚ÍA‚±‚¢‚Â‚Å”»’è‚·‚é•K—v‚ª‚ ‚é
-		//	ƒVƒXƒeƒ€ƒƒ‚ƒŠã‚ÌƒT[ƒtƒF[ƒX‚ÍLost‚µ‚È‚¢‚Ì‚¾‚ªOOG
-		//	Œ»İ‚Ì‰æ–Êbpp‚ÆˆÙ‚È‚éƒT[ƒtƒF[ƒX‚È‚ç‚ÎA‰ğ‘Ì‚µ‚Äì‚è‚È‚¨‚·•K—v‚ª‚ ‚é
+	if (nType!=0){	//	SurfaceÂ‚ÂªÂ‘Â¶ÂÃÂ‚Â·Â‚Ã©Â‚Â©Â‚Ã‡Â‚Â¤Â‚Â©Â‚ÃÂAÂ‚Â±Â‚Â¢Â‚Ã‚Â‚Ã…Â”Â»Â’Ã¨Â‚Â·Â‚Ã©Â•KÂ—vÂ‚ÂªÂ‚Â Â‚Ã©
+		//	ÂƒVÂƒXÂƒeÂƒÂ€ÂƒÂÂƒÂ‚ÂƒÂŠÂÃ£Â‚ÃŒÂƒTÂ[ÂƒtÂƒFÂ[ÂƒXÂ‚ÃLostÂ‚ÂµÂ‚ÃˆÂ‚Â¢Â‚ÃŒÂ‚Â¾Â‚ÂªÂOÂOÂG
+		//	ÂŒÂ»ÂÃÂ‚ÃŒÂ‰Ã¦Â–ÃŠbppÂ‚Ã†ÂˆÃ™Â‚ÃˆÂ‚Ã©ÂƒTÂ[ÂƒtÂƒFÂ[ÂƒXÂ‚ÃˆÂ‚Ã§Â‚ÃÂAÂ‰Ã°Â‘ÃŒÂ‚ÂµÂ‚Ã„ÂÃ¬Â‚Ã¨Â‚ÃˆÂ‚Â¨Â‚Â·Â•KÂ—vÂ‚ÂªÂ‚Â Â‚Ã©
 		bool bRestore = false;
 		if (m_lpSurface!=NULL && m_lpSurface->IsLost()) {
-			//	&& ˜_—‰‰Zq‚ÍA¶‚©‚ç‰E‚Ö‚Ì•]‰¿‚ğ•ÛØ‚·‚é‚µA
-			//	VC‚ÌÅ“K‰»‚É‚æ‚èA¶‚ª¬—§‚É‰E‚ª•]‰¿‚³‚ê‚È‚¢‚Ì‚à•ÛØ‚³‚ê‚é
+			//	&& Â˜_Â—ÂÂ‰Â‰ÂZÂqÂ‚ÃÂAÂÂ¶Â‚Â©Â‚Ã§Â‰EÂ‚Ã–Â‚ÃŒÂ•]Â‰Â¿Â‚Ã°Â•Ã›ÂÃ˜Â‚Â·Â‚Ã©Â‚ÂµÂA
+			//	VCÂ‚ÃŒÂÃ…Â“KÂ‰Â»Â‚Ã‰Â‚Ã¦Â‚Ã¨ÂAÂÂ¶Â‚ÂªÂÂ¬Â—Â§ÂÂÂ‚Ã‰Â‰EÂ‚ÂªÂ•]Â‰Â¿Â‚Â³Â‚ÃªÂ‚ÃˆÂ‚Â¢Â‚ÃŒÂ‚Ã Â•Ã›ÂÃ˜Â‚Â³Â‚ÃªÂ‚Ã©
 			bRestore = true;
 		} else {
-		//	Œ»İ‚Ì‰æ–Êbpp‚ÆƒRƒ“ƒpƒ`‚Å–³‚¢ƒT[ƒtƒF[ƒX‚È‚ç‚ÎƒŠƒXƒgƒA‚·‚é
+		//	ÂŒÂ»ÂÃÂ‚ÃŒÂ‰Ã¦Â–ÃŠbppÂ‚Ã†ÂƒRÂƒÂ“ÂƒpÂƒ`Â‚Ã…Â–Â³Â‚Â¢ÂƒTÂ[ÂƒtÂƒFÂ[ÂƒXÂ‚ÃˆÂ‚Ã§Â‚ÃÂƒÂŠÂƒXÂƒgÂƒAÂ‚Â·Â‚Ã©
 			int nType2 = GetMyFastDraw()->GetPrimary()->GetSurfaceType();
 			switch (nType2){
-			case 2:	//	256F‚Ì‚Æ‚«‚ÍARGB555‚Æ‚İ‚È‚·
-				if (nType==2 && m_bSecondary256) break; // 256F—pƒZƒJƒ“ƒ_ƒŠ‚â‚ñH
+			case 2:	//	256ÂFÂ‚ÃŒÂ‚Ã†Â‚Â«Â‚ÃÂARGB555Â‚Ã†Â‚ÃÂ‚ÃˆÂ‚Â·
+				if (nType==2 && m_bSecondary256) break; // 256ÂFÂ—pÂƒZÂƒJÂƒÂ“Âƒ_ÂƒÂŠÂ‚Ã¢Â‚Ã±ÂH
 				if (nType==4 || nType == 11) break;
 				bRestore = true; break;
 			case 3:
 				if (nType==3 || nType == 10) break;
 				bRestore = true; break;
 			case 4:
-				//	256Fƒ‚[ƒh‚Ì‚É“Ç‚İ‚ñ‚¾ƒrƒbƒgƒ}ƒbƒv‚È‚ñ‚©M—p‚Å‚«‚È‚¢
+				//	256ÂFÂƒÂ‚Â[ÂƒhÂ‚ÃŒÂÂÂ‚Ã‰Â“Ã‡Â‚ÃÂÂÂ‚Ã±Â‚Â¾ÂƒrÂƒbÂƒgÂƒ}ÂƒbÂƒvÂ‚ÃˆÂ‚Ã±Â‚Â©ÂMÂ—pÂ‚Ã…Â‚Â«Â‚ÃˆÂ‚Â¢
 				if (m_bLoad256 && IsLoaded()) {
 					bRestore = true; break;
 				}
@@ -252,47 +253,47 @@ LRESULT	CFastPlane::Restore(){
 
 		if (bRestore){
 			if (m_bAutoRestore){
-			//	©“®C•œƒT[ƒtƒF[ƒX‚È‚ç‚ÎAƒT[ƒtƒF[ƒX‚ğì¬ŒãA‚»‚¢‚Â‚ğƒRƒs[
+			//	ÂÂ©Â“Â®ÂCÂ•ÂœÂƒTÂ[ÂƒtÂƒFÂ[ÂƒXÂ‚ÃˆÂ‚Ã§Â‚ÃÂAÂƒTÂ[ÂƒtÂƒFÂ[ÂƒXÂ‚Ã°ÂÃ¬ÂÂ¬ÂŒÃ£ÂAÂ‚Â»Â‚Â¢Â‚Ã‚Â‚Ã°ÂƒRÂƒsÂ[
 				LRESULT lrErr = 0;
 				if (m_nSizeX!=0 && m_nSizeY!=0){
 					CFastPlane plane;
 					plane.CreateSurface(m_nSizeX,m_nSizeY,IsYGA());
 					lrErr = plane.BltFast(this,0,0);
-					// ‚±‚Ì•ÏŠ·‰Â”\‚â‚Á‚½‚©H
+					// Â‚Â±Â‚ÃŒÂ•ÃÂŠÂ·Â‰Ã‚Â”\Â‚Ã¢Â‚ÃÂ‚Â½Â‚Â©ÂH
 					if (lrErr==0){
 						InnerCreateSurface(m_nSizeX,m_nSizeY,m_bYGA,m_bSecondary256);
 						lrErr = BltFast(&plane,0,0);
 					}
 				}
-				//	“]‘—‚É¸”s‚µ‚½‚çA‚µ‚á[‚È‚¢‚©‚ç©‘O‚ÅƒŠƒXƒgƒA‚µ‚Ä‚ñ‚©DD
+				//	Â“]Â‘Â—Â‚Ã‰ÂÂ¸Â”sÂ‚ÂµÂ‚Â½Â‚Ã§ÂAÂ‚ÂµÂ‚Ã¡Â[Â‚ÃˆÂ‚Â¢Â‚Â©Â‚Ã§ÂÂ©Â‘OÂ‚Ã…ÂƒÂŠÂƒXÂƒgÂƒAÂ‚ÂµÂ‚Ã„Â‚Ã±Â‚Â©ÂDÂD
 				if (lrErr!=0) goto RestoreRetry;
 
-				//	Œ»İ‚Ì‰æ–Êƒ‚[ƒh‚É‡‚í‚¹‚ÄColorKey‚ğİ’è‚µ‚È‚¨‚·
+				//	ÂŒÂ»ÂÃÂ‚ÃŒÂ‰Ã¦Â–ÃŠÂƒÂ‚Â[ÂƒhÂ‚Ã‰ÂÂ‡Â‚Ã­Â‚Â¹Â‚Ã„ColorKeyÂ‚Ã°ÂÃÂ’Ã¨Â‚ÂµÂ‚ÃˆÂ‚Â¨Â‚Â·
 				UpdateColorKey();
 			} else {
 RestoreRetry:;
-				//	ƒrƒbƒgƒ}ƒbƒvƒtƒ@ƒCƒ‹‚È‚ç‚Î‚»‚ê‚ğ•œŒ³‚·‚é
+				//	ÂƒrÂƒbÂƒgÂƒ}ÂƒbÂƒvÂƒtÂƒ@ÂƒCÂƒÂ‹Â‚ÃˆÂ‚Ã§Â‚ÃÂ‚Â»Â‚ÃªÂ‚Ã°Â•ÂœÂŒÂ³Â‚Â·Â‚Ã©
 				if (IsLoaded()){
 					lr = InnerLoad(m_strBitmapFile);
 				} else {
-					//	–{“–‚ÍA‚±‚Ì‚Æ‚«A•ÏŠ·q‚ğ—pˆÓ‚µ‚Ä•ÏŠ·‚Ù‚¤‚ª—Ç‚¢
-					//	‚µ‚©‚µA•œŒ³‚Ì‚·‚×‚Ä‚Ì‘g‚İ‡‚í‚¹‚Í–c‘å‚Å‚ ‚éDD
-					//	ˆê“xAARGB8888‚É•ÏŠ·‚µ‚ÄA‚»‚±‚©‚çƒ^[ƒQƒbƒgŒ^‚É
-					//	–ß‚¹‚ÎA‚»‚¤‚Å‚à–³‚¢‚Ì‚¾‚ªDD
+					//	Â–{Â“Â–Â‚ÃÂAÂ‚Â±Â‚ÃŒÂ‚Ã†Â‚Â«ÂAÂ•ÃÂŠÂ·ÂqÂ‚Ã°Â—pÂˆÃ“Â‚ÂµÂ‚Ã„Â•ÃÂŠÂ·Â‚Ã™Â‚Â¤Â‚ÂªÂ—Ã‡Â‚Â¢
+					//	Â‚ÂµÂ‚Â©Â‚ÂµÂAÂ•ÂœÂŒÂ³Â‚ÃŒÂ‚Â·Â‚Ã—Â‚Ã„Â‚ÃŒÂ‘gÂ‚ÃÂÂ‡Â‚Ã­Â‚Â¹Â‚ÃÂ–cÂ‘Ã¥Â‚Ã…Â‚Â Â‚Ã©ÂDÂD
+					//	ÂˆÃªÂ“xÂAARGB8888Â‚Ã‰Â•ÃÂŠÂ·Â‚ÂµÂ‚Ã„ÂAÂ‚Â»Â‚Â±Â‚Â©Â‚Ã§Âƒ^Â[ÂƒQÂƒbÂƒgÂŒ^Â‚Ã‰
+					//	Â–ÃŸÂ‚Â¹Â‚ÃÂAÂ‚Â»Â‚Â¤Â‚Ã…Â‚Ã Â–Â³Â‚Â¢Â‚ÃŒÂ‚Â¾Â‚ÂªÂDÂD
 
 					if (m_nSizeX!=0 && m_nSizeY!=0){
-						//	‚Æ‚è‚ ‚¦‚¸AƒT[ƒtƒF[ƒXì‚è‚È‚¨‚µ‚Æ‚­‚©DD
+						//	Â‚Ã†Â‚Ã¨Â‚Â Â‚Â¦Â‚Â¸ÂAÂƒTÂ[ÂƒtÂƒFÂ[ÂƒXÂÃ¬Â‚Ã¨Â‚ÃˆÂ‚Â¨Â‚ÂµÂ‚Ã†Â‚Â­Â‚Â©ÂDÂD
 						InnerCreateSurface(m_nSizeX,m_nSizeY,m_bYGA,m_bSecondary256);
 					}
 				}
-				//	Œ»İ‚Ì‰æ–Êƒ‚[ƒh‚É‡‚í‚¹‚ÄColorKey‚ğİ’è‚µ‚È‚¨‚·
+				//	ÂŒÂ»ÂÃÂ‚ÃŒÂ‰Ã¦Â–ÃŠÂƒÂ‚Â[ÂƒhÂ‚Ã‰ÂÂ‡Â‚Ã­Â‚Â¹Â‚Ã„ColorKeyÂ‚Ã°ÂÃÂ’Ã¨Â‚ÂµÂ‚ÃˆÂ‚Â¨Â‚Â·
 				UpdateColorKey();
-				//	ƒI[ƒi[ƒhƒ[‚©‚à’m‚ê‚È‚¢‚Ì‚ÅA‚»‚ê‚ğ•œŒ³‚·‚é
-				lr |= OnDraw();	//	ˆÏ÷‚·‚é
+				//	ÂƒIÂ[ÂƒiÂ[ÂƒhÂƒÂÂ[Â‚Â©Â‚Ã Â’mÂ‚ÃªÂ‚ÃˆÂ‚Â¢Â‚ÃŒÂ‚Ã…ÂAÂ‚Â»Â‚ÃªÂ‚Ã°Â•ÂœÂŒÂ³Â‚Â·Â‚Ã©
+				lr |= OnDraw();	//	ÂˆÃÂÃ·Â‚Â·Â‚Ã©
 			}
 		}
 	}
-	m_bNowRestoring = false;	//	ƒŠƒXƒgƒAI—¹‚É‚Â‚«ARelease‚ÅƒtƒbƒN‰ğœ‚·‚é‚Ì‰ğœI
+	m_bNowRestoring = false;	//	ÂƒÂŠÂƒXÂƒgÂƒAÂIÂ—Â¹Â‚Ã‰Â‚Ã‚Â‚Â«ÂAReleaseÂ‚Ã…ÂƒtÂƒbÂƒNÂ‰Ã°ÂÂœÂ‚Â·Â‚Ã©Â‚ÃŒÂ‰Ã°ÂÂœÂI
 	return lr;
 }
 
@@ -300,39 +301,39 @@ RestoreRetry:;
 LRESULT CFastPlane::Load(const string& strBitmapFileName){
 	Release();
 	ResetColorKey();
-	// ‚ ‚Æ‚ÅRestore‚Å‚«‚é‚æ‚¤‚Éƒtƒ@ƒCƒ‹–¼‚ğŠi”[‚µ‚Ä‚¨‚­B
+	// Â‚Â Â‚Ã†Â‚Ã…RestoreÂ‚Ã…Â‚Â«Â‚Ã©Â‚Ã¦Â‚Â¤Â‚Ã‰ÂƒtÂƒ@ÂƒCÂƒÂ‹Â–Â¼Â‚Ã°ÂŠiÂ”[Â‚ÂµÂ‚Ã„Â‚Â¨Â‚Â­ÂB
 	LRESULT lr = InnerLoad(strBitmapFileName);
 	m_strBitmapFile = strBitmapFileName;
 	return lr;
 }
 
-//	ƒtƒ@ƒCƒ‹–¼‚ğ•Ô‚·
+//	ÂƒtÂƒ@ÂƒCÂƒÂ‹Â–Â¼Â‚Ã°Â•Ã”Â‚Â·
 string	CFastPlane::GetFileName() const{
 	return m_strBitmapFile;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
 
-//	ƒrƒbƒgƒ}ƒbƒv‚Ì“à•”“I‚Èƒ[ƒhBŠi”[ƒtƒ@ƒCƒ‹–¼‚É‚Í‰e‹¿‚µ‚È‚¢
+//	ÂƒrÂƒbÂƒgÂƒ}ÂƒbÂƒvÂ‚ÃŒÂ“Ã Â•Â”Â“IÂ‚ÃˆÂƒÂÂ[ÂƒhÂBÂŠiÂ”[ÂƒtÂƒ@ÂƒCÂƒÂ‹Â–Â¼Â‚Ã‰Â‚ÃÂ‰eÂ‹Â¿Â‚ÂµÂ‚ÃˆÂ‚Â¢
 LRESULT	CFastPlane::InnerLoad(const string& strFileName){
 /**
-	ISurface::Load‚ªÀ‘•‚³‚ê‚Ä‚¢‚é‚Ì‚ÅAŠî–{“I‚È“Ç‚İ‚İ‚ÍA
-	ƒT[ƒtƒF[ƒXì¬Œã‚ÉAISurface::Load‚ÉˆÏ÷‚·‚ê‚Î—Ç‚¢
+	ISurface::LoadÂ‚ÂªÂÃ€Â‘Â•Â‚Â³Â‚ÃªÂ‚Ã„Â‚Â¢Â‚Ã©Â‚ÃŒÂ‚Ã…ÂAÂŠÃ®Â–{Â“IÂ‚ÃˆÂ“Ã‡Â‚ÃÂÂÂ‚ÃÂ‚ÃÂA
+	ÂƒTÂ[ÂƒtÂƒFÂ[ÂƒXÂÃ¬ÂÂ¬ÂŒÃ£Â‚Ã‰ÂAISurface::LoadÂ‚Ã‰ÂˆÃÂÃ·Â‚Â·Â‚ÃªÂ‚ÃÂ—Ã‡Â‚Â¢
 */
 
 	/**
-		InnerLoad‚ÍA
-		ƒrƒbƒgƒ}ƒbƒvƒtƒ@ƒCƒ‹–¼A”²‚«F‚Ìw’è“™‚ğ”j‰ó‚µ‚È‚¢‚±‚Æ‚ğ•ÛØ‚·‚é
-		‚»‚Ì‚½‚ßRelease‘O‚É‚·‚×‚Ä‚Ìİ’è‚ğ•Û‘¶‚·‚é
+		InnerLoadÂ‚ÃÂA
+		ÂƒrÂƒbÂƒgÂƒ}ÂƒbÂƒvÂƒtÂƒ@ÂƒCÂƒÂ‹Â–Â¼ÂAÂ”Â²Â‚Â«ÂFÂ‚ÃŒÂwÂ’Ã¨Â“Â™Â‚Ã°Â”jÂ‰Ã³Â‚ÂµÂ‚ÃˆÂ‚Â¢Â‚Â±Â‚Ã†Â‚Ã°Â•Ã›ÂÃ˜Â‚Â·Â‚Ã©
+		Â‚Â»Â‚ÃŒÂ‚Â½Â‚ÃŸReleaseÂ‘OÂ‚Ã‰Â‚Â·Â‚Ã—Â‚Ã„Â‚ÃŒÂÃÂ’Ã¨Â‚Ã°Â•Ã›Â‘Â¶Â‚Â·Â‚Ã©
 	*/
 	string strBitmap(m_strBitmapFile);
-	//	colorkey‚Ìİ’è‚à•Û‘¶
+	//	colorkeyÂ‚ÃŒÂÃÂ’Ã¨Â‚Ã Â•Ã›Â‘Â¶
 
 	bool bUsePosColorKey = m_bUsePosColorKey;
 	int	nColorKeyX = m_nColorKeyX, nColorKeyY = m_nColorKeyY;
 	ISurfaceRGB rgbColorKey = m_rgbColorKey;
 	{
-		Release();	//	‰ğ‘Ì
+		Release();	//	Â‰Ã°Â‘ÃŒ
 	}
 	m_strBitmapFile = strBitmap;
 	m_bUsePosColorKey = bUsePosColorKey;
@@ -340,35 +341,35 @@ LRESULT	CFastPlane::InnerLoad(const string& strFileName){
 	m_rgbColorKey = rgbColorKey;
 
 
-	//	#notdefined#‚È‚ç‚ÎA³íI—¹‚µ‚½‚Æ‚µ‚Ä‹A‚é
+	//	#notdefined#Â‚ÃˆÂ‚Ã§Â‚ÃÂAÂÂ³ÂÃ­ÂIÂ—Â¹Â‚ÂµÂ‚Â½Â‚Ã†Â‚ÂµÂ‚Ã„Â‹AÂ‚Ã©
 	if (strFileName == "#notdefined#"){
 		return 0;
 	}
 
-	//	nSurfaceType‚ÌƒT[ƒtƒF[ƒX‚ğì¬‚µA‚»‚±‚É“Ç‚İ‚Ş
+	//	nSurfaceTypeÂ‚ÃŒÂƒTÂ[ÂƒtÂƒFÂ[ÂƒXÂ‚Ã°ÂÃ¬ÂÂ¬Â‚ÂµÂAÂ‚Â»Â‚Â±Â‚Ã‰Â“Ã‡Â‚ÃÂÂÂ‚Ã
 
 	int nSurfaceType = GetMyFastDraw()->GetPrimary()->GetSurfaceType();
 
 	m_bLoad256 = false;
 	if (m_bYGAUse){
-	//	ƒ¿ƒT[ƒtƒF[ƒX‚ğì¬‚·‚ñ‚Ì‚©H
+	//	ÂƒÂ¿ÂƒTÂ[ÂƒtÂƒFÂ[ÂƒXÂ‚Ã°ÂÃ¬ÂÂ¬Â‚Â·Â‚Ã±Â‚ÃŒÂ‚Â©ÂH
 		nSurfaceType = GetYGASurfaceType(nSurfaceType);
-		//	‘Î‰‚·‚éƒ¿ƒT[ƒtƒF[ƒX‚Ì”Ô†‚ğ“¾‚é
+		//	Â‘ÃÂ‰ÂÂ‚Â·Â‚Ã©ÂƒÂ¿ÂƒTÂ[ÂƒtÂƒFÂ[ÂƒXÂ‚ÃŒÂ”Ã”ÂÂ†Â‚Ã°Â“Â¾Â‚Ã©
 	} else {
 		switch(nSurfaceType){
 		case 2: nSurfaceType = 4; m_bLoad256=true; break;
-		// ---- 8bpp‚È‚ç‚Î RGB555‚Åì¬B
-		//	‚±‚Ì‚Æ‚«“Ç‚İ‚ñ‚¾ƒrƒbƒgƒ}ƒbƒv‚ÍA
-		//	‘¼‚Ì‰æ–Êƒ‚[ƒh‚ÉˆÚs‚µ‚½‚Æ‚«‚ÉƒŠƒXƒgƒA‚·‚×‚«
+		// ---- 8bppÂ‚ÃˆÂ‚Ã§Â‚Ã RGB555Â‚Ã…ÂÃ¬ÂÂ¬ÂB
+		//	Â‚Â±Â‚ÃŒÂ‚Ã†Â‚Â«Â“Ã‡Â‚ÃÂÂÂ‚Ã±Â‚Â¾ÂƒrÂƒbÂƒgÂƒ}ÂƒbÂƒvÂ‚ÃÂA
+		//	Â‘Â¼Â‚ÃŒÂ‰Ã¦Â–ÃŠÂƒÂ‚Â[ÂƒhÂ‚Ã‰ÂˆÃšÂsÂ‚ÂµÂ‚Â½Â‚Ã†Â‚Â«Â‚Ã‰ÂƒÂŠÂƒXÂƒgÂƒAÂ‚Â·Â‚Ã—Â‚Â«
 		}
 	}
 
 	LRESULT lr = ISurface::LoadByType(strFileName,nSurfaceType);
 	if (lr!=0) return lr;
 
-	// ”²‚«F‚ğƒŠƒZƒbƒg‚µ‚Æ‚±‚©[
-	// ResetColorKey();@©‚Ü‚¿‚ª‚¢('02/11/01)yane.
-	// ”²‚«F‚ğXV‚µ‚Æ‚±‚©[
+	// Â”Â²Â‚Â«ÂFÂ‚Ã°ÂƒÂŠÂƒZÂƒbÂƒgÂ‚ÂµÂ‚Ã†Â‚Â±Â‚Â©Â[
+	// ResetColorKey();Â@ÂÂ©Â‚ÃœÂ‚Â¿Â‚ÂªÂ‚Â¢('02/11/01)yane.
+	// Â”Â²Â‚Â«ÂFÂ‚Ã°ÂXÂVÂ‚ÂµÂ‚Ã†Â‚Â±Â‚Â©Â[
 	UpdateColorKey();
 
 	return lr;
@@ -380,7 +381,7 @@ HDC CFastPlane::GetDC(){
 	}
 	
 	if (m_hDC!=NULL) {
-		Err.Out("CFastPlane::EndPaint‚ªŒÄ‚Ño‚³‚ê‚Ä‚¢‚È‚¢‚Ì‚ÉBeginPaint‚ªŒÄ‚Ño‚³‚ê‚½");
+		Err.Out("CFastPlane::EndPaintÂ‚ÂªÂŒÃ„Â‚Ã‘ÂoÂ‚Â³Â‚ÃªÂ‚Ã„Â‚Â¢Â‚ÃˆÂ‚Â¢Â‚ÃŒÂ‚Ã‰BeginPaintÂ‚ÂªÂŒÃ„Â‚Ã‘ÂoÂ‚Â³Â‚ÃªÂ‚Â½");
 		return NULL;
 	}
 	if (m_lpSurface==NULL) return NULL;
@@ -394,7 +395,7 @@ void CFastPlane::ReleaseDC(){
 	}
 
 	if (m_hDC==NULL) {
-		Err.Out("CFastPlane::BeginPaint‚ªŒÄ‚Ño‚³‚ê‚Ä‚¢‚È‚¢‚Ì‚ÉEndPaint‚ªŒÄ‚Ño‚³‚ê‚½");
+		Err.Out("CFastPlane::BeginPaintÂ‚ÂªÂŒÃ„Â‚Ã‘ÂoÂ‚Â³Â‚ÃªÂ‚Ã„Â‚Â¢Â‚ÃˆÂ‚Â¢Â‚ÃŒÂ‚Ã‰EndPaintÂ‚ÂªÂŒÃ„Â‚Ã‘ÂoÂ‚Â³Â‚ÃªÂ‚Â½");
 		return ;
 	}
 	if (m_lpSurface==NULL) return ;
@@ -408,11 +409,11 @@ LRESULT CFastPlane::InnerCreateMySurface(int sx,int sy,int nSurfaceType,bool bCl
 	SIZE rc = { m_nSizeX,m_nSizeY };
 
 	switch (nSurfaceType){
-	case 4:	{ //	RGB555‚ğì¬
+	case 4:	{ //	RGB555Â‚Ã°ÂÃ¬ÂÂ¬
 		CFastPlaneRGB555* lpSurface;
 		if (m_bSecondary256DIB){
-			//	256F—p‚Ì‰¼‘zƒZƒJƒ“ƒ_ƒŠ‚Å‚ ‚é‚È‚ç‚ÎADIBSection‚Åì‚Á‚Ä‚¨‚­
-			//	(HDC‚ğæ“¾‚Å‚«‚é‚æ‚¤‚É‚·‚é‚½‚ß)
+			//	256ÂFÂ—pÂ‚ÃŒÂ‰Â¼Â‘zÂƒZÂƒJÂƒÂ“Âƒ_ÂƒÂŠÂ‚Ã…Â‚Â Â‚Ã©Â‚ÃˆÂ‚Ã§Â‚ÃÂADIBSectionÂ‚Ã…ÂÃ¬Â‚ÃÂ‚Ã„Â‚Â¨Â‚Â­
+			//	(HDCÂ‚Ã°ÂÃ¦Â“Â¾Â‚Ã…Â‚Â«Â‚Ã©Â‚Ã¦Â‚Â¤Â‚Ã‰Â‚Â·Â‚Ã©Â‚Â½Â‚ÃŸ)
 			BITMAPINFO bmi;
 			ZERO(bmi);
 			bmi.bmiHeader.biSize		= sizeof(BITMAPINFOHEADER);
@@ -421,9 +422,9 @@ LRESULT CFastPlane::InnerCreateMySurface(int sx,int sy,int nSurfaceType,bool bCl
 			bmi.bmiHeader.biPlanes		= 1;
 			bmi.bmiHeader.biBitCount	= 16;
 			bmi.bmiHeader.biCompression	= BI_RGB;
-			HDC hdc = ::GetDC(NULL); // hWnd‚Ì‚Ù‚¤‚ª‚¦‚¦‚ñ‚©H
+			HDC hdc = ::GetDC(NULL); // hWndÂ‚ÃŒÂ‚Ã™Â‚Â¤Â‚ÂªÂ‚Â¦Â‚Â¦Â‚Ã±Â‚Â©ÂH
 			m_hBitmap = ::CreateDIBSection(hdc /* NULL*/, &bmi , DIB_RGB_COLORS, (void**)&lpSurface, NULL, 0 );
-			//	ª‚±‚ê‚Åì‚ç‚ê‚éDIB‚ÍRGB555‚Ì‚æ‚¤‚¾‚ªH
+			//	ÂÂªÂ‚Â±Â‚ÃªÂ‚Ã…ÂÃ¬Â‚Ã§Â‚ÃªÂ‚Ã©DIBÂ‚ÃRGB555Â‚ÃŒÂ‚Ã¦Â‚Â¤Â‚Â¾Â‚ÂªÂH
 			::ReleaseDC(NULL,hdc);
 			if (m_hBitmap==NULL) return 1;
 			m_hDC = ::CreateCompatibleDC(NULL);
@@ -435,68 +436,68 @@ LRESULT CFastPlane::InnerCreateMySurface(int sx,int sy,int nSurfaceType,bool bCl
 		GetSurfaceInfo()->Init((void*)lpSurface,m_nSizeX*sizeof(CFastPlaneRGB555),rc);
 		break;
 				}
-		//	‚±‚Ì‚Æ‚«AHDC‚Íæ“¾‚Å‚«‚È‚¢BƒSƒƒ“ƒl
-	case 3:	{ //	RGB565‚ğì¬
+		//	Â‚Â±Â‚ÃŒÂ‚Ã†Â‚Â«ÂAHDCÂ‚ÃÂÃ¦Â“Â¾Â‚Ã…Â‚Â«Â‚ÃˆÂ‚Â¢ÂBÂƒSÂƒÂÂƒÂ“Âƒl
+	case 3:	{ //	RGB565Â‚Ã°ÂÃ¬ÂÂ¬
 		CFastPlaneRGB565* lpSurface = new CFastPlaneRGB565[m_nSizeX * m_nSizeY];
 		GetSurfaceInfo()->Init((void*)lpSurface,m_nSizeX*sizeof(CFastPlaneRGB565),rc);
 		break;
 				}
-	case 5: { //	RGB888‚ğì¬
+	case 5: { //	RGB888Â‚Ã°ÂÃ¬ÂÂ¬
 		CFastPlaneRGB888* lpSurface = new CFastPlaneRGB888[m_nSizeX * m_nSizeY];
 		GetSurfaceInfo()->Init((void*)lpSurface,m_nSizeX*sizeof(CFastPlaneRGB888),rc);
 		break;
 			}
-	case 6: { //	BGR888‚ğì¬
+	case 6: { //	BGR888Â‚Ã°ÂÃ¬ÂÂ¬
 		CFastPlaneBGR888* lpSurface = new CFastPlaneBGR888[m_nSizeX * m_nSizeY];
 		GetSurfaceInfo()->Init((void*)lpSurface,m_nSizeX*sizeof(CFastPlaneBGR888),rc);
 		break;
 			}
-	case 7: { //	XRGB8888‚ğì¬
+	case 7: { //	XRGB8888Â‚Ã°ÂÃ¬ÂÂ¬
 		CFastPlaneXRGB8888* lpSurface = new CFastPlaneXRGB8888[m_nSizeX * m_nSizeY];
 		GetSurfaceInfo()->Init((void*)lpSurface,m_nSizeX*sizeof(CFastPlaneXRGB8888),rc);
 		break;
 			}
-	case 8: { //	XBGR8888‚ğì¬
+	case 8: { //	XBGR8888Â‚Ã°ÂÃ¬ÂÂ¬
 		CFastPlaneXBGR8888* lpSurface = new CFastPlaneXBGR8888[m_nSizeX * m_nSizeY];
 		GetSurfaceInfo()->Init((void*)lpSurface,m_nSizeX*sizeof(CFastPlaneXBGR8888),rc);
 		break;
 			}
 
-	case 10:	{ //	ARGB4565‚ğì¬
+	case 10:	{ //	ARGB4565Â‚Ã°ÂÃ¬ÂÂ¬
 		CFastPlaneARGB4565* lpSurface = new CFastPlaneARGB4565[m_nSizeX * m_nSizeY];
 		GetSurfaceInfo()->Init((void*)lpSurface,m_nSizeX*sizeof(CFastPlaneARGB4565),rc);
 		break;
 				}
-	case 11: { //	ARGB4555‚ğì¬
+	case 11: { //	ARGB4555Â‚Ã°ÂÃ¬ÂÂ¬
 		CFastPlaneARGB4555* lpSurface = new CFastPlaneARGB4555[m_nSizeX * m_nSizeY];
 		GetSurfaceInfo()->Init((void*)lpSurface,m_nSizeX*sizeof(CFastPlaneARGB4555),rc);
 		break;
 				}
 	case 12:	//	ARGB8888
-			{ //	ARGB8888‚ğì¬
+			{ //	ARGB8888Â‚Ã°ÂÃ¬ÂÂ¬
 		CFastPlaneARGB8888* lpSurface = new CFastPlaneARGB8888[m_nSizeX * m_nSizeY];
 		GetSurfaceInfo()->Init((void*)lpSurface,m_nSizeX*sizeof(CFastPlaneARGB8888),rc);
 		break;
 				}
 	case 13:	//	ABGR8888
-			{ //	ABGR8888‚ğì¬
+			{ //	ABGR8888Â‚Ã°ÂÃ¬ÂÂ¬
 		CFastPlaneABGR8888* lpSurface = new CFastPlaneABGR8888[m_nSizeX * m_nSizeY];
 		GetSurfaceInfo()->Init((void*)lpSurface,m_nSizeX*sizeof(CFastPlaneABGR8888),rc);
 		break;
 				}
 	default:
-		return 1;	//	ƒTƒ|[ƒg‚µ‚Ä‚Ö‚ñ‚ÅOOG
+		return 1;	//	ÂƒTÂƒ|Â[ÂƒgÂ‚ÂµÂ‚Ã„Â‚Ã–Â‚Ã±Â‚Ã…ÂOÂOÂG
 	}
 
 	m_bYGA = (nSurfaceType>=10);
 
 	GetSurfaceInfo()->SetSurfaceType(nSurfaceType);
-	m_bMySurface = true; // ©•ª‚Ånew‚µ‚½ƒT[ƒtƒF[ƒX‚Å‚ ‚é‚±‚Æ‚ğˆÓ–¡‚·‚éƒ}[ƒJ[
+	m_bMySurface = true; // ÂÂ©Â•ÂªÂ‚Ã…newÂ‚ÂµÂ‚Â½ÂƒTÂ[ÂƒtÂƒFÂ[ÂƒXÂ‚Ã…Â‚Â Â‚Ã©Â‚Â±Â‚Ã†Â‚Ã°ÂˆÃ“Â–Â¡Â‚Â·Â‚Ã©Âƒ}Â[ÂƒJÂ[
 
-	//	ƒNƒŠƒAƒtƒ‰ƒO—§‚Á‚Ä‚È‚¢‚È‚çƒNƒŠƒA‚µ‚È‚¢
+	//	ÂƒNÂƒÂŠÂƒAÂƒtÂƒÂ‰ÂƒOÂ—Â§Â‚ÃÂ‚Ã„Â‚ÃˆÂ‚Â¢Â‚ÃˆÂ‚Ã§ÂƒNÂƒÂŠÂƒAÂ‚ÂµÂ‚ÃˆÂ‚Â¢
 	if (bClear) Clear();
 
-	//	hook ŠJn‚·‚é
+	//	hook ÂŠJÂnÂ‚Â·Â‚Ã©
 	if (!m_bNowRestoring && GetMyFastDraw()!=NULL){
 		GetMyFastDraw()->GetFastPlaneList()->insert(this);
 	}
@@ -511,24 +512,24 @@ LRESULT CFastPlane::InnerCreateSurface(int sx,int sy,bool bYGA,bool bSecondary25
 	Release();
 
 	if (sx==0 || sy==0) {
-		return 1;	//	‚±‚ñ‚ÈƒT[ƒtƒF[ƒXAŠ¨•Ù‚µ‚Ä‚­‚ê[OOG
+		return 1;	//	Â‚Â±Â‚Ã±Â‚ÃˆÂƒTÂ[ÂƒtÂƒFÂ[ÂƒXÂAÂŠÂ¨Â•Ã™Â‚ÂµÂ‚Ã„Â‚Â­Â‚ÃªÂ[ÂOÂOÂG
 	}
 
-	//	Œ»İ‚Ì‰æ–Êƒ‚[ƒh‚É‰‚¶‚½‚à‚Ì‚É‚·‚é•K—v‚ ‚è
+	//	ÂŒÂ»ÂÃÂ‚ÃŒÂ‰Ã¦Â–ÃŠÂƒÂ‚Â[ÂƒhÂ‚Ã‰Â‰ÂÂ‚Â¶Â‚Â½Â‚Ã Â‚ÃŒÂ‚Ã‰Â‚Â·Â‚Ã©Â•KÂ—vÂ‚Â Â‚Ã¨
 	int nType = GetMyFastDraw()->GetPrimary()->GetSurfaceType();
 
 	if (!bYGA) {
-		//	YGA‰æ‘œ‚Å‚Í–³‚¢‚Ì‚Å–³ğŒ‚ÅDirectDrawSurface
-		//	‚½‚¾‚µA8bpp‚Ì‚Æ‚«‚ÍARGB555‚ÌƒT[ƒtƒF[ƒX‚ğì‚é
+		//	YGAÂ‰Ã¦Â‘ÂœÂ‚Ã…Â‚ÃÂ–Â³Â‚Â¢Â‚ÃŒÂ‚Ã…Â–Â³ÂÃ°ÂŒÂÂ‚Ã…DirectDrawSurface
+		//	Â‚Â½Â‚Â¾Â‚ÂµÂA8bppÂ‚ÃŒÂ‚Ã†Â‚Â«Â‚ÃÂARGB555Â‚ÃŒÂƒTÂ[ÂƒtÂƒFÂ[ÂƒXÂ‚Ã°ÂÃ¬Â‚Ã©
 		if (nType == 2 && !bSecondary256) {
 			return InnerCreateMySurface(sx,sy,4);
 		} else {
 			if (bSecondary256) m_bSecondary256 = true;
-			//	‚±‚ÌƒT[ƒtƒF[ƒX‚ÍA256F—pƒZƒJƒ“ƒ_ƒŠ
+			//	Â‚Â±Â‚ÃŒÂƒTÂ[ÂƒtÂƒFÂ[ÂƒXÂ‚ÃÂA256ÂFÂ—pÂƒZÂƒJÂƒÂ“Âƒ_ÂƒÂŠ
 		}
 
-		///	Œ»İ‚Ìƒvƒ‰ƒCƒ}ƒŠ‚æ‚è‘å‚«‚ÈƒT[ƒtƒF[ƒX‚Íì¬‚É¸”s‚·‚é
-		///	(DirectX3‚Ì§ŒÀ)
+		///	ÂŒÂ»ÂÃÂ‚ÃŒÂƒvÂƒÂ‰ÂƒCÂƒ}ÂƒÂŠÂ‚Ã¦Â‚Ã¨Â‘Ã¥Â‚Â«Â‚ÃˆÂƒTÂ[ÂƒtÂƒFÂ[ÂƒXÂ‚ÃÂÃ¬ÂÂ¬Â‚Ã‰ÂÂ¸Â”sÂ‚Â·Â‚Ã©
+		///	(DirectX3Â‚ÃŒÂÂ§ÂŒÃ€)
 		int nPx,nPy;
 		GetMyFastDraw()->GetPrimary()->GetSize(nPx,nPy);
 		bool bCreateDirectDrawSurface = !(nPx < sx || nPx < sy);
@@ -538,26 +539,26 @@ LRESULT CFastPlane::InnerCreateSurface(int sx,int sy,bool bYGA,bool bSecondary25
 			ZERO(ddsd);
 			ddsd.dwSize = sizeof(ddsd);
 			ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH;
-			//	‹­§“I‚ÉƒVƒXƒeƒ€ƒƒ‚ƒŠ‚ğg‚¤ƒIƒvƒVƒ‡ƒ“
+			//	Â‹Â­ÂÂ§Â“IÂ‚Ã‰ÂƒVÂƒXÂƒeÂƒÂ€ÂƒÂÂƒÂ‚ÂƒÂŠÂ‚Ã°ÂgÂ‚Â¤ÂƒIÂƒvÂƒVÂƒÂ‡ÂƒÂ“
 			if (m_bUseSystemMemory) {
 				ddsd.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN | DDSCAPS_SYSTEMMEMORY;
 			} else {
 				ddsd.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN;
 			}
-			// ƒTƒCƒY‚ğ•Û‘¶‚µ‚Ä‚¨‚­
+			// ÂƒTÂƒCÂƒYÂ‚Ã°Â•Ã›Â‘Â¶Â‚ÂµÂ‚Ã„Â‚Â¨Â‚Â­
 			m_nSizeX = ddsd.dwWidth	 = sx;
 			m_nSizeY = ddsd.dwHeight = sy;
 
-			//	RGB888‚ÅAŠï”ƒoƒCƒg‚ÅI‚í‚Á‚Ä‚¢‚é‚Æ‚â‚ç‚µ‚¢‚Ì‚ÅA
-			//	—]•ª‚ÉŠm•Û‚·‚é‚æ‚¤‚É‚·‚éBdWidth‚ªŠï”‚È‚ç‚Î‹ô”‚ÅŠm•Û‚·‚é‚æ‚¤‚É‚·‚é
+			//	RGB888Â‚Ã…ÂAÂŠÃ¯ÂÂ”ÂƒoÂƒCÂƒgÂ‚Ã…ÂIÂ‚Ã­Â‚ÃÂ‚Ã„Â‚Â¢Â‚Ã©Â‚Ã†Â‚Ã¢Â‚Ã§Â‚ÂµÂ‚Â¢Â‚ÃŒÂ‚Ã…ÂA
+			//	Â—]Â•ÂªÂ‚Ã‰ÂŠmÂ•Ã›Â‚Â·Â‚Ã©Â‚Ã¦Â‚Â¤Â‚Ã‰Â‚Â·Â‚Ã©ÂBdWidthÂ‚ÂªÂŠÃ¯ÂÂ”Â‚ÃˆÂ‚Ã§Â‚ÃÂ‹Ã´ÂÂ”Â‚Ã…ÂŠmÂ•Ã›Â‚Â·Â‚Ã©Â‚Ã¦Â‚Â¤Â‚Ã‰Â‚Â·Â‚Ã©
 			if (GetMyFastDraw()->GetPrimary()->GetBpp()==24 && ((ddsd.dwWidth & 1)==1)){
-				ddsd.dwWidth++;	//	‹­§“I‚É‹ô”ƒoƒCƒg‚ÉƒAƒ‰ƒCƒ“
+				ddsd.dwWidth++;	//	Â‹Â­ÂÂ§Â“IÂ‚Ã‰Â‹Ã´ÂÂ”ÂƒoÂƒCÂƒgÂ‚Ã‰ÂƒAÂƒÂ‰ÂƒCÂƒÂ“
 			}
 			LPDIRECTDRAW lpDraw = GetMyFastDraw()->GetDDraw();
 			if (lpDraw==NULL) return 1;
 			if (lpDraw->CreateSurface(&ddsd,&m_lpSurface,NULL)!=DD_OK){
-				Err.Out("CFastPlane::InnerCreateSurface‚ÌCreateSurface‚É¸”s");
-				return 2; // ‚ ‚¶‚á[
+				Err.Out("CFastPlane::InnerCreateSurfaceÂ‚ÃŒCreateSurfaceÂ‚Ã‰ÂÂ¸Â”s");
+				return 2; // Â‚Â Â‚Â¶Â‚Ã¡Â[
 			}
 		} else {
 			return InnerCreateMySurface(sx,sy,nType);
@@ -565,41 +566,41 @@ LRESULT CFastPlane::InnerCreateSurface(int sx,int sy,bool bYGA,bool bSecondary25
 
 		UpdateSurfaceInfo();
 
-		//	m_nSurfaceRef = 1;	//	QÆƒJƒEƒ“ƒg‚Ìİ’èOO
-		Clear();	//	”O‚Ì‚½‚ßƒNƒŠƒA‚µ‚Ä‚¨‚­(ÅãˆÊ‚ğ0‚É‚·‚é‚½‚ß)
+		//	m_nSurfaceRef = 1;	//	ÂQÂÃ†ÂƒJÂƒEÂƒÂ“ÂƒgÂ‚ÃŒÂÃÂ’Ã¨ÂOÂO
+		Clear();	//	Â”OÂ‚ÃŒÂ‚Â½Â‚ÃŸÂƒNÂƒÂŠÂƒAÂ‚ÂµÂ‚Ã„Â‚Â¨Â‚Â­(ÂÃ…ÂÃ£ÂˆÃŠÂ‚Ã°0Â‚Ã‰Â‚Â·Â‚Ã©Â‚Â½Â‚ÃŸ)
 	} else {
-		//	‚x‚f‚`‰æ‘œ‚È‚Ì‚ÅAŒ»İ‚Ì‰æ–Êƒ‚[ƒh‚É‰‚¶‚½‚à‚Ì‚É‚·‚é•K—v‚ ‚è
+		//	Â‚xÂ‚fÂ‚`Â‰Ã¦Â‘ÂœÂ‚ÃˆÂ‚ÃŒÂ‚Ã…ÂAÂŒÂ»ÂÃÂ‚ÃŒÂ‰Ã¦Â–ÃŠÂƒÂ‚Â[ÂƒhÂ‚Ã‰Â‰ÂÂ‚Â¶Â‚Â½Â‚Ã Â‚ÃŒÂ‚Ã‰Â‚Â·Â‚Ã©Â•KÂ—vÂ‚Â Â‚Ã¨
 		int nType = GetMyFastDraw()->GetPrimary()->GetSurfaceType();
 		switch (nType){
-		case 3:	 //	ARGB4565‚ğì¬
+		case 3:	 //	ARGB4565Â‚Ã°ÂÃ¬ÂÂ¬
 			return InnerCreateMySurface(sx,sy,10);
 			break;
 
-		case 2:	 // Ë8bpp‚Ì‚Æ‚«‚ÍARGB555‚È‚Ì‚ÅA‚»‚ê‚É‘Î‚·‚éYGA‚ÍARGB4555
-		case 4:	 //	ARGB4555‚ğì¬
+		case 2:	 // ÂÃ‹8bppÂ‚ÃŒÂ‚Ã†Â‚Â«Â‚ÃÂARGB555Â‚ÃˆÂ‚ÃŒÂ‚Ã…ÂAÂ‚Â»Â‚ÃªÂ‚Ã‰Â‘ÃÂ‚Â·Â‚Ã©YGAÂ‚ÃARGB4555
+		case 4:	 //	ARGB4555Â‚Ã°ÂÃ¬ÂÂ¬
 			return InnerCreateMySurface(sx,sy,11);
 			break;
 
-		//	RGB‡‚È‚ç‚ÎARGB8888‚Å‚¦‚¦‚ñ‚¿‚á‚¤H
+		//	RGBÂÂ‡Â‚ÃˆÂ‚Ã§Â‚ÃARGB8888Â‚Ã…Â‚Â¦Â‚Â¦Â‚Ã±Â‚Â¿Â‚Ã¡Â‚Â¤ÂH
 		case 5:	//	RGB888
 		case 7:	//	XRGB8888
 			return InnerCreateMySurface(sx,sy,12);
 			break;
-		//	BGR‡‚È‚ç‚Î–O˜a‰ÁZ‚Ì‚±‚Æ‚Æ‚©l‚¦‚ÄABGR8888‚É‚µ‚Æ‚±‚©H
+		//	BGRÂÂ‡Â‚ÃˆÂ‚Ã§Â‚ÃÂ–OÂ˜aÂ‰ÃÂZÂ‚ÃŒÂ‚Â±Â‚Ã†Â‚Ã†Â‚Â©ÂlÂ‚Â¦Â‚Ã„ABGR8888Â‚Ã‰Â‚ÂµÂ‚Ã†Â‚Â±Â‚Â©ÂH
 		case 6:	//	BGR888
 		case 8:	//	XBGR8888
 			return InnerCreateMySurface(sx,sy,13);
 			break;
 		}
 
-		//	ƒNƒŠƒA‚µ‚Ä‚¨‚©‚È‚¢‚Æƒ¿‚ÉƒSƒ~‚ªc‚Á‚½‚Ü‚Ü‚É‚È‚éDDOOG
+		//	ÂƒNÂƒÂŠÂƒAÂ‚ÂµÂ‚Ã„Â‚Â¨Â‚Â©Â‚ÃˆÂ‚Â¢Â‚Ã†ÂƒÂ¿Â‚Ã‰ÂƒSÂƒ~Â‚ÂªÂcÂ‚ÃÂ‚Â½Â‚ÃœÂ‚ÃœÂ‚Ã‰Â‚ÃˆÂ‚Ã©ÂDÂDÂOÂOÂG
 		Clear();
 	}
 
 	m_bYGA = bYGA;
 
-	//	hook ŠJn‚·‚é
-	//	--- ‚±‚ê‚çˆÈŠO‚ÍAInnerCreateMySurface‚Ì‚È‚©‚Åhook‚µ‚Ä‚¢‚é‚Ì‚Åok
+	//	hook ÂŠJÂnÂ‚Â·Â‚Ã©
+	//	--- Â‚Â±Â‚ÃªÂ‚Ã§ÂˆÃˆÂŠOÂ‚ÃÂAInnerCreateMySurfaceÂ‚ÃŒÂ‚ÃˆÂ‚Â©Â‚Ã…hookÂ‚ÂµÂ‚Ã„Â‚Â¢Â‚Ã©Â‚ÃŒÂ‚Ã…ok
 	if (GetMyFastDraw()!=NULL){
 		GetMyFastDraw()->GetFastPlaneList()->insert(this);
 	}
@@ -607,7 +608,7 @@ LRESULT CFastPlane::InnerCreateSurface(int sx,int sy,bool bYGA,bool bSecondary25
 }
 
 LRESULT CFastPlane::CreateSurface(int sx,int sy,bool bYGA){
-	//	•’Ê‚ÉCreateSurface‚·‚é‚ÆA‚»‚ê‚ÍŠÔˆá‚¢‚È‚­ƒI[ƒi[ƒhƒ[ƒvƒŒ[ƒ“‚Å‚ ‚é
+	//	Â•ÂÂ’ÃŠÂ‚Ã‰CreateSurfaceÂ‚Â·Â‚Ã©Â‚Ã†ÂAÂ‚Â»Â‚ÃªÂ‚ÃÂŠÃ”ÂˆÃ¡Â‚Â¢Â‚ÃˆÂ‚Â­ÂƒIÂ[ÂƒiÂ[ÂƒhÂƒÂÂ[ÂƒvÂƒÂŒÂ[ÂƒÂ“Â‚Ã…Â‚Â Â‚Ã©
 //	m_bOwnerDraw	= false;
 //	m_bBitmap		= false;
 	ResetColorKey();
@@ -617,15 +618,15 @@ LRESULT CFastPlane::CreateSurface(int sx,int sy,bool bYGA){
 
 	UpdateColorKey();
 
-	//	CreateSurface‚µ‚Ä‚é‚ñ‚¾‚©‚çAFillColor‚ÍƒŠƒZƒbƒg‚·‚×‚«? '00/09/09
-	//	Ë‚µ‚©‚µA‚±‚¤‚µ‚Ä‚µ‚Ü‚¤‚ÆA‰æ–Ê‚ğØ‚è‘Ö‚¦‚½‚ ‚ÆAFillColor‚ª•Ï‚í‚Á‚Ä‚µ‚Ü‚¤DD
+	//	CreateSurfaceÂ‚ÂµÂ‚Ã„Â‚Ã©Â‚Ã±Â‚Â¾Â‚Â©Â‚Ã§ÂAFillColorÂ‚ÃÂƒÂŠÂƒZÂƒbÂƒgÂ‚Â·Â‚Ã—Â‚Â«? '00/09/09
+	//	ÂÃ‹Â‚ÂµÂ‚Â©Â‚ÂµÂAÂ‚Â±Â‚Â¤Â‚ÂµÂ‚Ã„Â‚ÂµÂ‚ÃœÂ‚Â¤Â‚Ã†ÂAÂ‰Ã¦Â–ÃŠÂ‚Ã°ÂÃ˜Â‚Ã¨Â‘Ã–Â‚Â¦Â‚Â½Â‚Â Â‚Ã†ÂAFillColorÂ‚ÂªÂ•ÃÂ‚Ã­Â‚ÃÂ‚Ã„Â‚ÂµÂ‚ÃœÂ‚Â¤ÂDÂD
 
 //	m_bOwnerDraw	= true;
 
 	return 0;
 }
 
-//	ƒvƒ‰ƒCƒ}ƒŠƒT[ƒtƒF[ƒX‚Ì¶¬
+//	ÂƒvÂƒÂ‰ÂƒCÂƒ}ÂƒÂŠÂƒTÂ[ÂƒtÂƒFÂ[ÂƒXÂ‚ÃŒÂÂ¶ÂÂ¬
 LRESULT	CFastPlane::CreatePrimary(bool& bUseFlip,int nSx,int nSy){
 	m_bPrimary = true;
 
@@ -652,18 +653,18 @@ sur_retry: ;
 		ddsd.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;
 	}
 	if (lpDraw->CreateSurface(&ddsd,&m_lpSurface,NULL)!=DD_OK){
-		Err.Out("CFastPlane::CreatePrimary‚É¸”s");
+		Err.Out("CFastPlane::CreatePrimaryÂ‚Ã‰ÂÂ¸Â”s");
 		if (bUseFlip) {
 			bUseFlip=false;
-			// Flipping Surface‚ÍƒrƒfƒIƒƒ‚ƒŠã‚É”z’u‚·‚é•K—v‚ª‚ ‚é‚½‚ßA
-			// Create‚Éƒ~ƒX‚µ‚½‚Æ‚àl‚¦‚ç‚ê‚é
+			// Flipping SurfaceÂ‚ÃÂƒrÂƒfÂƒIÂƒÂÂƒÂ‚ÂƒÂŠÂÃ£Â‚Ã‰Â”zÂ’uÂ‚Â·Â‚Ã©Â•KÂ—vÂ‚ÂªÂ‚Â Â‚Ã©Â‚Â½Â‚ÃŸÂA
+			// CreateÂ‚Ã‰Âƒ~ÂƒXÂ‚ÂµÂ‚Â½Â‚Ã†Â‚Ã ÂlÂ‚Â¦Â‚Ã§Â‚ÃªÂ‚Ã©
 			goto sur_retry;
 		}
-		return 1; // ‚ ‚¶‚á[
+		return 1; // Â‚Â Â‚Â¶Â‚Ã¡Â[
 	}
-	//	‚±‚±‚ÅƒRƒs[‚µ‚Ä‚¨‚­
+	//	Â‚Â±Â‚Â±Â‚Ã…ÂƒRÂƒsÂ[Â‚ÂµÂ‚Ã„Â‚Â¨Â‚Â­
 	if (nSx && nSy) {
-		m_nSizeX = nSx; m_nSizeY = nSy;	//	ƒTƒCƒY‚Í‚±‚ê‚ğÌ—p
+		m_nSizeX = nSx; m_nSizeY = nSy;	//	ÂƒTÂƒCÂƒYÂ‚ÃÂ‚Â±Â‚ÃªÂ‚Ã°ÂÃŒÂ—p
 	} else {
 		GetMyFastDraw()->GetSize(m_nSizeX,m_nSizeY);
 	}
@@ -671,21 +672,21 @@ sur_retry: ;
 	UpdateSurfaceInfo();
 
 	if (GetSurfaceType() == 2) {
-		//	8bpp‚â‚Á‚½‚çA‚±‚êƒZƒJƒ“ƒ_ƒŠ256“¯—lA
-		//	256Fƒ‚[ƒh‚â‚¯‚ÇARGB555‚Å‚Í–³‚­A8bpp‚Æ‚µ‚Ä—pˆÓ‚³‚ê‚½
-		//	“Áê‚ÈƒT[ƒtƒF[ƒX‚Æ‚µ‚Ä\¿‚·‚é
+		//	8bppÂ‚Ã¢Â‚ÃÂ‚Â½Â‚Ã§ÂAÂ‚Â±Â‚ÃªÂƒZÂƒJÂƒÂ“Âƒ_ÂƒÂŠ256Â“Â¯Â—lÂA
+		//	256ÂFÂƒÂ‚Â[ÂƒhÂ‚Ã¢Â‚Â¯Â‚Ã‡ÂARGB555Â‚Ã…Â‚ÃÂ–Â³Â‚Â­ÂA8bppÂ‚Ã†Â‚ÂµÂ‚Ã„Â—pÂˆÃ“Â‚Â³Â‚ÃªÂ‚Â½
+		//	Â“ÃÂÃªÂ‚ÃˆÂƒTÂ[ÂƒtÂƒFÂ[ÂƒXÂ‚Ã†Â‚ÂµÂ‚Ã„Â\ÂÂ¿Â‚Â·Â‚Ã©
 		m_bSecondary256 = true;
 	}
 
-	//	‚±‚ÌƒT[ƒtƒF[ƒX‚É‘Î‚µ‚Ä‚àAƒJƒ‰[ƒL[‚Íİ’è‚µ‚Æ‚±‚©DD
+	//	Â‚Â±Â‚ÃŒÂƒTÂ[ÂƒtÂƒFÂ[ÂƒXÂ‚Ã‰Â‘ÃÂ‚ÂµÂ‚Ã„Â‚Ã ÂAÂƒJÂƒÂ‰Â[ÂƒLÂ[Â‚ÃÂÃÂ’Ã¨Â‚ÂµÂ‚Ã†Â‚Â±Â‚Â©ÂDÂD
 	UpdateColorKey();
 
-//	m_nSurfaceRef = 1;		//	QÆƒJƒEƒ“ƒg‘«‚µ‚Ä‚¨‚©‚È‚¢‚Æ‚¤‚Ü‚­‰ğ•ú‚³‚ê‚È‚¢
-	m_bOwnerDraw = true;	//	‚±‚ê‚ğOn‚É‚µ‚È‚¢‚ÆRestore‚³‚ê‚Ä‚µ‚Ü‚¤
+//	m_nSurfaceRef = 1;		//	ÂQÂÃ†ÂƒJÂƒEÂƒÂ“ÂƒgÂ‘Â«Â‚ÂµÂ‚Ã„Â‚Â¨Â‚Â©Â‚ÃˆÂ‚Â¢Â‚Ã†Â‚Â¤Â‚ÃœÂ‚Â­Â‰Ã°Â•ÃºÂ‚Â³Â‚ÃªÂ‚ÃˆÂ‚Â¢
+	m_bOwnerDraw = true;	//	Â‚Â±Â‚ÃªÂ‚Ã°OnÂ‚Ã‰Â‚ÂµÂ‚ÃˆÂ‚Â¢Â‚Ã†RestoreÂ‚Â³Â‚ÃªÂ‚Ã„Â‚ÂµÂ‚ÃœÂ‚Â¤
 	return 0;
 }
 
-//	ƒZƒJƒ“ƒ_ƒŠƒT[ƒtƒF[ƒX‚Ì¶¬
+//	ÂƒZÂƒJÂƒÂ“Âƒ_ÂƒÂŠÂƒTÂ[ÂƒtÂƒFÂ[ÂƒXÂ‚ÃŒÂÂ¶ÂÂ¬
 LRESULT CFastPlane::CreateSecondary(CFastPlane*lpPrimary,bool& bUseFlip){
 	Release();
 	ResetColorKey();
@@ -693,52 +694,52 @@ LRESULT CFastPlane::CreateSecondary(CFastPlane*lpPrimary,bool& bUseFlip){
 	LPDIRECTDRAW lpDraw = GetMyFastDraw()->GetDDraw();
 	if (lpDraw==NULL) return 1;
 
-	//	«flipƒ‹[ƒ`ƒ“‘‚«‚©‚¯I–¢ƒTƒ|[ƒgI
+	//	ÂÂ«flipÂƒÂ‹Â[Âƒ`ÂƒÂ“ÂÂ‘Â‚Â«Â‚Â©Â‚Â¯ÂIÂ–Â¢ÂƒTÂƒ|Â[ÂƒgÂI
 sur_retry: ;
 	if (bUseFlip) {
-		// flip‚ğg‚¤ˆÈãAƒVƒXƒeƒ€ƒƒ‚ƒŠ‚Éƒoƒbƒtƒ@‚ğŠm•Û‚·‚é‚Ì‚Í‚Ü‚¸‚¢DDD
+		// flipÂ‚Ã°ÂgÂ‚Â¤ÂˆÃˆÂÃ£ÂAÂƒVÂƒXÂƒeÂƒÂ€ÂƒÂÂƒÂ‚ÂƒÂŠÂ‚Ã‰ÂƒoÂƒbÂƒtÂƒ@Â‚Ã°ÂŠmÂ•Ã›Â‚Â·Â‚Ã©Â‚ÃŒÂ‚ÃÂ‚ÃœÂ‚Â¸Â‚Â¢ÂDÂDÂD
 		DDSCAPS ddscaps;		
-		ZERO(ddscaps);	//	‚¢‚ç‚È‚¢‚¯‚Çˆê‰‚Ë
+		ZERO(ddscaps);	//	Â‚Â¢Â‚Ã§Â‚ÃˆÂ‚Â¢Â‚Â¯Â‚Ã‡ÂˆÃªÂ‰ÂÂ‚Ã‹
 		if (m_bUseSystemMemory) {
 			ddscaps.dwCaps = DDSCAPS_BACKBUFFER | DDSCAPS_SYSTEMMEMORY;
 		} else {
 			ddscaps.dwCaps = DDSCAPS_BACKBUFFER;
 		}
 		if (lpPrimary->GetSurface()->GetAttachedSurface(&ddscaps,&m_lpSurface)!=DD_OK){
-			Err.Out("CFastPlane::CreateSecondary‚ÌGetAttachedSurface‚É¸”s");
-			// ‚Ù‚â‚©‚çŒ¾‚í‚ñ‚±‚Á‚¿‚á‚È‚¢I
+			Err.Out("CFastPlane::CreateSecondaryÂ‚ÃŒGetAttachedSurfaceÂ‚Ã‰ÂÂ¸Â”s");
+			// Â‚Ã™Â‚Ã¢Â‚Â©Â‚Ã§ÂŒÂ¾Â‚Ã­Â‚Ã±Â‚Â±Â‚ÃÂ‚Â¿Â‚Ã¡Â‚ÃˆÂ‚Â¢ÂI
 			bUseFlip = false;
 			goto sur_retry;
 		}
 		lpPrimary->GetSize(m_nSizeX,m_nSizeY);
-		//	ˆê‰ƒNƒŠƒA‚µ‚Æ‚±‚©...
+		//	ÂˆÃªÂ‰ÂÂƒNÂƒÂŠÂƒAÂ‚ÂµÂ‚Ã†Â‚Â±Â‚Â©...
 		Clear();
-		//	ƒT[ƒtƒF[ƒX‚Ìƒ`ƒFƒbƒN•XV
+		//	ÂƒTÂ[ÂƒtÂƒFÂ[ÂƒXÂ‚ÃŒÂƒ`ÂƒFÂƒbÂƒNÂÂ•ÂXÂV
 		UpdateSurfaceInfo();
 	} else {
 		int nSizeX,nSizeY;
 		lpPrimary->GetSize(nSizeX,nSizeY);
 		if (InnerCreateSurface(nSizeX,nSizeY)!=0){
-			Err.Out("CFastPlane::CreateSecondary‚É¸”s");
+			Err.Out("CFastPlane::CreateSecondaryÂ‚Ã‰ÂÂ¸Â”s");
 			return 0;
 		}
-		//	Update‚ÆClear‚ÍAInnerCreateSurface‚ª–Ê“|‚ğŒ©‚é
+		//	UpdateÂ‚Ã†ClearÂ‚ÃÂAInnerCreateSurfaceÂ‚ÂªÂ–ÃŠÂ“|Â‚Ã°ÂŒÂ©Â‚Ã©
 	}
 
-	//	‚±‚ÌƒT[ƒtƒF[ƒX‚É‘Î‚µ‚Ä‚àAƒJƒ‰[ƒL[‚Íİ’è‚µ‚Æ‚±‚©DD
+	//	Â‚Â±Â‚ÃŒÂƒTÂ[ÂƒtÂƒFÂ[ÂƒXÂ‚Ã‰Â‘ÃÂ‚ÂµÂ‚Ã„Â‚Ã ÂAÂƒJÂƒÂ‰Â[ÂƒLÂ[Â‚ÃÂÃÂ’Ã¨Â‚ÂµÂ‚Ã†Â‚Â±Â‚Â©ÂDÂD
 	UpdateColorKey();
 
-//	m_nSurfaceRef = 1;		//	QÆƒJƒEƒ“ƒg‘«‚µ‚Ä‚¨‚©‚È‚¢‚Æ‚¤‚Ü‚­‰ğ•ú‚³‚ê‚È‚¢
+//	m_nSurfaceRef = 1;		//	ÂQÂÃ†ÂƒJÂƒEÂƒÂ“ÂƒgÂ‘Â«Â‚ÂµÂ‚Ã„Â‚Â¨Â‚Â©Â‚ÃˆÂ‚Â¢Â‚Ã†Â‚Â¤Â‚ÃœÂ‚Â­Â‰Ã°Â•ÃºÂ‚Â³Â‚ÃªÂ‚ÃˆÂ‚Â¢
 	m_bOwnerDraw = true;
 	return 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-//	V‚µ‚­ƒT[ƒtƒF[ƒX‚ğì‚Á‚½‚Æ‚«‚É‚ÍA‚±‚ÌŠÖ”‚ğŒÄ‚Ño‚·‚±‚ÆI
+//	ÂVÂ‚ÂµÂ‚Â­ÂƒTÂ[ÂƒtÂƒFÂ[ÂƒXÂ‚Ã°ÂÃ¬Â‚ÃÂ‚Â½Â‚Ã†Â‚Â«Â‚Ã‰Â‚ÃÂAÂ‚Â±Â‚ÃŒÂŠÃ–ÂÂ”Â‚Ã°ÂŒÃ„Â‚Ã‘ÂoÂ‚Â·Â‚Â±Â‚Ã†ÂI
 LRESULT	CFastPlane::UpdateSurfaceInfo(){
 	int nSurfaceType = CDirectDrawSurfaceManager().GetSurfaceType(GetSurface());
 
-	//	ÀÛ‚ÉLockì‹Æ‚ª•K—v‚Å‚ ‚é
+	//	ÂÃ€ÂÃ›Â‚Ã‰LockÂÃ¬Â‹Ã†Â‚ÂªÂ•KÂ—vÂ‚Ã…Â‚Â Â‚Ã©
 	DDSURFACEDESC ddsd = { sizeof (ddsd) };
 	LRESULT hres;
 	ddsd.dwSize = sizeof(ddsd);
@@ -748,21 +749,21 @@ LRESULT	CFastPlane::UpdateSurfaceInfo(){
 
 	if (hres != DD_OK) {
 		if (IsPrimarySurface()){
-			//	primary‚©‚à’m‚ê‚ñ
+			//	primaryÂ‚Â©Â‚Ã Â’mÂ‚ÃªÂ‚Ã±
 			GetSurfaceInfo()->Init(NULL,0,rc,nSurfaceType);
-			///	primary‚ÍALock‚É¸”s‚·‚é‚±‚Æ‚ª‚ ‚é‚©‚ç‰Šú‰»‚¾‚¯‚Å‚à‚µ‚Æ‚©‚É‚á‚¢‚©‚ñ
+			///	primaryÂ‚ÃÂALockÂ‚Ã‰ÂÂ¸Â”sÂ‚Â·Â‚Ã©Â‚Â±Â‚Ã†Â‚ÂªÂ‚Â Â‚Ã©Â‚Â©Â‚Ã§ÂÂ‰ÂŠÃºÂ‰Â»Â‚Â¾Â‚Â¯Â‚Ã…Â‚Ã Â‚ÂµÂ‚Ã†Â‚Â©Â‚Ã‰Â‚Ã¡Â‚Â¢Â‚Â©Â‚Ã±
 			GetSurfaceInfo()->SetLocker(smart_ptr<ISurfaceLocker>(new IDisableSurfaceLocker));
-			///	Surface‚ÌLock‚Í•K‚¸¸”s‚·‚é‚æ‚¤‚É‚µ‚Æ‚©‚È‚­‚Ä‚Í‚¢‚©‚ñ
+			///	SurfaceÂ‚ÃŒLockÂ‚ÃÂ•KÂ‚Â¸ÂÂ¸Â”sÂ‚Â·Â‚Ã©Â‚Ã¦Â‚Â¤Â‚Ã‰Â‚ÂµÂ‚Ã†Â‚Â©Â‚ÃˆÂ‚Â­Â‚Ã„Â‚ÃÂ‚Â¢Â‚Â©Â‚Ã±
 		} else {
-			//	primary‚Å‚È‚¢‚Ì‚Élock¸”s‚µ‚½‚çƒ_ƒ‚Û
+			//	primaryÂ‚Ã…Â‚ÃˆÂ‚Â¢Â‚ÃŒÂ‚Ã‰lockÂÂ¸Â”sÂ‚ÂµÂ‚Â½Â‚Ã§Âƒ_ÂƒÂÂ‚Ã›
 			GetSurfaceInfo()->SetInit(false);
 		}
-		return 1;	//	Lock‚É¸”s
+		return 1;	//	LockÂ‚Ã‰ÂÂ¸Â”s
 	}
 	GetSurfaceInfo()->Init(ddsd.lpSurface,ddsd.lPitch,rc,nSurfaceType);
-	//	ªƒAƒhƒŒƒX‚ğ“Á’è‚·‚é‚½‚ß‚ÉA‚±‚ê‚ª•K—v
+	//	ÂÂªÂƒAÂƒhÂƒÂŒÂƒXÂ‚Ã°Â“ÃÂ’Ã¨Â‚Â·Â‚Ã©Â‚Â½Â‚ÃŸÂ‚Ã‰ÂAÂ‚Â±Â‚ÃªÂ‚ÂªÂ•KÂ—v
 
-	//	unlock‚ğ–Y‚ê‚é‚Æ‘å•Ï‚È‚±‚Æ‚ÉOOG
+	//	unlockÂ‚Ã°Â–YÂ‚ÃªÂ‚Ã©Â‚Ã†Â‘Ã¥Â•ÃÂ‚ÃˆÂ‚Â±Â‚Ã†Â‚Ã‰ÂOÂOÂG
 	GetSurface()->Unlock(NULL);
 
 	return 0;
@@ -798,7 +799,7 @@ ISurfaceRGB		CFastPlane::GetFillColor() const {
 
 //////////////////////////////////////////////////////////////////////////////
 // todo
-// ƒfƒBƒXƒvƒŒƒC‚ÌF”‚ğ’²‚×‚é‚Ì‚ÉGetDisplayMode‚Íg‚Á‚Ä‚Í‚¢‚¯‚È‚¢
+// ÂƒfÂƒBÂƒXÂƒvÂƒÂŒÂƒCÂ‚ÃŒÂFÂÂ”Â‚Ã°Â’Â²Â‚Ã—Â‚Ã©Â‚ÃŒÂ‚Ã‰GetDisplayModeÂ‚ÃÂgÂ‚ÃÂ‚Ã„Â‚ÃÂ‚Â¢Â‚Â¯Â‚ÃˆÂ‚Â¢
 /*
 int		CFastPlane::GetBpp(){
 	return CBppManager::GetBpp();

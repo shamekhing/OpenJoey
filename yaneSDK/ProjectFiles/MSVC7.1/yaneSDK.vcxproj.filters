@@ -1,0 +1,677 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="config">
+      <UniqueIdentifier>{f550f099-1edd-479d-875d-355e22dc3658}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AppFrame">
+      <UniqueIdentifier>{95bc5cdc-a122-4742-aabe-4431dc20a37d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Auxiliary">
+      <UniqueIdentifier>{89fd228c-3929-4e53-a26e-a8ca81e971df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Draw">
+      <UniqueIdentifier>{019d64b5-ea1e-4b8a-af2c-ad68348c8c5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{ade1c7e3-e334-47ce-a8b0-f504e5d42ee0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{69f1cc4b-bb43-43f3-859c-053461897767}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Multimedia">
+      <UniqueIdentifier>{3c42197e-f1e4-4dda-b484-496d9e950fa9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Thread">
+      <UniqueIdentifier>{9eab7953-ee24-4214-9806-bb1b07976189}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Timer">
+      <UniqueIdentifier>{0a528d49-2a59-4f63-94d0-72748bbe0ade}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Window">
+      <UniqueIdentifier>{2db53873-1dac-4fcb-b174-e327add68ae3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="YTL">
+      <UniqueIdentifier>{5c39a390-303c-440f-8068-c21921b1afa7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="YTL\delegate">
+      <UniqueIdentifier>{fd8f5590-c27b-4876-9a58-e8b65aefd7fe}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\config\yaneConfig.h">
+      <Filter>config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppFrame\index.h">
+      <Filter>AppFrame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppFrame\yaneAppBase.h">
+      <Filter>AppFrame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppFrame\yaneAppDraw.h">
+      <Filter>AppFrame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppFrame\yaneAppFrame.h">
+      <Filter>AppFrame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppFrame\yaneAppInitializer.h">
+      <Filter>AppFrame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppFrame\yaneAppManager.h">
+      <Filter>AppFrame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppFrame\yaneFindWindow.h">
+      <Filter>AppFrame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppFrame\yaneObjectCreater.h">
+      <Filter>AppFrame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\AppFrame\yaneSingleApp.h">
+      <Filter>AppFrame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Auxiliary\index.h">
+      <Filter>Auxiliary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Auxiliary\yaneAllocator.h">
+      <Filter>Auxiliary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Auxiliary\yaneCOMBase.h">
+      <Filter>Auxiliary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Auxiliary\yaneCPUID.h">
+      <Filter>Auxiliary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Auxiliary\yaneDir.h">
+      <Filter>Auxiliary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Auxiliary\yaneFile.h">
+      <Filter>Auxiliary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Auxiliary\yaneIMEWrapper.h">
+      <Filter>Auxiliary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Auxiliary\yaneLoadCache.h">
+      <Filter>Auxiliary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Auxiliary\yaneLZSS.h">
+      <Filter>Auxiliary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Auxiliary\yaneMemory.h">
+      <Filter>Auxiliary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Auxiliary\yaneSerialize.h">
+      <Filter>Auxiliary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Auxiliary\yaneShell.h">
+      <Filter>Auxiliary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Auxiliary\yaneStream.h">
+      <Filter>Auxiliary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Auxiliary\yaneStringMap.h">
+      <Filter>Auxiliary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Auxiliary\yaneStringScanner.h">
+      <Filter>Auxiliary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Draw\index.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Draw\yaneDIBitmap.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Draw\yaneDirectDraw.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Draw\yaneDirtyRect.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Draw\yaneFastDraw.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Draw\yaneFastPlane.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Draw\yaneFont.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Draw\yaneGraphicLoader.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Draw\yaneGTL.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Draw\yaneLayer.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Draw\yanePlane.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Draw\yanePlaneLoader.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Draw\yaneScene.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Draw\yaneSprite.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Draw\yaneSurface.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Draw\yaneSurfaceBltter.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Draw\yaneSurfaceCache.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Draw\yaneTextDIBitmap.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Draw\yaneTextFastPlane.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Input\index.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Input\yaneDirectInput.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Input\yaneJoyStick.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Input\yaneKey.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Input\yaneKeyBase.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Input\yaneKeyInput.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Input\yaneMIDIInput.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Input\yaneMouse.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Input\yaneVirtualKey.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Math\index.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Math\yaneCounter.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Math\yaneRand.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Math\yaneRound.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Math\yaneSinTable.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Multimedia\index.h">
+      <Filter>Multimedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Multimedia\yaneACMStream.h">
+      <Filter>Multimedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Multimedia\yaneAudioMixer.h">
+      <Filter>Multimedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Multimedia\yaneCDDA.h">
+      <Filter>Multimedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Multimedia\yaneDirectMusic.h">
+      <Filter>Multimedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Multimedia\yaneDirectSound.h">
+      <Filter>Multimedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Multimedia\yaneMIDIOutputDM.h">
+      <Filter>Multimedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Multimedia\yaneMIDIOutputMCI.h">
+      <Filter>Multimedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Multimedia\yaneSELoader.h">
+      <Filter>Multimedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Multimedia\yaneSound.h">
+      <Filter>Multimedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Multimedia\yaneSoundBuffer.h">
+      <Filter>Multimedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Multimedia\yaneSoundFactory.h">
+      <Filter>Multimedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Multimedia\yaneSoundLoader.h">
+      <Filter>Multimedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Multimedia\yaneSoundParameter.h">
+      <Filter>Multimedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Multimedia\yaneSoundStream.h">
+      <Filter>Multimedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Multimedia\yaneVolumeFader.h">
+      <Filter>Multimedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Multimedia\yaneWaveOutput.h">
+      <Filter>Multimedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Multimedia\yaneWaveSound.h">
+      <Filter>Multimedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Multimedia\yaneWaveStaticSound.h">
+      <Filter>Multimedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Multimedia\yaneWaveStream.h">
+      <Filter>Multimedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Multimedia\yaneWaveStreamSound.h">
+      <Filter>Multimedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Thread\index.h">
+      <Filter>Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Thread\yaneCriticalSection.h">
+      <Filter>Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Thread\yaneEvent.h">
+      <Filter>Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Thread\yaneLockObject.h">
+      <Filter>Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Thread\yaneMicroThread.h">
+      <Filter>Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Thread\yaneMutex.h">
+      <Filter>Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Thread\yaneThread.h">
+      <Filter>Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Thread\yaneThreadLocal.h">
+      <Filter>Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Thread\yaneThreadPooler.h">
+      <Filter>Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Timer\index.h">
+      <Filter>Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Timer\yaneFPSTimer.h">
+      <Filter>Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Timer\yaneIntervalTimer.h">
+      <Filter>Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Timer\yaneTimer.h">
+      <Filter>Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Window\index.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Window\yaneDebugWindow.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Window\yaneHWndManager.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Window\yaneWindow.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Window\yaneWinHook.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Ytl\delegate.h">
+      <Filter>YTL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\YTL\exceptions.h">
+      <Filter>YTL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\YTL\factory_permutation.h">
+      <Filter>YTL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\YTL\fast_list.h">
+      <Filter>YTL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\YTL\function_callback.h">
+      <Filter>YTL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\YTL\index.h">
+      <Filter>YTL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\YTL\list_chain.h">
+      <Filter>YTL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\YTL\macro.h">
+      <Filter>YTL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\YTL\mediator.h">
+      <Filter>YTL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\YTL\proxy_ptr.h">
+      <Filter>YTL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\YTL\ref_callback_deleter.h">
+      <Filter>YTL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\YTL\ref_creater.h">
+      <Filter>YTL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\YTL\ref_deleter.h">
+      <Filter>YTL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\YTL\singleton.h">
+      <Filter>YTL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\YTL\smart_list_ptr.h">
+      <Filter>YTL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\YTL\smart_ptr.h">
+      <Filter>YTL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\YTL\smart_vector_ptr.h">
+      <Filter>YTL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\YTL\string.h">
+      <Filter>YTL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Ytl\delegate\functor.hpp">
+      <Filter>YTL\delegate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Ytl\delegate\is_compatible_function.hpp">
+      <Filter>YTL\delegate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Ytl\delegate\is_convertible.hpp">
+      <Filter>YTL\delegate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Ytl\delegate\is_same.hpp">
+      <Filter>YTL\delegate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Ytl\delegate\select_type.hpp">
+      <Filter>YTL\delegate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Ytl\delegate\type_test.hpp">
+      <Filter>YTL\delegate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Ytl\delegate\yes_no_type.hpp">
+      <Filter>YTL\delegate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\stdafx.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\AppFrame\yaneAppBase.cpp">
+      <Filter>AppFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppFrame\yaneAppFrame.cpp">
+      <Filter>AppFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppFrame\yaneAppInitializer.cpp">
+      <Filter>AppFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppFrame\yaneAppManager.cpp">
+      <Filter>AppFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppFrame\yaneFindWindow.cpp">
+      <Filter>AppFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppFrame\yaneObjectCreater.cpp">
+      <Filter>AppFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\AppFrame\yaneSingleApp.cpp">
+      <Filter>AppFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Auxiliary\yaneAllocator.cpp">
+      <Filter>Auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Auxiliary\yaneCOMBase.cpp">
+      <Filter>Auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Auxiliary\yaneCPUID.cpp">
+      <Filter>Auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Auxiliary\yaneDir.cpp">
+      <Filter>Auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Auxiliary\yaneFile.cpp">
+      <Filter>Auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Auxiliary\yaneIMEWrapper.cpp">
+      <Filter>Auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Auxiliary\yaneLoadCache.cpp">
+      <Filter>Auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Auxiliary\yaneLZSS.cpp">
+      <Filter>Auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Auxiliary\yaneMemory.cpp">
+      <Filter>Auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Auxiliary\yaneSerialize.cpp">
+      <Filter>Auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Auxiliary\yaneShell.cpp">
+      <Filter>Auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Auxiliary\yaneStream.cpp">
+      <Filter>Auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Auxiliary\yaneStringMap.cpp">
+      <Filter>Auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Auxiliary\yaneStringScanner.cpp">
+      <Filter>Auxiliary</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Draw\yaneDIBitmap.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Draw\yaneDirectDraw.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Draw\yaneDirtyRect.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Draw\yaneFastDraw.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Draw\yaneFastPlane.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Draw\yaneFont.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Draw\yaneGraphicLoader.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Draw\yaneGTL.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Draw\yaneLayer.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Draw\yanePlane.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Draw\yanePlaneLoader.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Draw\yaneScene.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Draw\yaneSprite.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Draw\yaneSurface1.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Draw\yaneSurface2.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Draw\yaneSurface3.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Draw\yaneSurface4.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Draw\yaneSurfaceBltter.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Draw\yaneTextDIBitmap.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Draw\yaneTextFastPlane.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Input\yaneDirectInput.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Input\yaneJoyStick.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Input\yaneKey.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Input\yaneKeyBase.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Input\yaneKeyInput.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Input\yaneMIDIInput.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Input\yaneMouse.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Input\yaneVirtualKey.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Math\yaneCounter.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Math\yaneRand.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Math\yaneSinTable.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Multimedia\yaneACMStream.cpp">
+      <Filter>Multimedia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Multimedia\yaneAudioMixer.cpp">
+      <Filter>Multimedia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Multimedia\yaneCDDA.cpp">
+      <Filter>Multimedia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Multimedia\yaneDirectMusic.cpp">
+      <Filter>Multimedia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Multimedia\yaneDirectSound.cpp">
+      <Filter>Multimedia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Multimedia\yaneMIDIOutputDM.cpp">
+      <Filter>Multimedia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Multimedia\yaneMIDIOutputMCI.cpp">
+      <Filter>Multimedia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Multimedia\yaneSELoader.cpp">
+      <Filter>Multimedia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Multimedia\yaneSound.cpp">
+      <Filter>Multimedia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Multimedia\yaneSoundBuffer.cpp">
+      <Filter>Multimedia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Multimedia\yaneSoundFactory.cpp">
+      <Filter>Multimedia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Multimedia\yaneSoundLoader.cpp">
+      <Filter>Multimedia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Multimedia\yaneSoundParameter.cpp">
+      <Filter>Multimedia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Multimedia\yaneSoundStream.cpp">
+      <Filter>Multimedia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Multimedia\yaneVolumeFader.cpp">
+      <Filter>Multimedia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Multimedia\yaneWaveOutput.cpp">
+      <Filter>Multimedia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Multimedia\yaneWaveSound.cpp">
+      <Filter>Multimedia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Multimedia\yaneWaveStaticSound.cpp">
+      <Filter>Multimedia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Multimedia\yaneWaveStream.cpp">
+      <Filter>Multimedia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Multimedia\yaneWaveStreamSound.cpp">
+      <Filter>Multimedia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Thread\yaneCriticalSection.cpp">
+      <Filter>Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Thread\yaneEvent.cpp">
+      <Filter>Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Thread\yaneLockObject.cpp">
+      <Filter>Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Thread\yaneMicroThread.cpp">
+      <Filter>Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Thread\yaneMutex.cpp">
+      <Filter>Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Thread\yaneThread.cpp">
+      <Filter>Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Thread\yaneThreadLocal.cpp">
+      <Filter>Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Thread\yaneThreadPooler.cpp">
+      <Filter>Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Timer\yaneFPSTimer.cpp">
+      <Filter>Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Timer\yaneIntervalTimer.cpp">
+      <Filter>Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Timer\yaneTimer.cpp">
+      <Filter>Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Window\yaneDebugWindow.cpp">
+      <Filter>Window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Window\yaneHWndManager.cpp">
+      <Filter>Window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Window\yaneWindow.cpp">
+      <Filter>Window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Window\yaneWinHook.cpp">
+      <Filter>Window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\YTL\function_callback.cpp">
+      <Filter>YTL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\stdafx.cpp" />
+  </ItemGroup>
+</Project>

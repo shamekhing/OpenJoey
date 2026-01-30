@@ -263,7 +263,7 @@ LRESULT CRichTextParser::GetNextSegment(CRichTextSegment& segment) {
     segment.text.clear();
     // Do NOT assign segment.context here. It will be assigned after parsing.
     
-    if (*m_lpStr == '\0') {
+    if (m_text.empty() || *m_lpStr == '\0') {
         return 3;
     }
     
@@ -292,6 +292,10 @@ LRESULT CRichTextParser::GetNextSegment(CRichTextSegment& segment) {
         std::string tagContent(start, end - start);
         m_lpStr = end + 1;
 
+        if (tagContent.empty()) {
+            // Empty tag <>: treat as no-op to avoid dereferencing out-of-range iterator
+            return 0;
+        }
         if (tagContent[0] == '/') {
             if (m_contextStack.size() > 1) {
                 m_contextStack.pop();
@@ -301,11 +305,11 @@ LRESULT CRichTextParser::GetNextSegment(CRichTextSegment& segment) {
 			LPCSTR lpAttr = tagContent.c_str();
 	        
 			// Use direct checks for alignment tags to ensure robustness
-			if (stricmp(lpAttr, "CENTER") == 0) {
+			if (_stricmp(lpAttr, "CENTER") == 0) {
 				m_context.m_nAlign = 1;
-			} else if (stricmp(lpAttr, "RIGHT") == 0) {
+			} else if (_stricmp(lpAttr, "RIGHT") == 0) {
 				m_context.m_nAlign = 2;
-			} else if (stricmp(lpAttr, "LEFT") == 0) {
+			} else if (_stricmp(lpAttr, "LEFT") == 0) {
 				m_context.m_nAlign = 0;
 			} 
 	        
@@ -384,22 +388,22 @@ void CRichTextParser::ParseTagAttributes(const std::string& tagContent, CRichTex
     }
 
     // Process single-attribute tags
-    if (stricmp(tagName.c_str(), "BOLD") == 0) {
+    if (_stricmp(tagName.c_str(), "BOLD") == 0) {
         context.m_bBold = true;
-    } else if (stricmp(tagName.c_str(), "ITALIC") == 0) {
+    } else if (_stricmp(tagName.c_str(), "ITALIC") == 0) {
         context.m_bItalic = true;
-    } else if (stricmp(tagName.c_str(), "U") == 0) {
+    } else if (_stricmp(tagName.c_str(), "U") == 0) {
         context.m_bUnderLine = true;
-    } else if (stricmp(tagName.c_str(), "S") == 0) {
+    } else if (_stricmp(tagName.c_str(), "S") == 0) {
         context.m_bStrikeOut = true;
-    } else if (stricmp(tagName.c_str(), "CENTER") == 0) {
+    } else if (_stricmp(tagName.c_str(), "CENTER") == 0) {
         context.m_nAlign = 1;
-    } else if (stricmp(tagName.c_str(), "RIGHT") == 0) {
+    } else if (_stricmp(tagName.c_str(), "RIGHT") == 0) {
         context.m_nAlign = 2;
     }
 
     // Now parse attributes for multi-attribute tags like FONT
-    if (stricmp(tagName.c_str(), "FONT") == 0 && pos != std::string::npos) {
+    if (_stricmp(tagName.c_str(), "FONT") == 0 && pos != std::string::npos) {
         std::string attributes = tagContent.substr(pos);
         LPCSTR lpAttr = attributes.c_str();
 
