@@ -12,6 +12,9 @@ CGUISliderEventListener::CGUISliderEventListener() {
     ResetEventFlag();
 }
 
+// CGUINormalSliderListener: m_bHasPlane must be set so we use m_vPlane (not null m_vPlaneLoader)
+CGUINormalSliderListener::CGUINormalSliderListener() : m_bHasPlane(false) {}
+
 void CGUINormalSliderListener::GetSliderSize(int nX, int nY, int& sx, int& sy) {
     LPRECT lprc = GetSlider()->GetRect();
     int w = lprc->right - lprc->left;
@@ -37,6 +40,8 @@ LRESULT CGUINormalSliderListener::OnDraw(ISurface* lp, int x, int y, int nX, int
     if (m_bHasPlane) {
         return lp->BltNatural(m_vPlane.get(), x, y);
     }
+    // Avoid dereferencing null m_vPlaneLoader (never set when using SetPlane only, e.g. Settings scene)
+    if (m_vPlaneLoader.getPointer() == NULL) return -1;
 
     CPlane planeHolder = m_vPlaneLoader->GetPlane(0);
     ISurface* plane0 = planeHolder.get();
@@ -118,6 +123,12 @@ void CGUISlider::SetEvent(smart_ptr<CGUISliderEventListener> pv) {
     m_pvSliderEvent->SetSlider(smart_ptr<CGUISlider>(this));
 }
 
+void CGUISlider::SetEvent(smart_ptr<CGUISliderEventListener> pv, smart_ptr<CGUISlider> selfRef) {
+    Reset();
+    m_pvSliderEvent = pv;
+    m_pvSliderEvent->SetSlider(selfRef);
+}
+
 void CGUISlider::CalcSliderPos(int& x, int& y, int& nSLX, int& nSLY, int& w, int& h) {
     int trackStartX = m_nX + m_nXOffset + m_rcRect.left;
     int trackStartY = m_nY + m_nYOffset + m_rcRect.top;
@@ -146,7 +157,7 @@ void CGUISlider::CalcSliderPos(int& x, int& y, int& nSLX, int& nSLY, int& w, int
 }
 
 LRESULT CGUISlider::OnSimpleMove(ISurface* lp) {
-    if (m_pvMouse.get() == NULL) return -1;
+    if (m_pvMouse.isNull()) return -1;
 
     int nXX, nYY, nSLX, nSLY, w, h;
     CalcSliderPos(nXX, nYY, nSLX, nSLY, w, h); // nXX/nYY are Absolute Screen Coordinates of Thumb
@@ -293,7 +304,7 @@ LRESULT CGUISlider::OnSimpleMove(ISurface* lp) {
 }
 
 LRESULT CGUISlider::OnSimpleDraw(ISurface* lp) {
-    if (m_pvSliderEvent.get() == NULL) return -1;
+    if (m_pvSliderEvent.isNull()) return -1;
     
     // Pass the calculated positions (m_nPosX, m_nPosY) to the listener for drawing
     // We also pass the item counts (m_nItemNumX, m_nItemNumY) so the listener knows how to size the thumb

@@ -768,24 +768,23 @@ void CSceneCardList::DrawCardGrid(const smart_ptr<ISurface>& lp) {
                                 lp->BltNatural(m_cardHoverBorder.get(), x, y, &dstSize, &srcRect, NULL, 0);
                             }
 
-							// Card TextBox (guard: GetCard() can return null)
+							// Card TextBox: match PoC — description panel shows card name + effect text; type on one line
 							if (card.cardData) {
-								//m_cardTextBox->SetTextTitle(card.cardData->name.name);
 								const DialogEntry* cardTypeDialog = m_bin->GetDialog(card.cardData->properties.GetMonsterTypeTextId());
 								const char* typeText = (cardTypeDialog && cardTypeDialog->text) ? cardTypeDialog->text : "";
 								const char* desc = card.cardData->description ? card.cardData->description : "";
 								const char* name = (card.cardData->name.name) ? card.cardData->name.name : "";
+								// PoC style: name, then type line, then effect text as main body (so effect is in the scroll panel, not on the card image)
 								std::string formattedText =
-									"<SIZE=-1><BOLD>" + std::string(name) + "</BOLD></SIZE>" +
-									"<HR>" +
-									"<COLOR=#4A2C00><SIZE=0>[" + std::string(typeText) + "]</SIZE></COLOR>" +
-									"<HR>" +
+									"<SIZE=-1><BOLD>" + std::string(name) + "</BOLD></SIZE>\n" +
+									"<COLOR=#4A2C00><SIZE=0>[" + std::string(typeText) + "]</SIZE></COLOR>\n\n" +
 									"<COLOR=#4A2C00><SIZE=0>" + std::string(desc) + "</SIZE></COLOR>";
-
+								if (!desc[0])
+									formattedText += " "; // avoid empty block so type line stays visible
 								m_cardTextBox->SetText(formattedText);
 								MonsterType ctype = card.cardData->properties.GetMonsterType();
 								if (ctype == TYPE_SPELLCARD || ctype == TYPE_TRAPCARD)
-									m_cardTextBoxFooter->SetText("TRAP SPELL CARD");
+									m_cardTextBoxFooter->SetText("[TRAP/SPELL CARD]");
 								else
 									m_cardTextBoxFooter->SetText("[MONSTER]");
 							}
@@ -833,77 +832,73 @@ void CSceneCardList::DrawCardPreview(const smart_ptr<ISurface>& lp) {
 }
 
 void CSceneCardList::DrawPagination(const smart_ptr<ISurface>& lp) {
-    // Load page number font
-    CPlane pageFont = m_vPlaneLoader.GetPlane(3); // page_font.bmp
+    // Load page number font (page_font.bmp: digits 0-9, optional glyph 10 = '/')
+    CPlane pageFont = m_vPlaneLoader.GetPlane(3);
 
     if (!pageFont) return;
 
     int pOffsetX = 8;
     int pOffsetY = 9;
-
-    // Draw current page number (positions from list_scene.txt)
-    char pageNum[8];
-    sprintf_s(pageNum, sizeof(pageNum), "%d", m_nCurrentPage);
-    int numX = 480;  // From list_scene.txt
     int numY = 561;
 
+    // Draw "current / total" (e.g. 1 / 16) — PoC style
+    char pageNum[8];
+    sprintf_s(pageNum, sizeof(pageNum), "%d", m_nCurrentPage);
+    int numX = 480;
+
     for (char* p = pageNum; *p; p++) {
         int digit = *p - '0';
-        RECT srcSize = { digit * 15, 0, digit * 15 + 15, 19 }; // Font character width is 15px, height 19px
+        RECT srcSize = { digit * 15, 0, digit * 15 + 15, 19 };
         lp->BltNatural(pageFont.get(), numX - pOffsetX, numY - pOffsetY, 0, &srcSize);
-        numX += 21; // Advance X for next digit
+        numX += 21;
     }
 
-    // Draw total pages
+    // Draw "/" between current and total (glyph index 10 if page_font has it)
+    int slashX = 503;
+    RECT srcSlash = { 10 * 15, 0, 10 * 15 + 15, 19 };
+    lp->BltNatural(pageFont.get(), slashX - pOffsetX, numY - pOffsetY, 0, &srcSlash);
+
     sprintf_s(pageNum, sizeof(pageNum), "%d", m_nTotalPages);
-    numX = 527;  // From list_scene.txt
+    numX = 527;
 
     for (char* p = pageNum; *p; p++) {
         int digit = *p - '0';
-        RECT srcSize = { digit * 15, 0, digit * 15 + 15, 19 }; // Font character width is 15px, height 19px
+        RECT srcSize = { digit * 15, 0, digit * 15 + 15, 19 };
         lp->BltNatural(pageFont.get(), numX - pOffsetX, numY - pOffsetY, 0, &srcSize);
-        numX += 21; // Advance X for next digit
+        numX += 21;
     }
 }
 
-// TODO: This needs further code. Switch all few seconds from Percentage% to OwnedCards/AllCards label
+// Draw card count "owned/total" (e.g. 771/771) next to CARD LIST header — PoC style
 void CSceneCardList::DrawCollectionRate(const smart_ptr<ISurface>& lp) {
-    // Get font and symbol planes
     CPlane rateFont = m_vPlaneLoader.GetPlane(11);    // get_font.bmp
     CPlane rateSymbol = m_vPlaneLoader.GetPlane(12);  // get_symbol.bmp
 
     if (!rateFont || !rateSymbol) return;
 
-    float rate = 0.0f;
-    if (m_nTotalPages > 0) {
-        // This calculates percentage of grid filled, not collection rate of all cards.
-        // It should be m_ownedCards.size() / total_game_cards * 100.0f if 'total_game_cards' exists.
-        rate = (float)m_ownedCards.size() / (m_nTotalPages * CARDS_PER_PAGE) * 100.0f;
-    }
+    int owned = (int)m_ownedCards.size();
+    int total = m_bin ? (int)m_bin->GetCardCount() : (m_nTotalPages * CARDS_PER_PAGE);
+    if (total <= 0) total = 1;
 
-    char rateStr[16];
-    sprintf_s(rateStr, sizeof(rateStr), "%.1f", rate);
-
-    // Draw at position from list_scene.txt (761,080)
+    // Draw "owned/total" (e.g. 771/771) using get_font digits; slash from get_symbol if available
     int numX = 670;
     int numY = 80;
 
-    // Draw digits
-    for (char* p = rateStr; *p; p++) {
-        if (*p == '.') {
-            RECT srcSize = { 11, 0, 17, 18 };
-            lp->BltNatural(rateSymbol.get(), numX, numY + 12, 0, &srcSize);
-            numX += 6;
-            continue;
+    auto DrawNumber = [&](int n) {
+        char buf[16];
+        sprintf_s(buf, sizeof(buf), "%d", n);
+        for (char* p = buf; *p; p++) {
+            int digit = *p - '0';
+            if (digit >= 0 && digit <= 9) {
+                RECT srcSize = { digit * 12, 0, digit * 12 + 12, 15 };
+                lp->BltNatural(rateFont.get(), numX, numY, 0, &srcSize);
+                numX += 10;
+            }
         }
+    };
 
-        int digit = *p - '0';
-        RECT srcSize = { digit * 12, 0, digit * 12 + 12, 15 };
-        lp->BltNatural(rateFont.get(), numX, numY, 0, &srcSize);
-        numX += 10;
-    }
-
-    // Draw % symbol
-    RECT rectPercent = { 15, 0, 36, 18 };
-    lp->BltNatural(rateSymbol.get(), numX + 2, numY - 1, 0, &rectPercent);
+    DrawNumber(owned);
+    // Gap between owned and total (if get_symbol has "/" glyph, draw it here; else just spacing)
+    numX += 6;
+    DrawNumber(total);
 }

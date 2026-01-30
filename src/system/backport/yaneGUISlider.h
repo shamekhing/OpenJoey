@@ -56,11 +56,12 @@ protected:
 
 class CGUINormalSliderListener : public CGUISliderEventListener {
 public:
+    CGUINormalSliderListener();
     virtual void SetPlaneLoader(smart_ptr<CPlaneLoader> pv) { m_vPlaneLoader = pv; }
     virtual void GetSliderSize(int nX, int nY, int& sx, int& sy);
     virtual LRESULT OnDraw(ISurface* lp, int x, int y, int nX, int nY);
     
-    virtual void SetPlane(smart_ptr<ISurface> pv) { m_vPlane = pv; }
+    virtual void SetPlane(smart_ptr<ISurface> pv) { m_vPlane = pv; m_bHasPlane = (pv.getPointer() != NULL); }
     virtual ISurface* GetPlane() { return m_vPlane.get(); }
 
 protected:
@@ -72,6 +73,8 @@ protected:
 class CGUISlider : public IGUIParts {
 public:
     void SetEvent(smart_ptr<CGUISliderEventListener> pv);
+    /// Pass same smart_ptr so listener shares ref (avoids double-delete when scene destroys slider).
+    void SetEvent(smart_ptr<CGUISliderEventListener> pv, smart_ptr<CGUISlider> selfRef);
     smart_ptr<CGUISliderEventListener> GetEvent() { return m_pvSliderEvent; }
     
     bool IsDraged() { return m_bDraged; }

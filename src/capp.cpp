@@ -197,6 +197,10 @@ void CApp::MainThread() {
 	int nPat = 0;
 	int testInt = 0;
     while (IsThreadValid()){
+        // If scene stack is empty (e.g. ReturnScene from a scene that was the only one), go to main menu so we never run with no scene
+        if (m_sceneControl->IsEnd())
+            m_sceneControl->JumpScene(SCENE_MAINMENU);
+
         ISurface* pSecondary = GetDraw()->GetSecondary();
 		smart_ptr<ISurface> surface(pSecondary, false); // false means don't take ownership (don't delete)
 
@@ -307,8 +311,13 @@ void CApp::MainThread() {
         GetDraw()->OnDraw();
 
         key.Input();
-        if (key.IsKeyPush(0))    // Exit with ESC key
-            break;
+        if (key.IsKeyPush(0)) {  // ESC key
+            // In a sub-scene (Settings, CardList, etc.): go back. On main menu: exit.
+            if (!m_sceneControl->IsEnd() && m_sceneControl->GetSceneNo() != SCENE_MAINMENU && m_sceneControl->GetSceneNo() != SCENE_SPLASH)
+                m_sceneControl->ReturnScene();
+            else
+                break;  // Exit when on splash or main menu
+        }
         if (key.IsKeyPush(5)) {  // Press SPACE key to increment phase
             //nPhase++;
             //nFade.Reset();

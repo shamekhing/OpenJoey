@@ -4,6 +4,13 @@
 #include "stdafx.h"
 #include "CSceneSettings.h"
 
+CSceneSettings::~CSceneSettings() {
+    // Break circular ref: ref count is 2 (scene + listener). Clear listener's ref so slider is deleted once when m_volumeSlider is destroyed.
+    if (!m_volumeSlider.isNull() && !m_volumeSlider->GetEvent().isNull())
+        m_volumeSlider->GetEvent()->SetSlider(smart_ptr<CGUISlider>());
+    // m_volumeSlider destroyed next (member order ensures it's before m_sliderNormal so listener's m_vPlane isn't use-after-free).
+}
+
 void CSceneSettings::OnInit() {
 	// Initialize input
 	m_mouse.Flush();
@@ -65,25 +72,29 @@ void CSceneSettings::OnInit() {
 		// Cast to derived type to access CGUINormalButtonListener methods
 		CGUINormalButtonListener* p = static_cast<CGUINormalButtonListener*>(buttonListener.get());
 
-		// Setup button plane
+		// Setup button plane (guard: plane may be NullDevice if option.txt failed/missing)
 		CPlane pln = m_vPlaneLoader.GetPlane(i);
 		POINT pos = m_vPlaneLoader.GetXY(i);
-		pln->SetPos(pos); // rendering pos
-		smart_ptr<ISurface> plnPtr(pln.get(), false); // no ownership
-		p->SetPlane(plnPtr);
+		if (pln.get()) {
+			pln->SetPos(pos);
+			smart_ptr<ISurface> plnPtr(pln.get(), false);
+			p->SetPlane(plnPtr);
+			btn->SetXY(pln->GetPosX(), pln->GetPosY());
+		}
 		btn->SetEvent(buttonListener);
-		btn->SetXY(pln->GetPosX(), pln->GetPosY()); // collision pos
 
 		// Manual calculate the bounding rectangle - only use when really needed like for sliced gfx.
 		//SIZE surfSize = pln->GetSurfaceInfo()->GetSize();
 		//RECT boundsRect = { 0, 0, surfSize.cx, surfSize.cy };
 		//btn->SetBounds(boundsRect);
 
-		// Vol+/- are sliced and need custom bounds
-		if(i == 10 || i == 11){
-			POINT posVol = m_vPlaneLoader.GetXY(12); //HACKO (only use x value!)
-			RECT boundsRect = { 0, 0, posVol.x, posVol.x };
-			btn->SetBounds(boundsRect);
+		// Vol+/- are sliced and need custom bounds (only if index 12 exists)
+		if ((i == 10 || i == 11) && pln.get()) {
+			POINT posVol = m_vPlaneLoader.GetXY(12);
+			if (posVol.x > 0) {
+				RECT boundsRect = { 0, 0, posVol.x, posVol.x };
+				btn->SetBounds(boundsRect);
+			}
 		}
 
 		// Insert btn into smart pointer vector list
@@ -100,16 +111,18 @@ void CSceneSettings::OnInit() {
     if (m_sliderMiddle.get()) m_sliderMiddle->SetPos(m_vPlaneLoader.GetXY(11));
     if (m_sliderBottom.get()) m_sliderBottom->SetPos(m_vPlaneLoader.GetXY(12));
 
-    // Create slider
-    m_volumeSlider = new CGUISlider();
+    // Create slider (smart_ptr so listener can share ref; avoids double-delete on back)
+    m_volumeSlider = smart_ptr<CGUISlider>(new CGUISlider());
+    m_sliderInitialized = false;
 
     // Create the slider listener
     smart_ptr<CGUISliderEventListener> sliderListener(new CGUINormalSliderListener());
     CGUINormalSliderListener* p = static_cast<CGUINormalSliderListener*>(sliderListener.get());
-	POINT sizeInfo = m_vPlaneLoader.GetXY(12);  // This will give slider x/y size (inverted, yes its this hacky specified in TXT)
+	POINT sizeInfo = m_vPlaneLoader.GetXY(12);  // Slider x/y size (inverted in TXT)
 	sliderListener->SetMinSize(sizeInfo.y, sizeInfo.x);
 
-    if (m_sliderTop.get() && m_sliderMiddle.get() && m_sliderBottom.get()) {
+    // Only run slider setup when we have valid planes and non-zero size (avoids CreateSurface(0,0) / invalid BltFast)
+    if (m_sliderTop.get() && m_sliderMiddle.get() && m_sliderBottom.get() && sizeInfo.x > 0 && sizeInfo.y > 0) {
 		// Get positions from the plane loader coordinates
 		POINT leftPos = m_vPlaneLoader.GetXY(10);   // Position of left cap
 		POINT rightPos = m_vPlaneLoader.GetXY(11);  // Position of right cap
@@ -134,9 +147,8 @@ void CSceneSettings::OnInit() {
 		smart_ptr<ISurface> plnPtr(&m_sliderNormal, false); // no ownership
         p->SetPlane(plnPtr);
         
-        // Configure the slider
-        m_volumeSlider->SetEvent(sliderListener);
-        
+        // Configure the slider (pass same smart_ptr so listener shares ref count)
+        m_volumeSlider->SetEvent(sliderListener, m_volumeSlider);
 
 		RECT rc;
 		SetRect(&rc,
@@ -151,6 +163,7 @@ void CSceneSettings::OnInit() {
 		m_volumeSlider->SetType(1);                                       // Make it horizontal
 		m_volumeSlider->SetItemNum(101, 0);                               // Set range
 		m_volumeSlider->SetSelectedItem(app->GetSettings()->Volume, 0);   // Set initial value last
+		m_sliderInitialized = true;
     }
 }
 
@@ -168,7 +181,7 @@ void CSceneSettings::OnMove(const smart_ptr<ISurface>& lp) {
 		if (button) {
 			button->OnSimpleMove(lp.get());
 			CGUIButtonEventListener* e	= button->GetEvent().get();
-			CGUINormalButtonListener* p	= (CGUINormalButtonListener*)e;
+			CGUINormalButtonListener* p	= e ? static_cast<CGUINormalButtonListener*>(e) : NULL;
 
 			bool btnPressFlag = button->IsLClick(); //TODO: button->IsPushed() + some Counter , to match game
 			if (m_nButton == 0 && btnPressFlag)
@@ -176,7 +189,7 @@ void CSceneSettings::OnMove(const smart_ptr<ISurface>& lp) {
 				m_nButton = button->GetID(); // Selected button id
 			}
 
-			if (button->IsIn())
+			if (button->IsIn() && p)
 			{
 				p->SetImageOffset(1);
 			}
@@ -186,8 +199,8 @@ void CSceneSettings::OnMove(const smart_ptr<ISurface>& lp) {
 	int vol = app->GetSettings()->Volume;
 	int volInc = 8;
 
-	// Update slider
-    if(m_volumeSlider) {
+	// Update slider only when it was fully initialized (avoids crash when option.txt missing/invalid)
+    if (!m_volumeSlider.isNull() && m_sliderInitialized) {
 		m_volumeSlider->OnSimpleMove(lp.get());
 		
 		// Apply volume mouse click
@@ -240,13 +253,13 @@ void CSceneSettings::OnMove(const smart_ptr<ISurface>& lp) {
 	}
 	m_nButton = 0;
 
-	// Apply volume value
-	if(vol >= 100) vol = 100;
-	if(vol <= 0) vol = 0;
-
-	if(vol >= 0 && vol <= 100){
+	// Apply volume value (only touch slider when initialized)
+	if (vol >= 100) vol = 100;
+	if (vol <= 0) vol = 0;
+	if (vol >= 0 && vol <= 100) {
 		app->GetSettings()->Volume = vol;
-		m_volumeSlider->SetSelectedItem(app->GetSettings()->Volume, 0);
+		if (!m_volumeSlider.isNull() && m_sliderInitialized)
+			m_volumeSlider->SetSelectedItem(app->GetSettings()->Volume, 0);
 	}
 }
 
@@ -261,8 +274,8 @@ void CSceneSettings::OnDraw(const smart_ptr<ISurface>& lp) {
 
 	if(m_timerMain.Get() > 500) {
 
-		// Draw slider
-		if(m_volumeSlider && m_timerMain.Get() > 500) {
+		// Draw slider only when fully initialized
+		if (!m_volumeSlider.isNull() && m_sliderInitialized && m_timerMain.Get() > 500) {
 			m_volumeSlider->OnSimpleDraw(lp.get());
 		}
 		
@@ -296,9 +309,9 @@ void CSceneSettings::OnDraw(const smart_ptr<ISurface>& lp) {
 		for (smart_vector_ptr<CGUIButton>::iterator it = m_vButtons.begin(); it != m_vButtons.end(); ++it, ++index) {
 			CGUIButton* button = it->get();
 			if (button) {
-				// Button event cast
+				// Button event cast (guard: e/p can be null if event not set)
 				CGUIButtonEventListener* e	= button->GetEvent().get();
-				CGUINormalButtonListener* p	= (CGUINormalButtonListener*)e;
+				CGUINormalButtonListener* p	= e ? static_cast<CGUINormalButtonListener*>(e) : NULL;
 				ISurface* originalSurface = button->GetPlane();
 				if (!originalSurface) continue;
 

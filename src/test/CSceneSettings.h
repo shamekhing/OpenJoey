@@ -17,6 +17,7 @@ public:
     virtual void OnDraw(const smart_ptr<ISurface>& lp);
     virtual void OnMove(const smart_ptr<ISurface>& lp);
     virtual void Serialize(ISerialize&) {}
+    virtual ~CSceneSettings();
 
 private:
     CKey1 key;
@@ -43,15 +44,14 @@ private:
 	CPlane m_settingsVolumeSlider2;
 	CPlane m_settingsVolumeSlider3;
 
-    CGUISlider* m_volumeSlider;
     CPlane m_sliderTop;
     CPlane m_sliderMiddle;
     CPlane m_sliderBottom;
-	// Sliced
-	// Volume slider graphics
-    CFastPlane m_sliderNormal;    // Left button normal state
-    CFastPlane m_sliderHover;     // Left button hover state
-	CTimer m_timerSliderPress;
+    CFastPlane m_sliderNormal;    // Listener holds smart_ptr to this; must outlive slider
+    CFastPlane m_sliderHover;
+    CTimer m_timerSliderPress;
+    smart_ptr<CGUISlider> m_volumeSlider;  // Destroy before m_sliderNormal so listener is destroyed while m_sliderNormal still exists
+    bool m_sliderInitialized;
 };
 
 #endif // CSCENESETTINGS_H
