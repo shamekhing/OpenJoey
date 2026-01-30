@@ -4,6 +4,99 @@ This file records code changes suitable for use as commit message summaries.
 
 ---
 
+## Clean for push: remove data/j, debug logs, user paths (src)
+
+**Summary:** Remove all references to `data/j`, debug logging to a user-specific path, and `#region agent log` blocks from the OpenJoey **src** tree so the repo is clean for push.
+
+### Suggested commit message (short)
+```
+Clean src: remove data/j fallback, debug logs, and user-specific paths
+```
+
+### Suggested commit message (detailed)
+```
+Clean src for push: remove data/j, debug logs, shsuw paths
+
+- Remove data/j fallback from CSceneMainMenu and CSceneSplash; load only
+  from data/y/title/.
+- Remove all debug logging that wrote to c:\\Users\\...\\.cursor\\debug.log
+  and all #region agent log / #endregion blocks from:
+  capp.cpp, CSceneSplash.cpp, CSceneYesNo.cpp, CSceneSettings.cpp,
+  CScene1.cpp, CSceneCardList.cpp, CBinSystem.cpp.
+- Remove #include <fstream> where only used for debug log.
+- Remove unused s_frameCount in capp.cpp.
+```
+
+### Files changed (src)
+| File | Change |
+|------|--------|
+| `src/capp.cpp` | Remove debug log blocks and s_frameCount. |
+| `src/test/CSceneSplash.cpp` | Remove debug logs and data/j; drop fstream if unused. |
+| `src/test/CSceneYesNo.cpp` | Remove debug log block; drop fstream. |
+| `src/test/CSceneSettings.cpp` | Remove debug log block; drop fstream. |
+| `src/test/CScene1.cpp` | Remove dbg() and all debug log blocks; drop fstream. |
+| `src/test/CSceneCardList.cpp` | Remove debug log blocks; drop fstream (keep sstream). |
+| `src/system/cards/CBinSystem.cpp` | Remove debug log writes from Initialize (entry + each Load fail). |
+
+---
+
+## Clean for push: remove debug logs and user paths (yaneSDK)
+
+**Summary:** Remove all debug logging and user-specific paths from the **yaneSDK** tree so the repo is clean for push.
+
+### Suggested commit message (short)
+```
+Clean yaneSDK: remove debug logs and user-specific paths
+```
+
+### Suggested commit message (detailed)
+```
+Clean yaneSDK for push: remove debug logs, shsuw paths
+
+- yaneFastDraw.cpp: remove all #region agent log blocks and writes to
+  c:\\Users\\...\\.cursor\\debug.log (SetDisplay, OnDraw minimized/lost/
+  lpPrimary/lpSecondary/presenting). Keep early-return logic; drop logging.
+- yaneWindow.cpp: remove debug log block in Create (window_size).
+```
+
+### Files changed (yaneSDK)
+| File | Change |
+|------|--------|
+| `yaneSDK/Draw/yaneFastDraw.cpp` | Remove debug log blocks (SetDisplay, OnDraw). |
+| `yaneSDK/Window/yaneWindow.cpp` | Remove debug log block in Create. |
+
+---
+
+## 2026-01-30: Main menu UI – black clear color and title.txt positions
+
+**Summary:** Fix main menu green rectangle (back buffer was not explicitly cleared to black) and align title/menu/buttons with original layout by using positions from `data/y/title/title.txt` scaled from 640×480 to 800×600.
+
+### Suggested commit message (short)
+```
+Main menu UI: black back-buffer clear; use title.txt positions (scaled 640→800)
+```
+
+### Suggested commit message (detailed)
+```
+Main menu UI: black clear color and title.txt positions
+
+- yaneSDK/Draw/yaneFastDraw.cpp: after CreateSecondary(), call
+  GetSecondary()->SetFillColor(0) so the back buffer clears to black
+  (fixes bright green rectangle in top-left of main menu).
+- src/test/CSceneMainMenu.cpp: use m_vPlaneLoader.GetXY(5), GetXY(6),
+  GetXY(7) for title and menu positions; scale from 640×480 to 800×600
+  so layout matches original. Button origin and draw positions now come
+  from title.txt (e.g. joey_logo 120010, menu_?_ani0 200320) scaled.
+```
+
+### Files changed
+| File | Change |
+|------|--------|
+| `yaneSDK/Draw/yaneFastDraw.cpp` | Set secondary fill color to 0 (black) after CreateSecondary. |
+| `src/test/CSceneMainMenu.cpp` | OnInit: button origin from GetXY(7) scaled; OnDraw: title1/title2 at GetXY(5)/GetXY(6) scaled, menu1 and buttons at GetXY(7) scaled (640×480 → 800×600). |
+
+---
+
 ## 2026-01-30: Make DirectMusic optional (build without legacy DirectX SDK)
 
 **Summary:** Add `USE_DirectMusic` config and guard all DirectMusic code so OpenJoey builds with Visual Studio 2022 when the June 2010 DirectX SDK is not installed. MIDI falls back to MCI when DirectMusic is disabled.

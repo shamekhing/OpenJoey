@@ -1,4 +1,4 @@
-#include "../../stdafx.h"
+#include "stdafx.h"
 #include "CBinSystem.h"
 #include "CBinDecompress.h"
 
@@ -14,6 +14,7 @@ CBinSystem::CBinSystem()
     , m_cardCount(0)
     , m_dialogCount(0)
 {
+	m_lastErrorFile[0] = '\0';
 }
 
 CBinSystem::~CBinSystem()
@@ -28,56 +29,72 @@ CBinSystem::~CBinSystem()
 	if(m_cardListMini) delete[] m_cardListMini;
 }
 
+void CBinSystem::Reset()
+{
+	if(m_cards) { delete[] m_cards; m_cards = NULL; }
+	if(m_dialogs) { delete[] m_dialogs; m_dialogs = NULL; }
+	if(m_cardDescriptions) { delete[] m_cardDescriptions; m_cardDescriptions = NULL; }
+	if(m_cardDescIndexes) { delete[] m_cardDescIndexes; m_cardDescIndexes = NULL; }
+	if(m_dialogTexts) { delete[] m_dialogTexts; m_dialogTexts = NULL; }
+	if(m_dialogIndexes) { delete[] m_dialogIndexes; m_dialogIndexes = NULL; }
+	if(m_cardList) { delete[] m_cardList; m_cardList = NULL; }
+	if(m_cardListMini) { delete[] m_cardListMini; m_cardListMini = NULL; }
+	m_cardCount = 0;
+	m_dialogCount = 0;
+	m_lastErrorFile[0] = '\0';
+}
+
 BOOL CBinSystem::Initialize(const char* basePath, const char* language)
 {
     char fullPath[MAX_PATH];
+    char indexPath[MAX_PATH];
+	m_lastErrorFile[0] = '\0';
 
     // Load card properties (no language suffix)
-    sprintf(fullPath, "%s\\card_prop.bin", basePath);
-    if(!LoadCardProperties(fullPath)) return FALSE;
+    sprintf_s(fullPath, sizeof(fullPath), "%s\\card_prop.bin", basePath);
+    if(!LoadCardProperties(fullPath)) { sprintf_s(m_lastErrorFile, "%s", fullPath); return FALSE; }
 
     // Load card names with language (### -> eng for example)
-    sprintf(fullPath, "%s\\card_name%s.bin", basePath, language);
-    if(!LoadCardNames(fullPath)) return FALSE;
+    sprintf_s(fullPath, sizeof(fullPath), "%s\\card_name%s.bin", basePath, language);
+    if(!LoadCardNames(fullPath)) { sprintf_s(m_lastErrorFile, "%s", fullPath); return FALSE; }
 
     // Load real card IDs (no language suffix)
-    sprintf(fullPath, "%s\\card_id.bin", basePath);
-    if(!LoadCardRealIds(fullPath)) return FALSE;
+    sprintf_s(fullPath, sizeof(fullPath), "%s\\card_id.bin", basePath);
+    if(!LoadCardRealIds(fullPath)) { sprintf_s(m_lastErrorFile, "%s", fullPath); return FALSE; }
 
     // Load internal card IDs (no language suffix)
-    sprintf(fullPath, "%s\\card_intid.bin", basePath);
-    if(!LoadCardInternalIds(fullPath)) return FALSE;
+    sprintf_s(fullPath, sizeof(fullPath), "%s\\card_intid.bin", basePath);
+    if(!LoadCardInternalIds(fullPath)) { sprintf_s(m_lastErrorFile, "%s", fullPath); return FALSE; }
 
     // Load card descriptions and indices with language
-    sprintf(fullPath, "%s\\card_desc%s.bin", basePath, language);
-    char indexPath[MAX_PATH];
-    sprintf(indexPath, "%s\\card_indx%s.bin", basePath, language);
-    if(!LoadCardDescriptions(fullPath, indexPath)) return FALSE;
+    sprintf_s(fullPath, sizeof(fullPath), "%s\\card_desc%s.bin", basePath, language);
+    sprintf_s(indexPath, sizeof(indexPath), "%s\\card_indx%s.bin", basePath, language);
+    if(!LoadCardDescriptions(fullPath, indexPath)) { sprintf_s(m_lastErrorFile, "%s (or %s)", fullPath, indexPath); return FALSE; }
 
     // Load dialog texts and indices with language
-    sprintf(fullPath, "%s\\dlg_text%s.bin", basePath, language);
-    sprintf(indexPath, "%s\\dlg_indx%s.bin", basePath, language);
-    if(!LoadDialogTexts(fullPath, indexPath)) return FALSE;
+    sprintf_s(fullPath, sizeof(fullPath), "%s\\dlg_text%s.bin", basePath, language);
+    sprintf_s(indexPath, sizeof(indexPath), "%s\\dlg_indx%s.bin", basePath, language);
+    if(!LoadDialogTexts(fullPath, indexPath)) { sprintf_s(m_lastErrorFile, "%s (or %s)", fullPath, indexPath); return FALSE; }
 
     // Load card pack data (no language suffix)
-    sprintf(fullPath, "%s\\card_pack.bin", basePath);
-    if(!LoadCardPacks(fullPath)) return FALSE;
+    sprintf_s(fullPath, sizeof(fullPath), "%s\\card_pack.bin", basePath);
+    if(!LoadCardPacks(fullPath)) { sprintf_s(m_lastErrorFile, "%s", fullPath); return FALSE; }
 
 	// Load card list
-    sprintf(fullPath, "%s\\..\\card\\list_card.txt", basePath);
-    if(!LoadCardList(fullPath, FALSE)) return FALSE;
+    sprintf_s(fullPath, sizeof(fullPath), "%s\\..\\card\\list_card.txt", basePath);
+    if(!LoadCardList(fullPath, FALSE)) { sprintf_s(m_lastErrorFile, "%s", fullPath); return FALSE; }
 
 	// Load card list (mini)
-    sprintf(fullPath, "%s\\..\\mini\\list_card.txt", basePath);
-    if(!LoadCardList(fullPath, TRUE)) return FALSE;
+    sprintf_s(fullPath, sizeof(fullPath), "%s\\..\\mini\\list_card.txt", basePath);
+    if(!LoadCardList(fullPath, TRUE)) { sprintf_s(m_lastErrorFile, "%s", fullPath); return FALSE; }
 
     return TRUE;
 }
 
 BYTE* CBinSystem::DecompressFile(const char* path, DWORD& outSize)
 {
-    FILE* file = fopen(path, "rb");
-    if(!file) return NULL;
+    FILE* file = NULL;
+    if (fopen_s(&file, path, "rb") != 0 || !file) return NULL;
 
     // Get file size
     fseek(file, 0, SEEK_END);
@@ -281,8 +298,8 @@ BOOL CBinSystem::LoadCardPacks(const char* path)
 
 BOOL CBinSystem::LoadCardList(const char* path, BOOL isMini)
 {
-    FILE* file = fopen(path, "r");
-    if(!file) return FALSE;
+    FILE* file = NULL;
+    if (fopen_s(&file, path, "r") != 0 || !file) return FALSE;
 
     // Allocate array based on card count
     CardListEntry** targetArray = isMini ? &m_cardListMini : &m_cardList;
@@ -304,7 +321,7 @@ BOOL CBinSystem::LoadCardList(const char* path, BOOL isMini)
 
         // Store filename and update card reference
         if(currentId < m_cardCount) {
-            strcpy((*targetArray)[currentId].imageFilename, line);
+            strcpy_s((*targetArray)[currentId].imageFilename, MAX_PATH, line);
             
 			// Update the appropriate pointer in the Card structure
 			if(isMini) {

@@ -115,6 +115,7 @@ protected:
     SliderMode m_sliderMode;
     smart_ptr<CGUISlider> m_vSlider;
     smart_ptr<CGUITextBoxSliderListener> m_vSliderListener;
+    CPlane m_sliderThumbPlane;  // hold ownership so thumb surface outlives SetSliderLoader
     smart_ptr<ISurface> m_vSliderThumbGraphic;
 
     smart_ptr<CGUIButton> m_vScrollUpButton;

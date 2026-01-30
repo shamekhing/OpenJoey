@@ -22,8 +22,8 @@ public:
     virtual ~ISurfaceFadeBlt();
 
 protected:
-    int m_nFadeTable[480];     // Fade value (0-256) for each raster
-    int m_nRasterTable[480];   // Raster offset value for each raster
+    int m_nFadeTable[600];     // Fade value (0-256) for each raster (800x600)
+    int m_nRasterTable[600];   // Raster offset value for each raster
 };
 
 /////////////////////////////////////////////////////////////////

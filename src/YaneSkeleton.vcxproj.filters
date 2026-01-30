@@ -2,27 +2,27 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{3d138de0-5765-4ce1-af2b-23443071775a}</UniqueIdentifier>
+      <UniqueIdentifier>{d55bfe2d-a839-458d-8f3f-edcbeb1d5e64}</UniqueIdentifier>
       <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
     </Filter>
     <Filter Include="Source Files\examples">
-      <UniqueIdentifier>{f493d6b4-4193-4803-8d13-2e7fe4628725}</UniqueIdentifier>
+      <UniqueIdentifier>{90817d72-c3d6-4a26-8185-76893b43b412}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\system">
-      <UniqueIdentifier>{801fffa9-6447-4012-bc91-0396db814c35}</UniqueIdentifier>
+      <UniqueIdentifier>{6343f28c-4747-4e7e-8623-09833abc6a7d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\system\cards">
-      <UniqueIdentifier>{82757c5c-9c7e-4588-b466-b27eb7c7a50c}</UniqueIdentifier>
+      <UniqueIdentifier>{8b2685b9-7ca4-4f9e-812a-6a2161082bb4}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\test">
-      <UniqueIdentifier>{5568823c-f591-4e42-9c13-c81d0b7f21eb}</UniqueIdentifier>
+      <UniqueIdentifier>{93605af4-2e5e-4053-bffe-70039da69290}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files">
-      <UniqueIdentifier>{4e3fcb2e-226f-440f-b88d-2fb396c35a95}</UniqueIdentifier>
+      <UniqueIdentifier>{dac5f2e5-25ed-48ed-8aa4-a1ca7dd38cee}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl</Extensions>
     </Filter>
     <Filter Include="Resource Files">
-      <UniqueIdentifier>{18b0537e-7965-4c86-ade9-ba5e0afd9704}</UniqueIdentifier>
+      <UniqueIdentifier>{0a522ffd-fafe-4931-80eb-8087bcd92e69}</UniqueIdentifier>
       <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
     </Filter>
   </ItemGroup>

@@ -1,5 +1,5 @@
 // CJoeySceneFactory.cpp
-#include "../stdafx.h"
+#include "stdafx.h"
 #include "../CApp.h"
 #include "../system/CJoeySceneFactory.h"
 

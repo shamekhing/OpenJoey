@@ -1,7 +1,7 @@
 // CSceneMainMenu.cpp
 // Created by derplayer
 // Created on 2025-03-21 19:02:59
-
+#include "stdafx.h"
 #include "CSceneMainMenu.h"
 static bool ButtonAnimFowardDirection = true;
 static bool ButtonAnimPause = false;
@@ -25,20 +25,21 @@ void CSceneMainMenu::OnInit() {
 	m_timer2.Restart();
 	m_timer2.Reset(); //always running
 
-	// Load splash screen define
+	// Load title/menu define from data/y/title/
 	m_vPlaneLoader.SetLang(app->GetLang());
-	m_vPlaneLoader.SetReadDir("data/y/title/");  // Base directory
-	if (m_vPlaneLoader.Set("data/y/title/title.txt", false) != 0) {  // Relative to SetReadDir
+	m_vPlaneLoader.SetReadDir("data/y/title/");
+	LRESULT setResult = m_vPlaneLoader.Set("data/y/title/title.txt", false);
+	if (setResult != 0) {
 		OutputDebugStringA("Error: Failed to load data/y/title/title.txt\n");
 	}
 
-	// Title screen backdrop
+	// Title screen backdrop (CPlane holds ownership; no dangling pointer from GetPlane() temporary)
 	m_title1 = m_vPlaneLoader.GetPlane(5);
 	m_title2 = m_vPlaneLoader.GetPlane(6);
 
 	// Button set A
-	m_menu1 = m_vPlaneLoader.GetPlane(7); // POS
-	m_menu2 = m_vPlaneLoader.GetPlane(8); // POS
+	m_menu1 = m_vPlaneLoader.GetPlane(7);
+	m_menu2 = m_vPlaneLoader.GetPlane(8);
 	m_menu3 = m_vPlaneLoader.GetPlane(9);
 	m_menu4 = m_vPlaneLoader.GetPlane(10);
 	m_menu5 = m_vPlaneLoader.GetPlane(11);
@@ -57,28 +58,39 @@ void CSceneMainMenu::OnInit() {
 	// Puzzle
 	/*m_menuPuzzle = m_vPlaneLoader.GetPlane(21);*/
 
-	// Setup buttons
-	static const int BUTTON_X = 227+5; //TODO: load from txt
-    static const int BUTTON_Y = 331+27;
-    static const int BUTTON_SPACING = 37; //BUTTON_Y / 5; // Height of each button slice (button sheet size / entry amount)
-    
-    for(int i = 0; i < 6; i++) {
-        m_vButtons[i].SetMouse(smart_ptr<CFixMouse>(&m_mouse, false));
+	// Menu/options: center X only; Y from title.txt (640x480) scaled to 800x600
+	static const int SCREEN_W = 800, SCREEN_H = 600;
+	static const int BUTTON_SPACING = 46;
+	const int menuH = 6 * BUTTON_SPACING;
+	POINT pos7 = m_vPlaneLoader.GetXY(7);
+	int buttonWidth = 0, buttonSheetHeight = 0;
+	{
+		CPlane firstBtn = m_vPlaneLoader.GetPlane(7);
+		if (firstBtn.get()) firstBtn.get()->GetSize(buttonWidth, buttonSheetHeight);
+		if (buttonWidth <= 0) buttonWidth = 358;
+	}
+	int BUTTON_X = (SCREEN_W - buttonWidth) / 2;   // center width-wise
+	int BUTTON_Y = (pos7.y * SCREEN_H) / 480;
+	if (BUTTON_Y + menuH > SCREEN_H) BUTTON_Y = SCREEN_H - menuH;
+	if (BUTTON_Y < 0) BUTTON_Y = 0;
 
-        // Create the button listener as CGUIButtonEventListener type directly
-        smart_ptr<CGUIButtonEventListener> buttonListener(new CGUINormalButtonListener());
-        
-        // Cast to derived type to access CGUINormalButtonListener methods
-        CGUINormalButtonListener* p = static_cast<CGUINormalButtonListener*>(buttonListener.get());
-        p->SetPlaneLoader(smart_ptr<CPlaneLoader>(&m_vPlaneLoader, false), 7 + i);
-        //p->SetType(1);
-		//p->SetImageOffset(35);
+	for (int i = 0; i < 6; i++) {
+		m_vButtons[i].SetMouse(smart_ptr<CFixMouse>(&m_mouse, false)); // Non-owning: m_mouse outlives scene
 
-        m_vButtons[i].SetEvent(buttonListener);
-        m_vButtons[i].SetXY(BUTTON_X, BUTTON_Y);
-		RECT boundsRect = { 0, i * BUTTON_SPACING, BUTTON_Y, (i + 1) * BUTTON_SPACING };
+		// Create the button listener as CGUIButtonEventListener type directly
+		smart_ptr<CGUIButtonEventListener> buttonListener(new CGUINormalButtonListener());
+
+		// Cast to derived type to access CGUINormalButtonListener methods
+		CGUINormalButtonListener* p = static_cast<CGUINormalButtonListener*>(buttonListener.get());
+		p->SetPlaneLoader(smart_ptr<CPlaneLoader>(&m_vPlaneLoader, false), 7 + i);
+
+		m_vButtons[i].SetEvent(buttonListener);
+		// Per-button position from title.txt (scaled to 800x600)
+		m_vButtons[i].SetXY(BUTTON_X, BUTTON_Y + i * BUTTON_SPACING);
+		// Bounds: full slice for this button (local 0,0 to width x slice height)
+		RECT boundsRect = { 0, 0, buttonWidth, BUTTON_SPACING };
 		m_vButtons[i].SetBounds(boundsRect);
-    }
+	}
 
     m_nButton = 0;
     //m_nFade.Set(0, 16, 1);  // 16 frames fade
@@ -88,10 +100,7 @@ void CSceneMainMenu::OnMove(const smart_ptr<ISurface>& lp) {
 	key.Input();
 	m_mouse.Flush(); // or buttons will stuck
 
-    // Handle Space debug key
-    if (key.IsKeyPush(5)) {  GetSceneControl()->JumpScene(SCENE1); }
-
-	// Update buttons
+	// Update buttons (no Space->SCENE1; app starts at splash)
     for(int i = 0; i < 6; i++) {
 		m_vButtons[i].OnSimpleMove(lp.get());
 		CGUIButtonEventListener* e	= m_vButtons[i].GetEvent().get();
@@ -151,23 +160,34 @@ void CSceneMainMenu::OnMove(const smart_ptr<ISurface>& lp) {
 void CSceneMainMenu::OnDraw(const smart_ptr<ISurface>& lp) {
 	lp->Clear();
 
-	int x, y, b;
-    m_mouse.GetInfo(x, y, b);
-	char buf[128];
-	sprintf(buf, "MouseLoop menu: %d %d %d\n", x,y,b);
-	OutputDebugStringA(buf);
+	// Center X only; Y from title.txt (640x480) scaled to 800x600. Blt/BlendBlt = color key (no green).
+	static const int SCREEN_W = 800, SCREEN_H = 600;
+	POINT pos5 = m_vPlaneLoader.GetXY(5), pos6 = m_vPlaneLoader.GetXY(6), pos7 = m_vPlaneLoader.GetXY(7);
+	int w = 0, h = 0;
 
-	if(m_timer2.Get() > 0)
-		lp->BltFast(m_title1, 0, 0);
-	if(m_timer2.Get() > 300) {
-		lp->BlendBltFast(m_title2, 0, 0, m_nFade);
+	if (m_timer2.Get() > 0 && m_title1.get()) {
+		m_title1->GetSize(w, h);
+		int t1x = (SCREEN_W - w) / 2;  if (t1x < 0) t1x = 0;
+		int t1y = (pos5.y * SCREEN_H) / 480;  if (t1y < 0) t1y = 0;
+		lp->Blt(m_title1.get(), t1x, t1y);
+	}
+	if (m_timer2.Get() > 300 && m_title2.get()) {
+		m_title2->GetSize(w, h);
+		int t2x = (SCREEN_W - w) / 2;  if (t2x < 0) t2x = 0;
+		int t2y = (pos6.y * SCREEN_H) / 480;  if (t2y < 0) t2y = 0;
+		lp->BlendBlt(m_title2.get(), t2x, t2y, (int)m_nFade);
 		m_nFade.Inc();
 	}
-	
 	if(m_timer2.Get() > 1000) {
-		// base menu button backdrop
-		//lp->BltFast(m_menu1, 227, 331);
-		lp->BlendBltFast(m_menu1, 227, 331, m_nFade2);
+		const int BUTTON_STACK_H = 6 * 46;
+		int m1y = (pos7.y * SCREEN_H) / 480;
+		if (m1y + BUTTON_STACK_H > SCREEN_H) m1y = SCREEN_H - BUTTON_STACK_H;
+		if (m1y < 0) m1y = 0;
+		if (m_menu1.get()) {
+			m_menu1->GetSize(w, h);
+			int m1x = (SCREEN_W - w) / 2;  if (m1x < 0) m1x = 0;
+			lp->BlendBlt(m_menu1.get(), m1x, m1y, (int)m_nFade2);
+		}
 		m_nFade2.Inc();
 	}
 
@@ -182,40 +202,31 @@ void CSceneMainMenu::OnDraw(const smart_ptr<ISurface>& lp) {
 	//	}
 	//}
 	if(m_timer2.Get() > 2000) {
-		// Draw buttons
-		const int buttonCount = 6; // Total number of buttons
-		const int sliceHeight = 37; // Height of each button slice
-		const int BUTTON_X = 227 + 5; // Starting X position on `lp`
-		const int BUTTON_Y = 331 + 27; // Starting Y position on `lp`
-
-		// Get the dimensions of the source surface
+		// Draw buttons: center X; Y from title.txt scaled, clamped
+		const int buttonCount = 6;
+		const int sliceHeight = 46;
 		int width = 0, height = 0;
-		// Loop through and blit each slice of the source surface onto the target `lp`
+		ISurface* pFirst = m_vButtons[0].GetPlane();
+		if (pFirst) pFirst->GetSize(width, height);
+		int DRAW_BUTTON_X = (800 - width) / 2;  if (DRAW_BUTTON_X < 0) DRAW_BUTTON_X = 0;
+		int DRAW_BUTTON_Y = (pos7.y * 600) / 480;
+		if (DRAW_BUTTON_Y + buttonCount * sliceHeight > 600) DRAW_BUTTON_Y = 600 - buttonCount * sliceHeight;
+		if (DRAW_BUTTON_Y < 0) DRAW_BUTTON_Y = 0;
 		for (int i = 0; i < buttonCount; ++i) {
-			// Button event cast
 			CGUIButtonEventListener* e	= m_vButtons[i].GetEvent().get();
 			CGUINormalButtonListener* p	= (CGUINormalButtonListener*)e;
 
-			// TODO: a second timer for short gfx button highlight freeze of 250 msec?
-			//if(ButtonAnimPause)
-			//	p->SetPlaneNumber(8); // freeze gfx btn
-			//else
-			//	p->SetPlaneNumber(8+m_nFadeButton.Get()); // update fade button gfx
-
-			//if(!ButtonClicked) p->SetPlaneNumber(8+m_nFadeButton.Get()); // update fade button gfx
 			p->SetPlaneNumber(8+m_nFadeButton.Get()); // update fade button gfx
 
 			ISurface* originalSurface = m_vButtons[i].GetPlane();
-			originalSurface->GetSize(width, height); // Ensure variables match expected types
+			if (!originalSurface) continue;
+			originalSurface->GetSize(width, height);
 
-			// Define the source rectangle for the current slice
+			// Source rect: slice i of the button sheet
 			RECT sourceRect = { 0, i * sliceHeight, width, (i + 1) * sliceHeight };
+			int destX = DRAW_BUTTON_X;
+			int destY = DRAW_BUTTON_Y + (i * sliceHeight);
 
-			// Calculate the destination position on the target surface (lp)
-			int destX = BUTTON_X; // X position remains constant
-			int destY = BUTTON_Y + (i * sliceHeight); // Increment Y for each button
-
-			// Blit the slice directly onto the primary surface
 			if (m_vButtons[i].IsIn())
 			{
 				lp->BltFast(originalSurface, destX, destY, NULL, &sourceRect, NULL, 0);

@@ -1,4 +1,4 @@
-#include "../../stdafx.h"
+#include "stdafx.h"
 #include "yaneGUITextBox.h"
 
 #ifndef min
@@ -225,9 +225,8 @@ void CGUITextBox::SetSliderLoader(string folder, string path){
             OutputDebugStringA("Error: Failed to load slider gfx\n");
             return;
         }
-        CPlane pln = m_vPlaneScrollLoader.GetPlane(5);
-        smart_ptr<ISurface> plnPtr(pln.get(), false);
-        m_vSliderThumbGraphic = plnPtr;
+        m_sliderThumbPlane = m_vPlaneScrollLoader.GetPlane(5);
+        m_vSliderThumbGraphic = smart_ptr<ISurface>(m_sliderThumbPlane.get(), false);
         pSliderListener->SetPlane(m_vSliderThumbGraphic);
 }
 

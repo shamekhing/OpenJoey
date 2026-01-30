@@ -1,7 +1,7 @@
 // CSceneSettings.cpp
 // Created by derplayer
 // Created on 2025-03-22 21:35:28
-
+#include "stdafx.h"
 #include "CSceneSettings.h"
 
 void CSceneSettings::OnInit() {
@@ -30,15 +30,15 @@ void CSceneSettings::OnInit() {
 	}
 
 	m_settingsBackdrop = m_vPlaneLoader.GetPlane(0);
-	m_settingsBackdrop->SetPos(m_vPlaneLoader.GetXY(0));
+	if (m_settingsBackdrop.get()) m_settingsBackdrop->SetPos(m_vPlaneLoader.GetXY(0));
 
 	// Not buttons, so are rendered manualy in Draw tick
 	m_settingsWindowBtn = m_vPlaneLoader.GetPlane(1);
-	m_settingsWindowBtn->SetPos(m_vPlaneLoader.GetXY(1));
+	if (m_settingsWindowBtn.get()) m_settingsWindowBtn->SetPos(m_vPlaneLoader.GetXY(1));
 	m_settingsFullscreenBtn = m_vPlaneLoader.GetPlane(2);
-	m_settingsFullscreenBtn->SetPos(m_vPlaneLoader.GetXY(2));
+	if (m_settingsFullscreenBtn.get()) m_settingsFullscreenBtn->SetPos(m_vPlaneLoader.GetXY(2));
 	m_settingsBitBtn = m_vPlaneLoader.GetPlane(3);
-	m_settingsBitBtn->SetPos(m_vPlaneLoader.GetXY(3));
+	if (m_settingsBitBtn.get()) m_settingsBitBtn->SetPos(m_vPlaneLoader.GetXY(3));
 
 	//m_settingsVolumeSlider1 = m_vPlaneLoader.GetPlane(10);
 	//m_settingsVolumeSlider1->SetPos(m_vPlaneLoader.GetXY(10));
@@ -57,7 +57,7 @@ void CSceneSettings::OnInit() {
         int i = buttonIds[j]; // Get the current ID
 		CGUIButton* btn = new CGUIButton();
 		btn->SetID(i);
-		btn->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false));
+		btn->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false)); // Non-owning: m_mouse outlives scene
 
 		// Create the button listener as CGUIButtonEventListener type directly
 		smart_ptr<CGUIButtonEventListener> buttonListener(new CGUINormalButtonListener());
@@ -92,15 +92,13 @@ void CSceneSettings::OnInit() {
 	}
 
     // Volume Slider test
-    // Load slider graphics from the plane loader (raw pointers like other surfaces)
     m_sliderTop = m_vPlaneLoader.GetPlane(10);
     m_sliderMiddle = m_vPlaneLoader.GetPlane(11);
     m_sliderBottom = m_vPlaneLoader.GetPlane(12);
 
-    // Set positions like other elements
-    if(m_sliderTop) m_sliderTop->SetPos(m_vPlaneLoader.GetXY(10));
-    if(m_sliderMiddle) m_sliderMiddle->SetPos(m_vPlaneLoader.GetXY(11));
-    if(m_sliderBottom) m_sliderBottom->SetPos(m_vPlaneLoader.GetXY(12));
+    if (m_sliderTop.get()) m_sliderTop->SetPos(m_vPlaneLoader.GetXY(10));
+    if (m_sliderMiddle.get()) m_sliderMiddle->SetPos(m_vPlaneLoader.GetXY(11));
+    if (m_sliderBottom.get()) m_sliderBottom->SetPos(m_vPlaneLoader.GetXY(12));
 
     // Create slider
     m_volumeSlider = new CGUISlider();
@@ -111,7 +109,7 @@ void CSceneSettings::OnInit() {
 	POINT sizeInfo = m_vPlaneLoader.GetXY(12);  // This will give slider x/y size (inverted, yes its this hacky specified in TXT)
 	sliderListener->SetMinSize(sizeInfo.y, sizeInfo.x);
 
-    if (m_sliderTop && m_sliderMiddle && m_sliderBottom) {
+    if (m_sliderTop.get() && m_sliderMiddle.get() && m_sliderBottom.get()) {
 		// Get positions from the plane loader coordinates
 		POINT leftPos = m_vPlaneLoader.GetXY(10);   // Position of left cap
 		POINT rightPos = m_vPlaneLoader.GetXY(11);  // Position of right cap
@@ -148,7 +146,7 @@ void CSceneSettings::OnInit() {
 			leftPos.y + sizeInfo.x    // Use height from size specification
 		);
 
-		m_volumeSlider->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false));  // Set mouse first
+		m_volumeSlider->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false)); // Non-owning: m_mouse outlives scene
 		m_volumeSlider->SetRect(&rc);                                     // Then set position
 		m_volumeSlider->SetType(1);                                       // Make it horizontal
 		m_volumeSlider->SetItemNum(101, 0);                               // Set range
@@ -208,7 +206,7 @@ void CSceneSettings::OnMove(const smart_ptr<ISurface>& lp) {
 			vol = x;
 			OutputDebugStringA("Volume during drag: ");
 			char debug[32];
-			sprintf(debug, "%d\n", x);
+			sprintf_s(debug, sizeof(debug), "%d\n", x);
 			OutputDebugStringA(debug);
 		}
 	}
@@ -257,7 +255,8 @@ void CSceneSettings::OnDraw(const smart_ptr<ISurface>& lp) {
 	//lp->BltFast(m_background.get(), 0, 0); // render cached framebuffer (this can restore FB when something overrides it)
 
 	if(m_timerMain.Get() > 0) {
-		lp->BlendBltFast(m_settingsBackdrop, m_settingsBackdrop->GetPosX(), m_settingsBackdrop->GetPosY(), m_nFade);
+		if (m_settingsBackdrop.get())
+			lp->BlendBltFast(m_settingsBackdrop.get(), m_settingsBackdrop->GetPosX(), m_settingsBackdrop->GetPosY(), m_nFade);
 	}
 
 	if(m_timerMain.Get() > 500) {
@@ -269,25 +268,28 @@ void CSceneSettings::OnDraw(const smart_ptr<ISurface>& lp) {
 		
 		// Draw settings overlays (TODO: in real game its INVERTED...)
 		if(app->GetSettings()->WindowMode == true){
-			lp->BltFast(m_settingsWindowBtn, m_settingsWindowBtn->GetPosX(), m_settingsWindowBtn->GetPosY());
+			if (m_settingsWindowBtn.get())
+				lp->BltFast(m_settingsWindowBtn.get(), m_settingsWindowBtn->GetPosX(), m_settingsWindowBtn->GetPosY());
 		} else {
-			lp->BltFast(m_settingsFullscreenBtn, m_settingsFullscreenBtn->GetPosX(), m_settingsFullscreenBtn->GetPosY());
+			if (m_settingsFullscreenBtn.get())
+				lp->BltFast(m_settingsFullscreenBtn.get(), m_settingsFullscreenBtn->GetPosX(), m_settingsFullscreenBtn->GetPosY());
 
 			// Prepare horizontal blit rectangle split
 			int buttonCount = 3;
 			int btnId = app->GetSettings()->BitCount; // Retrieve the button ID
-			SIZE surfSize = m_settingsBitBtn->GetSurfaceInfo()->GetSize();
-			int sliceWidth = surfSize.cx / buttonCount; // Divide the width into 3 equal parts
-			int sliceWidthOffset = sliceWidth * btnId; // Calculate vertical offset based on button position
-			RECT sourceRect = {
-				btnId * sliceWidth,
+			const CSurfaceInfo* bitInfo = m_settingsBitBtn.get() ? m_settingsBitBtn->GetConstSurfaceInfo() : NULL;
+			if (bitInfo) {
+				SIZE surfSize = bitInfo->GetSize();
+				int sliceWidth = surfSize.cx / buttonCount;
+				int sliceWidthOffset = sliceWidth * btnId;
+				RECT sourceRect = {
+					btnId * sliceWidth,
 					0,
 					(btnId + 1) * sliceWidth,
 					surfSize.cy
-			};
-
-			// Blit the rectangle
-			lp->BltFast(m_settingsBitBtn, m_settingsBitBtn->GetPosX()+sliceWidthOffset, m_settingsBitBtn->GetPosY(), NULL, &sourceRect, NULL, 0);
+				};
+				lp->BltFast(m_settingsBitBtn.get(), m_settingsBitBtn->GetPosX()+sliceWidthOffset, m_settingsBitBtn->GetPosY(), NULL, &sourceRect, NULL, 0);
+			}
 		}
 
 		int index = 0;
@@ -298,34 +300,33 @@ void CSceneSettings::OnDraw(const smart_ptr<ISurface>& lp) {
 				CGUIButtonEventListener* e	= button->GetEvent().get();
 				CGUINormalButtonListener* p	= (CGUINormalButtonListener*)e;
 				ISurface* originalSurface = button->GetPlane();
+				if (!originalSurface) continue;
 
-				// Special edge case for slicee volume buttons
+				// Special edge case for sliced volume buttons
 				if(index == 6 || index == 7){
-					POINT sizeInfo = m_vPlaneLoader.GetXY(12); // Get volume +/- button size from txt (devs did it very hacky, x is x/y size and y is x size of slider)
+					POINT sizeInfo = m_vPlaneLoader.GetXY(12);
 					RECT hoverButtonLeft = { 0, 0, sizeInfo.x, sizeInfo.x };
 					RECT hoverButtonRight = { sizeInfo.x, 0, sizeInfo.x * 2, sizeInfo.x };
 					RECT clickedButtonLeft = { 0, sizeInfo.x, sizeInfo.x, sizeInfo.x * 2 };
 					RECT clickedButtonRight = { sizeInfo.x, sizeInfo.x, sizeInfo.x * 2, sizeInfo.x * 2 };
 					if (button->IsIn())
 					{
-						if(index == 6){ // Arrow left
+						if(index == 6){
 							if (button->IsPushed())  lp->BltFast(originalSurface, originalSurface->GetPosX(), originalSurface->GetPosY(), NULL, &clickedButtonLeft, NULL, 0);
 							else lp->BltFast(originalSurface, originalSurface->GetPosX(), originalSurface->GetPosY(), NULL, &hoverButtonLeft, NULL, 0);
 						}
-
-						if(index == 7){ // Arrow right
+						if(index == 7){
 							if (button->IsPushed())  lp->BltFast(originalSurface, originalSurface->GetPosX(), originalSurface->GetPosY(), NULL, &clickedButtonRight, NULL, 0);
 							else lp->BltFast(originalSurface, originalSurface->GetPosX(), originalSurface->GetPosY(), NULL, &hoverButtonRight, NULL, 0);
 						}
 					}
-				} 
+				}
 				else
 				{
-					// Blit the button surface onto the primary surface
 					if (button->IsIn())
 					{
-						lp->BltNatural(originalSurface, originalSurface->GetPosX(), originalSurface->GetPosY()); // BltNatural is good for alpha channel
-						break; // Only one button at time
+						lp->BltNatural(originalSurface, originalSurface->GetPosX(), originalSurface->GetPosY());
+						break;
 					}
 				}
 			}

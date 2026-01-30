@@ -1,11 +1,14 @@
 // CScene1.cpp
+#include "stdafx.h"
 #include "CScene1.h"
 
 // Created by derplayer
 // Created on 2025-01-19 15:46:24
 void CScene1::OnInit() {
+    // Create plane so Load() is not called on null (default CPlane is empty)
+    bgPlane = CPlane(new CFastPlane());
     bgPlane->Load("data/y/try/end_e.bmp");
-    
+
     // Create text planes
     pTextPtr = new CTextFastPlane;
     pTextPtr->GetFont()->SetText("OpenJoey scene handling test");
@@ -34,9 +37,9 @@ void CScene1::OnMove(const smart_ptr<ISurface>& lp) {
 
 void CScene1::OnDraw(const smart_ptr<ISurface>& lp) {
     lp->Clear();
-    //lp->BltFast(bgPlane.get(), 0, 0);
 
-	ISurfaceTransBlt::CircleBlt1(lp.get(), bgPlane.get(), 0, 0, (int)nFade, 0, 255);
+	if (bgPlane.get())
+		ISurfaceTransBlt::CircleBlt1(lp.get(), bgPlane.get(), 0, 0, (int)nFade, 0, 255);
 	nFade.Inc();
 
     if (key.IsKeyPush(5)) {  // Space

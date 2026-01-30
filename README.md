@@ -1,6 +1,6 @@
 # OpenJoey - Open Source reimplementation of Yu-Gi-Oh! - Power of Chaos
-**OpenJoey**: a free, open source black-box re-implementation (NOT a decompilation) of the [Power of Chaos](https://yugioh.fandom.com/wiki/Yu-Gi-Oh!_Power_of_Chaos) game serires.
-Powered by the yaneSDK engine for accurace reimplementation.
+**OpenJoey**: a free, open source black-box re-implementation (NOT a decompilation) of the [Power of Chaos](https://yugioh.fandom.com/wiki/Yu-Gi-Oh!_Power_of_Chaos) game series.
+Powered by the yaneSDK engine for accurate reimplementation.
 
 ## Work in progress
 This project is in the *very* early stages. There is still a long way to go before there's anything playable. 
@@ -12,14 +12,14 @@ Pull requests are always welcome.
 ## What is yaneSDK?
 TL;DR: Early 2000s free C++ engine for japanese indie devs that was also used for Power of Chaos games.
 
-## What do i need to compile this project?
-The "TEST" project file is for Code::Blocks. You will also need:
-* Microsoft Visual C++ Toolkit 2003 (the SDKv3 has also support for VC++6/.NET/.NET2003 and BCC5.5/BCB5/6!, look in yaneSDK\ProjectFiles folder)
-* Microsoft Platform SDK (older one that plays nice with Visual C++ Toolkit 2003)
-* Microsoft DirectX SDK (yaneSDK has support for DX3 up to DX8) - this project assumes the usage of DX 6.1 or higher
+## What do I need to compile this project?
 
-or...
-* Just use Visual Studio .NET 2003 (VC7.1) with everything preinstalled.
+**Recommended:** Visual Studio 2022 (or 2019) with C++ desktop workload and the Windows SDK. Open **`yaneSDK.sln`** in the repo root; the solution builds the yaneSDK library and the **YaneSkeleton** app. You will also need:
+* **Microsoft DirectX SDK** (June 2010 or compatible) — yaneSDK supports DX3–DX8; this project assumes DX 6.1 or higher.
+
+The executable is produced under `src\_Build\Release\` (or `Debug`). Place the **data** folder (see [Runtime data](#runtime-data-game-data)) next to the executable (e.g. `src\_Build\Release\data\`).
+
+**Legacy / alternative:** The yaneSDK tree also has project files for Code::Blocks and older toolchains. In **yaneSDK\\ProjectFiles** you can find support for Microsoft Visual C++ Toolkit 2003, Platform SDK, and Visual Studio .NET 2003 (VC7.1).
 
 ## Untouched yaneSDK source code
 Raw untouched source code is in misc folder. (v1-v5)
@@ -39,7 +39,7 @@ Card/game data is required at runtime but is omitted from this repo to reduce le
 
 ### Where to place data
 
-Next to the executable (e.g. in the same folder as `YaneSkeleton.exe`), create a `data` folder with:
+Next to the executable (e.g. `src\_Build\Release\` or the same folder as `YaneSkeleton.exe`), create a `data` folder with:
 
 - `data\bin#\` — card .bin files
 - `data\card\` — list_card.txt and card images

@@ -16,6 +16,9 @@
 # Mono auto generated files
 mono_crash.*
 
+# Local temp / scratch
+_temp/
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/

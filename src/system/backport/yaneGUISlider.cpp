@@ -1,4 +1,4 @@
-#include "../../stdafx.h"
+#include "stdafx.h"
 #include "yaneGUISlider.h"
 
 namespace yaneuraoGameSDK3rd {
@@ -38,9 +38,10 @@ LRESULT CGUINormalSliderListener::OnDraw(ISurface* lp, int x, int y, int nX, int
         return lp->BltNatural(m_vPlane.get(), x, y);
     }
 
-    ISurface* plane0 = m_vPlaneLoader->GetPlane(0).get();
-    ISurface* plane1 = m_vPlaneLoader->GetPlane(0).get();
-    ISurface* plane2 = m_vPlaneLoader->GetPlane(0).get();
+    CPlane planeHolder = m_vPlaneLoader->GetPlane(0);
+    ISurface* plane0 = planeHolder.get();
+    ISurface* plane1 = planeHolder.get();
+    ISurface* plane2 = planeHolder.get();
 
     if (!plane0 || !plane1 || !plane2) {
         WARNING(true, "CGUINormalSliderListener::Plane is NULL");
@@ -89,7 +90,7 @@ LRESULT CGUINormalSliderListener::OnDraw(ISurface* lp, int x, int y, int nX, int
 ///////////////////////////////////////////////////////////////////////////////
 
 CGUISlider::CGUISlider() {
-    ::SetRect(&m_rcRect, 0, 0, 640, 480);
+    ::SetRect(&m_rcRect, 0, 0, 800, 600);
     m_nItemNumX = 1;
     m_nItemNumY = 1;
     m_nType = 0;

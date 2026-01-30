@@ -1,7 +1,10 @@
 // CSceneYesNo.cpp
 // Created by derplayer
 // Created on 2025-01-26 23:01:28
-
+#include "stdafx.h"
+#ifdef _MSC_VER
+#pragma warning(disable: 4996) // fopen/fopen_s deprecation
+#endif
 #include "CSceneYesNo.h"
 
 void CSceneYesNo::OnInit() {
@@ -63,8 +66,8 @@ void CSceneYesNo::OnInit() {
     //    return;
     //}
 
-    FILE* testFile = fopen("test/yesno/01.yga", "rb");
-    if (testFile) {
+    FILE* testFile = NULL;
+    if (fopen_s(&testFile, "test/yesno/01.yga", "rb") == 0 && testFile) {
         fclose(testFile);
         OutputDebugStringA("File test/yesno/01.yga exists\n");
     } else {
@@ -75,7 +78,7 @@ void CSceneYesNo::OnInit() {
     LRESULT lr = m_vPlaneLoader.Load(0);
     if (lr != 0) {
         char buf[64];
-        sprintf(buf, "Error: Load(0) failed, code=%ld\n", lr);
+        sprintf_s(buf, sizeof(buf), "Error: Load(0) failed, code=%ld\n", lr);
         OutputDebugStringA(buf);
     } else {
         OutputDebugStringA("Load(0) succeeded\n");
@@ -89,7 +92,7 @@ void CSceneYesNo::OnInit() {
     } else {
         int type = bgPlane->GetType();
         char typeBuf[32];
-        sprintf(typeBuf, "bgPlane type=%d\n", type);
+        sprintf_s(typeBuf, sizeof(typeBuf), "bgPlane type=%d\n", type);
         OutputDebugStringA(typeBuf);
 
         CSurfaceInfo* test = bgPlane->GetSurfaceInfo();
@@ -97,7 +100,7 @@ void CSceneYesNo::OnInit() {
             int sx, sy;
             bgPlane->GetSize(sx, sy);
             char buf[128];
-            sprintf(buf, "bgPlane: IsInit=%d, GetPtr=%p, type=%d, size=%dx%d\n",
+            sprintf_s(buf, sizeof(buf), "bgPlane: IsInit=%d, GetPtr=%p, type=%d, size=%dx%d\n",
                     test->IsInit(), test->GetPtr(), test->GetSurfaceType(), sx, sy);
             OutputDebugStringA(buf);
         }
@@ -122,7 +125,7 @@ void CSceneYesNo::OnInit() {
     static const int BUTTON_SPACING = 120;
     
     for(int i = 0; i < 2; i++) {
-        m_vButtons[i].SetMouse(smart_ptr<CFixMouse>(&m_mouse, false));
+        m_vButtons[i].SetMouse(smart_ptr<CFixMouse>(&m_mouse, false)); // Non-owning: m_mouse outlives scene
 
         // Create the button listener as CGUIButtonEventListener type directly
         smart_ptr<CGUIButtonEventListener> buttonListener(new CGUINormalButtonListener());
@@ -151,7 +154,7 @@ void CSceneYesNo::OnInit() {
     //loaderDemo.Add(1, plane1);  // Add to slot 1
 
     for(int i = 0; i < 8; i++) {
-        m_vCards[i].SetMouse(smart_ptr<CFixMouse>(&m_mouse, false));
+        m_vCards[i].SetMouse(smart_ptr<CFixMouse>(&m_mouse, false)); // Non-owning: m_mouse outlives scene
 
         // Create the button listener as CGUIButtonEventListener type directly
         smart_ptr<CGUIButtonEventListener> buttonListener(new CGUINormalButtonListener());
@@ -174,7 +177,7 @@ void CSceneYesNo::OnInit() {
 	// Example: at screen coordinates (50, 50), 300 width, 200 height, with a vertical slider.
 	myTextBox = smart_ptr<yaneuraoGameSDK3rd::Draw::CGUITextBox>(new yaneuraoGameSDK3rd::Draw::CGUITextBox(), false);
 	myTextBox->Create(50, 350, 300, 200, yaneuraoGameSDK3rd::Draw::CGUITextBox::VERTICAL_SLIDER);
-	myTextBox->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false)); // Pass the current mouse state
+	myTextBox->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false)); // Non-owning: m_mouse outlives scene
 
 	// 3. Set the text content
 	myTextBox->SetText("Hello world! This is a simple example of a multi-line textbox "
@@ -274,8 +277,9 @@ void CSceneYesNo::OnDraw(const smart_ptr<ISurface>& lp) {
 		//return;
 	}
     // Draw darkened background
-	CSurfaceInfo* m_vBackgroundInfo = m_vBackground->GetSurfaceInfo();
-	lp->BltFast(m_vBackground.get(), 0, 0);
+	if (m_vBackground.get()) {
+		lp->BltFast(m_vBackground.get(), 0, 0);
+	}
 	//CSurfaceInfo* m_vBackgroundInfo = app->framebufferCache->GetSurfaceInfo();
 	//lp->BltFast(app->framebufferCache.get(), 0, 0);
 
@@ -300,15 +304,16 @@ void CSceneYesNo::OnDraw(const smart_ptr<ISurface>& lp) {
 
 	// DEMO1: blit data onto new 32x32 surface and draw it
 	CFastPlane bgSurface;
-	bgSurface.CreateSurface(32, 32, false);  
-	RECT srcRegion = {0, 0, 32, 32};  // Take first 32x32 pixels
-	bgSurface.BltFast(m_pMessageSurface.get(), 0, 0, NULL, &srcRegion);
+	bgSurface.CreateSurface(32, 32, false);
+	RECT srcRegion = {0, 0, 32, 32};
+	if (m_pMessageSurface.get())
+		bgSurface.BltFast(m_pMessageSurface.get(), 0, 0, NULL, &srcRegion);
 	lp->BltFast(&bgSurface, 128, 32);
 
 	int x, y, b;
     m_mouse.GetInfo(x, y, b);
 	char buf[128];
-	sprintf(buf, "MouseLoop: %d %d %d\n", x,y,b);
+	sprintf_s(buf, sizeof(buf), "MouseLoop: %d %d %d\n", x,y,b);
 	OutputDebugStringA(buf);
 
     // Draw buttons

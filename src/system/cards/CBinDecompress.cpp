@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "CBinDecompress.h"
 
 bool CBinDecompress::IsCompressed(const BYTE* data, DWORD size, const char* filename) {
@@ -32,7 +33,7 @@ BYTE* CBinDecompress::Decompress(const BYTE* data, DWORD size, DWORD& outSize) {
 CBinDecompressDetector::BinType CBinDecompressDetector::GetBinType(const char* filename) {
     // MSVC 2003: Use basic string functions instead of std::string
     char tempName[MAX_PATH];
-    strcpy(tempName, filename);
+    strcpy_s(tempName, sizeof(tempName), filename);
     
     // Simple lowercase conversion
     char* p = tempName;

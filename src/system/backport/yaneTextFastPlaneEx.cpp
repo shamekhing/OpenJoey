@@ -4,7 +4,7 @@
 // This file implements CTextFastPlaneEx, which inherits from CTextFastPlane
 // to provide rich text layout and rendering.
 //
-
+#include "stdafx.h"
 #include "yaneTextFastPlaneEx.h"
 
 namespace yaneuraoGameSDK3rd {

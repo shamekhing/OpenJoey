@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--
+  Note: You may see MSBuild warnings MSB4211:
+  - "Platform is being set ... but was already consumed" (Microsoft.Cpp.Default.props)
+  - "GetTargetPathDependsOn is being set ... but was already consumed" (Microsoft.Common.CurrentVersion.targets)
+  These are harmless and do not affect the build. Do not set these properties here;
+  setting them in Directory.Build.props can make the warnings worse.
+  -->
+</Project>

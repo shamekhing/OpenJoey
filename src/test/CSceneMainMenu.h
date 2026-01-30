@@ -35,16 +35,15 @@ private:
 	CGUIButton m_vButtons[6];
 	int m_nButton;					// Selected button (0=none, 1=duel, 2=edit, 3=list, 4=setup, 5=quit)
 
-	ISurface* m_title1;
-	ISurface* m_title2;
-
-	ISurface* m_menu1;
-	ISurface* m_menu2;
-	ISurface* m_menu3;
-	ISurface* m_menu4;
-	ISurface* m_menu5;
-	ISurface* m_menu6;
-	ISurface* m_menu7;
+	CPlane m_title1;
+	CPlane m_title2;
+	CPlane m_menu1;
+	CPlane m_menu2;
+	CPlane m_menu3;
+	CPlane m_menu4;
+	CPlane m_menu5;
+	CPlane m_menu6;
+	CPlane m_menu7;
 };
 
 #endif // CSCENEMAINMENU_H

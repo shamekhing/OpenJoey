@@ -31,22 +31,22 @@ private:
 	smart_vector_ptr<CGUIButton> m_vButtons; // we vector now, fuck arrays :^)
 	int m_nButton;	// Selected button
 
-	// option graphics
-	ISurface* m_settingsBackdrop;
-	ISurface* m_settingsWindowBtn;
-	ISurface* m_settingsFullscreenBtn;
-	ISurface* m_settingsBitBtn;
-	ISurface* m_settingsBackBtn;
+	// option graphics (CPlane holds ownership so surfaces are not dangling from GetPlane() temporary)
+	CPlane m_settingsBackdrop;
+	CPlane m_settingsWindowBtn;
+	CPlane m_settingsFullscreenBtn;
+	CPlane m_settingsBitBtn;
+	CPlane m_settingsBackBtn;
 
-	// TODO: we dont have slider UI code yet
-	ISurface* m_settingsVolumeSlider1;
-	ISurface* m_settingsVolumeSlider2;
-	ISurface* m_settingsVolumeSlider3;
+	// TODO: we dont have slider UI code yet (unused; kept as CPlane for consistency if re-enabled)
+	CPlane m_settingsVolumeSlider1;
+	CPlane m_settingsVolumeSlider2;
+	CPlane m_settingsVolumeSlider3;
 
-    CGUISlider* m_volumeSlider;     // Change to raw pointer like other surfaces
-    ISurface* m_sliderTop;          // Match other surface declarations
-    ISurface* m_sliderMiddle;
-    ISurface* m_sliderBottom;
+    CGUISlider* m_volumeSlider;
+    CPlane m_sliderTop;
+    CPlane m_sliderMiddle;
+    CPlane m_sliderBottom;
 	// Sliced
 	// Volume slider graphics
     CFastPlane m_sliderNormal;    // Left button normal state

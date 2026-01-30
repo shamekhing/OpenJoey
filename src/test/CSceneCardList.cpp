@@ -1,10 +1,11 @@
 // CSceneCardList.cpp
 // Created by derplayer
 // Created on 2025-05-23 10:30:43
-
+#include "stdafx.h"
 #include "CSceneCardList.h"
-#include <fstream>
 #include <sstream>
+#include <fstream>
+#include <string>
 
 // Destructor for manual cleanup of CGUIButton pointers
 CSceneCardList::~CSceneCardList() {
@@ -55,7 +56,8 @@ void CSceneCardList::OnInit() {
     // Load scene layout data
     m_vPlaneLoader.SetLang(app->GetLang());
     m_vPlaneLoader.SetReadDir("data/y/list/");
-    if (m_vPlaneLoader.Set("data/y/list/list_scene.txt", false) != 0) {
+    LRESULT listSceneResult = m_vPlaneLoader.Set("data/y/list/list_scene.txt", false);
+    if (listSceneResult != 0) {
         OutputDebugStringA("Error: Failed to load data/y/list/list_scene.txt\n");
     }
     // FIX: Set color key for transparency on m_vPlaneLoader
@@ -173,7 +175,7 @@ void CSceneCardList::OnMove(const smart_ptr<ISurface>& lp) {
 
                             // Load the full card graphic
                             char fullCardPath[256];
-                            sprintf(fullCardPath, "data/card/%s.bmp", currentCard.bmpName.c_str());
+                            sprintf_s(fullCardPath, sizeof(fullCardPath), "data/card/%s.bmp", currentCard.bmpName.c_str());
                             smart_ptr<CFastPlane> fullPlane(new CFastPlane());
                             if (fullPlane->Load(fullCardPath) == 0) {
                                 m_fullCardPreviewPlane = fullPlane;
@@ -276,7 +278,7 @@ void CSceneCardList::InitializeUI() {
     // Create back button
     CGUIButton* backBtn = new CGUIButton();
     backBtn->SetID(1);
-    backBtn->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false));
+    backBtn->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false)); // Non-owning: m_mouse outlives scene
     smart_ptr<CGUIButtonEventListener> buttonListener(new CGUINormalButtonListener());
     CGUINormalButtonListener* p = static_cast<CGUINormalButtonListener*>(buttonListener.get()); // Use static_cast
     p->SetPlaneLoader(smart_ptr<CPlaneLoader>(&m_vPlaneLoader, false), 1);
@@ -327,7 +329,7 @@ void CSceneCardList::InitializeUI() {
 	// TODO: create signature with two XY points and calulate anything else from this
 	m_cardTextBox->Create(topLeftBox.x, topLeftBox.y, boxScaleX, boxScaleY, yaneuraoGameSDK3rd::Draw::CGUITextBox::VERTICAL_SLIDER);
 
-	m_cardTextBox->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false)); // Pass the current mouse state
+	m_cardTextBox->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false)); // Non-owning: m_mouse outlives scene
 	//m_cardTextBox->SetTextColor(yaneuraoGameSDK3rd::Draw::ISurface::makeRGB(0, 0, 0, 0));
 	smart_ptr<yaneuraoGameSDK3rd::Draw::CFont> customFont(new yaneuraoGameSDK3rd::Draw::CFont());
 	customFont->SetFont("Arial");
@@ -348,7 +350,7 @@ void CSceneCardList::InitializeUI() {
 	// footer
 	// TODO: +200 PLACEHOLDER - use real value from txt
 	m_cardTextBoxFooter->Create(topLeftBox.x, topLeftBox.y+200, boxScaleX, boxScaleY, yaneuraoGameSDK3rd::Draw::CGUITextBox::VERTICAL_SLIDER);
-	m_cardTextBoxFooter->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false));
+	m_cardTextBoxFooter->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false)); // Non-owning: m_mouse outlives scene
 	smart_ptr<yaneuraoGameSDK3rd::Draw::CFont> customFontF(new yaneuraoGameSDK3rd::Draw::CFont());
 	customFontF->SetFont("Arial");
 	customFontF->SetSize(13);
@@ -370,7 +372,7 @@ void CSceneCardList::InitializeUI() {
 void CSceneCardList::InitializePageControls() {
     // Left arrow button
     CGUIButton* leftBtn = new CGUIButton();
-    leftBtn->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false));
+    leftBtn->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false)); // Non-owning: m_mouse outlives scene
     smart_ptr<CGUIButtonEventListener> leftListener(new CGUINormalButtonListener());
     CGUINormalButtonListener* pl = static_cast<CGUINormalButtonListener*>(leftListener.get()); // Use static_cast
     pl->SetPlaneLoader(smart_ptr<CPlaneLoader>(&m_vPlaneLoader, false), 6); // pe_yaji_l1.bmp, pe_yaji_l2.bmp etc.
@@ -382,7 +384,7 @@ void CSceneCardList::InitializePageControls() {
 
     // Right arrow button
     CGUIButton* rightBtn = new CGUIButton();
-    rightBtn->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false));
+    rightBtn->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false)); // Non-owning: m_mouse outlives scene
     smart_ptr<CGUIButtonEventListener> rightListener(new CGUINormalButtonListener());
     CGUINormalButtonListener* pr = static_cast<CGUINormalButtonListener*>(rightListener.get()); // Use static_cast
     pr->SetPlaneLoader(smart_ptr<CPlaneLoader>(&m_vPlaneLoader, false), 8); // pe_yaji_r1.bmp, pe_yaji_r2.bmp etc.
@@ -449,7 +451,7 @@ void CSceneCardList::LoadCardData() {
                             // NEW: Create CGUIButton for each card
                             CGUIButton* cardBtn = new CGUIButton(); // Allocated with new, owned by smart_ptr
                             cardBtn->SetID(card.id); // Use card ID as button ID
-                            cardBtn->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false));
+                            cardBtn->SetMouse(smart_ptr<CFixMouse>(&m_mouse, false)); // Non-owning: m_mouse outlives scene
 
                             smart_ptr<CGUIButtonEventListener> cardBtnListener(new CGUINormalButtonListener());
                             CGUINormalButtonListener* pBtn = static_cast<CGUINormalButtonListener*>(cardBtnListener.get());
@@ -457,7 +459,7 @@ void CSceneCardList::LoadCardData() {
                             // Create a CFastPlane for this card's image
                             smart_ptr<CFastPlane> cardPlane = smart_ptr<CFastPlane>(new CFastPlane());
                             char filepath[256];
-                            sprintf(filepath, "data/mini/%s.bmp", card.bmpName.c_str());
+                            sprintf_s(filepath, sizeof(filepath), "data/mini/%s.bmp", card.bmpName.c_str());
                             if (cardPlane->Load(filepath) == 0) {
                                 // Set the button's plane to the card's image
                                 pBtn->SetPlane(smart_ptr<ISurface>(cardPlane.get(), false)); // Button listener doesn't own surface
@@ -470,7 +472,7 @@ void CSceneCardList::LoadCardData() {
                             } else {
                                 delete cardBtn; // Clean up button if image failed to load
                                 char debugStr[256];
-                                sprintf(debugStr, "Warning: Failed to load card texture for button: %s\n", filepath);
+                                sprintf_s(debugStr, sizeof(debugStr), "Warning: Failed to load card texture for button: %s\n", filepath);
                                 OutputDebugStringA(debugStr);
                             }
                         }
@@ -511,7 +513,7 @@ void CSceneCardList::LoadCardTexturesForCurrentPage() {
 
         if (card.m_cardButton.get()) { // Check if the button exists for this card
             smart_ptr<CFastPlane> cardPlane = smart_ptr<CFastPlane>(new CFastPlane());
-            sprintf(filepath, "data/mini/%s.bmp", card.bmpName.c_str());
+            sprintf_s(filepath, sizeof(filepath), "data/mini/%s.bmp", card.bmpName.c_str());
 
             if (cardPlane->Load(filepath) == 0) {
                 m_cardTextures[card.id] = cardPlane; // Keep a reference in the map
@@ -526,7 +528,7 @@ void CSceneCardList::LoadCardTexturesForCurrentPage() {
                 CGUINormalButtonListener* pBtn = static_cast<CGUINormalButtonListener*>(cardBtnListener.get());
                 pBtn->SetPlane(smart_ptr<ISurface>()); // FIX: Set plane to a null smart_ptr
                 char debugStr[256];
-                sprintf(debugStr, "Warning: Failed to load card texture (for button update): %s\n", filepath);
+                sprintf_s(debugStr, sizeof(debugStr), "Warning: Failed to load card texture (for button update): %s\n", filepath);
                 OutputDebugStringA(debugStr);
             }
         }
@@ -757,43 +759,35 @@ void CSceneCardList::DrawCardGrid(const smart_ptr<ISurface>& lp) {
                         card.m_cardButton->OnSimpleScaleDraw(lp.get());
 
                         // Draw hover border if the button is hovered AND fully scaled in
-                        if (card.m_cardButton->IsIn() && scalePercent == 100 && m_cardHoverBorder) {
-                            // FIX: Use BltFast with pDstSize and pSrcRect for scaling
-                            SIZE dstSize = { scaledWidth, scaledHeight };
-                            RECT srcRect = {
-                                0, 0,
-                                m_cardHoverBorder->GetConstSurfaceInfo()->GetSize().cx, // FIX: Use GetConstSurfaceInfo()->GetSize().cx
-                                m_cardHoverBorder->GetConstSurfaceInfo()->GetSize().cy  // FIX: Use GetConstSurfaceInfo()->GetSize().cy
-                            };
-                            lp->BltNatural(m_cardHoverBorder.get(), x, y, &dstSize, &srcRect, NULL, 0);
+                        if (card.m_cardButton->IsIn() && scalePercent == 100 && m_cardHoverBorder.get()) {
+                            const CSurfaceInfo* hoverInfo = m_cardHoverBorder->GetConstSurfaceInfo();
+                            if (hoverInfo) {
+                                SIZE dstSize = { scaledWidth, scaledHeight };
+                                SIZE sz = hoverInfo->GetSize();
+                                RECT srcRect = { 0, 0, sz.cx, sz.cy };
+                                lp->BltNatural(m_cardHoverBorder.get(), x, y, &dstSize, &srcRect, NULL, 0);
+                            }
 
-							// Card TextBox
-							//m_cardTextBox->SetTextTitle(card.cardData->name.name);
-							// TODO: this needs some work
-							const DialogEntry* cardTypeDialog = m_bin->GetDialog(card.cardData->properties.GetMonsterTypeTextId());
-							const char* typeText = (cardTypeDialog && cardTypeDialog->text) ? cardTypeDialog->text : "";
-							const char* desc = card.cardData->description ? card.cardData->description : "";
-							const char* name = (card.cardData->name.name) ? card.cardData->name.name : "";
-							std::string formattedText = 
-								"<SIZE=-1><BOLD>" + std::string(name) + "</BOLD></SIZE>" +
-								"<HR>" +
-								"<COLOR=#4A2C00><SIZE=0>[" + std::string(typeText) + "]</SIZE></COLOR>" +
-								"<HR>" +
-								"<COLOR=#4A2C00><SIZE=0>" + std::string(desc) + "</SIZE></COLOR>"
-								;
+							// Card TextBox (guard: GetCard() can return null)
+							if (card.cardData) {
+								//m_cardTextBox->SetTextTitle(card.cardData->name.name);
+								const DialogEntry* cardTypeDialog = m_bin->GetDialog(card.cardData->properties.GetMonsterTypeTextId());
+								const char* typeText = (cardTypeDialog && cardTypeDialog->text) ? cardTypeDialog->text : "";
+								const char* desc = card.cardData->description ? card.cardData->description : "";
+								const char* name = (card.cardData->name.name) ? card.cardData->name.name : "";
+								std::string formattedText =
+									"<SIZE=-1><BOLD>" + std::string(name) + "</BOLD></SIZE>" +
+									"<HR>" +
+									"<COLOR=#4A2C00><SIZE=0>[" + std::string(typeText) + "]</SIZE></COLOR>" +
+									"<HR>" +
+									"<COLOR=#4A2C00><SIZE=0>" + std::string(desc) + "</SIZE></COLOR>";
 
-							m_cardTextBox->SetText(formattedText);
-							MonsterType ctype = card.cardData->properties.GetMonsterType();
-							if (ctype == TYPE_SPELLCARD || ctype == TYPE_TRAPCARD)
-							{
-								//m_cardTextBox->SetTextFooter(""); // empty (hides the footer)
-								m_cardTextBoxFooter->SetText("TRAP SPELL CARD");
-							} 
-							else
-							{
-								m_cardTextBoxFooter->SetText("[MONSTER]");
-								//m_cardTextBox->SetTextTitleType("[MONSTER]");
-								//m_cardTextBox->SetTextFooter("ATK 1337 TEST");
+								m_cardTextBox->SetText(formattedText);
+								MonsterType ctype = card.cardData->properties.GetMonsterType();
+								if (ctype == TYPE_SPELLCARD || ctype == TYPE_TRAPCARD)
+									m_cardTextBoxFooter->SetText("TRAP SPELL CARD");
+								else
+									m_cardTextBoxFooter->SetText("[MONSTER]");
 							}
 
                         }
@@ -849,7 +843,7 @@ void CSceneCardList::DrawPagination(const smart_ptr<ISurface>& lp) {
 
     // Draw current page number (positions from list_scene.txt)
     char pageNum[8];
-    sprintf(pageNum, "%d", m_nCurrentPage);
+    sprintf_s(pageNum, sizeof(pageNum), "%d", m_nCurrentPage);
     int numX = 480;  // From list_scene.txt
     int numY = 561;
 
@@ -861,7 +855,7 @@ void CSceneCardList::DrawPagination(const smart_ptr<ISurface>& lp) {
     }
 
     // Draw total pages
-    sprintf(pageNum, "%d", m_nTotalPages);
+    sprintf_s(pageNum, sizeof(pageNum), "%d", m_nTotalPages);
     numX = 527;  // From list_scene.txt
 
     for (char* p = pageNum; *p; p++) {
@@ -888,7 +882,7 @@ void CSceneCardList::DrawCollectionRate(const smart_ptr<ISurface>& lp) {
     }
 
     char rateStr[16];
-    sprintf(rateStr, "%.1f", rate);
+    sprintf_s(rateStr, sizeof(rateStr), "%.1f", rate);
 
     // Draw at position from list_scene.txt (761,080)
     int numX = 670;

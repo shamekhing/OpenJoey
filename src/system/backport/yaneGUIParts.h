@@ -34,7 +34,7 @@ public:
     virtual LRESULT OnSimpleMove(ISurface* lp) { return 0; }  // Movement/logic phase
     virtual LRESULT OnSimpleDraw(ISurface* lp) { return 0; }    // Drawing phase only
 
-    // Mouse settings
+    // Mouse settings. If pv is non-owning (e.g. smart_ptr<CFixMouse>(&m_mouse, false)), the pointed-to object must outlive this control.
     virtual void SetMouse(smart_ptr<CFixMouse> pv) { Reset(); m_pvMouse = pv; }
     virtual smart_ptr<CFixMouse> GetMouse() { return m_pvMouse; }
 

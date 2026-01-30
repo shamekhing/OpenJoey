@@ -43,17 +43,12 @@ class CGUINormalButtonListener : public CGUIButtonEventListener {
 public:
     virtual void SetPlaneLoader(smart_ptr<CPlaneLoader> pv, int nNo);
     virtual void SetPlane(smart_ptr<ISurface> pv);
-    virtual ISurface* GetPlane(void){ 
-
-		if(m_bHasPlane) 
+    virtual ISurface* GetPlane(void){
+		if (m_bHasPlane)
 			return m_vPlane.get();
-		return m_vPlaneLoader->GetPlane(m_nPlaneStart).get();
-
-		// TODO: no idea, is this right? - could be that it breaks anim
-		if(m_vPlane.isNull())
-			return NULL;
-			//m_vPlane = smart_ptr<ISurface>(m_vPlaneLoader->GetPlane(m_nPlaneStart).get(), false);
-		return m_vPlane.get(); 
+		if (m_vPlaneLoader.get() == NULL) return NULL;
+		m_cachedPlane = GetMyPlaneAsPlane(false);
+		return m_cachedPlane.get();
 	}
 
 	virtual void SetPlaneNumber(int nNo){ 
@@ -77,6 +72,9 @@ public:
     virtual int  GetImageOffset(void) { return m_nImageOffset; }
     virtual ISurface* GetMyPlane(bool bPush = false);
 
+    /// Returns a CPlane that owns the surface; use this (or keep the CPlane in scope) instead of raw GetMyPlane() to avoid dangling pointers.
+    CPlane GetMyPlaneAsPlane(bool bPush = false);
+
     virtual void OnLButtonClick(void) {}
     virtual void OnRButtonClick(void) {}
     virtual bool IsLClick(){ 
@@ -96,6 +94,9 @@ protected:
     bool m_bHasPlane;
     smart_ptr<CPlaneLoader> m_vPlaneLoader;
     int  m_nPlaneStart;
+    /// Cached plane so GetPlane()/GetDrawSurface() return valid pointers (no temporary CPlane destroyed).
+    CPlane m_cachedPlane;
+    CPlane m_cachedDrawPlane;
 
     int  m_nType;
     bool m_bReverse;

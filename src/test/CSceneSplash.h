@@ -23,14 +23,16 @@ private:
 	CPlaneLoader m_vPlaneLoader;
 
     smart_ptr<ISurface> m_background;
-	ISurface* m_splash0;
-	ISurface* m_splash1;
+	CPlane m_splash0;  // hold ownership so surface is not freed when temporary from GetPlane() goes out of scope
+	CPlane m_splash1;
 
     CSaturationCounter m_nFade;     // Fade effect counter
 	CRootCounter m_nPhase;     // Fade effect phase
 	CTimer m_timer;
 	bool SplashTimerWait;
 	bool IsReadToLoadMenu;
+	bool m_splashLoadFailed;   // true when title.txt failed to load -> skip to menu after short delay
+	int m_framesNoSplash;      // frames drawn with no splash; when high enough, jump to main menu
 };
 
 #endif // CSCENESPLASH_H

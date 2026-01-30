@@ -1,19 +1,20 @@
-#include "..\..\stdafx.h"
+#include "stdafx.h"
 #include "yanePlaneEffectBlt.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 //	class ISurfaceFadeBlt
 
 LRESULT	ISurfaceFadeBlt::FadeBlt(ISurface*lpDraw,ISurface*lpPlane,int x,int y){
+	if (!lpDraw || !lpPlane) return 0;
 	int sx,sy;
 	lpPlane->GetSize(sx,sy);
 
-	//	全ラスタが普通ならば通常転送で解決する
+	//	?S???X?^???????????]???????????
 	bool bNormal = true;
 	int i;
 	for(i=0;i<sy;i++){
 		if (i+y < 0) continue;	//	upper cliping
-		if (i+y > 480) break;	//	lower cliping
+		if (i+y > 600) break;	//	lower cliping (800x600)
 		if ((m_nFadeTable[i+y]!=256) || (m_nRasterTable[i+y]!=0)){
 			bNormal = false;
 			break;
@@ -22,10 +23,10 @@ LRESULT	ISurfaceFadeBlt::FadeBlt(ISurface*lpDraw,ISurface*lpPlane,int x,int y){
 	if (bNormal) {
 		return lpDraw->Blt(lpPlane,x,y);
 	}
-	//	全ラスタが0か？
+	//	?S???X?^??0???H
 	for(i=0;i<sy;i++){
 		if (i+y < 0) continue;	//	upper cliping
-		if (i+y > 480) break;	//	lower cliping
+		if (i+y > 600) break;	//	lower cliping (800x600)
 		if (m_nFadeTable[i+y]==0) {
 			bNormal = false;
 			break;
@@ -36,11 +37,11 @@ LRESULT	ISurfaceFadeBlt::FadeBlt(ISurface*lpDraw,ISurface*lpPlane,int x,int y){
 	}
 	for(i=0;i<sy;i++){
 		if (i+y < 0) continue;	//	upper cliping
-		if (i+y > 480) break;	//	lower cliping
+		if (i+y > 600) break;	//	lower cliping (800x600)
 
 		int nFade = m_nFadeTable[i+y];
 		RECT rcSrc;
-		::SetRect(&rcSrc,0,i,sx,i+1);	//	ワンラスタ
+		::SetRect(&rcSrc,0,i,sx,i+1);	//	???????X?^
 		if (nFade==0) {
 			continue;
 		};
@@ -55,7 +56,7 @@ LRESULT	ISurfaceFadeBlt::FadeBlt(ISurface*lpDraw,ISurface*lpPlane,int x,int y){
 }
 
 ISurfaceFadeBlt::ISurfaceFadeBlt(void){
-	for(int i=0;i<480;i++){
+	for(int i=0;i<600;i++){
 		m_nFadeTable[i] = 256;
 	}
 	ZERO(m_nRasterTable);
@@ -66,23 +67,23 @@ ISurfaceFadeBlt::~ISurfaceFadeBlt(){
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-//		トランジション系の関数
+//		?g?????W?V?????n????
 //
 ///////////////////////////////////////////////////////////////////////////////
-//--- 修正 '01/11/29  by ENRA  ---
-// nTransMode=2の時、byFadeRateを有効にした
+//--- ?C?? '01/11/29  by ENRA  ---
+// nTransMode=2????AbyFadeRate??L???????
 //--------------------------------
-//--- 修正 '02/02/01  by ENRA  ---
-// クリッピングが出来るようにした
-// クロストランジションを出来るだけサポートした
+//--- ?C?? '02/02/01  by ENRA  ---
+// ?N???b?s???O???o??????????
+// ?N???X?g?????W?V???????o???????T?|?[?g????
 //--------------------------------
 
-//	コールバック用関数
+//	?R?[???o?b?N?p???
 vector< smart_ptr<ISurfaceTransBltListener> > ISurfaceTransBlt::m_avListener;
 
-//	まずは、マクロ類から
+//	?????A?}?N???????
 
-//	通常転送
+//	???]??
 #define CheckNormal \
 	if (nPhase <= 0) return 0;				\
 	if (nPhase >= 256) {					\
@@ -97,7 +98,7 @@ vector< smart_ptr<ISurfaceTransBltListener> > ISurfaceTransBlt::m_avListener;
 	lpPlane->GetSize(sx,sy);
 
 
-//	普通にBltするマクロ
+//	?????Blt????}?N??
 #define BLT(dst,src) {\
 	switch (nTransMode) {				\
 	case 0 :dst ->BltFast(src,x,y,NULL,NULL,lpDstClipRect); break; \
@@ -107,7 +108,7 @@ vector< smart_ptr<ISurfaceTransBltListener> > ISurfaceTransBlt::m_avListener;
 	}				\
 					}
 
-//	水平ラインを転送するマクロ
+//	???????C????]??????}?N??
 #define BLTHLINE(p) {\
 	RECT rc;								\
 	::SetRect(&rc,0,p,sx,p+1);				\
@@ -119,7 +120,7 @@ vector< smart_ptr<ISurfaceTransBltListener> > ISurfaceTransBlt::m_avListener;
 	}										\
 					}
 
-//	水平ラインpをnドット目からkドット転送するマクロ
+//	???????C??p??n?h?b?g?????k?h?b?g?]??????}?N??
 #define BLTHLINE2(p,n,k) {\
 	RECT rc;									\
 	int k2,n2;									\
@@ -136,7 +137,7 @@ vector< smart_ptr<ISurfaceTransBltListener> > ISurfaceTransBlt::m_avListener;
 	}										\
 					}
 
-//	垂直ラインを転送するマクロ
+//	???????C????]??????}?N??
 #define BLTVLINE(p) {\
 	RECT rc;							\
 	::SetRect(&rc,p,0,p+1,sy);			\
@@ -148,7 +149,7 @@ vector< smart_ptr<ISurfaceTransBltListener> > ISurfaceTransBlt::m_avListener;
 	}										\
 					}
 
-//	水平ラインをずらして転送するマクロ
+//	???????C??????????]??????}?N??
 #define BLTHLINEOFFSET(p,ox) {\
 	RECT rc;								\
 	::SetRect(&rc,0,p,sx,p+1);				\
@@ -160,7 +161,7 @@ vector< smart_ptr<ISurfaceTransBltListener> > ISurfaceTransBlt::m_avListener;
 	}										\
 					}
 
-//	矩形を転送するマクロ(Clipあり)
+//	??`??]??????}?N??(Clip????)
 #define BLTRECT(_x,_y,_sx,_sy) {\
 	RECT rc;									\
 	int	sx2,sy2;								\
@@ -180,7 +181,7 @@ vector< smart_ptr<ISurfaceTransBltListener> > ISurfaceTransBlt::m_avListener;
 	}										\
 					}
 
-//	矩形をオフセットして転送するマクロ(Clipあり)
+//	??`???I?t?Z?b?g????]??????}?N??(Clip????)
 #define BLTRECTOFFSET(_x,_y,_sx,_sy,_ox,_oy) {\
 	RECT rc;									\
 	int	sx2 = _sx, sy2 = _sy;					\
@@ -198,7 +199,7 @@ vector< smart_ptr<ISurfaceTransBltListener> > ISurfaceTransBlt::m_avListener;
 	}										\
 					}
 
-//	ご近所の矩形を転送するマクロ
+//	????????`??]??????}?N??
 #define BLTRECTNEIGHBOR(_x,_y,_sx,_sy,level) {\
 	RECT rc;									\
 	int	sx2,sy2;								\
@@ -218,7 +219,7 @@ vector< smart_ptr<ISurfaceTransBltListener> > ISurfaceTransBlt::m_avListener;
 	}										\
 				}
 
-//	点を転送するマクロ（遅い）
+//	?_??]??????}?N???i?x???j
 #define BLTPSET(_x,_y) {\
 	RECT rc;									\
 	::SetRect(&rc,_x,_y,_x+1,_y+1);				\
@@ -230,7 +231,7 @@ vector< smart_ptr<ISurfaceTransBltListener> > ISurfaceTransBlt::m_avListener;
 	}										\
 				}
 
-//	水平ラインを上下にずらして転送するマクロ
+//	???????C?????????????]??????}?N??
 #define BLTHLINEFROM(p,oy) {\
 	RECT rc;							\
 	::SetRect(&rc,0,p,sx,p+1);			\
@@ -242,7 +243,7 @@ vector< smart_ptr<ISurfaceTransBltListener> > ISurfaceTransBlt::m_avListener;
 	}										\
 				}
 
-//	垂直ラインを左右にずらして転送するマクロ
+//	???????C???????E???????]??????}?N??
 #define BLTVLINEFROM(p,ox) {\
 	RECT rc;							\
 	::SetRect(&rc,p,0,p+1,sy);			\
@@ -254,7 +255,7 @@ vector< smart_ptr<ISurfaceTransBltListener> > ISurfaceTransBlt::m_avListener;
 	}										\
 				}
 
-//	水平ラインを横にrx分ストレッチして転送するマクロ
+//	???????C????????rx???X?g???b?`????]??????}?N??
 #define BLTHLINEST(p,rx) {\
 	RECT rc;													\
 	::SetRect(&rc,0,p,sx,p+1);									\
@@ -267,7 +268,7 @@ vector< smart_ptr<ISurfaceTransBltListener> > ISurfaceTransBlt::m_avListener;
 	}										\
 				}
 
-//	垂直ラインを縦にry分ストレッチして転送するマクロ
+//	???????C?????c??ry???X?g???b?`????]??????}?N??
 #define BLTVLINEST(p,ry) {\
 	RECT rc;													\
 	::SetRect(&rc,p,0,p+1,sy);									\
@@ -287,7 +288,7 @@ LRESULT ISurfaceTransBlt::Blt(int nTransNo,ISurface*lpDst,ISurface*lpSrc,int x,i
                                    int nTransMode,BYTE byFadeRate,LPRECT lpDstClipRect);
     
     static TransBltFunc FuncList[] = {
-        ISurfaceTransBlt::MirrorBlt1,    // 一応０でも呼びoしておく
+        ISurfaceTransBlt::MirrorBlt1,    // ???O??????o???????
         ISurfaceTransBlt::MirrorBlt1,    // 1
 		ISurfaceTransBlt::MirrorBlt2,
 		ISurfaceTransBlt::MirrorBlt3,
@@ -370,23 +371,23 @@ LRESULT ISurfaceTransBlt::Blt(int nTransNo,ISurface*lpDst,ISurface*lpSrc,int x,i
 		ISurfaceTransBlt::TensileBlt2,	// 80
 		ISurfaceTransBlt::TensileBlt3,
 		ISurfaceTransBlt::TensileBlt4,
-	//	上のがトランジション系Blt
+	//	?????g?????W?V?????nBlt
 	};
 
-//	WARNING(nTransNo >= NELEMS(FuncList) ,"ISurfaceTransBlt::Bltで範囲外");
-	//	これエラーではなく、不正終了としてリターンするほうがいい。
+//	WARNING(nTransNo >= NELEMS(FuncList) ,"ISurfaceTransBlt::Blt????O");
+	//	????G???[??????A?s???I?????????^?[???????????????B
 
-	//	マイナスの値の場合は、ユーザー登録関数
+	//	?}?C?i?X??l?????A???[?U?[?o?^???
 	if (nTransNo<0) {
 		nTransNo = -nTransNo-1;
 		int n = GetBltListener()->size();
 		if (nTransNo < n){
 			return (*GetBltListener())[nTransNo]->Blt(lpDst,lpSrc,x,y,nPhase,nTransMode,byFadeRate,lpDstClipRect);
 		} else {
-			return 1;	//　範囲外
+			return 1;	//?@???O
 		}
 	}else{
-		// クロストランジションをサポートする場合はここにcaseを書く
+		// ?N???X?g?????W?V???????T?|?[?g????????????case??????
 		switch(nTransNo){
 		case  5:	// CutInBlt1
 		case  7:	// CutInBlt3
@@ -464,12 +465,12 @@ LRESULT ISurfaceTransBlt::Blt(int nTransNo,ISurface*lpDst,ISurface*lpSrc,int x,i
 				nPhase = 512 - nPhase;
 			} break;
 		default:
-			// クロストランジション非対応
+			// ?N???X?g?????W?V????????
 			if(nPhase>256) nPhase = 0;
 		}
 	}
 
-	if (nTransNo >= NELEMS(FuncList)) return 1; // 範囲外
+	if (nTransNo >= NELEMS(FuncList)) return 1; // ???O
 
 	return FuncList[nTransNo](lpDst,lpSrc,x,y,nPhase,nTransMode,byFadeRate,lpDstClipRect);
 }
@@ -512,8 +513,8 @@ LRESULT ISurfaceTransBlt::MirrorBlt4(ISurface*lpDraw,ISurface*lpPlane,int x,int 
 LRESULT ISurfaceTransBlt::CutInBlt1(ISurface*lpDraw,ISurface*lpPlane,int x,int y,int nPhase,int nTransMode,BYTE byFadeRate,LPRECT lpDstClipRect){
 	CheckNormal;
 	for(int py=0;py<sy;py++){
-		int r,r2;	//	ずれ幅
-		r2 = 256-nPhase;	//	ずれ幅
+		int r,r2;	//	????
+		r2 = 256-nPhase;	//	????
 		r = (rand() % r2) - (r2>>1);
 		BLTHLINEOFFSET(py,r);
 	}
@@ -530,7 +531,7 @@ LRESULT ISurfaceTransBlt::CutInBlt2(ISurface*lpDraw,ISurface*lpPlane,int x,int y
 			if ((rand()&255) <= nPhase){
 				BLTRECT(px,py,4,2);
 			} else {
-				BLTRECTNEIGHBOR(px,py,4,2,level);	//	近所のやつをBlt
+				BLTRECTNEIGHBOR(px,py,4,2,level);	//	????????Blt
 			}
 		}
 	}
@@ -641,8 +642,8 @@ LRESULT ISurfaceTransBlt::CutInBlt13(ISurface*lpDraw,ISurface*lpPlane,int x,int 
 	int sr;	// start size
 	sr = (sx * nPhase) >> 8;
 	for(int py=0;py<sy;py+=2){
-		BLTRECT(0,py,sr,1); // クリップ付きHLINE
-		BLTRECT(sx-sr-1,py+1,sx,1); // クリップ付きHLINE
+		BLTRECT(0,py,sr,1); // ?N???b?v?t??HLINE
+		BLTRECT(sx-sr-1,py+1,sx,1); // ?N???b?v?t??HLINE
 	}
 	return 0;
 }
@@ -651,8 +652,8 @@ LRESULT ISurfaceTransBlt::CutInBlt14(ISurface*lpDraw,ISurface*lpPlane,int x,int 
 	int sr;	// start size
 	sr = (sy * nPhase) >> 8;
 	for(int px=0;px<sx;px+=2){
-		BLTRECT(px,0,1,sr); // クリップ付きVLINE
-		BLTRECT(px+1,sy-sr-1,1,sy); // クリップ付きVLINE
+		BLTRECT(px,0,1,sr); // ?N???b?v?t??VLINE
+		BLTRECT(px+1,sy-sr-1,1,sy); // ?N???b?v?t??VLINE
 	}
 	return 0;
 }
@@ -661,14 +662,14 @@ LRESULT ISurfaceTransBlt::CutInBlt15(ISurface*lpDraw,ISurface*lpPlane,int x,int 
 	int sr;	// start size
 	sr = (sx * nPhase) >> 7;
 	for(int py=0;py<sy;py+=4){
-		BLTRECT(0,py,sr,1);			// クリップ付きHLINE
-		BLTRECT(sx-sr-1,py+2,sx,1);	// クリップ付きHLINE
+		BLTRECT(0,py,sr,1);			// ?N???b?v?t??HLINE
+		BLTRECT(sx-sr-1,py+2,sx,1);	// ?N???b?v?t??HLINE
 	}
 	if (nPhase > 128) {
 		for(int py=0;py<sy;py+=4){
 			sr = (sx * (nPhase-128)) >> 7;
-			BLTRECT(0,py+1,sr,1);		// クリップ付きHLINE
-			BLTRECT(sx-sr-1,py+3,sx,1); // クリップ付きHLINE
+			BLTRECT(0,py+1,sr,1);		// ?N???b?v?t??HLINE
+			BLTRECT(sx-sr-1,py+3,sx,1); // ?N???b?v?t??HLINE
 		}
 	}
 	return 0;
@@ -678,14 +679,14 @@ LRESULT ISurfaceTransBlt::CutInBlt16(ISurface*lpDraw,ISurface*lpPlane,int x,int 
 	int sr;	// start size
 	sr = (sy * nPhase) >> 7;
 	for(int px=0;px<sx;px+=4){
-		BLTRECT(px,0,1,sr);			// クリップ付きVLINE
-		BLTRECT(px+2,sy-sr-1,1,sy);	// クリップ付きVLINE
+		BLTRECT(px,0,1,sr);			// ?N???b?v?t??VLINE
+		BLTRECT(px+2,sy-sr-1,1,sy);	// ?N???b?v?t??VLINE
 	}
 	if (nPhase > 128) {
 		for(int px=0;px<sx;px+=4){
 			sr = (sy * (nPhase-128)) >> 7;
-			BLTRECT(px+1,0,1,sr);		// クリップ付きVLINE
-			BLTRECT(px+3,sy-sr-1,1,sy); // クリップ付きVLINE
+			BLTRECT(px+1,0,1,sr);		// ?N???b?v?t??VLINE
+			BLTRECT(px+3,sy-sr-1,1,sy); // ?N???b?v?t??VLINE
 		}
 	}
 	return 0;
@@ -873,7 +874,7 @@ LRESULT ISurfaceTransBlt::CircleBlt1(ISurface*lpDraw,ISurface*lpPlane,int x,int 
 		int px,rx;
 		rx = (int)(VC6_SQRT(sr*sr/4-ssy*ssy)*2);
 		px = (sx>>1)-(rx>>1);
-		BLTRECT(px,py,rx,1); // クリップ付きHLINE
+		BLTRECT(px,py,rx,1); // ?N???b?v?t??HLINE
 	}
 	return 0;
 }
@@ -889,7 +890,7 @@ LRESULT ISurfaceTransBlt::CircleBlt2(ISurface*lpDraw,ISurface*lpPlane,int x,int 
 		int px,rx;
 		rx = (int)(VC6_SQRT(sr*sr/4-ssy*ssy)*2);
 		px = (sx>>1)-(rx>>1);
-		BLTRECT(px,py,rx,1); // クリップ付きHLINE
+		BLTRECT(px,py,rx,1); // ?N???b?v?t??HLINE
 	}
 	return 0;
 }
@@ -905,7 +906,7 @@ LRESULT ISurfaceTransBlt::CircleBlt3(ISurface*lpDraw,ISurface*lpPlane,int x,int 
 		int px,rx;
 		rx = (int)(VC6_SQRT(sr*sr/4-ssy*ssy));
 		px = 0;
-		BLTRECT(px,py,rx,1); // クリップ付きHLINE
+		BLTRECT(px,py,rx,1); // ?N???b?v?t??HLINE
 	}
 	return 0;
 }
@@ -921,7 +922,7 @@ LRESULT ISurfaceTransBlt::CircleBlt4(ISurface*lpDraw,ISurface*lpPlane,int x,int 
 		int px,rx;
 		rx = (int)(VC6_SQRT(sr*sr/4-ssy*ssy));
 		px = sx-rx;
-		BLTRECT(px,py,rx,1); // クリップ付きHLINE
+		BLTRECT(px,py,rx,1); // ?N???b?v?t??HLINE
 	}
 	return 0;
 }
@@ -937,7 +938,7 @@ LRESULT ISurfaceTransBlt::CircleBlt5(ISurface*lpDraw,ISurface*lpPlane,int x,int 
 		int px,rx;
 		rx = (int)(VC6_SQRT(sr*sr/4-ssy*ssy)*2); // bug-fixed '00/02/24
 		px = (sx>>1)-(rx>>1);
-		BLTRECT(px,py,rx,1); // クリップ付きHLINE
+		BLTRECT(px,py,rx,1); // ?N???b?v?t??HLINE
 	}
 	return 0;
 }
@@ -1133,7 +1134,7 @@ LRESULT ISurfaceTransBlt::BlendBlt1(ISurface*lpDraw,ISurface*lpPlane,int x,int y
 //	case 0 :return lpDraw->BlendBltFast(lpPlane,x,y,PlaneRGB(256-nPhase,256-nPhase,256-nPhase),PlaneRGB(nPhase,nPhase,nPhase));
 	case 1 :return lpDraw->BlendBlt(lpPlane,x,y,nPhase,NULL,NULL,lpDstClipRect);
 //	case 1 :return lpDraw->BlendBlt(lpPlane,x,y,PlaneRGB(256-nPhase,256-nPhase,256-nPhase),PlaneRGB(nPhase,nPhase,nPhase));
-//	case 2 :return lpDraw->FadeBltAlpha(lpPlane,x,y,nPhase); //	遅いから、こんなん使わんといてやー
+//	case 2 :return lpDraw->FadeBltAlpha(lpPlane,x,y,nPhase); //	?x??????A??????g????????[
 	case 2 :return lpDraw->BlendBltFast(lpPlane,x,y,nPhase,NULL,NULL,lpDstClipRect);
 //	case 3 :return -1; // not supported
 	case 3 :return lpDraw->BltNatural(lpPlane,x,y,nPhase,NULL,NULL,lpDstClipRect);
@@ -1142,9 +1143,9 @@ LRESULT ISurfaceTransBlt::BlendBlt1(ISurface*lpDraw,ISurface*lpPlane,int x,int y
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// BYTE byFadeRateを追加 '01/11/29	by enra
-// ところでint nTransMode /* = false */って？？
-// なんでbooleanが出てくんの？消しました。
+// BYTE byFadeRate???? '01/11/29	by enra
+// ??????int nTransMode /* = false */????H?H
+// ????boolean???o??????H??????????B
 LRESULT ISurfaceTransBlt::MosaicBlt1(ISurface* lpDraw, ISurface* lpPlane,
 					   int x, int y, int nPhase, int nTransMode, BYTE byFadeRate,LPRECT lpDstClipRect)
 {
@@ -1157,9 +1158,9 @@ LRESULT ISurfaceTransBlt::MosaicBlt1(ISurface* lpDraw, ISurface* lpPlane,
 	if(lpDstClipRect!=NULL){
 		RECT rc2;
 		::IntersectRect(&rc2, &rc, lpDstClipRect);
-		return lpDraw->MosaicEffect(nPhase, &rc2);	//	転送矩形にモザイクをかける
+		return lpDraw->MosaicEffect(nPhase, &rc2);	//	?]????`????U?C?N????????
 	}
-	return lpDraw->MosaicEffect(nPhase, &rc);	//	転送矩形にモザイクをかける
+	return lpDraw->MosaicEffect(nPhase, &rc);	//	?]????`????U?C?N????????
 }
 
 LRESULT ISurfaceTransBlt::FlushBlt1(ISurface* lpDraw, ISurface* lpPlane,
@@ -1173,16 +1174,16 @@ LRESULT ISurfaceTransBlt::FlushBlt1(ISurface* lpDraw, ISurface* lpPlane,
 	if(lpDstClipRect!=NULL){
 		RECT rc2;
 		::IntersectRect(&rc2, &rc, lpDstClipRect);
-		return lpDraw->FlushEffect(&rc2);	//	転送矩形にモザイクをかける
+		return lpDraw->FlushEffect(&rc2);	//	?]????`????U?C?N????????
 	}
 
-	return lpDraw->FlushEffect(&rc);	//	転送矩形にモザイクをかける
+	return lpDraw->FlushEffect(&rc);	//	?]????`????U?C?N????????
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //	Thanks ! > TearDrop_Stone
 
-// スリットカーテントランジション。
+// ?X???b?g?J?[?e???g?????W?V?????B
 LRESULT ISurfaceTransBlt::SlitCurtainBlt1(ISurface* pDest, ISurface* pSrc,
 					   int x, int y, int nPhase, int nTransMode, BYTE byFadeRate,LPRECT lpDstClipRect)
 {
@@ -1224,7 +1225,7 @@ LRESULT ISurfaceTransBlt::SlitCurtainBlt8(ISurface* pDest, ISurface* pSrc,
 	return BltTransHelper2(pSrc, pDest, x, y, nPhase, false, nTransMode, byFadeRate, 8, lpDstClipRect);
 }
 
-// 引き伸ばしトランジション。
+// ?????L????g?????W?V?????B
 LRESULT ISurfaceTransBlt::TensileBlt1(ISurface* pDest, ISurface* pSrc,
 					   int x, int y, int nPhase, int nTransMode, BYTE byFadeRate,LPRECT lpDstClipRect)
 {
@@ -1246,11 +1247,11 @@ LRESULT ISurfaceTransBlt::TensileBlt4(ISurface* pDest, ISurface* pSrc,
 	return TensileBltHelper2(pSrc, pDest, x, y, nPhase, false, nTransMode, byFadeRate, lpDstClipRect);
 }
 
-// 引き伸ばしトランジションの実体
+// ?????L????g?????W?V?????????
 LRESULT ISurfaceTransBlt::TensileBltHelper1(ISurface* pSrc, ISurface* pDest, int x, int y,
 										   int nPhase, bool Direction, int nTransMode,	BYTE byFadeRate,LPRECT lpDstClipRect)
 {
-	ISurface *lpDraw=pDest,*lpPlane=pSrc;	//	もうええやん＾＾；
+	ISurface *lpDraw=pDest,*lpPlane=pSrc;	//	???????????O?O?G
 	CheckNormal;
 
 	int i, j;
@@ -1262,8 +1263,8 @@ LRESULT ISurfaceTransBlt::TensileBltHelper1(ISurface* pSrc, ISurface* pDest, int
 	sz.cy = sy;
 	rc.top = 0;
 	rc.bottom = sy;
-	// すでに表示されている部分が存在するはずだから、
-	// そこを表示
+	// ?????\?????????????????????????????A
+	// ??????\??
 	i = (nPhase * sx) / 256;
 	if(Direction){
 		rc.right = sx;
@@ -1280,7 +1281,7 @@ LRESULT ISurfaceTransBlt::TensileBltHelper1(ISurface* pSrc, ISurface* pDest, int
 		case 3 :pDest->BltNatural(pSrc,x + rc.left, y, NULL,&rc,lpDstClipRect,0); break;
 		}
 	}
-	// 次に表示されるべき部分は引き伸ばされる。
+	// ????\???????????????????L??????B
 	if(Direction){
 		i = 0;
 		j = rc.right = rc.left;
@@ -1292,7 +1293,7 @@ LRESULT ISurfaceTransBlt::TensileBltHelper1(ISurface* pSrc, ISurface* pDest, int
 		rc.right++;
 		j = dx - rc.left - x;
 	}
-	// 引き伸ばされるべき部分を横に拡大する。FPS が怖いけどね。
+	// ?????L??????????????????g????BFPS ???|???????B
 	sz.cx = j;
 	if(rc.left < 0)
 		rc.left = 0;
@@ -1309,7 +1310,7 @@ LRESULT ISurfaceTransBlt::TensileBltHelper1(ISurface* pSrc, ISurface* pDest, int
 LRESULT ISurfaceTransBlt::TensileBltHelper2(ISurface* pSrc, ISurface* pDest, int x, int y,
 										   int nPhase, bool Direction, int nTransMode, BYTE byFadeRate,LPRECT lpDstClipRect)
 {
-	ISurface *lpDraw=pDest,*lpPlane=pSrc;	//	もうええやん＾＾；
+	ISurface *lpDraw=pDest,*lpPlane=pSrc;	//	???????????O?O?G
 	CheckNormal;
 
 	int i, j;
@@ -1321,8 +1322,8 @@ LRESULT ISurfaceTransBlt::TensileBltHelper2(ISurface* pSrc, ISurface* pDest, int
 	sz.cx = sx;
 	rc.left = 0;
 	rc.right = sx;
-	// すでに表示されている部分が存在するはずだから、
-	// そこを表示
+	// ?????\?????????????????????????????A
+	// ??????\??
 	i = (nPhase * sy) / 256;
 	if(Direction){
 		rc.bottom = sy;
@@ -1338,7 +1339,7 @@ LRESULT ISurfaceTransBlt::TensileBltHelper2(ISurface* pSrc, ISurface* pDest, int
 	case 3 :pDest->BltNatural(pSrc,x, y + rc.top, NULL,&rc,lpDstClipRect,0); break;  // Fixed params and added basePoint
 	}
 
-	// 次に表示されるべき部分は引き伸ばされる。
+	// ????\???????????????????L??????B
 	if(rc.top < 0 || rc.bottom > sy)
 		return 0;
 	if(Direction){
@@ -1352,7 +1353,7 @@ LRESULT ISurfaceTransBlt::TensileBltHelper2(ISurface* pSrc, ISurface* pDest, int
 		rc.bottom++;
 		j = dy - rc.top - y;
 	}
-	// 引き伸ばされるべき部分を縦に拡大する。FPS が怖いけどね。
+	// ?????L???????????????c??g????BFPS ???|???????B
 	sz.cy = j;
 	if(rc.top < 0)
 		rc.top = 0;
@@ -1368,12 +1369,12 @@ LRESULT ISurfaceTransBlt::TensileBltHelper2(ISurface* pSrc, ISurface* pDest, int
 	return 0;
 }
 
-// 左右からのカーテン。
+// ???E?????J?[?e???B
 LRESULT ISurfaceTransBlt::BltTransHelper1(ISurface* pSrc, ISurface* pDest, int x, int y,
 										int nPhase, bool Direction, int nTransMode, BYTE byFadeRate,
 										int WidthNum,LPRECT lpDstClipRect)
 {
-	ISurface *lpDraw=pDest,*lpPlane=pSrc;	//	もうええやん＾＾；
+	ISurface *lpDraw=pDest,*lpPlane=pSrc;	//	???????????O?O?G
 	CheckNormal;
 
 	const int ColumnNum = (sx + WidthNum + 1) / WidthNum;
@@ -1408,12 +1409,12 @@ LRESULT ISurfaceTransBlt::BltTransHelper1(ISurface* pSrc, ISurface* pDest, int x
 
 	return 0;
 }
-// 上下のカーテン。
+// ????J?[?e???B
 LRESULT ISurfaceTransBlt::BltTransHelper2(ISurface* pSrc, ISurface* pDest, int x, int y,
 										int nPhase, bool Direction, int nTransMode, BYTE byFadeRate,
 										int WidthNum,LPRECT lpDstClipRect)
 {
-	ISurface *lpDraw=pDest,*lpPlane=pSrc;	//	もうええやん＾＾；
+	ISurface *lpDraw=pDest,*lpPlane=pSrc;	//	???????????O?O?G
 	CheckNormal;
 
 	const int ColumnNum = (sy + WidthNum + 1) / WidthNum;
@@ -1450,7 +1451,7 @@ LRESULT ISurfaceTransBlt::BltTransHelper2(ISurface* pSrc, ISurface* pDest, int x
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-//　テーブルの作成
+//?@?e?[?u?????
 
 smart_ptr<CSinTable>						ISurfaceTransBlt::m_sin_table;
 smart_ptr<ISurfaceTransBlt::BltTransTable>	ISurfaceTransBlt::m_blt_table;
@@ -1466,7 +1467,7 @@ void ISurfaceTransBlt::MakeBltTable(){
 
 ISurfaceTransBlt::BltTransTable::BltTransTable()
 {
-	::srand(NULL);	//	randomize（固定型）
+	::srand(NULL);	//	randomize?i???^?j
 	for(int i = 0; i < 256; i++){
 		RandTable[i] = rand() & 255;
 	}
@@ -1507,7 +1508,7 @@ LRESULT ISurfaceTransBlt::DiffusionCongeriesBlt1(ISurface* lpDraw, ISurface* lpP
 
 	for(int py=0;py<sy;py+=2){
 		for(int px=0;px<sx;px+=4){
-			int ex,ey;	//	画像中心からピクセルの方向を示す単位ベクトル*256倍
+			int ex,ey;	//	?????S????s?N?Z??????????????P??x?N?g??*256?{
 			ex = px - sx/2;
 			ey = py - sy/2;
 			int r;
@@ -1536,7 +1537,7 @@ LRESULT ISurfaceTransBlt::DiffusionCongeriesBlt2(ISurface* lpDraw, ISurface* lpP
 
 	for(int py=0;py<sy;py+=2){
 		for(int px=0;px<sx;px+=2){
-			int ex,ey;	//	画像中心からピクセルの方向を示す単位ベクトル*256倍
+			int ex,ey;	//	?????S????s?N?Z??????????????P??x?N?g??*256?{
 			ex = px - sx/2;
 			ey = py - sy/2;
 			int r;
@@ -1566,7 +1567,7 @@ LRESULT ISurfaceTransBlt::DiffusionCongeriesBlt3(ISurface* lpDraw, ISurface* lpP
 	int nP = (256-nPhase)<<1;
 	for(int py=0;py<sy;py+=2){
 		for(int px=0;px<sx;px+=4){
-			int ex,ey;	//	画像中心からピクセルの方向を示す単位ベクトル*256倍
+			int ex,ey;	//	?????S????s?N?Z??????????????P??x?N?g??*256?{
 			ex = px - sx/2;
 			ey = py - sy/2;
 			int r;
@@ -1599,7 +1600,7 @@ LRESULT ISurfaceTransBlt::SquashBlt(ISurface* lpDraw, ISurface* lpPlane,
 	int nP = (256-nPhase)<<1;
 	for(int py=0;py<sy;py+=2){
 		for(int px=0;px<sx;px+=4){
-			int ex,ey;	//	画像中心からピクセルの方向を示す単位ベクトル*256倍
+			int ex,ey;	//	?????S????s?N?Z??????????????P??x?N?g??*256?{
 			ex = px - sx/2;
 			ey = py - sy/2;
 			int r;
@@ -1629,7 +1630,7 @@ LRESULT ISurfaceTransBlt::ForwardRollBlt(ISurface* lpDraw, ISurface* lpPlane,
 	int nP = (256-nPhase)<<1;
 	for(int py=0;py<sy;py+=2){
 		for(int px=0;px<sx;px+=4){
-			int ex,ey;	//	画像中心からピクセルの方向を示す単位ベクトル*256倍
+			int ex,ey;	//	?????S????s?N?Z??????????????P??x?N?g??*256?{
 			ex = px - sx/2;
 			ey = py - sy/2;
 			ex *= m_sin_table->Cos(nP>>2);
@@ -1655,7 +1656,7 @@ LRESULT ISurfaceTransBlt::RotationBlt1(ISurface* lpDraw, ISurface* lpPlane,
 	int ph = (256-nPhase) << 1;
 	for(int py=0;py<sy;py+=2){
 		for(int px=0;px<sx;px+=2){
-			int ex,ey,ex2,ey2;	//	画像中心からピクセルの方向を示す単位ベクトル*256倍
+			int ex,ey,ex2,ey2;	//	?????S????s?N?Z??????????????P??x?N?g??*256?{
 			ex = px - sx/2;
 			ey = py - sy/2;
 			ex2 = (ex * m_sin_table->Cos(ph)>>16)	- (ey * m_sin_table->Sin(ph)>>16);
@@ -1681,7 +1682,7 @@ LRESULT ISurfaceTransBlt::RotationBlt2(ISurface* lpDraw, ISurface* lpPlane,
 	int ph = (256-nPhase)<<1;
 	for(int py=0;py<sy;py+=4){
 		for(int px=0;px<sx;px+=4){
-			int ex,ey,ex2,ey2;	//	画像中心からピクセルの方向を示す単位ベクトル*256倍
+			int ex,ey,ex2,ey2;	//	?????S????s?N?Z??????????????P??x?N?g??*256?{
 			ex = px - sx/2;
 			ey = py - sy/2;
 			ex2 = (ex * m_sin_table->Cos(ph)>>16)	- (ey * m_sin_table->Sin(ph)>>16);
@@ -1707,7 +1708,7 @@ LRESULT ISurfaceTransBlt::RotationBlt3(ISurface* lpDraw, ISurface* lpPlane,
 	int ph = (256-nPhase)<<1;
 	for(int py=0;py<sy;py+=8){
 		for(int px=0;px<sx;px+=8){
-			int ex,ey,ex2,ey2;	//	画像中心からピクセルの方向を示す単位ベクトル*256倍
+			int ex,ey,ex2,ey2;	//	?????S????s?N?Z??????????????P??x?N?g??*256?{
 			ex = px - sx/2;
 			ey = py - sy/2;
 			ex2 = (ex * m_sin_table->Cos(ph)>>16)	- (ey * m_sin_table->Sin(ph)>>16);
@@ -1733,7 +1734,7 @@ LRESULT ISurfaceTransBlt::RotationBlt4(ISurface* lpDraw, ISurface* lpPlane,
 	int ph = (256-nPhase)<<1;
 	for(int py=0;py<sy;py+=4){
 		for(int px=0;px<sx;px+=4){
-			int ex,ey,ex2,ey2;	//	画像中心からピクセルの方向を示す単位ベクトル*256倍
+			int ex,ey,ex2,ey2;	//	?????S????s?N?Z??????????????P??x?N?g??*256?{
 			ex = px - sx/2;
 			ey = py - sy/2;
 			ex2 = (ex * m_sin_table->Cos(ph)>>16)	- (ey * m_sin_table->Sin(ph)>>16);

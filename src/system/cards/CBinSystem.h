@@ -239,7 +239,9 @@ public:
     CBinSystem();
     ~CBinSystem();
 
+    void Reset();
     BOOL Initialize(const char* basePath, const char* language);
+	const char* GetLastErrorFile() const { return m_lastErrorFile; }
 
     // Property getters - keep these the same but modify their implementation
     WORD GetDefenseValue(DWORD cardId);
@@ -304,6 +306,8 @@ private:
     // Counters
     DWORD m_cardCount;
     DWORD m_dialogCount;
+
+	char m_lastErrorFile[MAX_PATH];
 };
 
 #endif // CBINSYSTEM_H

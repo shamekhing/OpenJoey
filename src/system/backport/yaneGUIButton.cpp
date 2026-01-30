@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "yaneGUIButton.h"
 
 namespace yaneuraoGameSDK3rd {
@@ -42,8 +43,9 @@ ISurface* CGUINormalButtonListener::GetDrawSurface(bool bPush, bool bIn) {
         bUsePushState = bPush && bIn;
     }
 
-    // Returns the surface based on the button's state for drawing
-    return GetMyPlane(bUsePushState);
+    // Cache plane so returned pointer stays valid (no temporary CPlane destroyed).
+    m_cachedDrawPlane = GetMyPlaneAsPlane(bUsePushState);
+    return m_cachedDrawPlane.get();
 }
 
 void CGUINormalButtonListener::SetType(int nType) {
@@ -53,19 +55,23 @@ void CGUINormalButtonListener::SetType(int nType) {
 
 bool CGUINormalButtonListener::IsButton(int px, int py) {
     if (m_nType == 0) return false;
-    
-    ISurface* lp = GetMyPlane();
+
+    CPlane plane = GetMyPlaneAsPlane();
+    ISurface* lp = plane.get();
     if (lp == NULL) return false;
+
+    const CSurfaceInfo* pInfo = lp->GetConstSurfaceInfo();
+    if (!pInfo) return false;
 
     if (lp->IsAlpha() && (m_nType & 4)) {
         ISurfaceRGB rgba;
-        if (lp->GetConstSurfaceInfo()->GetPixel(px, py, rgba) == 0) {
+        if (pInfo->GetPixel(px, py, rgba) == 0) {
             return ((rgba >> 24) & 0xff) != 0;
         }
         return false;
     } else {
         ISurfaceRGB rgba;
-        if (lp->GetConstSurfaceInfo()->GetPixel(px, py, rgba) == 0) {
+        if (pInfo->GetPixel(px, py, rgba) == 0) {
             return rgba != lp->GetColorKey();
         }
         return false;
@@ -92,8 +98,8 @@ LRESULT CGUINormalButtonListener::OnDraw(ISurface* lp, int x, int y, bool bPush,
 
     if (m_nType & (32+64)) {
         if (m_bHasPlane && m_vPlane.get() != NULL) {
-            ISurface* surface = m_vPlaneLoader->GetPlane(m_nPlaneStart + m_nImageOffset).get();
-            return lp->BltNatural(surface, x, y);
+            CPlane plane = m_vPlaneLoader->GetPlane(m_nPlaneStart + m_nImageOffset);
+            return lp->BltNatural(plane.get(), x, y);
         }
         return 0;
     }
@@ -109,7 +115,8 @@ LRESULT CGUINormalButtonListener::OnDraw(ISurface* lp, int x, int y, bool bPush,
         b = bPush && bIn;
     }
 
-    return lp->BltNatural(GetMyPlane(b), x, y);
+    CPlane plane = GetMyPlaneAsPlane(b);
+    return lp->BltNatural(plane.get(), x, y);
 }
 
 void CGUINormalButtonListener::OnLBClick() {
@@ -130,15 +137,19 @@ void CGUINormalButtonListener::OnLBDown() {
     OnLButtonClick();
 }
 
-ISurface* CGUINormalButtonListener::GetMyPlane(bool bPush) {
-	if(m_bHasPlane) return m_vPlane.get();
-    if (m_vPlaneLoader.get() == NULL) return NULL;
-    
+CPlane CGUINormalButtonListener::GetMyPlaneAsPlane(bool bPush) {
+    if (m_bHasPlane) return CPlane(m_vPlane);
+    if (m_vPlaneLoader.get() == NULL) return CPlane();
     int n = m_nPlaneStart;
     if (bPush) n++;
     if ((m_nType & 2) && m_bReverse) n += 2;
     if (m_nType & (32+64)) n = m_nPlaneStart + m_nImageOffset;
-    return m_vPlaneLoader->GetPlane(n).get();
+    return m_vPlaneLoader->GetPlane(n);
+}
+
+ISurface* CGUINormalButtonListener::GetMyPlane(bool bPush) {
+    m_cachedPlane = GetMyPlaneAsPlane(bPush);
+    return m_cachedPlane.get();
 }
 
 void CGUINormalButtonListener::OnInit(void) {
@@ -250,11 +261,15 @@ LRESULT CGUIButton::OnSimpleScaleDraw(ISurface* lp) {
     if (useCustomScale) {
         ISurface* sourcePlane = m_pvButtonEvent->GetDrawSurface(m_bPushed, m_bIn);
         if (sourcePlane) {
-            SIZE dstSize = { actualDrawWidth, actualDrawHeight };
-            RECT srcRect = { 0, 0, sourcePlane->GetConstSurfaceInfo()->GetSize().cx, sourcePlane->GetConstSurfaceInfo()->GetSize().cy };
-            return lp->BltFast(sourcePlane, m_nX, m_nY, &dstSize, &srcRect, NULL, 0);
+            const CSurfaceInfo* srcInfo = sourcePlane->GetConstSurfaceInfo();
+            if (srcInfo) {
+                SIZE dstSize = { actualDrawWidth, actualDrawHeight };
+                SIZE srcSize = srcInfo->GetSize();
+                RECT srcRect = { 0, 0, srcSize.cx, srcSize.cy };
+                return lp->BltFast(sourcePlane, m_nX, m_nY, &dstSize, &srcRect, NULL, 0);
+            }
         }
-        return 0; // If sourcePlane is null, nothing to draw
+        return 0;
     } else {
         // Otherwise, fallback to the listener's default OnDraw (which uses natural size)
         return m_pvButtonEvent->OnDraw(lp, m_nX, m_nY, m_bPushed, m_bIn);
