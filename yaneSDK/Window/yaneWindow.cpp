@@ -10,30 +10,30 @@
 namespace yaneuraoGameSDK3rd {
 namespace Window {
 
-bool CWindow::g_bFullScreen		= false; // �N������̓E�B���h�D���[�h�ł���I
+bool CWindow::g_bFullScreen		= false; // N®¼ãÍEBhD[hÅµåI
 CCriticalSection CWindow::m_cs;
 
 //////////////////////////////////////////////////////////////////////////////
 
 CWindow::CWindow(){
-	m_dwFillColor	=	0;			//	�N���������f�B�t�H���g
+	m_dwFillColor	=	0;			//	N®ªfBtHg
 	m_hWnd			=	NULL;
-	m_bShowCursor	=	true;		//	�f�B�t�H���g�Ń}�E�X�J�[�\����\��
-	m_bUseMouseLayer=	false;		//	�\�t�g�E�F�A�}�E�X�J�[�\��
-	m_bUseMenu		=	false;		//	���j���[�̂����Ȃ���͂킩���O�O�G
-	m_bMinimized	=	false;		//	�ŏ�������Ă��邩�H
-	m_bResized		=	false;		//	ChangeWindowStyle��SetSize�̃t���O�B
-	m_pWndProc		=	NULL;		//	hook����WndProc
+	m_bShowCursor	=	true;		//	fBtHgÅ}EXJ[\ð\¦
+	m_bUseMouseLayer=	false;		//	\tgEFA}EXJ[\
+	m_bUseMenu		=	false;		//	j[Ì éâÈµâÍí©çñOOG
+	m_bMinimized	=	false;		//	Å¬»³êÄ¢é©H
+	m_bResized		=	false;		//	ChangeWindowStyleÌSetSizeÌtOB
+	m_pWndProc		=	NULL;		//	hookµ½WndProc
 }
 
 CWindow::~CWindow(){
-	GetHookList()->Del(this);		//	���ڃt�b�N����������
+	GetHookList()->Del(this);		//	¼ÚtbNðð·é
 /*
 	if (m_hWnd!=NULL) {
 		::DestroyWindow(m_hWnd);
-	//	������ȋ����ȕ��@��Destroy����̂́A�����߂����˂�O�O�G
-	//	�{���ACAppBase����g���̂Ȃ�΁A���̃f�X�g���N�^�ł́A���ł�
-	//	Window�͉�̂��ꂽ���Ƃ̂͂�����...
+	//	ª±ñÈ­øÈû@ÅDestroy·éÌÍA¨©ßµ©ËéOOG
+	//	{ACAppBase©çg¤ÌÈçÎA±ÌfXgN^ÅÍA·ÅÉ
+	//	WindowÍðÌ³ê½ ÆÌÍ¸¾ª...
 		m_hWnd	= NULL;
 	}
 */
@@ -68,66 +68,66 @@ LRESULT CWindow::Create(CWindowOption& opt,HWND hParent){
 	CCriticalLock cl(GetCriticalSection());
 
 	HINSTANCE hInst = CAppInitializer::GetInstance();
-	m_bFullScreen = g_bFullScreen;	//	���݂̉�ʃ��[�h������I�ɕێ�
-	m_opt	= opt;	//	�R�s�[���Ă���
+	m_bFullScreen = g_bFullScreen;	//	»ÝÌæÊ[hðàIÉÛ
+	m_opt	= opt;	//	Rs[µÄ¨­
 
 	m_hWnd = NULL;
 
 	LONG lChild = 0;
 
-	//	�܂��C����������T�|�[�g
+	//	Ü½Cªü¢½çT|[g
 	if (m_opt.dialog!=NULL){
-	//	dialog���炵���ŁH
+	//	dialogìéçµ¢ÅH
 		m_hWnd = ::CreateDialogParam(hInst,m_opt.dialog, hParent, (DLGPROC)gDlgProc,
 			reinterpret_cast<LPARAM>(this));
-			//	��this��LPARAM�ɓ����Ă���Ă���I
+			//	ªthisªLPARAMÉüÁÄâÁÄ­éI
 		goto window_setting;
 	}
 
-    // �܂��o�^����Ă��Ȃ��E�B���h�E�N���X���ŁA����Windows�W���N���X
-    // �ȊO�̖��O�̏ꍇ��RegisterClassEx()���Ă��
+    // Ü¾o^³êÄ¢È¢EBhENX¼ÅA©ÂWindowsWNX
+    // ÈOÌ¼OÌêÍRegisterClassEx()µÄâé
     WNDCLASSEX wndclass;
     if( !::GetClassInfoEx(hInst, opt.classname.c_str(), &wndclass) &&
         !IsWindowsClassName(opt.classname)) {
 
-        // �����܂�̃E�C���h�E�N���X��������
+        // ¨«ÜèÌEChENX¶¬
 		wndclass.cbSize		= sizeof(WNDCLASSEX);
-		wndclass.style		= 0;	//	�_�u���N���b�N���m����Ȃ灨CS_DBLCLKS;
+		wndclass.style		= 0;	//	_uNbN´m·éÈç¨CS_DBLCLKS;
 		wndclass.lpfnWndProc= gWndProc;
 		wndclass.cbClsExtra	= 0;
 		wndclass.cbWndExtra	= 0;
 		wndclass.hInstance	= hInst;
 
-		// �Ƃ肠�����A"MAIN"�̃A�C�R���\��
+		// Æè ¦¸A"MAIN"ÌACR\¦
 		wndclass.hIcon		= LoadIcon(hInst,"MAIN");
 		wndclass.hIconSm	= LoadIcon(hInst,"MAIN");
 
 		wndclass.hCursor	= LoadCursor(NULL,IDC_ARROW);
-		// �Ƃ肠�����A�}�E�X�J�[�\�����p�Ӂi�s�v�Ȃ�΁A���Ƃŏ����ׂ��I�j
+		// Æè ¦¸A}EXJ[\àpÓisvÈçÎA ÆÅÁ·×µIj
 
-		//	�Ƃ肠�����A�N������́A�������ɂ��Ƃ����Ɓc
+		//	Æè ¦¸AN®¼ãÍA©ÉµÆ±ÁÆc
 		if (m_dwFillColor==0) {
 			wndclass.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
 		} else {
 			wndclass.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
 		}
 
-		//	MENU�����œǂݍ���ł݂�
+		//	MENUà¼ÅÇÝñÅÝé
 		wndclass.lpszMenuName  = "IDR_MENU";
-		//	���̃��\�[�X���{���ɑ��݂���̂��́A���s���܂ł킩��Ȃ��̂�
-		//	���m�ȃE�B���h�D�̃A�h�W���X�g���E�B���h�D������ł����o���Ȃ�
+		//	±Ì\[Xª{É¶Ý·éÌ©ÍAÀsÜÅí©çÈ¢ÌÅ
+		//	³mÈEBhDÌAhWXgªEBhD¶¬ãÅµ©oÈ¢
 
 		{
 			HRSRC hrsrc;
 			hrsrc = ::FindResource(NULL,"IDR_MENU",RT_MENU);
-			if (hrsrc!=NULL) { m_bUseMenu = true; }	//	���j���[����₪��ŁO�O�G
+			if (hrsrc!=NULL) { m_bUseMenu = true; }	//	j[ èâªñÅOOG
 		}
 
 		wndclass.lpszClassName = opt.classname.c_str();
 
-		// �Ȃ�Ŏ��s���Ă񂾂�ˁH
+		// ÈñÅ¸sµÄñ¾ëËH
 		if (!::RegisterClassEx(&wndclass)) {
-			Err.Out("CWindow::Create��RegisterClassEx���s");
+			Err.Out("CWindow::CreateÅRegisterClassEx¸s");
 			return 1;
 		}
 	}
@@ -137,8 +137,8 @@ LRESULT CWindow::Create(CWindowOption& opt,HWND hParent){
 	}
 
 	if (m_bFullScreen){
-		//	�E�C���h�E�̐����i�t���X�N���[�����j
-		//	���̂Ƃ��́A��ʂ̃X�^�C���I�v�V�����͖�������
+		//	EChEÌ¶¬itXN[j
+		//	±ÌÆ«ÍAæÊÌX^CIvVÍ³·é
 
 		int sx,sy;
 		GetScreenSize(sx,sy);
@@ -148,12 +148,12 @@ LRESULT CWindow::Create(CWindowOption& opt,HWND hParent){
 						0, 0, sx, sy,
 						hParent, NULL, hInst, NULL );
 	} else {
-		// �E�B���h�D���E���l���ɓ���Ȃ��Ă͂Ȃ�Ȃ�
-		// �\���͈͂�640*480�Ȃ�΁A�������ׂ�Window�T�C�Y�́A����ȏ�ł���
+		// EBhD«Eðl¶ÉüêÈ­ÄÍÈçÈ¢
+		// \¦ÍÍª640*480ÈçÎA¶¬·×«WindowTCYÍA»êÈãÅ é
 		RECT r;
 		InnerAdjustWindow(r,opt);
 		m_hWnd = ::CreateWindow(opt.classname.c_str(),opt.caption.c_str(),
-				// WS_EX_TOPMOST���w�肵�����񂾂��ǂȁ[
+				// WS_EX_TOPMOSTðwèµ½¢ñ¾¯ÇÈ[
 						lChild | opt.style,
 						CW_USEDEFAULT,
 						CW_USEDEFAULT,
@@ -163,15 +163,15 @@ LRESULT CWindow::Create(CWindowOption& opt,HWND hParent){
 
 window_setting:;
 	if (m_hWnd==NULL){
-		Err.Out("CWindow::Create��CreateWindow�Ɏ��s�B");
+		Err.Out("CWindow::CreateÅCreateWindowÉ¸sB");
 		return 1;
 	}
 
-	//	�R�[���o�b�N���ꂽ�Ƃ��ɁA���ꂼ���WindowClass��dispatch�o����悤��
-	//	GWL_USERDATA��this���B���Ă����B
+	//	R[obN³ê½Æ«ÉA»ê¼êÌWindowClassÉdispatchoéæ¤É
+	//	GWL_USERDATAÉthisðBµÄ¨­B
 	::SetWindowLong(m_hWnd,GWL_USERDATA,(LONG)this);
 
-	//	��ʂ̃Z���^�[�ɐ�������悤�ɏC���O�O
+	//	æÊÌZ^[É¶¬·éæ¤ÉC³OO
 	if ((!m_bFullScreen) && (m_opt.size_x!=0) && (m_opt.size_y!=0)
 			&& m_opt.bCentering) {
 		int	sx,sy;
@@ -187,18 +187,18 @@ window_setting:;
 
 	::SetFocus(m_hWnd);
 
-	//	�W����WindowClass�Ȃ�΁A�R�[���o�b�N�֐��Ƃ��āA�����
-	//	��������ł��B
+	//	WÌWindowClassÈçÎAR[obNÖÆµÄA±êð
+	//	«ñÅâéB
 	if (IsWindowsClassName(opt.classname)){
 		m_pWndProc = (WNDPROC)::SetWindowLong(m_hWnd,GWL_WNDPROC,(LONG)gWndProc);
-		//	��������hook�́Aillegal��...
+		//	±¤¢¤hookÍAillegal©...
 	} else {
 		m_pWndProc = NULL;
 	}
 
-	//	�����̃E�B���h�D�Ȃ̂Œ��ڃt�b�N�ł���
-	//	�i�Ƃ�����CAppManager�ɖ��o�^�̒i�K�Ȃ̂Œ��ڃt�b�N�����Ȃ��j
-	GetHookList()->Add(this);			//	�t�b�N���J�n����
+	//	©ªÌEBhDÈÌÅ¼ÚtbNÅ«é
+	//	iÆ¢¤©CAppManagerÉ¢o^ÌiKÈÌÅ¼ÚtbNµ©È¢j
+	GetHookList()->Add(this);			//	tbNðJn·é
 
 	return 0;
 }
@@ -210,9 +210,9 @@ void CWindow::GetScreenSize(int &x,int &y){
 
 LRESULT CWindow::SetWindowPos(int x,int y){
 	if (m_hWnd==NULL) return 0;
-	//	�E�B���h�E����������Ă�����ړ������Ȃ��Ă͂Ȃ�Ȃ��i�������E�B���h�D���[�h���j
+	//	EBhEª¶¬³êÄ¢½çÚ®³¹È­ÄÍÈçÈ¢i½¾µEBhD[hj
 	if (!m_bFullScreen){
-		//	�����Ńg�b�v�I�[�_�[�ɂ��Ă����Ă����Ȃ��̂��낤...
+		//	±±ÅgbvI[_[ÉµÄ¨¢ÄàâèÈ¢Ì¾ë¤...
 		return !::SetWindowPos(m_hWnd,HWND_TOP,x,y,NULL,NULL,SWP_NOSIZE|SWP_NOZORDER);
 	}
 	return 0;
@@ -222,7 +222,7 @@ void CWindow::SetSize(int sx,int sy){
 	if (m_opt.size_x != sx || m_opt.size_y != sy){
 		m_opt.size_x = sx;
 		m_opt.size_y = sy;
-		m_bResized	= true;	//	�ύX���ꂽ�Ńt���O�O�O�G
+		m_bResized	= true;	//	ÏX³ê½ÅtOOOG
 	}
 }
 
@@ -233,15 +233,15 @@ LRESULT CWindow::Resize(int sx,int sy){
 	if (m_hWnd==NULL) return 0;
 
 	if (!m_bFullScreen){
-		//	�����[�h�Ȃ̂�...
+		//	[hÈÌÅ...
 		if ((m_opt.size_x!=0) && (m_opt.size_y!=0)){
-			::ShowWindow(m_hWnd, SW_SHOW);	//	�O�̂��߂ɑ���O�O�G
+			::ShowWindow(m_hWnd, SW_SHOW);	//	OÌ½ßÉéOOG
 		}
 		RECT r;
 		InnerAdjustWindow(r,m_opt);
 		return !::SetWindowPos(m_hWnd,NULL,0,0,r.right-r.left,r.bottom-r.top,SWP_NOMOVE|SWP_NOZORDER);
 	} else {
-		//	�t���X�N���[���Ȃ�΁A���T�C�Y�͔�T�|�[�g
+		//	tXN[ÈçÎATCYÍñT|[g
 	}
 
 	return 0;
@@ -251,10 +251,10 @@ void	CWindow::UseMouseLayer(bool bUse){
 	if (bUse==m_bUseMouseLayer) return ;
 	m_bUseMouseLayer = bUse;
 	if (bUse) {
-		//	�g���Ȃ�Ζ������ɏ���
+		//	g¤ÈçÎ³ðÉÁ·
 		ShowCursor(false);
 	} else {
-		//	�g��Ȃ��̂ł���΁A�E�B���h�D���[�h(or DIBDraw)�Ȃ�΃}�E�X�J�[�\������
+		//	gíÈ¢ÌÅ êÎAEBhD[h(or DIBDraw)ÈçÎ}EXJ[\
 		if (!IsFullScreen()
 /*
 #ifdef USE_DIB32
@@ -269,13 +269,13 @@ void	CWindow::UseMouseLayer(bool bUse){
 }
 
 void	CWindow::ChangeWindowStyle() {
-	//	���݂̉�ʃ��[�h�ƁA�E�B���h�E�X�^�C�������v����ΕύX�̕K�v�Ȃ�
+	//	»ÝÌæÊ[hÆAEBhEX^Cªv·êÎÏXÌKvÈµ
 	if (m_bFullScreen==g_bFullScreen && !m_bResized) return ;
 
 	m_bFullScreen	= g_bFullScreen;
 	m_bResized		= false;
 
-	// �قȂ�ꍇ�̓E�B���h�D�X�^�C�������݂̃��[�h�ɍ��킹�ĕύX
+	// ÙÈéêÍEBhDX^Cð»ÝÌ[hÉí¹ÄÏX
 	if (!m_bFullScreen) {
 		RECT r;
 		int	sx,sy;
@@ -289,46 +289,46 @@ void	CWindow::ChangeWindowStyle() {
 		InnerAdjustWindow(r,m_opt);
 		::SetWindowPos(m_hWnd,HWND_TOP,sx,sy,r.right-r.left,r.bottom-r.top,SWP_NOZORDER);
 
-		//	�����́ASetWindowLong() �Ō��݂̏��(�ő剻�A�ŏ����A�ʏ�)
-		//	��ݒ肷��(��� '02/03/16)
-		UINT nState = 0;// �E�C���h�E�̏��
+		//	±±ÌASetWindowLong() Å»ÝÌóÔ(Åå»AÅ¬»AÊí)
+		//	ðÝè·é(êÞ '02/03/16)
+		UINT nState = 0;// EChEÌóÔ
 		if(::IsIconic(m_hWnd))nState = WS_MINIMIZE;
 		else if(::IsZoomed(m_hWnd))nState = WS_MAXIMIZE;
 		::SetWindowLong(m_hWnd,GWL_STYLE,m_opt.style | nState );
-		//	WS_CAPTION����('01/04/24)�@����ρA����̓��[�U�[���w�肵�Ȃ���_��
+		//	WS_CAPTIONÁ·('01/04/24)@âÁÏA±êÍ[U[ªwèµÈ«á_
 
-		::SetMenu(m_hWnd,GetMenu(m_hWnd)); // ���j���[�̈�̍ĕ`��
+		::SetMenu(m_hWnd,GetMenu(m_hWnd)); // j[ÌæÌÄ`æ
 		::ShowWindow(m_hWnd,SW_SHOW);
 		CIMEWrapper::GetObj()->Show();
 	} else {
 		::SetWindowLong(m_hWnd, GWL_STYLE, WS_POPUP);
-		::SetMenu(m_hWnd,GetMenu(m_hWnd)); // ���j���[�̈�̍ĕ`��
+		::SetMenu(m_hWnd,GetMenu(m_hWnd)); // j[ÌæÌÄ`æ
 		::ShowWindow(m_hWnd,SW_SHOW);
 		CIMEWrapper::GetObj()->Hide();
 	}
 }
 
-//	�E�B���h�D�T�C�Y��adjust����
-//	Win32::AdjustWindow��bug-fix�p
+//	EBhDTCYÌadjust
+//	Win32::AdjustWindowÌbug-fixp
 //		(C) Tia-Deen & yaneurao '00/08/01,'00/11/05
 void	CWindow::InnerAdjustWindow(RECT&rc,CWindowOption&opt){
 	::SetRect(&rc,0,0,opt.size_x,opt.size_y);
 	LONG	lStyle = opt.style;
-/*	//	����ρA���̃R�[�h��user���w�肷�ׂ� '01/11/14
+/*	//	âÁÏA±ÌR[hÍuserªwè·×« '01/11/14
 	if (lStyle & WS_POPUP) {
 		lStyle |= WS_CAPTION;
 	}
 */
 	bool	bMenu = false;
 	if (lStyle & WS_SYSMENU){
-		//	m_hWnd��NULL�̏�Ԃ�GetMenu���Ăяo���͕̂s���H
+		//	m_hWndªNULLÌóÔÅGetMenuðÄÑo·ÌÍs³H
 		if (m_bUseMenu || (m_hWnd!=NULL && ::GetMenu(m_hWnd)!=NULL)){
 			bMenu = true;
 		} else {
 			bMenu = false;
-			lStyle &= ~WS_SYSMENU;	//	SYSMENU�t���O���O��
+			lStyle &= ~WS_SYSMENU;	//	SYSMENUtOðO·
 		}
-	//	lStyle |= WS_CAPTION;	//	�������A�L���v�V�����̎w��͍s�Ȃ��i�������������߁j
+	//	lStyle |= WS_CAPTION;	//	µ©µALvVÌwèÍsÈ¤i³ª¶¤½ßj
 	}
 	::AdjustWindowRect(&rc,lStyle,bMenu);
 }
@@ -336,17 +336,17 @@ void	CWindow::InnerAdjustWindow(RECT&rc,CWindowOption&opt){
 ///////////////////////////////////////////////////////////////////////////////
 
 bool	CWindow::IsShowCursor(){
-	//	�n�[�h�E�F�A�}�E�X�J�[�\���̕\���^��\�����擾
+	//	n[hEFA}EXJ[\Ì\¦^ñ\¦ðæ¾
 	return m_bShowCursor;
 }
 
 void	CWindow::ShowCursor(bool bShow){
-	//	�����CreateWindow�����X���b�h���������Ȃ��Ă͂Ȃ�Ȃ�
+	//	±êÍCreateWindowµ½XbhªµÈ­ÄÍÈçÈ¢
 
-	//	�\�t�g�E�F�A�}�E�X�J�[�\���Ȃ�΋����I�t
+	//	\tgEFA}EXJ[\ÈçÎ­§It
 	if (m_bUseMouseLayer) bShow = false;
 
-	//	�n�[�h�E�F�A�}�E�X�J�[�\���̕\���^��\��
+	//	n[hEFA}EXJ[\Ì\¦^ñ\¦
 	if (m_bShowCursor==bShow) return ;
 
 	m_bShowCursor = bShow;
@@ -362,15 +362,15 @@ bool CWindow::IsWindowsClassName(const string& strClassName){
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-//	���b�Z�[�W�̃g���b�v
+//	bZ[WÌgbv
 //
 
-//	�ʏ��Window�̏ꍇ
+//	ÊíÌWindowÌê
 LRESULT CALLBACK CWindow::gWndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam){
 
-	CWindow* win = (CWindow*)::GetWindowLong(hWnd,GWL_USERDATA);	//	������CWindow*���B���Ă�����
+	CWindow* win = (CWindow*)::GetWindowLong(hWnd,GWL_USERDATA);	//	±±ÉCWindow*ðBµÄ¨¢½
 	/**
-		���ł����E�B���h�D�ɑ΂��đ����Ă������b�Z�[�W���^����dispatch���邱�Ƃ����肤��..
+		ÁÅµ½EBhDÉÎµÄçêÄ«½bZ[Wð^«­dispatch·é±Æª è¤é..
 	*/
 	if (win!=NULL) {
 		return win->m_HookPtrList.Dispatch(hWnd,uMsg,wParam,lParam,win->m_pWndProc);
@@ -379,17 +379,17 @@ LRESULT CALLBACK CWindow::gWndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lPar
 	}
 }
 
-//	�_�C�A���O�̏ꍇ
+//	_CAOÌê
 LRESULT CALLBACK CWindow::gDlgProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam){
-	CWindow* win = (CWindow*)::GetWindowLong(hWnd,GWL_USERDATA);	//	������CWindow*���B���Ă�����
+	CWindow* win = (CWindow*)::GetWindowLong(hWnd,GWL_USERDATA);	//	±±ÉCWindow*ðBµÄ¨¢½
 	if (win==NULL) {
-		win = reinterpret_cast<CWindow*>(lParam);	//	���Ⴀ�������H(Create�����u�ԁH)
+		win = reinterpret_cast<CWindow*>(lParam);	//	¶á ±±©H(Createµ½uÔH)
 	}
 	if (win!=NULL) {
 		return win->m_HookPtrList.DispatchDlg(hWnd,uMsg,wParam,lParam,win->m_pWndProc);
 	} else {
-		//	�_�C�A���O�̏ꍇ�́ADefWindowProc���Ăяo���Ă͂����Ȃ�
-		//	(�����I�ɏ�������悤�����_�C�A���Oprocedure��)
+		//	_CAOÌêÍADefWindowProcðÄÑoµÄÍ¢¯È¢
+		//	(àIÉ·éæ¤¾_CAOprocedureª)
 		return 0;
 	}
 	return 0;
@@ -397,24 +397,24 @@ LRESULT CALLBACK CWindow::gDlgProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lPar
 
 
 //////////////////////////////////////////////////////////////////////////////
-//	�ŏ������ꂽ���𔻒肵�A�ێ����邽�߂̃t�b�N
+//	Å¬»³ê½©ð»èµAÛ·é½ßÌtbN
 LRESULT	CWindow::WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam){
 
 	switch(uMsg){
 	case WM_ACTIVATEAPP: {
-		//	Windows2000�Ȃ�ΕK�����ł��邪�A
-		//	Win95/98��WM_SIZE��SIZE_RESTORED�������ŗ��Ȃ����Ƃ���H
+		//	Windows2000ÈçÎK¸òñÅ­éªA
+		//	Win95/98ÍWM_SIZEÌSIZE_RESTOREDµ©òñÅÈ¢±Æ èH
 		UINT bActive = wParam;
 		if (bActive) {
-			m_bMinimized = false;	//	�ʏ��Ԃł���
+			m_bMinimized = false;	//	ÊíóÔÅ é
 		}
 		break;
 						 }
 	case WM_SIZE : {
 		switch (wParam) {
-		case SIZE_MINIMIZED : m_bMinimized = true; break;		//	�ŏ�������Ă���
-		case SIZE_RESTORED	: m_bMinimized = false; break;		//	�ʏ��Ԃł���
-		//		���ʏ��Ԃɖ߂������ǂ����́A������WM_ACTIVATEAPP�ƂŌ���ׂ�
+		case SIZE_MINIMIZED : m_bMinimized = true; break;		//	Å¬»³êÄ¢é
+		case SIZE_RESTORED	: m_bMinimized = false; break;		//	ÊíóÔÅ é
+		//		ªÊíóÔÉßµ½©Ç¤©ÍA±±ÆWM_ACTIVATEAPPÆÅ©é×«
 		}
 		break;
 						}
@@ -422,54 +422,54 @@ LRESULT	CWindow::WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam){
 
 /*
 	http://www.microsoft.com/JAPAN/support/kb/articles/JP214/6/55.HTM
-	���F
+	æèF
 
-	[SDK32] �A�v���P�[�V�����I����A�^�X�N �o�[�ɋ󔒂̃{�b�N�X���c�� 
-	�ŏI�X�V��: 2001/01/30
-	�����ԍ�: JP214655	
+	[SDK32] AvP[VI¹ãA^XN o[ÉóÌ{bNXªcé 
+	ÅIXVú: 2001/01/30
+	¶Ô: JP214655	
 
-����
-�A�v���P�[�V�����̏I����A�^�X�N �o�[���X�V���ꂸ�A�󔒂̃{�b�N�X (�E�B���h�E�̃^�C�g����A�C�R�����\������Ă��Ȃ�����) ���c���ꂽ�܂܂ɂȂ邱�Ƃ�����܂��B���̋󔒂̃{�b�N�X���N���b�N����ƁA�����Ă��܂��܂��B 
+»Û
+AvP[VÌI¹ãA^XN o[ªXV³ê¸AóÌ{bNX (EBhEÌ^CgâACRª\¦³êÄ¢È¢àÌ) ªc³ê½ÜÜÉÈé±Æª èÜ·B»ÌóÌ{bNXðNbN·éÆAÁ¦ÄµÜ¢Ü·B 
 
-����
-���̖��́A�A�v���P�[�V�������^�X�N �o�[�ɑ΂���\���Ɋ֌W����E�B���h�E�̃X�^�C����ύX�������߂ɋN����܂��B 
+´ö
+±ÌâèÍAAvP[Vª^XN o[ÉÎ·é\¦ÉÖW·éEBhEÌX^CðÏXµ½½ßÉN±èÜ·B 
 
-�Ⴆ�΁A�E�B���h�E�� WS_EX_TOOLWINDOWS �X�^�C�����w�肵�āA���̊g���X�^�C����ύX���A���̃E�B���h�E���N���[�Y����O�Ɋg���X�^�C���̃��Z�b�g�Ɏ��s�����ꍇ�A�^�X�N �o�[�ɋ󔒂̃{�^�����\������܂��B 
+á¦ÎAEBhEª WS_EX_TOOLWINDOWS X^CðwèµÄA»Ìg£X^CðÏXµA»ÌEBhEðN[Y·éOÉg£X^CÌZbgÉ¸sµ½êA^XN o[ÉóÌ{^ª\¦³êÜ·B 
 
-�������@
-���̓���ɑ��������ꍇ�A���̖�����������ɂ́A�E�B���h�E�̃X�^�C�������Z�b�g���邩�A�A�v���P�[�V�����̃��C�� �E�B���h�E�̏����ŁAWM_CLOSE �܂��� WM_DESTROY �̒��ŁASW_HIDE ���p�����^�ɂ��� ShowWindow ���Ăяo���܂��B 
+ðû@
+±Ì®ìÉöµ½êA±Ìâèðð·éÉÍAEBhEÌX^CðZbg·é©AAvP[VÌC EBhEÌÅAWM_CLOSE Ü½Í WM_DESTROY ÌÅASW_HIDE ðp^ÉµÄ ShowWindow ðÄÑoµÜ·B 
 */
 
 /*
-	�ǋL�B
-		�������́A�E�B���h�D�̏�Ԃ�W���ɖ߂����ɏI������ƁA����
-		���ۂ��N����悤���B
-		�܂�A
-		�E�B���h�E�̏�Ԃ��ő剻����W���ɖ߂��Ƃ��̃A�j���[�V������
-		���ꂵ������SW_HIDE�ŁAhide���āA���̂��ƁA�E�B���h�D�X�^�C����
-		�m�[�}���ɖ߂��Ηǂ��B
+	ÇLB
+		³µ­ÍAEBhDÌóÔðWÉß³¸ÉI¹·éÆA±Ì
+		»ÛªN«éæ¤¾B
+		ÂÜèA
+		EBhEÌóÔðÅå»©çWÉß·Æ«ÌAj[Vª
+		©êµ¢½ßSW_HIDEÅAhideµÄA»Ì ÆAEBhDX^Cð
+		m[}Éß¹ÎÇ¢B
 */
 	case WM_DESTROY : {
 		::ShowWindow(m_hWnd, SW_HIDE);
 
-///		�������ƁA�f�b�h���b�N�Ɋׂ邱�Ƃ�����悤���D�D
+///		«ðâéÆAfbhbNÉ×é±Æª éæ¤¾DD
 //		::SetWindowLong(m_hWnd, GWL_STYLE, WS_POPUP);
-		//	���ň��̃h���C�o�̃o�O�ɂ��Ȃ��āA
-		//	����𔽉f�����邽�߂�(ShowWindow��SetWindowPos����K�v������)
+		//	ªÅ«ÌhCoÌoOÉ»È¦ÄA
+		//	±êð½f³¹é½ßÉ(ShowWindow©SetWindowPos·éKvª é)
 //		::SetWindowPos(hWnd, (HWND)HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
 /*
-		��SetWindowPos(hWnd, (HWND)HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
-		���Ă����Ƃ��A��������Z�b�g���Ȃ��ƁA��͂薼�����E�B���h�D���^�X�N�o�[��Ɏc�邱�Ƃ�����i�o�O���̂Q�j
+		ªSetWindowPos(hWnd, (HWND)HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+		µÄ¢½Æ«A±êðZbgµÈ¢ÆAâÍè¼³µEBhDª^XNo[ãÉcé±Æª éioO»ÌQj
 */
 
 //		::ShowWindow(m_hWnd, SW_HIDE);
 		}
 		break;
-	//	��L�̖��ɑ΂���΍�R�[�h
+	//	ãLÌâèÉÎ·éÎôR[h
 	case WM_NCDESTROY : {
-		//	�E�B���h�D����̂��ꂽ�̂ŁA���̃t�F�C�Y�ŁA�E�B���h�D�n���h����
-		//	���Z�b�g���Ă��K�v������B�i�������Ȃ��ƁA���̃N���X��
-		//	�f�X�g���N�^�ŁA��d��destroy����Ă��܂��j
+		//	EBhDªðÌ³ê½ÌÅA±ÌtFCYÅAEBhDnhð
+		//	ZbgµÄâéKvª éBi»¤µÈ¢ÆA±ÌNXÌ
+		//	fXgN^ÅAñdÉdestroy³êÄµÜ¤j
 		m_hWnd = NULL;
 		break;
 		}
@@ -496,12 +496,12 @@ string	CDialogHelper::GetText(int nEditControlID){
 	HWND hWnd = GetHWnd();
 	if (hWnd==NULL) return "";
 	smart_ptr<BYTE> pBuf;
-	int nLength = 16;	//	16����������J�n
+	int nLength = 16;	//	16¶ª©çJn
 	while (true) {
 		pBuf.AddArray(nLength);
 		int nResultLength = ::GetDlgItemText(hWnd,nEditControlID,(LPTSTR)pBuf.get(),pBuf.size());
 		if (nResultLength+1 == nLength){
-			//	�o�b�t�@��������Ȃ��Ǝv����
+			//	obt@·ª«èÈ¢Ævíêé
 			nLength <<=1;
 		} else {
 			break;
@@ -510,7 +510,7 @@ string	CDialogHelper::GetText(int nEditControlID){
 	return string((LPCSTR)pBuf.get());
 }
 
-///	�X�^�e�B�b�N�e�L�X�g�R���g���[��etc..�ɑ΂��āA�����Ƀe�L�X�g�������ݒ肷��
+///	X^eBbNeLXgRg[etc..ÉÎµÄA»±ÉeLXg¶ñðÝè·é
 LRESULT	CDialogHelper::SetText(int nEditControlID,const string& str){
 	HWND hWnd = GetHWnd();
 	if (hWnd==NULL) return 1;
@@ -530,13 +530,13 @@ LRESULT CDialogHelper::SetCheck(int nEditControlID,int nCheck){
 	return ::SendMessage(hDlgItem , BM_SETCHECK, nCheck , 0L)?0:3;
 }
 
-///	�{�^����Ԃ̎擾
+///	{^óÔÌæ¾
 LRESULT	CDialogHelper::GetCheck(int nEditControlID){
 /*
-	-1:���̃{�^���͑��݂��Ȃ�
-	0:�{�^���̃`�F�b�N�̓I�t�ɂȂ��Ă��܂��B 
-	1:�{�^���̃`�F�b�N�̓I���ɂȂ��Ă��܂��B 
-	2:�{�^���̓O���C�\���i�s�m��j�̏�Ԃł��B�{�^�����ABS_3STATE �X�^�C���܂��� BS_AUTO3STATE �X�^�C�������Ƃ��ɂ����K�p����܂��B 
+	-1:»Ì{^Í¶ÝµÈ¢
+	0:{^Ì`FbNÍItÉÈÁÄ¢Ü·B 
+	1:{^Ì`FbNÍIÉÈÁÄ¢Ü·B 
+	2:{^ÍOC\¦ismèjÌóÔÅ·B{^ªABS_3STATE X^CÜ½Í BS_AUTO3STATE X^CðÂÆ«É¾¯Kp³êÜ·B 
 */
 	HWND hWnd = GetHWnd();
 	if (hWnd==NULL) return -1;
@@ -544,9 +544,9 @@ LRESULT	CDialogHelper::GetCheck(int nEditControlID){
 //	if (hDlgItem==NULL) return -1;
 	UINT n = ::IsDlgButtonChecked(hWnd,nEditControlID);
 	switch(n){
-	case BST_UNCHECKED : return 0; // �{�^���̃`�F�b�N�̓I�t�ɂȂ��Ă��܂��B
-	case BST_CHECKED : return 1; //�{�^���̃`�F�b�N�̓I���ɂȂ��Ă��܂��B 
-	case BST_INDETERMINATE : return 2; // �{�^���̓O���C�\���i�s�m��j�̏�Ԃł��B�{�^�����ABS_3STATE �X�^�C���܂��� BS_AUTO3STATE �X�^�C�������Ƃ��ɂ����K�p����܂��B 
+	case BST_UNCHECKED : return 0; // {^Ì`FbNÍItÉÈÁÄ¢Ü·B
+	case BST_CHECKED : return 1; //{^Ì`FbNÍIÉÈÁÄ¢Ü·B 
+	case BST_INDETERMINATE : return 2; // {^ÍOC\¦ismèjÌóÔÅ·B{^ªABS_3STATE X^CÜ½Í BS_AUTO3STATE X^CðÂÆ«É¾¯Kp³êÜ·B 
 	}
 	return -1;	//???
 }
@@ -555,7 +555,7 @@ LRESULT	CDialogHelper::GetCheck(int nEditControlID){
 
 void	CMsgDlg::Out(const string& caption,const string& message){
 /*
-	// �t���X�N���[���Ńt���b�v�g���Ă邩���m��Ȃ��̂�
+	// tXN[ÅtbvgÁÄé©àmêÈ¢ÌÅ
 #ifdef USE_DirectDraw
 	CDirectDraw* lpDraw = CAppManager::GetMyDirectDraw();
 	if (lpDraw!=NULL){

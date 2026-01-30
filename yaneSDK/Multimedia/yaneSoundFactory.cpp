@@ -113,7 +113,7 @@ smart_ptr<ISound> CSoundFactory::InnerCreate(int nDevice){
 				GetWaveOutput()->SetSoundParameter(GetSoundParameter());
 				pSound = new CWaveSound(GetWaveOutput());
 
-				bool bStreamPlay;
+				bool bStreamPlay = false;
 				if (nDevice==3) bStreamPlay=IsStreamPlay();
 				else if (nDevice==4) bStreamPlay = false;
 				else if (nDevice==5) bStreamPlay = true;

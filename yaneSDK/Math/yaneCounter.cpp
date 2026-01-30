@@ -14,10 +14,10 @@ smart_ptr<ICounterFactory> ICounter::m_vFactory;
 
 ICounter* ICounter::CreateInstance(int nType){
 	switch(nType){
-	case 0 : new CNullCounter;
-	case 1 : new CRootCounter;
-	case 2 : new CSaturationCounter;
-	case 3 : new CInteriorCounter;
+	case 0 : return new CNullCounter;
+	case 1 : return new CRootCounter;
+	case 2 : return new CSaturationCounter;
+	case 3 : return new CInteriorCounter;
 	default :
 		if (!m_vFactory.isNull()){
 			ICounter* p = m_vFactory->CreateInstance(nType);
@@ -25,7 +25,7 @@ ICounter* ICounter::CreateInstance(int nType){
 		}
 #ifdef USE_EXCEPTION
 		throw CRuntimeException();
-		//	ƒ‰ƒ“ƒ^ƒCƒ€—áŠO‚ğ”­¶
+		//	ÂƒÂ‰ÂƒÂ“Âƒ^ÂƒCÂƒÂ€Â—Ã¡ÂŠOÂ‚Ã°Â”Â­ÂÂ¶
 #else
 		return NULL;
 #endif
@@ -39,7 +39,7 @@ void CProxyCounter::Serialize(ISerialize&s){
 		s << *GetCounter();
 	} else {
 		int nType;
-		s << nType;			//	Œ^‚©‚çfactory‚É‚æ‚Á‚Ä•œŒ³
+		s << nType;			//	ÂŒ^Â‚Â©Â‚Ã§factoryÂ‚Ã‰Â‚Ã¦Â‚ÃÂ‚Ã„Â•ÂœÂŒÂ³
 		m_vCounter.Add(ICounter::CreateInstance(nType));
 		s << *GetCounter();
 	}
@@ -63,42 +63,42 @@ CRootCounter::CRootCounter(int nStart,int nEnd,int nStep){
 }
 
 void CRootCounter::inc(bool bAdd){
-	bool bInc = (m_nStart > m_nEnd) ^ bAdd; // ‹t•ûŒüƒJƒEƒ“ƒ^H
+	bool bInc = (m_nStart > m_nEnd) ^ bAdd; // Â‹tÂ•Ã»ÂŒÃ¼ÂƒJÂƒEÂƒÂ“Âƒ^ÂH
 	if (bInc) {
-	//	ƒCƒ“ƒNƒŠƒƒ“ƒg
+	//	ÂƒCÂƒÂ“ÂƒNÂƒÂŠÂƒÂÂƒÂ“Âƒg
 		if (m_nStep>0) {
-		//	®”ƒCƒ“ƒNƒŠƒƒ“ƒg
+		//	ÂÂ®ÂÂ”ÂƒCÂƒÂ“ÂƒNÂƒÂŠÂƒÂÂƒÂ“Âƒg
 			m_nRootCount += m_nStep;
 		} else {
-		//	•ª”ƒCƒ“ƒNƒŠƒƒ“ƒg
+		//	Â•ÂªÂÂ”ÂƒCÂƒÂ“ÂƒNÂƒÂŠÂƒÂÂƒÂ“Âƒg
 			m_nRate++; if (m_nRate>=(-m_nStep)) { m_nRate = 0; m_nRootCount++; }
 		}
-		//	ƒTƒ`ƒ…ƒŒ[ƒg‚µ‚½‚Ì‚©H
+		//	ÂƒTÂƒ`ÂƒÂ…ÂƒÂŒÂ[ÂƒgÂ‚ÂµÂ‚Â½Â‚ÃŒÂ‚Â©ÂH
 		int nMax = m_nStart < m_nEnd ? m_nEnd : m_nStart;
 		if (m_nRootCount > nMax) {
 			int nMin = m_nStart < m_nEnd ? m_nStart : m_nEnd;
 			m_nRootCount = nMin;
-			//		CRootCounter‚Æ‚Í‚±‚±ª‚ªˆá‚¤‚¾‚¯
+			//		CRootCounterÂ‚Ã†Â‚ÃÂ‚Â±Â‚Â±ÂÂªÂ‚ÂªÂˆÃ¡Â‚Â¤Â‚Â¾Â‚Â¯
 		}
 	} else {
-	//	ƒfƒNƒŠƒƒ“ƒg
+	//	ÂƒfÂƒNÂƒÂŠÂƒÂÂƒÂ“Âƒg
 		if (m_nStep>0) {
-		//	®”ƒfƒNƒŠƒƒ“ƒg
+		//	ÂÂ®ÂÂ”ÂƒfÂƒNÂƒÂŠÂƒÂÂƒÂ“Âƒg
 			m_nRootCount -= m_nStep;
 		} else {
-		//	•ª”ƒfƒNƒŠƒƒ“ƒg
+		//	Â•ÂªÂÂ”ÂƒfÂƒNÂƒÂŠÂƒÂÂƒÂ“Âƒg
 			m_nRate--; if (m_nRate<=(m_nStep)) { m_nRate = 0; m_nRootCount--; }
-			//	Ë@m_nRate++‚Å‚È‚¢‚±‚Æ‚É’ˆÓB
-			//	++‚Ì‚ ‚Æ--‚µ‚ÄA”‚Ì®‡«‚ª‚Æ‚ê‚È‚­‚Ä‚Í‚È‚ç‚È‚¢
-			//	‚©‚ÂAnStep<0‚Ì‚Æ‚«Å‰‚Ì‚P‰ñ–Ú‚Ì--‚ÅRootCounter‚ª
-			//	1Œ¸‚Á‚Ä‚Í‚¢‚¯‚È‚¢B‚æ‚Á‚Ä‚±‚¤‚¢‚¤À‘•‚É‚È‚é
+			//	ÂÃ‹Â@m_nRate++Â‚Ã…Â‚ÃˆÂ‚Â¢Â‚Â±Â‚Ã†Â‚Ã‰Â’ÂÂˆÃ“ÂB
+			//	++Â‚ÃŒÂ‚Â Â‚Ã†--Â‚ÂµÂ‚Ã„ÂAÂÂ”Â‚ÃŒÂÂ®ÂÂ‡ÂÂ«Â‚ÂªÂ‚Ã†Â‚ÃªÂ‚ÃˆÂ‚Â­Â‚Ã„Â‚ÃÂ‚ÃˆÂ‚Ã§Â‚ÃˆÂ‚Â¢
+			//	Â‚Â©Â‚Ã‚ÂAnStep<0Â‚ÃŒÂ‚Ã†Â‚Â«ÂÃ…ÂÂ‰Â‚ÃŒÂ‚PÂ‰Ã±Â–ÃšÂ‚ÃŒ--Â‚Ã…RootCounterÂ‚Âª
+			//	1ÂŒÂ¸Â‚ÃÂ‚Ã„Â‚ÃÂ‚Â¢Â‚Â¯Â‚ÃˆÂ‚Â¢ÂBÂ‚Ã¦Â‚ÃÂ‚Ã„Â‚Â±Â‚Â¤Â‚Â¢Â‚Â¤ÂÃ€Â‘Â•Â‚Ã‰Â‚ÃˆÂ‚Ã©
 		}
-		//	ƒTƒ`ƒ…ƒŒ[ƒg‚µ‚½‚Ì‚©H
+		//	ÂƒTÂƒ`ÂƒÂ…ÂƒÂŒÂ[ÂƒgÂ‚ÂµÂ‚Â½Â‚ÃŒÂ‚Â©ÂH
 		int nMin = m_nStart < m_nEnd ? m_nStart : m_nEnd;
 		if (m_nRootCount < nMin) {
 			int nMax = m_nStart < m_nEnd ? m_nEnd : m_nStart;
 			m_nRootCount = nMax;
-			//		CRootCounter‚Æ‚Í‚±‚±ª‚ªˆá‚¤‚¾‚¯
+			//		CRootCounterÂ‚Ã†Â‚ÃÂ‚Â±Â‚Â±ÂÂªÂ‚ÂªÂˆÃ¡Â‚Â¤Â‚Â¾Â‚Â¯
 		}
 	}
 }
@@ -121,33 +121,33 @@ CSaturationCounter::CSaturationCounter(int nStart,int nEnd,int nStep){
 }
 
 void CSaturationCounter::inc(bool bAdd){
-	bool bInc = (m_nStart > m_nEnd) ^ bAdd; // ‹t•ûŒüƒJƒEƒ“ƒ^H
+	bool bInc = (m_nStart > m_nEnd) ^ bAdd; // Â‹tÂ•Ã»ÂŒÃ¼ÂƒJÂƒEÂƒÂ“Âƒ^ÂH
 	if (bInc) {
-	//	ƒCƒ“ƒNƒŠƒƒ“ƒg
+	//	ÂƒCÂƒÂ“ÂƒNÂƒÂŠÂƒÂÂƒÂ“Âƒg
 		if (m_nStep>0) {
-		//	®”ƒCƒ“ƒNƒŠƒƒ“ƒg
+		//	ÂÂ®ÂÂ”ÂƒCÂƒÂ“ÂƒNÂƒÂŠÂƒÂÂƒÂ“Âƒg
 			m_nRootCount += m_nStep;
 		} else {
-		//	•ª”ƒCƒ“ƒNƒŠƒƒ“ƒg
+		//	Â•ÂªÂÂ”ÂƒCÂƒÂ“ÂƒNÂƒÂŠÂƒÂÂƒÂ“Âƒg
 			m_nRate++; if (m_nRate>=(-m_nStep)) { m_nRate = 0; m_nRootCount++; }
 		}
-		//	ƒTƒ`ƒ…ƒŒ[ƒg‚µ‚½‚Ì‚©H
+		//	ÂƒTÂƒ`ÂƒÂ…ÂƒÂŒÂ[ÂƒgÂ‚ÂµÂ‚Â½Â‚ÃŒÂ‚Â©ÂH
 		int nMax = m_nStart < m_nEnd ? m_nEnd : m_nStart;
 		if (m_nRootCount > nMax) m_nRootCount = nMax;
 	} else {
-	//	ƒfƒNƒŠƒƒ“ƒg
+	//	ÂƒfÂƒNÂƒÂŠÂƒÂÂƒÂ“Âƒg
 		if (m_nStep>0) {
-		//	®”ƒfƒNƒŠƒƒ“ƒg
+		//	ÂÂ®ÂÂ”ÂƒfÂƒNÂƒÂŠÂƒÂÂƒÂ“Âƒg
 			m_nRootCount -= m_nStep;
 		} else {
-		//	•ª”ƒfƒNƒŠƒƒ“ƒg
+		//	Â•ÂªÂÂ”ÂƒfÂƒNÂƒÂŠÂƒÂÂƒÂ“Âƒg
 			m_nRate--; if (m_nRate<=(m_nStep)) { m_nRate = 0; m_nRootCount--; }
-			//	Ë@m_nRate++‚Å‚È‚¢‚±‚Æ‚É’ˆÓB
-			//	++‚Ì‚ ‚Æ--‚µ‚ÄA”‚Ì®‡«‚ª‚Æ‚ê‚È‚­‚Ä‚Í‚È‚ç‚È‚¢
-			//	‚©‚ÂAnStep<0‚Ì‚Æ‚«Å‰‚Ì‚P‰ñ–Ú‚Ì--‚ÅRootCounter‚ª
-			//	1Œ¸‚Á‚Ä‚Í‚¢‚¯‚È‚¢B‚æ‚Á‚Ä‚±‚¤‚¢‚¤À‘•‚É‚È‚é
+			//	ÂÃ‹Â@m_nRate++Â‚Ã…Â‚ÃˆÂ‚Â¢Â‚Â±Â‚Ã†Â‚Ã‰Â’ÂÂˆÃ“ÂB
+			//	++Â‚ÃŒÂ‚Â Â‚Ã†--Â‚ÂµÂ‚Ã„ÂAÂÂ”Â‚ÃŒÂÂ®ÂÂ‡ÂÂ«Â‚ÂªÂ‚Ã†Â‚ÃªÂ‚ÃˆÂ‚Â­Â‚Ã„Â‚ÃÂ‚ÃˆÂ‚Ã§Â‚ÃˆÂ‚Â¢
+			//	Â‚Â©Â‚Ã‚ÂAnStep<0Â‚ÃŒÂ‚Ã†Â‚Â«ÂÃ…ÂÂ‰Â‚ÃŒÂ‚PÂ‰Ã±Â–ÃšÂ‚ÃŒ--Â‚Ã…RootCounterÂ‚Âª
+			//	1ÂŒÂ¸Â‚ÃÂ‚Ã„Â‚ÃÂ‚Â¢Â‚Â¯Â‚ÃˆÂ‚Â¢ÂBÂ‚Ã¦Â‚ÃÂ‚Ã„Â‚Â±Â‚Â¤Â‚Â¢Â‚Â¤ÂÃ€Â‘Â•Â‚Ã‰Â‚ÃˆÂ‚Ã©
 		}
-		//	ƒTƒ`ƒ…ƒŒ[ƒg‚µ‚½‚Ì‚©H
+		//	ÂƒTÂƒ`ÂƒÂ…ÂƒÂŒÂ[ÂƒgÂ‚ÂµÂ‚Â½Â‚ÃŒÂ‚Â©ÂH
 		int nMin = m_nStart < m_nEnd ? m_nStart : m_nEnd;
 		if (m_nRootCount < nMin) m_nRootCount = nMin;
 	}
@@ -163,7 +163,7 @@ CInteriorCounter::CInteriorCounter(){
 }
 
 void	CInteriorCounter::Set(int nStart,int nEnd,int nFrames){
-	WARNING(nFrames == 0,"CInteriorCounter::Set‚ÅnFrames == 0");
+	WARNING(nFrames == 0,"CInteriorCounter::SetÂ‚Ã…nFrames == 0");
 	m_nStart	= nStart;
 	m_nEnd		= nEnd;
 	m_nNow		= nStart;
@@ -172,21 +172,21 @@ void	CInteriorCounter::Set(int nStart,int nEnd,int nFrames){
 }
 
 void	CInteriorCounter::Inc(){
-	//	ƒJƒEƒ“ƒ^‚ÍI—¹’l‚©H
+	//	ÂƒJÂƒEÂƒÂ“Âƒ^Â‚ÃÂIÂ—Â¹Â’lÂ‚Â©ÂH
 	if (m_nFramesNow >= m_nFrames) {
 		m_nNow = m_nEnd;
 		return ;
 	}
 	m_nFramesNow++;
-	//	“à•ªˆ—
+	//	Â“Ã Â•ÂªÂÂˆÂ—Â
 	m_nNow =  m_nStart + m_nFramesNow * (m_nEnd-m_nStart) / m_nFrames;
 }
 
 void	CInteriorCounter::Dec(){
-	//	ƒJƒEƒ“ƒ^‚Í‰Šú’l‚©H
+	//	ÂƒJÂƒEÂƒÂ“Âƒ^Â‚ÃÂÂ‰ÂŠÃºÂ’lÂ‚Â©ÂH
 	if (m_nFramesNow == 0) return ;
 	m_nFramesNow--;
-	//	“à•ªˆ—
+	//	Â“Ã Â•ÂªÂÂˆÂ—Â
 	m_nNow =  m_nStart + m_nFramesNow * (m_nEnd-m_nStart) / m_nFrames;
 }
 //////////////////////////////////////////////////////////////////////////////

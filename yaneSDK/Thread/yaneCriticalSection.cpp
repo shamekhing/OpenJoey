@@ -12,9 +12,10 @@ CCriticalSection::CCriticalSection(){
 
 CCriticalSection::~CCriticalSection(){
 	::DeleteCriticalSection(&m_csCriticalSection);
+	// Do not throw from destructor (C++ forbids it; can cause terminate).
 	if (m_nLockCount!=0) {
-#ifdef USE_EXCEPTION
-		throw CRuntimeException("CCriticalSection��Enter�����񐔂���Leave���Ȃ��܂܏I�����Ă���");
+#ifdef _DEBUG
+		::OutputDebugStringA("CCriticalSection: destructor called while still entered (Enter/Leave mismatch).\n");
 #endif
 	}
 }
@@ -22,21 +23,21 @@ CCriticalSection::~CCriticalSection(){
 void CCriticalSection::Enter(){
 	::EnterCriticalSection(&m_csCriticalSection);
 	m_dwLockedThread = ::GetCurrentThreadId();
-	//	���قȂ�X���b�h���炱���ɓ����Ă��邱�Ƃ͂ł��Ȃ�
-	//	(CriticalSection�̒�`���)
+	//	ªÙÈéXbh©ç±±ÉüÁÄ­é±ÆÍÅ«È¢
+	//	(CriticalSectionÌè`æè)
 	m_nLockCount++;
 }
 
 void CCriticalSection::Leave(){
 #ifdef USE_EXCEPTION
 	if (m_nLockCount==0){
-		throw CRuntimeException("CCriticalSection��Enter���Ă��Ȃ��̂�Leave���Ă���");
+		throw CRuntimeException("CCriticalSectionðEnterµÄ¢È¢ÌÉLeaveµÄ¢é");
 	}
 #endif
 	if (--m_nLockCount==0) {
 		m_dwLockedThread = (DWORD)-1;
 	}
-	//	��Leave��������ɑ��X���b�h��Enter����\��������
+	//	ªLeaveµ½¼ãÉ¼XbhªEnter·éÂ\«ª é
 	::LeaveCriticalSection(&m_csCriticalSection);
 }
 
@@ -56,12 +57,12 @@ void	CCriticalLock::Leave(){
 	if (m_nLockCount-- == 0){
 /*
 #ifdef USE_EXCEPTION
-		throw CRuntimeException("CCriticalLock::Leave(Enter����Ă��Ȃ�)");
+		throw CRuntimeException("CCriticalLock::Leave(Enter³êÄ¢È¢)");
 #endif
 */
-		//	������͎��͂��肤��
-		//	��)CriticalLock���Ă���Ȃ��ŁA��������Leave���āA���̂���
-		//		��O����������Enter���Ȃ����O�ɔ������Ȃ�..
+		//	ª±êÍÀÍ è¤é
+		//	á)CriticalLockµÄ¢éÈ©ÅA¢Á½ñLeaveµÄA»Ì Æ
+		//		áOª­¶µÄEnterµÈ¨·OÉ²¯½ÈÇ..
 		return ;
 	}
 	m_cs->Leave();
@@ -70,13 +71,13 @@ void	CCriticalLock::Leave(){
 void	CCriticalLock::Enter(){
 	m_cs->Enter();
 	m_nLockCount++;
-	//	�� if (++m_nLockCount==0) { m_cs->Enter(); }
-	//	�Ƃ͏����Ȃ��B�Ȃ��Ȃ�A++m_nLockCount��atomic�ł͖���
+	//	ª if (++m_nLockCount==0) { m_cs->Enter(); }
+	//	ÆÍ¯È¢BÈºÈçA++m_nLockCountªatomicÅÍ³¢
 }
 
 CCriticalLock::~CCriticalLock()
 {
-	//	guard����Ă����Ƃ��̂݉��
+	//	guard³êÄ¢½Æ«ÌÝðú
 	if (0<m_nLockCount){
 		for(int i=0;i<m_nLockCount;i++) m_cs->Leave();
 	}

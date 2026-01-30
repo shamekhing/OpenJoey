@@ -15,30 +15,30 @@ CAppBase::CAppBase() {
 	m_bIdle		=	false;
 	m_bMessage	=	false;
 	m_bWaitIfMinimized = false;
-	m_bClose	=	false;	//	OnPreClose‚ð–³Ž‹‚µ‚ÄClose‚·‚éó‘Ô‚È‚Ì‚©H
+	m_bClose	=	false;	//	OnPreCloseï¿½ð–³Žï¿½ï¿½ï¿½ï¿½ï¿½Closeï¿½ï¿½ï¿½ï¿½ï¿½Ô‚È‚Ì‚ï¿½ï¿½H
 	m_hAccel	=	NULL;
 	m_bMainApp	=	false;
 
-	CAppManager::Inc();	//	ŽQÆƒJƒEƒ“ƒg‚ÌƒCƒ“ƒNƒŠƒƒ“ƒg
+	CAppManager::Inc();	//	ï¿½Qï¿½ÆƒJï¿½Eï¿½ï¿½ï¿½gï¿½ÌƒCï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½g
 }
 
 CAppBase::~CAppBase() {
 	StopThread();
-	CAppManager::Dec();	//	ŽQÆƒJƒEƒ“ƒg‚ÌƒfƒNƒŠƒƒ“ƒg
-	//	‚±‚ÌƒNƒ‰ƒX‚ÍACThread”h¶ƒNƒ‰ƒX‚È‚Ì‚ÅA
-	//	ªDec‚ªStopThread‚æ‚èæ‚É‚È‚Á‚Ä‚µ‚Ü‚¤B
-	//	‚æ‚Á‚ÄAæs‚µ‚ÄAStopThread‚ðŒÄ‚Ño‚·‚±‚Æ‚É‚æ‚Á‚ÄA
-	//	ƒXƒŒƒbƒh‚Ì’âŽ~‚ª•ÛØ‚³‚ê‚éB
+	CAppManager::Dec();	//	ï¿½Qï¿½ÆƒJï¿½Eï¿½ï¿½ï¿½gï¿½Ìƒfï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½g
+	//	ï¿½ï¿½ï¿½ÌƒNï¿½ï¿½ï¿½Xï¿½ÍACThreadï¿½hï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Xï¿½È‚Ì‚ÅA
+	//	ï¿½ï¿½Decï¿½ï¿½StopThreadï¿½ï¿½ï¿½ï¿½É‚È‚ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½B
+	//	ï¿½ï¿½ï¿½ï¿½ÄAï¿½ï¿½sï¿½ï¿½ï¿½ÄAStopThreadï¿½ï¿½ï¿½Ä‚Ñoï¿½ï¿½ï¿½ï¿½ï¿½Æ‚É‚ï¿½ï¿½ï¿½ÄA
+	//	ï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½Ì’ï¿½~ï¿½ï¿½ï¿½ÛØ‚ï¿½ï¿½ï¿½ï¿½B
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
 LRESULT CAppBase::OnPreCreate(CWindowOption& opt){
 
-	opt.caption		= "‚ ‚Õ‚è‚¿‚á‚ñ";
+	opt.caption		= "ï¿½ï¿½ï¿½Õ‚è‚¿ï¿½ï¿½ï¿½";
 	opt.classname	= "YANEAPPLICATION";
-	opt.size_x		= 640;
-	opt.size_y		= 480;
+	opt.size_x		= 800;
+	opt.size_y		= 600;
 	opt.style		= WS_MINIMIZEBOX | WS_CAPTION | WS_SYSMENU;
 
 	return 0;
@@ -47,28 +47,28 @@ LRESULT CAppBase::OnPreCreate(CWindowOption& opt){
 //////////////////////////////////////////////////////////////////////////////
 
 LRESULT CAppBase::Run(){
-	//	‚±‚ê‚ª‘æˆêƒCƒ“ƒXƒ^ƒ“ƒX‚È‚ç‚ÎA‚±‚ê‚ðeƒEƒBƒ“ƒhƒD‚Æ‚Ý‚È‚·
+	//	ï¿½ï¿½ï¿½ê‚ªï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½È‚ï¿½ÎAï¿½ï¿½ï¿½ï¿½ï¿½eï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½Æ‚Ý‚È‚ï¿½
 //	if (m_lpMainApp==NULL) m_lpMainApp = this;
 	/**
-		ƒEƒBƒ“ƒhƒD‚ÉŽå]ŠÖŒW‚Í‚È‚­‚È‚Á‚½‚Ì‚Å
-		ƒƒCƒ“‚Æ‚©ƒTƒu‚Æ‚©‚¢‚¤‹æ•ÊŽ©‘Ì‚ª‚È‚¢
+		ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½ÉŽï¿½]ï¿½ÖŒWï¿½Í‚È‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½
+		ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Æ‚ï¿½ï¿½Tï¿½uï¿½Æ‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÊŽï¿½ï¿½Ì‚ï¿½ï¿½È‚ï¿½
 	*/
 
 /*
 	if (IsMainApp()) {
 		return JumpToThread();
 	}
-	//	ƒƒCƒ“ƒEƒBƒ“ƒhƒDˆÈŠO‚È‚ç‚ÎA‚»‚êê—p‚ÉƒXƒŒƒbƒh‚ðì‚é«
+	//	ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½ÈŠOï¿½È‚ï¿½ÎAï¿½ï¿½ï¿½ï¿½ï¿½pï¿½ÉƒXï¿½ï¿½ï¿½bï¿½hï¿½ï¿½ï¿½ï¿½é«
 */
 	/**
-		‚±‚ÌƒtƒŒ[ƒ€‚ÍyaneSDK3rd‚Å‚Í”pŽ~
-		•K‚¸ƒXƒŒƒbƒh‚ð¶¬‚·‚é‚æ‚¤‚É•ÏX
+		ï¿½ï¿½ï¿½Ìƒtï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½yaneSDK3rdï¿½Å‚Í”pï¿½~
+		ï¿½Kï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½ð¶ï¿½ï¿½ï¿½ï¿½ï¿½æ‚¤ï¿½É•ÏX
 	*/
 
 	m_nThreadStatus = -1;
 	if (CreateThread()) return 1;
 
-	//	ƒEƒBƒ“ƒhƒD‚ÌŠ®¬‚Ü‚Å‘Ò‚Â
+	//	ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½ÌŠï¿½ï¿½ï¿½ï¿½Ü‚Å‘Ò‚ï¿½
 	while (true){
 		if (m_bMessage || m_nThreadStatus>=0) break;
 		::Sleep(100);
@@ -76,41 +76,41 @@ LRESULT CAppBase::Run(){
 	return 0;
 }
 
-//	‚±‚ê‚ªì¬‚³‚ê‚½ƒƒCƒ“ƒXƒŒƒbƒh
+//	ï¿½ï¿½ï¿½ê‚ªï¿½ì¬ï¿½ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½bï¿½h
 void CAppBase::ThreadProc(){		//	override from CThread
-	//	ƒEƒBƒ“ƒhƒD‚Ìì¬‚ÆWorkThread‚Ìì¬‚ÆMessageLoop
+	//	ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½Ìì¬ï¿½ï¿½WorkThreadï¿½Ìì¬ï¿½ï¿½MessageLoop
 	if (OnInit()) return ;
 	CWindowOption opt;
-	if (OnPreCreate(opt)) return ;			//	ƒEƒBƒ“ƒhƒD‚ªì‚ç‚ê‚é‘O‚ÉŒÄ‚Ño‚³‚ê‚é
-	if (m_oWindow.Create(opt)) return ;		//	ƒEƒBƒ“ƒhƒD‚Ìì¬
-	if (OnCreate()) return ;				//	ƒEƒBƒ“ƒhƒD‚ªì‚ç‚ê‚Ä‚©‚çŒÄ‚Ño‚³‚ê‚é
-	CAppManager::Add(this);					//	‚±‚ÌCAppBase‚Ì“o˜^
-	CAppManager::Hook(this);				//	ƒƒbƒZ[ƒWƒtƒbƒNŠJŽn
-	m_bMessage = true;						//	‚â‚Á‚ÆƒEƒBƒ“ƒhƒD‚ÍŠ®¬‚µ‚½
-	MainThread();							//	ƒ†[ƒU[‘¤‚Å—pˆÓ‚³‚ê‚½AƒƒCƒ“ŠÖ”
-	m_bMessage = false;						//	ƒEƒBƒ“ƒhƒD‚Í”j‰ó‚³‚ê‚é‚Ì‚Å...
-	OnDestroy();							//	I—¹’¼‘O
-	//	Thread‚Åapp‚ð”»•Ê‚µ‚Ä‚¢‚é‚Ì‚ÅHook‚µ‚½Thread‚ªDel‚µ‚È‚­‚Ä‚Í‚È‚ç‚È‚¢
-	//	::SendMessage(GetHWnd(),WM_CLOSE,0,0);	//	ƒƒbƒZ[ƒWƒXƒŒƒbƒh‚ð’âŽ~‚³‚¹‚é
+	if (OnPreCreate(opt)) return ;			//	ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½ÉŒÄ‚Ñoï¿½ï¿½ï¿½ï¿½ï¿½
+	if (m_oWindow.Create(opt)) return ;		//	ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½Ìì¬
+	if (OnCreate()) return ;				//	ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Ä‚Ñoï¿½ï¿½ï¿½ï¿½ï¿½
+	CAppManager::Add(this);					//	ï¿½ï¿½ï¿½ï¿½CAppBaseï¿½Ì“oï¿½^
+	CAppManager::Hook(this);				//	ï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½tï¿½bï¿½Nï¿½Jï¿½n
+	m_bMessage = true;						//	ï¿½ï¿½ï¿½ï¿½ÆƒEï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½ÍŠï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	MainThread();							//	ï¿½ï¿½ï¿½[ï¿½Uï¿½[ï¿½ï¿½ï¿½Å—pï¿½Ó‚ï¿½ï¿½ê‚½ï¿½Aï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Öï¿½
+	m_bMessage = false;						//	ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½Í”jï¿½ó‚³‚ï¿½ï¿½Ì‚ï¿½...
+	OnDestroy();							//	ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½O
+	//	Threadï¿½ï¿½appï¿½ð”»•Ê‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Ì‚ï¿½Hookï¿½ï¿½ï¿½ï¿½Threadï¿½ï¿½Delï¿½ï¿½ï¿½È‚ï¿½ï¿½Ä‚Í‚È‚ï¿½È‚ï¿½
+	//	::SendMessage(GetHWnd(),WM_CLOSE,0,0);	//	ï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½ï¿½ï¿½~ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-	//	::SendMessage(GetHWnd(),WM_DESTROY,0,0);	//	ƒƒbƒZ[ƒWƒXƒŒƒbƒh‚ð’âŽ~‚³‚¹‚é
-	//	ª‚±‚ê•K—v‚È‚ñ‚©HH‚±‚ê‚¢‚ê‚Ä‚é‚ÆAƒXƒŒƒbƒh‚ªƒfƒbƒhƒƒbƒN‚·‚é‚Æ‚«‚ª‚ ‚éDD
+	//	::SendMessage(GetHWnd(),WM_DESTROY,0,0);	//	ï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½ï¿½ï¿½~ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	//	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Kï¿½vï¿½È‚ñ‚©Hï¿½Hï¿½ï¿½ï¿½ê‚¢ï¿½ï¿½Ä‚ï¿½ÆAï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½ï¿½ï¿½fï¿½bï¿½hï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Dï¿½D
 
-	::PostMessage(GetHWnd(),WM_DESTROY,0,0);	//	ƒƒbƒZ[ƒWƒXƒŒƒbƒh‚ð’âŽ~‚³‚¹‚é
-	MessagePump(true);	//	ª‚Å“Š‚¶‚½ƒƒbƒZ[ƒW‚Ìˆ—
-	//	ª‰½‚É‚µ‚Ä‚à‚±‚ê‚ÍŽÀs‚µ‚È‚¢‚ÆAƒEƒBƒ“ƒhƒD‚ÌŽcŠ[‚ªŽc‚é‚±‚Æ‚ª‚ ‚é
+	::PostMessage(GetHWnd(),WM_DESTROY,0,0);	//	ï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½ï¿½ï¿½~ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	MessagePump(true);	//	ï¿½ï¿½ï¿½Å“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½Ìï¿½ï¿½ï¿½
+	//	ï¿½ï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ÍŽï¿½ï¿½sï¿½ï¿½ï¿½È‚ï¿½ï¿½ÆAï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½ÌŽcï¿½[ï¿½ï¿½ï¿½cï¿½é‚±ï¿½Æ‚ï¿½ï¿½ï¿½ï¿½ï¿½
 
-	//	WM_Destory‚ðˆ—‚µ‚È‚­‚Ä‚Í‚È‚ç‚È‚¢‚Ì‚Å‚±‚±‚ÅƒtƒbƒN‰ðœ
-	CAppManager::Unhook(this);				//	ƒƒbƒZ[ƒWƒtƒbƒN‚ÌI—¹
+	//	WM_Destoryï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½Ä‚Í‚È‚ï¿½È‚ï¿½ï¿½Ì‚Å‚ï¿½ï¿½ï¿½ï¿½Åƒtï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½
+	CAppManager::Unhook(this);				//	ï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½tï¿½bï¿½Nï¿½ÌIï¿½ï¿½
 
 	/*
-		‚±‚±‚ÅCAppManager‚©‚çØ‚è—£‚·‚ÆAStopThread‚³‚ê‚é‘O‚ÉA
-		I—¹”»’è‚ªs‚È‚í‚êAƒXƒŒƒbƒh‚ªŽc‘¶‚·‚é‰Â”\«‚ª‚ ‚éB
-		‚æ‚Á‚ÄACThread‚Ì‘S‚Ä‚ÌƒXƒŒƒbƒh‚ªI—¹‚µ‚½‚Ì‚ðŠm”F‚µ‚Ä‚©‚ç’âŽ~‚·‚×‚«
+		ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½CAppManagerï¿½ï¿½ï¿½ï¿½Ø‚è—£ï¿½ï¿½ï¿½ÆAStopThreadï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½ÉA
+		ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½è‚ªï¿½sï¿½È‚ï¿½ï¿½Aï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½ï¿½ï¿½cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â”\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
+		ï¿½ï¿½ï¿½ï¿½ÄACThreadï¿½Ì‘Sï¿½Ä‚ÌƒXï¿½ï¿½ï¿½bï¿½hï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½mï¿½Fï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½~ï¿½ï¿½ï¿½×‚ï¿½
 	*/
 
-	CAppManager::Del(this);					//	‚±‚ÌCAppBase‚Ìíœ
-	InnerStopThread();						//	ƒXƒŒƒbƒh‚ð’âŽ~
+	CAppManager::Del(this);					//	ï¿½ï¿½ï¿½ï¿½CAppBaseï¿½Ìíœ
+	InnerStopThread();						//	ï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½ï¿½ï¿½~
 }
 
 LRESULT CAppBase::MessagePump(bool bPeek/*=true*/){
@@ -118,32 +118,32 @@ LRESULT CAppBase::MessagePump(bool bPeek/*=true*/){
 	HWND hWnd = GetHWnd();
 	if (bPeek) {
 		while (::PeekMessage(&msg, NULL /* hWnd */,0,0,PM_REMOVE)) {
-			//	Ë‚±‚±AhWnd‚É‚µ‚È‚¢‚Æƒ}ƒ‹ƒ`ƒEƒBƒ“ƒhƒD‚É‚µ‚½‚Æ‚«Aƒ}ƒYƒC‚Ì‚¾‚ªA
-			//@‚Ç‚¤‚àANULLƒEƒBƒ“ƒhƒD‚É‚µ‚©”ò‚ñ‚Å‚±‚È‚¢ƒƒbƒZ[ƒW‚ª‚ ‚é‚æ‚¤‚Å...
-			//	ƒƒbƒZ[ƒW‚ª‘¶Ý‚·‚éŒÀ‚èˆ—‚µ‚Â‚Ã‚¯‚é
+			//	ï¿½Ë‚ï¿½ï¿½ï¿½ï¿½AhWndï¿½É‚ï¿½ï¿½È‚ï¿½ï¿½Æƒ}ï¿½ï¿½ï¿½`ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½É‚ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½Aï¿½}ï¿½Yï¿½Cï¿½Ì‚ï¿½ï¿½ï¿½ï¿½A
+			//ï¿½@ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½ANULLï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½É‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ‚¤ï¿½ï¿½...
+			//	ï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½Ý‚ï¿½ï¿½ï¿½ï¿½ï¿½èˆï¿½ï¿½ï¿½ï¿½ï¿½Â‚Ã‚ï¿½ï¿½ï¿½
 			if(::TranslateAccelerator(hWnd,m_hAccel,&msg)==0) {
 				::TranslateMessage(&msg); 
 				::DispatchMessage(&msg);
 			}
 		}
-		//	ˆÀ‘S‚É‚·‚é‚È‚çAPeekMessage‚ªƒGƒ‰[I—¹‚µ‚Ä‚¢‚È‚¢‚©’²‚×‚é‚×‚«‚È‚Ì‚©‚à’m‚ê‚È‚¢
-		//	GetMessage‚É‘Î‚µ‚Ä–ß‚è’l‚ª-1‚©‚Ç‚¤‚©‚ðƒ`ƒFƒbƒN‚µ‚Ä‚¢‚é‚í‚¯‚ÅAPeekMessage‚É‚Â‚¢‚Ä‚à
-		//	‚»‚ê‚É‘Î‰ž‚·‚éˆ—‚ª•K—v‚¾‚Æl‚¦‚ç‚ê‚é
+		//	ï¿½ï¿½ï¿½Sï¿½É‚ï¿½ï¿½ï¿½È‚ï¿½APeekMessageï¿½ï¿½ï¿½Gï¿½ï¿½ï¿½[ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×‚ï¿½×‚ï¿½ï¿½È‚Ì‚ï¿½ï¿½ï¿½ï¿½mï¿½ï¿½È‚ï¿½
+		//	GetMessageï¿½É‘Î‚ï¿½ï¿½Ä–ß‚ï¿½lï¿½ï¿½-1ï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½`ï¿½Fï¿½bï¿½Nï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½í‚¯ï¿½ÅAPeekMessageï¿½É‚Â‚ï¿½ï¿½Ä‚ï¿½
+		//	ï¿½ï¿½ï¿½ï¿½É‘Î‰ï¿½ï¿½ï¿½ï¿½éˆï¿½ï¿½ï¿½ï¿½ï¿½Kï¿½vï¿½ï¿½ï¿½Ælï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		return 0;
 	} else {
 		LRESULT lr = ::GetMessage(&msg,NULL,0,0);
-		//	Ë‚±‚±AGetHWnd‚É‚µ‚È‚¢‚Æƒ}ƒ‹ƒ`ƒEƒBƒ“ƒhƒD‚É‚µ‚½‚Æ‚«Aƒ}ƒYƒC‚Ì‚¾‚ªA
-		//@‚Ç‚¤‚àANULLƒEƒBƒ“ƒhƒD‚É‚µ‚©”ò‚ñ‚Å‚±‚È‚¢ƒƒbƒZ[ƒW‚ª‚ ‚é‚æ‚¤‚Å...
+		//	ï¿½Ë‚ï¿½ï¿½ï¿½ï¿½AGetHWndï¿½É‚ï¿½ï¿½È‚ï¿½ï¿½Æƒ}ï¿½ï¿½ï¿½`ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½É‚ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½Aï¿½}ï¿½Yï¿½Cï¿½Ì‚ï¿½ï¿½ï¿½ï¿½A
+		//ï¿½@ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½ANULLï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½É‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ‚¤ï¿½ï¿½...
 		if (lr!=-1) {
-			//	ƒGƒ‰[ƒR[ƒh‚ª•Ô‚Á‚Ä‚«‚Ä‚¢‚éê‡A‚»‚ê‚ð
-			//	dispatch‚µ‚Ä‚Í‚¢‚¯‚È‚¢B
-			//	‚µ‚©‚µA‚±‚Ìê‡AƒAƒvƒŠ‚ðI—¹‚³‚¹‚é‚×‚«‚¾‚ë‚¤‚©H
+			//	ï¿½Gï¿½ï¿½ï¿½[ï¿½Rï¿½[ï¿½hï¿½ï¿½ï¿½Ô‚ï¿½ï¿½Ä‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ê‡ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½
+			//	dispatchï¿½ï¿½ï¿½Ä‚Í‚ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½B
+			//	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Ìê‡ï¿½Aï¿½Aï¿½vï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×‚ï¿½ï¿½ï¿½ï¿½ë‚¤ï¿½ï¿½ï¿½H
 			if(::TranslateAccelerator(hWnd,m_hAccel,&msg)==0) {
 				::TranslateMessage(&msg);
 				::DispatchMessage(&msg);
 			}
 		} else {
-			// -1‚ª•Ô‚Á‚Ä‚«‚½‚È‚çA‚±‚ÌƒXƒŒƒbƒh”jŠü‚µ‚½‚Ù‚¤‚ª‚¢‚¢‚ñ‚¶‚á‚ËH
+			// -1ï¿½ï¿½ï¿½Ô‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½È‚ï¿½Aï¿½ï¿½ï¿½ÌƒXï¿½ï¿½ï¿½bï¿½hï¿½jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ñ‚¶‚ï¿½ËH
 			InvalidateThread();
 		}
 		return lr;
@@ -153,88 +153,88 @@ LRESULT CAppBase::MessagePump(bool bPeek/*=true*/){
 bool CAppBase::IsThreadValid()	{
 
 	GetIntervalTimer()->CallBack();
-	//	ƒtƒbƒN‚³‚ê‚Ä‚¢‚éƒ^ƒCƒ}‚ÉƒR[ƒ‹ƒoƒbƒN‚ð‚©‚¯‚é
+	//	ï¿½tï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½^ï¿½Cï¿½}ï¿½ÉƒRï¿½[ï¿½ï¿½ï¿½oï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 	if ( m_bIdle ){
-		// Idleƒ‚[ƒh’Ç‰Á
+		// Idleï¿½ï¿½ï¿½[ï¿½hï¿½Ç‰ï¿½
 		MessagePump(false); // get
 	}else{
 		MessagePump(true); // peek
 	}
 	if (m_bWaitIfMinimized) {
-		//	WM_QUIT‚©Å¬‰»‚ª‰ðœ‚³‚ê‚é‚Ì‚ð‘Ò‚Â
+		//	WM_QUITï¿½ï¿½ï¿½Åï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½Ò‚ï¿½
 		while (GetMyWindow()->IsMinimized()){
 			if (MessagePump(false)!=0) break; // get
 		}
 	}
 
-	//	‚±‚Ìƒ`ƒFƒbƒN‚Ì‚Æ‚«‚ÉƒXƒŒƒbƒh‚Ì³“–«‚àƒ`ƒFƒbƒN‚·‚é
+	//	ï¿½ï¿½ï¿½Ìƒ`ï¿½Fï¿½bï¿½Nï¿½Ì‚Æ‚ï¿½ï¿½ÉƒXï¿½ï¿½ï¿½bï¿½hï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½`ï¿½Fï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½
 	return CThread::IsThreadValid();
 }
 
 void	CAppBase::InnerStopThread(){
 	if (IsMainApp()) {
-		CAppManager::StopAllThread();			//	‘SƒXƒŒƒbƒh‚ð’âŽ~‚³‚¹‚é
+		CAppManager::StopAllThread();			//	ï¿½Sï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½ï¿½ï¿½~ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	} else {
-		//	ƒVƒ“ƒOƒ‹ƒXƒŒƒbƒh‚È‚ç‚Î‚±‚ê‚ÍŒÄ‚Ño‚·‚Ü‚Å‚à‚È‚­A’âŽ~‚µ‚Ä‚¢‚é‚Í‚¸‚¾‚ª
-//		StopThread();							//	ƒƒCƒ“ƒXƒŒƒbƒh‚ÌI—¹‘Ò‹@‚·‚é
+		//	ï¿½Vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½È‚ï¿½Î‚ï¿½ï¿½ï¿½ÍŒÄ‚Ñoï¿½ï¿½ï¿½Ü‚Å‚ï¿½ï¿½È‚ï¿½ï¿½Aï¿½ï¿½~ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Í‚ï¿½ï¿½ï¿½ï¿½ï¿½
+//		StopThread();							//	ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½ÌIï¿½ï¿½ï¿½Ò‹@ï¿½ï¿½ï¿½ï¿½
 	}
 	CThread::InvalidateThread();
 }
 
 void	CAppBase::InvalidateThread(){	//	overriden from CThread
-//	Idleƒ‚[ƒh‚ðÌ—p‚µ‚Ä‚¢‚é‚Ì‚ÅAƒƒbƒZ[ƒW‚ª—ˆ‚È‚¢ŒÀ‚èA
-//	IsThreadValid‚ªŒÄ‚Ño‚³‚ê‚È‚¢A‚·‚È‚í‚¿AWM_CLOSE‚É‰ž“š‚µ‚Ä•Â‚¶‚é‚±‚Æ‚ªo—ˆ‚È‚¢
+//	Idleï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½ï¿½Ì—pï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Ì‚ÅAï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½A
+//	IsThreadValidï¿½ï¿½ï¿½Ä‚Ñoï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½Aï¿½ï¿½ï¿½È‚í‚¿ï¿½AWM_CLOSEï¿½É‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä•Â‚ï¿½ï¿½é‚±ï¿½Æ‚ï¿½ï¿½oï¿½ï¿½ï¿½È‚ï¿½
 	if (m_bIdle){
 		HWND hWnd = GetHWnd();
-		if (hWnd!=NULL) {	//	‚±‚ÌƒƒbƒZ[ƒW‘—‚Á‚Ä”j‰ó‚µ‚Ä‚Ü‚¤
+		if (hWnd!=NULL) {	//	ï¿½ï¿½ï¿½Ìƒï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½Ä”jï¿½ó‚µ‚Ä‚Ü‚ï¿½
 			//	::SendMessage(hWnd,WM_CLOSE,0,0);
-			//	‚±‚¢‚Â‚ÍAƒƒbƒZ[ƒWƒLƒ…[‚ÉÏ‚Ü‚ê‚é‚½‚ßA
-			//	‚±‚ê‚ðŒÄ‚Ño‚µ‚½ƒXƒŒƒbƒh‚ÌƒƒbƒZ[ƒWƒ‹[ƒv‚ªŒÄ‚Î‚ê‚é
-			//	‚Ü‚ÅA‚±‚ê‚ÌŽÀs‚ª’x‰„‚³‚ê‚éB
-			//	‚æ‚Á‚ÄA
+			//	ï¿½ï¿½ï¿½ï¿½ï¿½Â‚ÍAï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½Lï¿½ï¿½ï¿½[ï¿½ÉÏ‚Ü‚ï¿½é‚½ï¿½ßA
+			//	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚Ñoï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½Ìƒï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½ï¿½ï¿½[ï¿½vï¿½ï¿½ï¿½Ä‚Î‚ï¿½ï¿½
+			//	ï¿½Ü‚ÅAï¿½ï¿½ï¿½ï¿½ÌŽï¿½ï¿½sï¿½ï¿½ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
+			//	ï¿½ï¿½ï¿½ï¿½ÄA
 			::PostMessage(hWnd,WM_CLOSE,0,0);
-			//	‚±‚ê‚ª³‰ðB
+			//	ï¿½ï¿½ï¿½ê‚ªï¿½ï¿½ï¿½ï¿½ï¿½B
 		}
 	}
-	CThread::InvalidateThread();	//	superƒNƒ‰ƒX‚ÉˆÏ÷‚·‚é
+	CThread::InvalidateThread();	//	superï¿½Nï¿½ï¿½ï¿½Xï¿½ÉˆÏï¿½ï¿½ï¿½ï¿½ï¿½
 }
 
 IIntervalTimer*	CAppBase::GetIntervalTimer(){ return& m_vIntervalTimer; }
 
 //////////////////////////////////////////////////////////////////////////////
-//	‚±‚ÌƒNƒ‰ƒX‚ÌƒƒbƒZ[ƒWˆ——p
-//		V‚½‚ÉƒƒbƒZ[ƒW‚ðˆ—‚µ‚½‚¢‚Æ‚«‚ÍACWinHook‚©‚ç”h¶‚³‚¹‚½ƒNƒ‰ƒX‚ðì‚Á‚ÄA
-//		‚»‚¢‚Â‚ÅƒtƒbƒN‚ð‚©‚¯‚Ä‚Ë‚ñB
+//	ï¿½ï¿½ï¿½ÌƒNï¿½ï¿½ï¿½Xï¿½Ìƒï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½p
+//		ï¿½Vï¿½ï¿½ï¿½Éƒï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ÍACWinHookï¿½ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÄA
+//		ï¿½ï¿½ï¿½ï¿½ï¿½Â‚Åƒtï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚Ë‚ï¿½B
 LRESULT CAppBase::WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam){
 
 	switch (uMsg){
 
 	///////////////////////////////////////////////////////////////////////////
 /*
-	//	GetMessage‚ÅŽ©•ª‚Ì‘®‚·‚éƒEƒBƒ“ƒhƒDƒƒbƒZ[ƒW‚µ‚©Žæ‚èo‚µ‚Ä‚¢‚È‚¢‚Ì‚ÅA
-	//	ƒAƒvƒŠ‚ªØ‚è‘Ö‚í‚Á‚½‚Æ‚«‚ÉWM_PAINT‚ªE‚¦‚È‚¢‚±‚Æ‚ª‚ ‚é‚æ‚¤‚¾‚ªc(Windows2000ƒÀ‚ÌƒoƒO?)
+	//	GetMessageï¿½ÅŽï¿½ï¿½ï¿½ï¿½Ì‘ï¿½ï¿½ï¿½ï¿½ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½oï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½Ì‚ÅA
+	//	ï¿½Aï¿½vï¿½ï¿½ï¿½ï¿½ï¿½Ø‚ï¿½Ö‚ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ï¿½WM_PAINTï¿½ï¿½ï¿½Eï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ï¿½ï¿½ï¿½æ‚¤ï¿½ï¿½ï¿½ï¿½ï¿½c(Windows2000ï¿½ï¿½ï¿½Ìƒoï¿½O?)
 	case WM_ACTIVATEAPP : {
 		if( wParam ) UpdateWindow(hWnd);
 		break;
 						  }
 */
-	case WM_CLOSE: { // ƒEƒCƒ“ƒhƒE‚ª•Â‚¶‚ç‚ê‚½
-		if (!m_bClose && OnPreClose()) return 1; // ˆ—‚µ‚½‚±‚Æ‚É‚µ‚Ä‹A‚é
+	case WM_CLOSE: { // ï¿½Eï¿½Cï¿½ï¿½ï¿½hï¿½Eï¿½ï¿½ï¿½Â‚ï¿½ï¿½ï¿½ê‚½
+		if (!m_bClose && OnPreClose()) return 1; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚É‚ï¿½ï¿½Ä‹Aï¿½ï¿½
 		CThread::InvalidateThread();
-		//	‚±‚ÌƒNƒ‰ƒX‚ÌInvalidateThread‚ÍAƒAƒCƒhƒ‹ƒ‚[ƒh‚¾‚ÆWM_CLOSE‚ð”­s‚·‚é‚Ì‚Å‰i‹vƒ‹[ƒv‚É‚È‚é
-//		InnerStopThread();		//	‚±‚ê‚ÅWorker‚ð’âŽ~‚³‚¹‚Ä‚©‚ç‚Å‚È‚¢‚Æ
-								//	WM_DESTORY‚ÅhWnd‚ª–³Œø‚É‚È‚é‚ÆA‚»‚Ì“r’[A
-								//	ƒ[ƒJ[ƒXƒŒƒbƒh‚ª¢‚é‚±‚Æ‚É‚È‚é
+		//	ï¿½ï¿½ï¿½ÌƒNï¿½ï¿½ï¿½Xï¿½ï¿½InvalidateThreadï¿½ÍAï¿½Aï¿½Cï¿½hï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½WM_CLOSEï¿½ð”­sï¿½ï¿½ï¿½ï¿½Ì‚Å‰iï¿½vï¿½ï¿½ï¿½[ï¿½vï¿½É‚È‚ï¿½
+//		InnerStopThread();		//	ï¿½ï¿½ï¿½ï¿½ï¿½Workerï¿½ï¿½ï¿½~ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Å‚È‚ï¿½ï¿½ï¿½
+								//	WM_DESTORYï¿½ï¿½hWndï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É‚È‚ï¿½ÆAï¿½ï¿½ï¿½Ì“rï¿½[ï¿½A
+								//	ï¿½ï¿½ï¿½[ï¿½Jï¿½[ï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½ï¿½ï¿½ï¿½ï¿½é‚±ï¿½Æ‚É‚È‚ï¿½
 		return 1;
-		//	invalidate‚µ‚Ä‚¨‚¯‚ÎAƒ[ƒJ[ƒXƒŒƒbƒh‚ÍŽ©“®“I‚É‹AŠÒ‚·‚é
-		//	‹AŠÒ‚µ‚½ƒ[ƒJ[ƒXƒŒƒbƒh‚ÉWM_DESTROY‚ð”­s‚µ‚Ä‚à‚ç‚¤
+		//	invalidateï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ÎAï¿½ï¿½ï¿½[ï¿½Jï¿½[ï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½ÍŽï¿½ï¿½ï¿½ï¿½Iï¿½É‹Aï¿½Ò‚ï¿½ï¿½ï¿½
+		//	ï¿½Aï¿½Ò‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½Jï¿½[ï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½ï¿½WM_DESTROYï¿½ð”­sï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ç‚¤
 				   }
 
 	case WM_DESTROY:{
 
 		if (IsMainApp()) {
-			PostQuitMessage(0); //	ƒƒCƒ“ƒEƒBƒ“ƒhƒD‚¾‚Á‚½‚È‚çI—¹‚·‚é
+			PostQuitMessage(0); //	ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		}
 		break;
 					}

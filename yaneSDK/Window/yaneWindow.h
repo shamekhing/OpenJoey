@@ -14,47 +14,47 @@ namespace Window {
 
 class CWindowOption {
 /**
-	class CWindow ‚ÅŽw’è‚·‚é‚½‚ß‚ÌƒEƒBƒ“ƒhƒDƒIƒvƒVƒ‡ƒ“
+	class CWindow ï¿½ÅŽwï¿½è‚·ï¿½é‚½ï¿½ß‚ÌƒEï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½Iï¿½vï¿½Vï¿½ï¿½ï¿½ï¿½
 */
 public:
-	string	caption;	///	ƒLƒƒƒvƒVƒ‡ƒ“
-	string	classname;	///	ƒNƒ‰ƒX–¼(caption‚Æ“¯‚¶‚Å‚à—Ç‚¢)
-	LPCTSTR dialog;		///	ƒ_ƒCƒAƒƒO‚Ìê‡‚ÍA‚±‚±‚ÅƒŠƒ\[ƒX–¼‚ðŽw’è‚·‚ê‚Îok
+	string	caption;	///	ï¿½Lï¿½ï¿½ï¿½vï¿½Vï¿½ï¿½ï¿½ï¿½
+	string	classname;	///	ï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½(captionï¿½Æ“ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½Ç‚ï¿½)
+	LPCTSTR dialog;		///	ï¿½_ï¿½Cï¿½Aï¿½ï¿½ï¿½Oï¿½Ìê‡ï¿½ÍAï¿½ï¿½ï¿½ï¿½ï¿½Åƒï¿½ï¿½\ï¿½[ï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½wï¿½è‚·ï¿½ï¿½ï¿½ok
 		/**
-			‚±‚ê‚ðstring‚É‚µ‚Ä‚¢‚È‚¢‚Ì‚ÍA
-			MAKEINTRESOURCEƒ}ƒNƒ‚ªA’P‚ÉintŒ^‚ð‹­§“I‚ÉLPCTSTR‚ÉƒLƒƒƒXƒg‚µ‚Ä
-			::DialogBoxŠÖ”‚É“n‚·Žd—l‚É‚È‚Á‚Ä‚¢‚é‚½‚ßAstring‚É‚·‚é‚Æ
-			MAKEINTERSOURCEƒ}ƒNƒ‚ªŽg‚¦‚È‚¢‚©‚çB
+			ï¿½ï¿½ï¿½ï¿½ï¿½stringï¿½É‚ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½Ì‚ÍA
+			MAKEINTRESOURCEï¿½}ï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Pï¿½ï¿½intï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½LPCTSTRï¿½ÉƒLï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½
+			::DialogBoxï¿½Öï¿½ï¿½É“nï¿½ï¿½ï¿½dï¿½lï¿½É‚È‚ï¿½ï¿½Ä‚ï¿½ï¿½é‚½ï¿½ßAstringï¿½É‚ï¿½ï¿½ï¿½ï¿½
+			MAKEINTERSOURCEï¿½}ï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½B
 
-			IWindow”h¶ƒNƒ‰ƒX‚ÌOnPreCreate‚ðƒI[ƒo[ƒ‰ƒCƒh‚µ‚ÄA
+			IWindowï¿½hï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½OnPreCreateï¿½ï¿½ï¿½Iï¿½[ï¿½oï¿½[ï¿½ï¿½ï¿½Cï¿½hï¿½ï¿½ï¿½ÄA
 
 			virtual LRESULT OnPreCreate(CWindowOption &opt){
-				opt.dialog = MAKEINTRESOURCE(IDD_DIALOG1);	//	ƒ_ƒCƒAƒƒO‚È‚Ì‚¾I
+				opt.dialog = MAKEINTRESOURCE(IDD_DIALOG1);	//	ï¿½_ï¿½Cï¿½Aï¿½ï¿½ï¿½Oï¿½È‚Ì‚ï¿½ï¿½I
 				return 0;
 			}
-			‚Ì‚æ‚¤‚É‚·‚ê‚ÎAƒ_ƒCƒAƒƒO‚ð•\Ž¦‚Å‚«‚é
+			ï¿½Ì‚æ‚¤ï¿½É‚ï¿½ï¿½ï¿½ÎAï¿½_ï¿½Cï¿½Aï¿½ï¿½ï¿½Oï¿½ï¿½\ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½
 	
 		*/
 
-	int		size_x;		///	‰¡•ûŒü‚ÌƒTƒCƒY
-	int		size_y;		///	c•ûŒü‚ÌƒTƒCƒY
-	LONG	style;		///	ƒEƒBƒ“ƒhƒDƒXƒ^ƒCƒ‹‚Ì’Ç‰ÁŽw’è	
+	int		size_x;		///	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÌƒTï¿½Cï¿½Y
+	int		size_y;		///	ï¿½cï¿½ï¿½ï¿½ï¿½ï¿½ÌƒTï¿½Cï¿½Y
+	LONG	style;		///	ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½Xï¿½^ï¿½Cï¿½ï¿½ï¿½Ì’Ç‰ï¿½ï¿½wï¿½ï¿½	
 
-	bool	bCentering;	///	ƒEƒBƒ“ƒhƒD‚Í‰æ–Ê‘S‘Ì‚É‘Î‚µ‚ÄƒZƒ“ƒ^ƒŠƒ“ƒO‚µ‚Ä•\Ž¦‚©
+	bool	bCentering;	///	ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½Í‰ï¿½Ê‘Sï¿½Ì‚É‘Î‚ï¿½ï¿½ÄƒZï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½Ä•\ï¿½ï¿½ï¿½ï¿½
 
 	CWindowOption() {
 		/**
-			ƒfƒBƒtƒHƒ‹ƒg‚Å‚±‚êB•K—v‚ª‚ ‚ê‚Î‘‚«Š·‚¦‚é‚×‚µ
-			caption = "‚ ‚Õ‚è‚¿‚á‚ñ";
+			ï¿½fï¿½Bï¿½tï¿½Hï¿½ï¿½ï¿½gï¿½Å‚ï¿½ï¿½ï¿½Bï¿½Kï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×‚ï¿½
+			caption = "ï¿½ï¿½ï¿½Õ‚è‚¿ï¿½ï¿½ï¿½";
 			classname = "YANEAPPLICATION";
 			style = WS_VISIBLE | WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU;
-			size_x = 640; size_y = 480;
+			size_x = 800; size_y = 600;
 			bCentering = true;
 		*/
-		caption = "‚ ‚Õ‚è‚¿‚á‚ñ";
+		caption = "ï¿½ï¿½ï¿½Õ‚è‚¿ï¿½ï¿½ï¿½";
 		classname = "YANEAPPLICATION";
 		style = WS_VISIBLE | WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU;
-		size_x = 640; size_y = 480;
+		size_x = 800; size_y = 600;
 		bCentering = true;
 		dialog = NULL;
 	}
@@ -77,9 +77,9 @@ public:
 	virtual void		ClearAllHook()=0;
 	
 	virtual void		SetResized(bool bResized)=0;
-	// DirectDraw‚É‚æ‚éƒtƒ‹ƒXƒNƒŠ[ƒ“ƒ‚[ƒh‰»‚µ‚½‚Æ‚«‚É
-	//	ƒEƒBƒ“ƒhƒD‚ªŸŽè‚ÉƒŠƒTƒCƒY‚³‚ê‚é‚Ì‚ÅA‚»‚Ì‚Æ‚«‚É’Ê’m‚µ‚Ä‚¨‚©‚È‚¢‚Æ
-	//	ƒEƒBƒ“ƒhƒDƒNƒ‰ƒX‚Ì“à•”ó‘Ô‚ÆˆÙ‚È‚é‚à‚Ì‚É‚È‚Á‚Ä‚µ‚Ü‚¤
+	// DirectDrawï¿½É‚ï¿½ï¿½tï¿½ï¿½ï¿½Xï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ï¿½
+	//	ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Éƒï¿½ï¿½Tï¿½Cï¿½Yï¿½ï¿½ï¿½ï¿½ï¿½Ì‚ÅAï¿½ï¿½ï¿½Ì‚Æ‚ï¿½ï¿½É’Ê’mï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½
+	//	ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½Nï¿½ï¿½ï¿½Xï¿½Ì“ï¿½ï¿½ï¿½ï¿½ï¿½Ô‚ÆˆÙ‚È‚ï¿½ï¿½ï¿½Ì‚É‚È‚ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½
 
 	virtual void ChangeScreen(bool bFullScr)=0;
 	virtual bool IsDialog() const=0;
@@ -89,90 +89,90 @@ public:
 
 class CWindow : public IWinHook , public IWindow{
 /**
-	‘‹‚ð¶¬‚·‚éƒNƒ‰ƒX‚Å‚·B‚±‚ÌƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒXˆê‚Â‚ªA
-	‘‹ˆê‚Â‚É‘Î‰ž‚µ‚Ü‚·Bƒ}ƒ‹ƒ`ƒEƒBƒ“ƒhƒD‚ÌƒTƒ|[ƒg‚Í‚â‚âŠÃ‚¢‚Å‚·B
-	i‚Ç‚¤‚¹ƒtƒ‹ƒXƒNƒŠ[ƒ“‚É‚È‚é‚ÆDirectDraw‚ð—p‚¢‚Ä•`‰æ‚µ‚Ä‚¢‚éˆÈãA
-	‚Ç‚¤‚µ‚æ‚¤‚à–³‚¢‚Æ‚¢‚¤˜b‚à‚ ‚écj
+	ï¿½ï¿½ï¿½ð¶ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Xï¿½Å‚ï¿½ï¿½Bï¿½ï¿½ï¿½ÌƒNï¿½ï¿½ï¿½Xï¿½ÌƒCï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½ï¿½Â‚ï¿½ï¿½A
+	ï¿½ï¿½ï¿½ï¿½Â‚É‘Î‰ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½Bï¿½}ï¿½ï¿½ï¿½`ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½ÌƒTï¿½|ï¿½[ï¿½gï¿½Í‚ï¿½ï¿½Ã‚ï¿½ï¿½Å‚ï¿½ï¿½B
+	ï¿½iï¿½Ç‚ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½Xï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½É‚È‚ï¿½ï¿½DirectDrawï¿½ï¿½pï¿½ï¿½ï¿½Ä•`ï¿½æ‚µï¿½Ä‚ï¿½ï¿½ï¿½Èï¿½A
+	ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½æ‚¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ï¿½ï¿½bï¿½ï¿½ï¿½ï¿½ï¿½ï¿½cï¿½j
 
-	™@•`‰æ‚Ì‚½‚ß‚É
+	ï¿½ï¿½ï¿½@ï¿½`ï¿½ï¿½Ì‚ï¿½ï¿½ß‚ï¿½
 
-	class CFastDraw‚ðŽg‚Á‚½•`‰æ‚ðs‚È‚¤ê‡A
-	‚»‚¿‚ç‚àŽQÆ‚µ‚Ä‚­‚¾‚³‚¢BCFastDraw‚ðŽg‚Á‚Ä‚¢‚é‚Æ‚«‚É
-	‰æ–ÊƒTƒCƒY‚ð•ÏX‚·‚éê‡ACFastDraw::ChangeDisplayMode‚ð
-	ŒÄ‚Ño‚µ‚Ä‚­‚¾‚³‚¢B
+	class CFastDrawï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½`ï¿½ï¿½ï¿½ï¿½sï¿½È‚ï¿½ï¿½ê‡ï¿½A
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Qï¿½Æ‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½BCFastDrawï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ï¿½
+	ï¿½ï¿½ÊƒTï¿½Cï¿½Yï¿½ï¿½ÏXï¿½ï¿½ï¿½ï¿½ê‡ï¿½ACFastDraw::ChangeDisplayModeï¿½ï¿½
+	ï¿½Ä‚Ñoï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
 
 */
 public:
-	/// ‘‹‚ðì‚éBeƒEƒBƒ“ƒhƒE‚ª‘¶Ý‚·‚é‚Ì‚È‚ç‚ÎÅŒã‚Ìƒpƒ‰ƒ[ƒ^‚ÅŽw’è‚·‚é‚±‚Æ
+	/// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Bï¿½eï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Eï¿½ï¿½ï¿½ï¿½ï¿½Ý‚ï¿½ï¿½ï¿½Ì‚È‚ï¿½ÎÅŒï¿½Ìƒpï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^ï¿½ÅŽwï¿½è‚·ï¿½é‚±ï¿½ï¿½
 	LRESULT		Create(CWindowOption& opt,HWND lpParent=NULL);
 
-	HWND		GetHWnd()const { return m_hWnd; }	///	HWND‚ð•Ô‚·
+	HWND		GetHWnd()const { return m_hWnd; }	///	HWNDï¿½ï¿½Ô‚ï¿½
 
-	LRESULT		SetWindowPos(int x,int y);			///	ƒEƒBƒ“ƒhƒD‚ðˆÚ“®
+	LRESULT		SetWindowPos(int x,int y);			///	ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½ï¿½ï¿½Ú“ï¿½
 
 	void		ChangeWindowStyle();
-	///	Œ»Ý‚ÌƒXƒNƒŠ[ƒ“ƒ‚[ƒhiƒtƒ‹ƒXƒNƒŠ[ƒ“ or ƒEƒBƒ“ƒhƒDƒ‚[ƒhj—p‚É
-	///	WindowStyle‚ð•ÏX‚·‚é
+	///	ï¿½ï¿½ï¿½Ý‚ÌƒXï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½hï¿½iï¿½tï¿½ï¿½ï¿½Xï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ or ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½ï¿½ï¿½[ï¿½hï¿½jï¿½pï¿½ï¿½
+	///	WindowStyleï¿½ï¿½ÏXï¿½ï¿½ï¿½ï¿½
 
-	LRESULT		Resize(int sx,int sy);				///	‘‹‚ÌƒŠƒTƒCƒY
+	LRESULT		Resize(int sx,int sy);				///	ï¿½ï¿½ï¿½Ìƒï¿½ï¿½Tï¿½Cï¿½Y
 
-	//	–{—ˆ‚Ístatic‚ÈŠÖ”‚È‚Ì‚¾‚ªIWindowŒo—R‚ÅƒAƒNƒZƒX‚·‚é•K—v‚ª‚ ‚é‚½‚ßA‚±‚¤‚È‚é
+	//	ï¿½{ï¿½ï¿½ï¿½ï¿½staticï¿½ÈŠÖï¿½ï¿½È‚Ì‚ï¿½ï¿½ï¿½IWindowï¿½oï¿½Rï¿½ÅƒAï¿½Nï¿½Zï¿½Xï¿½ï¿½ï¿½ï¿½Kï¿½vï¿½ï¿½ï¿½ï¿½ï¿½é‚½ï¿½ßAï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
 	virtual void ChangeScreen(bool bFullScr){
 		g_bFullScreen = bFullScr;
 	}
 	/**
-		ƒtƒ‹ƒXƒNƒŠ[ƒ“ÌƒEƒBƒ“ƒhƒDƒ‚[ƒh‚ÌØ‚è‘Ö‚¦‚ª”­¶‚µ‚½ê‡A
-		‚±‚ÌŠÖ”‚ðŒÄ‚Ño‚µ‚½‚ ‚Æ‚»‚ê‚¼‚ê‚ÌƒEƒBƒ“ƒhƒD‚ÉŠÖ‚µ‚Ä
-		ChangeWindowStyle‚ðŒÄ‚Ño‚·‚±‚Æ
-		‚½‚¾‚µAƒtƒ‹ƒXƒNƒŠ[ƒ“Žž‚Ìƒ}ƒ‹ƒ`ƒEƒBƒ“ƒhƒD‚ÍDirectDraw‚ðŽg‚¤ŠÖŒWãA
-		”ñƒTƒ|[ƒg
+		ï¿½tï¿½ï¿½ï¿½Xï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ÌƒEï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½ï¿½ï¿½[ï¿½hï¿½ÌØ‚ï¿½Ö‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½A
+		ï¿½ï¿½ï¿½ÌŠÖï¿½ï¿½ï¿½ï¿½Ä‚Ñoï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ê‚¼ï¿½ï¿½ÌƒEï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½ÉŠÖ‚ï¿½ï¿½ï¿½
+		ChangeWindowStyleï¿½ï¿½ï¿½Ä‚Ñoï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½tï¿½ï¿½ï¿½Xï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒ}ï¿½ï¿½ï¿½`ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½ï¿½DirectDrawï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ÖŒWï¿½ï¿½A
+		ï¿½ï¿½Tï¿½|ï¿½[ï¿½g
 	*/
 
 	void		SetSize(int sx,int sy);
 	/**
-		‘‹‚ÌƒŠƒTƒCƒYiÝ’è‚Ì‚Ý‚ÅŽÀÛ‚É•ÏX‚Í‚µ‚È‚¢j
-		‚È‚º‚±‚ñ‚È‚à‚Ì‚ª•K—v‚É‚È‚é‚©‚Æ‚¢‚¤‚ÆAResizeËChangeWindowStyle‚Æ
-		ŽÀs‚·‚é‚Æ‚Q‰ñƒEƒBƒ“ƒhƒDƒTƒCƒY‚Ì•ÏX‚ðs‚È‚¤‚±‚Æ‚É‚È‚Á‚ÄA
-		‚»‚Ìƒ‚[ƒVƒ‡ƒ“‚ªŒ©‚¦‚Ä¢‚é‚©‚çB
-		SetSize@Ë@ChangeWindowStyle‚È‚ç‚ÎˆÀ‘SB
+		ï¿½ï¿½ï¿½Ìƒï¿½ï¿½Tï¿½Cï¿½Yï¿½iï¿½Ý’ï¿½Ì‚Ý‚ÅŽï¿½ï¿½Û‚É•ÏXï¿½Í‚ï¿½ï¿½È‚ï¿½ï¿½j
+		ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½Ì‚ï¿½ï¿½Kï¿½vï¿½É‚È‚é‚©ï¿½Æ‚ï¿½ï¿½ï¿½ï¿½ÆAResizeï¿½ï¿½ChangeWindowStyleï¿½ï¿½
+		ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½Æ‚Qï¿½ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½Tï¿½Cï¿½Yï¿½Ì•ÏXï¿½ï¿½ï¿½sï¿½È‚ï¿½ï¿½ï¿½ï¿½Æ‚É‚È‚ï¿½ï¿½ÄA
+		ï¿½ï¿½ï¿½Ìƒï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½ï¿½é‚©ï¿½ï¿½B
+		SetSizeï¿½@ï¿½Ë@ChangeWindowStyleï¿½È‚ï¿½Îˆï¿½ï¿½Sï¿½B
 	*/
 
 	///		MouseLayer
 	void	UseMouseLayer(bool bUse);
-	///	ƒ\ƒtƒgƒEƒFƒAƒJ[ƒ\ƒ‹‚Ì‚½‚ß‚ÉƒJ[ƒ\ƒ‹‚ðÁ‚·
+	///	ï¿½\ï¿½tï¿½gï¿½Eï¿½Fï¿½Aï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ß‚ÉƒJï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	void	ShowCursor(bool bShow);
-	///	ƒn[ƒhƒEƒFƒAƒ}ƒEƒXƒJ[ƒ\ƒ‹‚Ì•\Ž¦^”ñ•\Ž¦
+	///	ï¿½nï¿½[ï¿½hï¿½Eï¿½Fï¿½Aï¿½}ï¿½Eï¿½Xï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½Ì•\ï¿½ï¿½ï¿½^ï¿½ï¿½\ï¿½ï¿½
 	bool	IsShowCursor();
-	///	ƒn[ƒhƒEƒFƒAƒ}ƒEƒXƒJ[ƒ\ƒ‹‚Ì•\Ž¦^”ñ•\Ž¦‚ðŽæ“¾
+	///	ï¿½nï¿½[ï¿½hï¿½Eï¿½Fï¿½Aï¿½}ï¿½Eï¿½Xï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½Ì•\ï¿½ï¿½ï¿½^ï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾
 
-	///	¶¬‚µ‚Ä‚¢‚é‚Ì‚Íƒ_ƒCƒAƒƒO‚©H
+	///	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Ì‚Íƒ_ï¿½Cï¿½Aï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½H
 	virtual bool IsDialog() const
 	{	return const_cast<CWindow*>(this)->GetWindowOption()->dialog!=NULL; }
 
 	///		Property
-	DWORD		m_dwFillColor;		///	”wŒiF
+	DWORD		m_dwFillColor;		///	ï¿½wï¿½iï¿½F
 
 	CWindowOption* GetWindowOption() { return &m_opt; }
-	///	WindowƒIƒvƒVƒ‡ƒ“‚ÌŽæ“¾BƒEƒBƒ“ƒhƒD¶¬‘O‚È‚ç‚Î‘‚«Š·‚¦‚Ä‚à—Ç‚¢B
+	///	Windowï¿½Iï¿½vï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ÌŽæ“¾ï¿½Bï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½È‚ï¿½Îï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ç‚ï¿½ï¿½B
 
 	volatile bool	IsMinimized() { return m_bMinimized; }
-	///	Å¬‰»‚³‚ê‚Ä‚¢‚é‚©H
+	///	ï¿½Åï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½é‚©ï¿½H
 
-	///	ƒƒbƒZ[ƒW‚ðƒtƒbƒN‚·‚é‚½‚ß‚Ìƒ|ƒCƒ“ƒ^ƒŠƒXƒg
-	///	iclass IWinHook ‚ÌƒxƒNƒ^j
+	///	ï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½ï¿½ï¿½tï¿½bï¿½Nï¿½ï¿½ï¿½é‚½ï¿½ß‚Ìƒ|ï¿½Cï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½Xï¿½g
+	///	ï¿½iclass IWinHook ï¿½Ìƒxï¿½Nï¿½^ï¿½j
 	CWinHookList* GetHookList() { return &m_HookPtrList; }
 
-	///	ƒƒbƒZ[ƒW‚ðƒtƒbƒN‚·‚é‚½‚ß‚Ìƒ|ƒCƒ“ƒ^ƒŠƒXƒg‚ðƒNƒŠƒA‚·‚é
+	///	ï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½ï¿½ï¿½tï¿½bï¿½Nï¿½ï¿½ï¿½é‚½ï¿½ß‚Ìƒ|ï¿½Cï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½
 	void	ClearAllHook() { m_HookPtrList.Clear(); }
 
 	CWindow();
 	virtual ~CWindow();
 
 	/**
-		 ƒƒjƒ…[‚Ì‘¶Ý‚ðƒ`ƒFƒbƒN‚µAƒƒjƒ…[‚ª‚ ‚é‚Ì‚È‚ç‚Î
-		“à•”ƒtƒ‰ƒO(m_bUseMenu)‚ðXV‚·‚éB
-		“®“I‚Éƒƒjƒ…[‚ðŽæ‚èŠO‚µ‚µ‚½‚Æ‚«‚ÉA‚±‚ÌƒNƒ‰ƒX‚É
-		‚»‚ê‚ð”½‰f‚³‚¹‚é‚Ì‚ÉŽg‚¤
+		 ï¿½ï¿½ï¿½jï¿½ï¿½ï¿½[ï¿½Ì‘ï¿½ï¿½Ý‚ï¿½ï¿½`ï¿½Fï¿½bï¿½Nï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½jï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚È‚ï¿½ï¿½
+		ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½O(m_bUseMenu)ï¿½ï¿½ï¿½Xï¿½Vï¿½ï¿½ï¿½ï¿½B
+		ï¿½ï¿½ï¿½Iï¿½Éƒï¿½ï¿½jï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ÉAï¿½ï¿½ï¿½ÌƒNï¿½ï¿½ï¿½Xï¿½ï¿½
+		ï¿½ï¿½ï¿½ï¿½ð”½‰fï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚ÉŽgï¿½ï¿½
 	*/
 	void CheckMenu() {
 		if(m_hWnd!=NULL&&::GetMenu(m_hWnd)!=NULL){
@@ -182,72 +182,72 @@ public:
 		}
 	}
 
-	///		‚»‚Ì‘¼
+	///		ï¿½ï¿½ï¿½Ì‘ï¿½
 	static void	GetScreenSize(int &x,int &y);
-	///	Œ»Ý‚Ì‰æ–Ê‘S‘Ì‚ÌƒTƒCƒY‚ÌŽæ“¾
+	///	ï¿½ï¿½ï¿½Ý‚Ì‰ï¿½Ê‘Sï¿½Ì‚ÌƒTï¿½Cï¿½Yï¿½ÌŽæ“¾
 
 	static bool	IsFullScreen() { return g_bFullScreen; }
-	///	ƒtƒ‹ƒXƒNƒŠ[ƒ“‚©H
+	///	ï¿½tï¿½ï¿½ï¿½Xï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½H
 
 	virtual void		SetResized(bool bResized) { m_bResized = true; }
 	/**
-		DirectDraw‚É‚æ‚éƒtƒ‹ƒXƒNƒŠ[ƒ“ƒ‚[ƒh‰»‚µ‚½‚Æ‚«‚É
-		ƒEƒBƒ“ƒhƒD‚ªŸŽè‚ÉƒŠƒTƒCƒY‚³‚ê‚é‚Ì‚ÅA‚»‚Ì‚Æ‚«‚É’Ê’m‚µ‚Ä‚¨‚©‚È‚¢‚Æ
-		ƒEƒBƒ“ƒhƒDƒNƒ‰ƒX‚Ì“à•”ó‘Ô‚ÆˆÙ‚È‚é‚à‚Ì‚É‚È‚Á‚Ä‚µ‚Ü‚¤
-		(CFastDraw‚©‚çŒÄ‚Ño‚µ‚ÄŽg‚¤)
+		DirectDrawï¿½É‚ï¿½ï¿½tï¿½ï¿½ï¿½Xï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ï¿½
+		ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Éƒï¿½ï¿½Tï¿½Cï¿½Yï¿½ï¿½ï¿½ï¿½ï¿½Ì‚ÅAï¿½ï¿½ï¿½Ì‚Æ‚ï¿½ï¿½É’Ê’mï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½
+		ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½Nï¿½ï¿½ï¿½Xï¿½Ì“ï¿½ï¿½ï¿½ï¿½ï¿½Ô‚ÆˆÙ‚È‚ï¿½ï¿½ï¿½Ì‚É‚È‚ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½
+		(CFastDrawï¿½ï¿½ï¿½ï¿½Ä‚Ñoï¿½ï¿½ï¿½ÄŽgï¿½ï¿½)
 	*/
 
 protected:
-	HWND		m_hWnd;				//	ƒEƒBƒ“ƒhƒDƒnƒ“ƒhƒ‹
-	bool		m_bFullScreen;		//	Œ»Ý‚Ç‚¿‚ç‚Ìƒ‚[ƒh‚É‡‚í‚¹‚Ä‘‹‚ðì‚Á‚Ä‚¢‚é‚Ì‚©H
-	CWindowOption	m_opt;			//	ƒEƒBƒ“ƒhƒDƒIƒvƒVƒ‡ƒ“
-	bool		m_bCentering;		//	ƒEƒBƒ“ƒhƒD‚Í‰æ–Ê‘S‘Ì‚É‘Î‚µ‚ÄƒZƒ“ƒ^ƒŠƒ“ƒO‚µ‚Ä•\Ž¦‚©(default:true)
+	HWND		m_hWnd;				//	ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½nï¿½ï¿½ï¿½hï¿½ï¿½
+	bool		m_bFullScreen;		//	ï¿½ï¿½ï¿½Ý‚Ç‚ï¿½ï¿½ï¿½Ìƒï¿½ï¿½[ï¿½hï¿½Éï¿½ï¿½í‚¹ï¿½Ä‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½H
+	CWindowOption	m_opt;			//	ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½Iï¿½vï¿½Vï¿½ï¿½ï¿½ï¿½
+	bool		m_bCentering;		//	ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½Í‰ï¿½Ê‘Sï¿½Ì‚É‘Î‚ï¿½ï¿½ÄƒZï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½Ä•\ï¿½ï¿½ï¿½ï¿½(default:true)
 
 	static LRESULT CALLBACK gWndProc(HWND,UINT,WPARAM,LPARAM);
 	static LRESULT CALLBACK gDlgProc(HWND,UINT,WPARAM,LPARAM);
 	LRESULT Dispatch(HWND,UINT,WPARAM,LPARAM);	//	windows message dispatcher
 
-	LRESULT		Initializer();	//	‹N“®ŒãAˆê“x‚¾‚¯ƒEƒBƒ“ƒhƒDƒNƒ‰ƒX‚ð“o˜^‚·‚é
-	//	ƒtƒbƒN‚µ‚Ä‚¢‚é‚·‚×‚Ä‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚Ö‚Ìƒ`ƒFƒCƒ“
+	LRESULT		Initializer();	//	ï¿½Nï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½oï¿½^ï¿½ï¿½ï¿½ï¿½
+	//	ï¿½tï¿½bï¿½Nï¿½ï¿½ï¿½Ä‚ï¿½ï¿½é‚·ï¿½×‚Ä‚ÌƒCï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½Ö‚Ìƒ`ï¿½Fï¿½Cï¿½ï¿½
 	CWinHookList	m_HookPtrList;
 
 	////////////////////////////////////////////////////////////////////////////
-	//	ƒ}ƒEƒXƒJ[ƒ\ƒ‹‚ÌOn/Off‚ÍAƒEƒBƒ“ƒhƒD‚É‘Î‚·‚é‘®«‚È‚Ì‚Å
-	//	ƒEƒBƒ“ƒhƒDƒNƒ‰ƒX‚ª’S‚¤‚×‚«
+	//	ï¿½}ï¿½Eï¿½Xï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½On/Offï¿½ÍAï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½É‘Î‚ï¿½ï¿½é‘®ï¿½ï¿½ï¿½È‚Ì‚ï¿½
+	//	ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½Sï¿½ï¿½ï¿½×‚ï¿½
 //	void	InnerShowCursor(bool bShow);
-	bool	m_bShowCursor;			//	ƒ}ƒEƒXƒJ[ƒ\ƒ‹‚Ì•\Ž¦ó‘Ô
-	bool	m_bUseMouseLayer;		//	ƒ\ƒtƒgƒEƒFƒAƒ}ƒEƒXƒJ[ƒ\ƒ‹‚ðŽg‚¤‚©H
+	bool	m_bShowCursor;			//	ï¿½}ï¿½Eï¿½Xï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½Ì•\ï¿½ï¿½ï¿½ï¿½ï¿½
+	bool	m_bUseMouseLayer;		//	ï¿½\ï¿½tï¿½gï¿½Eï¿½Fï¿½Aï¿½}ï¿½Eï¿½Xï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½H
 
-	//	ƒEƒBƒ“ƒhƒDƒTƒCƒY‚Ìadjust
+	//	ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½Tï¿½Cï¿½Yï¿½ï¿½adjust
 	void	InnerAdjustWindow(RECT&,CWindowOption&);
 
-	//	ƒƒjƒ…[•t‚«ƒEƒBƒ“ƒhƒD‚©H
+	//	ï¿½ï¿½ï¿½jï¿½ï¿½ï¿½[ï¿½tï¿½ï¿½ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½ï¿½ï¿½H
 	bool	m_bUseMenu;
 
-	//	ChangeWindowStyleÌSetSize‚Ìƒtƒ‰ƒO
+	//	ChangeWindowStyleï¿½ï¿½SetSizeï¿½Ìƒtï¿½ï¿½ï¿½O
 	bool	m_bResized;
 
-	//	WindowsŠî–{‘‹ƒ^ƒCƒv‚ðì¬‚µ‚½‚Æ‚«‚ÉAƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰‚ð
-	//	ƒtƒbƒN‚·‚é‚Ì‚ÅA‚»‚ÌŠÖ”ƒ|ƒCƒ“ƒ^‚ð•Û‘¶‚µ‚Ä‚¨‚­•K—v‚ª‚ ‚éB
+	//	Windowsï¿½ï¿½{ï¿½ï¿½ï¿½^ï¿½Cï¿½vï¿½ï¿½ï¿½ì¬ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ÉAï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½nï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½
+	//	ï¿½tï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½Ì‚ÅAï¿½ï¿½ï¿½ÌŠÖï¿½ï¿½|ï¿½Cï¿½ï¿½ï¿½^ï¿½ï¿½Û‘ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½Kï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
 	WNDPROC	m_pWndProc;
 
-	//	Å¬‰»‚³‚ê‚Ä‚¢‚é‚©H
+	//	ï¿½Åï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½é‚©ï¿½H
 	volatile bool	m_bMinimized;
 
 	bool IsWindowsClassName(const string& strClassName);
-	//	Windows‚Å—pˆÓ‚³‚ê‚Ä‚¢‚éWindowƒNƒ‰ƒX–¼‚©‚Ç‚¤‚©‚ð’²‚×‚é
+	//	Windowsï¿½Å—pï¿½Ó‚ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Windowï¿½Nï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½ð’²‚×‚ï¿½
 
 /*
-	//	ƒƒjƒ…[‚ªŠmŽÀ‚É‘¶Ý‚·‚é‚±‚Æ‚ðŽ–‘O‚É“`‚¦‚Ä‚¨‚¯‚Î
-	//	¶¬Žž‚É³Šm‚ÈƒEƒBƒ“ƒhƒDƒTƒCƒY‚ª‚¢‚«‚È‚è‹‚Ü‚é
+	//	ï¿½ï¿½ï¿½jï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½mï¿½ï¿½ï¿½É‘ï¿½ï¿½Ý‚ï¿½ï¿½é‚±ï¿½Æ‚ï¿½ï¿½ï¿½ï¿½Oï¿½É“`ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½
+	//	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Éï¿½ï¿½mï¿½ÈƒEï¿½Bï¿½ï¿½ï¿½hï¿½Dï¿½Tï¿½Cï¿½Yï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚è‹ï¿½Ü‚ï¿½
 	void		UseMenu(bool bUseMenu) { m_bUseMenu = bUseMenu; }
-*/	//	Ž©“®“I‚É”»’è‚·‚é‚æ‚¤‚É‚µ‚½
+*/	//	ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½É”ï¿½ï¿½è‚·ï¿½ï¿½æ‚¤ï¿½É‚ï¿½ï¿½ï¿½
 
-	static	bool g_bFullScreen;			//	ƒtƒ‹ƒXƒNƒŠ[ƒ“ƒ‚[ƒh‚È‚Ì‚©H
+	static	bool g_bFullScreen;			//	ï¿½tï¿½ï¿½ï¿½Xï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½hï¿½È‚Ì‚ï¿½ï¿½H
 
 	static CCriticalSection m_cs;
 	static CCriticalSection* GetCriticalSection() { return &m_cs; }
-	//	ª‚±‚Ìã‚Ìstaticƒƒ“ƒoŒQ‚ÉƒAƒNƒZƒX‚·‚é‚½‚ß‚ÌƒNƒŠƒeƒBƒJƒ‹ƒZƒNƒVƒ‡ƒ“
+	//	ï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½staticï¿½ï¿½ï¿½ï¿½ï¿½oï¿½Qï¿½ÉƒAï¿½Nï¿½Zï¿½Xï¿½ï¿½ï¿½é‚½ï¿½ß‚ÌƒNï¿½ï¿½ï¿½eï¿½Bï¿½Jï¿½ï¿½ï¿½Zï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½
 
 	// override from CWinHook
 	virtual LRESULT WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam);
@@ -255,83 +255,83 @@ protected:
 
 class CDialogHelper {
 /**
-	ƒ_ƒCƒAƒƒO‚ðˆµ‚¤‚Æ‚«‚Ìƒwƒ‹ƒpƒNƒ‰ƒX
+	ï¿½_ï¿½Cï¿½Aï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½Ìƒwï¿½ï¿½ï¿½pï¿½Nï¿½ï¿½ï¿½X
 */
 public:
 	CDialogHelper(IWindow *pWin=NULL) : m_pWindow(pWin){ hook(pWin); }
 	~CDialogHelper() { unhook(GetWindow()); }
 
-	///	ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Å“n‚µ‚»‚Ñ‚ê‚½Žž‚Ì‚½‚ß‚Ìsetter / getter
+	///	ï¿½Rï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½^ï¿½Å“nï¿½ï¿½ï¿½ï¿½ï¿½Ñ‚ê‚½ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ß‚ï¿½setter / getter
 	IWindow* GetWindow() { return m_pWindow; }
 	void SetWindow(IWindow*pWin) { unhook(m_pWindow); m_pWindow = pWin; hook(pWin); }
 
-	///	HWNDŽæ“¾
+	///	HWNDï¿½æ“¾
 	HWND	GetHWnd() { return GetWindow()->GetHWnd();}
 
-	///	‚ ‚éƒRƒ“ƒgƒ[ƒ‹‚ÌHWnd‚ð“¾‚é
+	///	ï¿½ï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½HWndï¿½ð“¾‚ï¿½
 	HWND	GetHWnd(int nEditControlID) { return ::GetDlgItem(GetHWnd(),nEditControlID);}
 
-	///	ƒGƒfƒBƒbƒgƒRƒ“ƒgƒ[ƒ‹etc..‚©‚çA‚»‚±‚É•\Ž¦‚³‚ê‚Ä‚¢‚éƒeƒLƒXƒg‚ðŽæ“¾‚·‚é
+	///	ï¿½Gï¿½fï¿½Bï¿½bï¿½gï¿½Rï¿½ï¿½ï¿½gï¿½ï¿½ï¿½[ï¿½ï¿½etc..ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½É•\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½eï¿½Lï¿½Xï¿½gï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½
 	///	(StaticText,Edit Control)
 	string	GetText(int nEditControlID);
 
-	///	ƒGƒfƒBƒbƒgƒRƒ“ƒgƒ[ƒ‹etc..‚É‘Î‚µ‚ÄA‚»‚±‚ÉƒeƒLƒXƒg•¶Žš—ñ‚ðÝ’è‚·‚é
+	///	ï¿½Gï¿½fï¿½Bï¿½bï¿½gï¿½Rï¿½ï¿½ï¿½gï¿½ï¿½ï¿½[ï¿½ï¿½etc..ï¿½É‘Î‚ï¿½ï¿½ÄAï¿½ï¿½ï¿½ï¿½ï¿½Éƒeï¿½Lï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý’è‚·ï¿½ï¿½
 	///	(StaticText,Edit Control)
 	LRESULT	SetText(int nEditControlID,const string& str);
 
-	///	ƒ{ƒ^ƒ“ó‘Ô‚ÌŽæ“¾
+	///	ï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½Ô‚ÌŽæ“¾
 	///	(CheckBox,RadioButton)
 	/**
-		-1:‚»‚Ìƒ{ƒ^ƒ“‚Í‘¶Ý‚µ‚È‚¢
-		0:ƒ{ƒ^ƒ“‚Ìƒ`ƒFƒbƒN‚ÍƒIƒt‚É‚È‚Á‚Ä‚¢‚Ü‚·B 
-		1:ƒ{ƒ^ƒ“‚Ìƒ`ƒFƒbƒN‚ÍƒIƒ“‚É‚È‚Á‚Ä‚¢‚Ü‚·B 
-		2:ƒ{ƒ^ƒ“‚ÍƒOƒŒƒC•\Ž¦i•sŠm’èj‚Ìó‘Ô‚Å‚·B
-		ƒ{ƒ^ƒ“‚ªABS_3STATE ƒXƒ^ƒCƒ‹‚Ü‚½‚Í BS_AUTO3STATE ƒXƒ^ƒCƒ‹‚ðŽ‚Â‚Æ‚«‚É‚¾‚¯“K—p‚³‚ê‚Ü‚·B 
+		-1:ï¿½ï¿½ï¿½Ìƒ{ï¿½^ï¿½ï¿½ï¿½Í‘ï¿½ï¿½Ý‚ï¿½ï¿½È‚ï¿½
+		0:ï¿½{ï¿½^ï¿½ï¿½ï¿½Ìƒ`ï¿½Fï¿½bï¿½Nï¿½ÍƒIï¿½tï¿½É‚È‚ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½B 
+		1:ï¿½{ï¿½^ï¿½ï¿½ï¿½Ìƒ`ï¿½Fï¿½bï¿½Nï¿½ÍƒIï¿½ï¿½ï¿½É‚È‚ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½B 
+		2:ï¿½{ï¿½^ï¿½ï¿½ï¿½ÍƒOï¿½ï¿½ï¿½Cï¿½\ï¿½ï¿½ï¿½iï¿½sï¿½mï¿½ï¿½jï¿½Ìï¿½Ô‚Å‚ï¿½ï¿½B
+		ï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ABS_3STATE ï¿½Xï¿½^ï¿½Cï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ BS_AUTO3STATE ï¿½Xï¿½^ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â‚Æ‚ï¿½ï¿½É‚ï¿½ï¿½ï¿½ï¿½Kï¿½pï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B 
 	*/
 	LRESULT	GetCheck(int nEditControlID);
 
-	///	ƒ{ƒ^ƒ“‚Éƒ`ƒFƒbƒN‚ð“ü‚ê‚é
+	///	ï¿½{ï¿½^ï¿½ï¿½ï¿½Éƒ`ï¿½Fï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	///	(CheckBox,RadioButton)
 	/**
 		nCheck:
-		0:ƒ{ƒ^ƒ“‚Ìƒ`ƒFƒbƒN‚ÍƒIƒt‚É
-		1:ƒ{ƒ^ƒ“‚Ìƒ`ƒFƒbƒN‚ÍƒIƒ“‚É
-		2:ƒ{ƒ^ƒ“‚ÍƒOƒŒƒC•\Ž¦i•sŠm’èj‚Ìó‘Ô‚É
+		0:ï¿½{ï¿½^ï¿½ï¿½ï¿½Ìƒ`ï¿½Fï¿½bï¿½Nï¿½ÍƒIï¿½tï¿½ï¿½
+		1:ï¿½{ï¿½^ï¿½ï¿½ï¿½Ìƒ`ï¿½Fï¿½bï¿½Nï¿½ÍƒIï¿½ï¿½ï¿½ï¿½
+		2:ï¿½{ï¿½^ï¿½ï¿½ï¿½ÍƒOï¿½ï¿½ï¿½Cï¿½\ï¿½ï¿½ï¿½iï¿½sï¿½mï¿½ï¿½jï¿½Ìï¿½Ô‚ï¿½
 	*/
 	LRESULT SetCheck(int nEditControlID,int nCheck=1);
 
 	/**
-		ƒ{ƒ^ƒ““™‚Í‰Ÿ‚µ‰º‚°î•ñ‚ª—ˆ‚é‚Ì‚ÅA“Á’è‚ÌƒƒbƒZ[ƒW‚ð
-		hook‚·‚éŒ`‚Åî•ñ‚ðŽæ“¾‚·‚é
+		ï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½Í‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ñ‚ª—ï¿½ï¿½ï¿½Ì‚ÅAï¿½ï¿½ï¿½ï¿½Ìƒï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½ï¿½
+		hookï¿½ï¿½ï¿½ï¿½`ï¿½Åï¿½ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½
 
-		—á)
-		ƒ{ƒ^ƒ“‚È‚ç‚Î
+		ï¿½ï¿½)
+		ï¿½{ï¿½^ï¿½ï¿½ï¿½È‚ï¿½ï¿½
 
 			uMsg = WM_COMMAND , wParam = nEditControl
-		‚¾‚©‚çA‚±‚Ì‚æ‚¤‚É
-		Ž–‘O‚ÉuMsg‚ÆwParam‚ðƒyƒA‚É‚µ‚ÄƒƒbƒZ[ƒWdispatcher‚É
-		“o˜^‚µ‚Ä‚¨‚«A‚ ‚Æ‚Å‰ðÍƒLƒ…[‚Ìƒf[ƒ^‚ð’²‚×‚é‚Æ—Ç‚¢
+		ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Ì‚æ‚¤ï¿½ï¿½
+		ï¿½ï¿½ï¿½Oï¿½ï¿½uMsgï¿½ï¿½wParamï¿½ï¿½ï¿½yï¿½Aï¿½É‚ï¿½ï¿½Äƒï¿½ï¿½bï¿½Zï¿½[ï¿½Wdispatcherï¿½ï¿½
+		ï¿½oï¿½^ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Æ‚Å‰ï¿½ÍƒLï¿½ï¿½ï¿½[ï¿½Ìƒfï¿½[ï¿½^ï¿½ð’²‚×‚ï¿½Æ—Ç‚ï¿½
 
-		Ë class CMessagePooler‚àŽQÆ‚Ì‚±‚ÆB
+		ï¿½ï¿½ class CMessagePoolerï¿½ï¿½ï¿½Qï¿½Æ‚Ì‚ï¿½ï¿½ÆB
 	*/
 	CMessagePooler* GetPooler() { return &m_vPooler; }
 
 	/**
-		HookŒn‚ÍAŽ¯•ÊŽq‚ª–ß‚é‚Ì‚ÅAGetPoolInfo‚Ìˆø”‚Æ‚µ‚Ä
-		“n‚µ‚ÄAƒv[ƒ‹‚³‚ê‚Ä‚¢‚éî•ñ‚ðŽæ“¾‚µ‚ÄŽg‚¤
+		Hookï¿½nï¿½ÍAï¿½ï¿½ï¿½ÊŽqï¿½ï¿½ï¿½ß‚ï¿½Ì‚ÅAGetPoolInfoï¿½Ìˆï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ï¿½
+		ï¿½nï¿½ï¿½ï¿½ÄAï¿½vï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ÄŽgï¿½ï¿½
 	*/
 
 	int	HookButtonOnClick(int nEditControl)
 	{	return GetPooler()->SetPoolData(WM_COMMAND,nEditControl,true,0,false); }
 	/**
-			ƒ{ƒ^ƒ“î•ñ‚Ìhook
-		—á)
+			ï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½hook
+		ï¿½ï¿½)
 			int nID = dialog.HookButtonOnClick(IDC_BUTTON1);
 			while (IsThreadValid()){
 				if (dialog.GetPoolInfo(nID)->isPool()){
-				//	ƒ{ƒ^ƒ“‚¨‚³‚ê‚Æ‚éI
+				//	ï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½I
 					dialog.GetPoolInfo(nID)->reset();
-					//	‰Ÿ‚µ‰º‚°î•ñ‚ÌƒNƒŠƒA
+					//	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÌƒNï¿½ï¿½ï¿½A
 				}
 			}
 	*/
@@ -339,39 +339,39 @@ public:
 	int	HookHScroolBar(int nEditControl)
 	{	return GetPooler()->SetPoolData(WM_HSCROLL,0,false,(LPARAM)GetHWnd(nEditControl),true);}
 	/**
-		…•½ƒXƒNƒ[ƒ‹ƒo[‚Ìhook
+		ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½oï¿½[ï¿½ï¿½hook
 
-		ƒƒbƒZ[ƒW‚ÍwParam‚É“ü‚é
-			nScrollCode = (int) LOWORD(wParam); // ƒXƒNƒ[ƒ‹ƒR[ƒh
-			nPos = (short int) HIWORD(wParam);	// ƒXƒNƒ[ƒ‹ƒ{ƒbƒNƒXi‚Â‚Ü‚Ýj‚ÌˆÊ’u
+		ï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½ï¿½wParamï¿½É“ï¿½ï¿½ï¿½
+			nScrollCode = (int) LOWORD(wParam); // ï¿½Xï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Rï¿½[ï¿½h
+			nPos = (short int) HIWORD(wParam);	// ï¿½Xï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½{ï¿½bï¿½Nï¿½Xï¿½iï¿½Â‚Ü‚Ýjï¿½ÌˆÊ’u
 	*/
 
 	int	HookVScroolBar(int nEditControl)
 	{	return GetPooler()->SetPoolData(WM_VSCROLL,0,false,(LPARAM)GetHWnd(nEditControl),true);}
 	/**
-		‚’¼ƒXƒNƒ[ƒ‹ƒo[‚Ìhook
+		ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½oï¿½[ï¿½ï¿½hook
 
-		ƒƒbƒZ[ƒW‚ÍwParam‚É“ü‚é
-			nScrollCode = (int) LOWORD(wParam); // ƒXƒNƒ[ƒ‹ƒR[ƒh
-			nPos = (short int) HIWORD(wParam);	// ƒXƒNƒ[ƒ‹ƒ{ƒbƒNƒXi‚Â‚Ü‚Ýj‚ÌˆÊ’u
+		ï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½ï¿½wParamï¿½É“ï¿½ï¿½ï¿½
+			nScrollCode = (int) LOWORD(wParam); // ï¿½Xï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Rï¿½[ï¿½h
+			nPos = (short int) HIWORD(wParam);	// ï¿½Xï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½{ï¿½bï¿½Nï¿½Xï¿½iï¿½Â‚Ü‚Ýjï¿½ÌˆÊ’u
 	*/
 
-	///	ƒXƒNƒ[ƒ‹ƒo[‚É‚ÍA‚³‚ç‚Éƒwƒ‹ƒpŠÖ”•K—v‚¾‚ë‚¤iì‚è‚©‚¯j
+	///	ï¿½Xï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½oï¿½[ï¿½É‚ÍAï¿½ï¿½ï¿½ï¿½Éƒwï¿½ï¿½ï¿½pï¿½Öï¿½ï¿½Kï¿½vï¿½ï¿½ï¿½ë‚¤ï¿½iï¿½ï¿½è‚©ï¿½ï¿½ï¿½j
 
 	CMessagePooler::CInfo* GetPoolInfo(int nID)
 	{	return GetPooler()->GetInfo(nID); }
 
-	///	---- ƒRƒ“ƒ{ƒ{ƒbƒNƒX‚ÆƒŠƒXƒgƒ{ƒbƒNƒX—p‚Ìî•ñ•ÛŽƒNƒ‰ƒX ---
+	///	---- ï¿½Rï¿½ï¿½ï¿½{ï¿½{ï¿½bï¿½Nï¿½Xï¿½Æƒï¿½ï¿½Xï¿½gï¿½{ï¿½bï¿½Nï¿½Xï¿½pï¿½Ìï¿½ï¿½ÛŽï¿½ï¿½Nï¿½ï¿½ï¿½X ---
 	/**
-		”õlFƒRƒ“ƒ{ƒ{ƒbƒNƒX‚ÍˆÈ‰º‚Ì‚RŽí—Þ‚ ‚é
-			‚PD•W€ @@@@@@@@í‚É‚‚ê‚Ä‚¢‚é @@@@@ƒGƒfƒBƒbƒg‰Â”\
-			‚QDƒhƒƒbƒvƒ_ƒEƒ“ @@@«ƒ{ƒbƒNƒX‚Å‚‚ê‚é @@@ƒGƒfƒBƒbƒg‰Â”\ 
-			‚RDƒhƒƒbƒvƒ_ƒEƒ“ƒŠƒXƒg ƒtƒH[ƒJƒX‚ª—ˆ‚é‚Æ‚‚ê‚é ƒGƒfƒBƒbƒg‹ÖŽ~iƒŠƒXƒg’†‚©‚ç‘I‘ð‚Ì‚Ýj
+		ï¿½ï¿½ï¿½lï¿½Fï¿½Rï¿½ï¿½ï¿½{ï¿½{ï¿½bï¿½Nï¿½Xï¿½ÍˆÈ‰ï¿½ï¿½Ì‚Rï¿½ï¿½Þ‚ï¿½ï¿½ï¿½
+			ï¿½Pï¿½Dï¿½Wï¿½ï¿½ ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½ï¿½Éï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½Gï¿½fï¿½Bï¿½bï¿½gï¿½Â”\
+			ï¿½Qï¿½Dï¿½hï¿½ï¿½ï¿½bï¿½vï¿½_ï¿½Eï¿½ï¿½ ï¿½@ï¿½@ï¿½@ï¿½ï¿½ï¿½{ï¿½bï¿½Nï¿½Xï¿½Åï¿½ï¿½ï¿½ï¿½ ï¿½@ï¿½@ï¿½@ï¿½Gï¿½fï¿½Bï¿½bï¿½gï¿½Â”\ 
+			ï¿½Rï¿½Dï¿½hï¿½ï¿½ï¿½bï¿½vï¿½_ï¿½Eï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½g ï¿½tï¿½Hï¿½[ï¿½Jï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æï¿½ï¿½ï¿½ï¿½ ï¿½Gï¿½fï¿½Bï¿½bï¿½gï¿½ÖŽ~ï¿½iï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½Ì‚Ýj
 
-		ƒhƒƒbƒvƒ_ƒEƒ“‚Ì‚‚³(‚‚ê‹ï‡)‚ÌÝ’èF
-			ƒŠƒ\[ƒXƒGƒfƒBƒ^‚ÌƒRƒ“ƒ{ƒ{ƒbƒNƒXƒRƒ“ƒgƒ[ƒ‹‚ÌŠG‚Ì«‚ð
-			ƒNƒŠƒbƒN‚µ‚Ä˜g‚ðo‚·B‚±‚Ì˜g‚ð‰º•ûŒü‚Éˆø‚Á’£‚Á‚Ä‚‚ê‹ï‡‚ð’²®B
-			’ˆÓIFƒfƒtƒHƒ‹ƒg‚Ì‚Ü‚Ü‚¾‚Æ‚‚³‚ª‚O‚È‚Ì‚ÅƒŠƒXƒg€–Ú‚ªŒ©‚¦‚È‚¢B
+		ï¿½hï¿½ï¿½ï¿½bï¿½vï¿½_ï¿½Eï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï‡)ï¿½ÌÝ’ï¿½F
+			ï¿½ï¿½ï¿½\ï¿½[ï¿½Xï¿½Gï¿½fï¿½Bï¿½^ï¿½ÌƒRï¿½ï¿½ï¿½{ï¿½{ï¿½bï¿½Nï¿½Xï¿½Rï¿½ï¿½ï¿½gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ÌŠGï¿½Ìï¿½ï¿½ï¿½
+			ï¿½Nï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½Ä˜gï¿½ï¿½ï¿½oï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½Ì˜gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Éˆï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½ï¿½ï¿½ï‡ï¿½ð’²ï¿½ï¿½B
+			ï¿½ï¿½ï¿½ÓIï¿½Fï¿½fï¿½tï¿½Hï¿½ï¿½ï¿½gï¿½Ì‚Ü‚Ü‚ï¿½ï¿½Æï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½È‚Ì‚Åƒï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Ú‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½B
 	*/
 	struct CListBoxInfo {
 	typedef vector<string> mylist;
@@ -379,18 +379,18 @@ public:
 	mylist* GetList() { return& m_list;}
 	const mylist* GetConstList() const { return& m_list; }
 
-	///	ƒŠƒXƒgƒ{ƒbƒNƒX‚Å‚ ‚é‚©‚ðÝ’è^Žæ“¾‚·‚é(ƒŠƒXƒgƒ{ƒbƒNƒX‚Å‚È‚¢‚È‚çƒRƒ“ƒ{ƒ{ƒbƒNƒXj
+	///	ï¿½ï¿½ï¿½Xï¿½gï¿½{ï¿½bï¿½Nï¿½Xï¿½Å‚ï¿½ï¿½é‚©ï¿½ï¿½Ý’ï¿½^ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½Xï¿½gï¿½{ï¿½bï¿½Nï¿½Xï¿½Å‚È‚ï¿½ï¿½È‚ï¿½Rï¿½ï¿½ï¿½{ï¿½{ï¿½bï¿½Nï¿½Xï¿½j
 	bool	IsListBox() const { return m_bListBox; }
 	void	SetListBox(bool bListBox) { m_bListBox = bListBox; }
 
-	///	•¶Žš—ñ‚ðƒŠƒXƒg‚É’Ç‰Á
-	/// nPos‚Í’Ç‰ÁŒÂŠBŽw’è‚µ‚½’¼‘O‚É’Ç‰Á‚³‚ê‚éBnPos==-1(default)‚Å‚ÍAÅIs‚É’Ç‰Á‚³‚ê‚é
+	///	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½gï¿½É’Ç‰ï¿½
+	/// nPosï¿½Í’Ç‰ï¿½ï¿½Âï¿½ï¿½Bï¿½wï¿½è‚µï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½É’Ç‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½BnPos==-1(default)ï¿½Å‚ÍAï¿½ÅIï¿½sï¿½É’Ç‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	void	AddString(const string& str,int nPos = -1){
 		if (nPos==-1){
 			GetList()->push_back(str);
 			nPos = (int)GetList()->size()-1;
 		} else {
-			//	‘}“ü‚·‚é‚ñ‚Å1ŒÂ‚¸‚Â‚¸‚ç‚·
+			//	ï¿½}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1ï¿½Â‚ï¿½ï¿½Â‚ï¿½ï¿½ç‚·
 			GetList()->push_back("");
 			int size = (int)GetList()->size();
 			for(int i=size-1;i>=nPos+1;--i){
@@ -402,21 +402,21 @@ public:
 
 	}
 
-	///	Œ»Ý‚Ì‘I‘ðs‚ðÝ’è^Žæ“¾‚·‚é (0 origin)
+	///	ï¿½ï¿½ï¿½Ý‚Ì‘Iï¿½ï¿½ï¿½sï¿½ï¿½Ý’ï¿½^ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½ (0 origin)
 	LRESULT	SetCurSel(int nSel) {
-		if ((int)GetList()->size() <= nSel) return -1; // ”ÍˆÍŠO
+		if ((int)GetList()->size() <= nSel) return -1; // ï¿½ÍˆÍŠO
 		::SendMessage(GetHWnd(),IsListBox()?LB_SETCURSEL:CB_SETCURSEL
 			, (WPARAM)nSel, 0L);
 		return 0;
 	}
-	///	iŽæ“¾‚·‚éê‡‚ÍA‘I‘ðs‚ª‚È‚¯‚ê‚Î-1‚ª•Ô‚é)
+	///	ï¿½iï¿½æ“¾ï¿½ï¿½ï¿½ï¿½ê‡ï¿½ÍAï¿½Iï¿½ï¿½ï¿½sï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½-1ï¿½ï¿½ï¿½Ô‚ï¿½)
 	int GetCurSel() const {
 		int nPos = ::SendMessage(GetHWnd(),IsListBox()?LB_GETCURSEL:CB_GETCURSEL
 			,0L, 0L);
 		return nPos;
 	}
 
-	///	Œ»Ý‘I‘ð‚µ‚Ä‚¢‚éêŠ‚É‚ ‚é•¶Žš—ñ‚ðŽæ“¾
+	///	ï¿½ï¿½ï¿½Ý‘Iï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½êŠï¿½É‚ï¿½ï¿½é•¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾
 	string	GetSelectedString() const {
 		int nPos = GetCurSel();
 		if ((int)GetConstList()->size()<=nPos) {
@@ -426,7 +426,7 @@ public:
 		}
 	}
 
-	///	Ý’è‚³‚ê‚Ä‚¢‚é•¶Žš—ñ‚ð‘SƒNƒŠƒA
+	///	ï¿½Ý’è‚³ï¿½ï¿½Ä‚ï¿½ï¿½é•¶ï¿½ï¿½ï¿½ï¿½ï¿½Sï¿½Nï¿½ï¿½ï¿½A
 	LRESULT	Clear(){
 		HWND hWnd = GetHWnd();
 		if (hWnd==NULL) return -1;
@@ -438,20 +438,20 @@ public:
 
 	CListBoxInfo(HWND hWnd = NULL) : m_hWnd(hWnd),m_bListBox(true) {}
 	
-	///	ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Å“n‚µ‚»‚Ñ‚ê‚½‚Æ‚«‚Ì‚½‚ß‚ÉƒRƒ“ƒ{ƒ{ƒbƒNƒX(ƒŠƒXƒgƒ{ƒbƒNƒX)
-	///	‚ÌhWnd‚ð“n‚µ‚Ä‚â‚é‚½‚ß‚Ìƒƒ“ƒo
+	///	ï¿½Rï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½^ï¿½Å“nï¿½ï¿½ï¿½ï¿½ï¿½Ñ‚ê‚½ï¿½Æ‚ï¿½ï¿½Ì‚ï¿½ï¿½ß‚ÉƒRï¿½ï¿½ï¿½{ï¿½{ï¿½bï¿½Nï¿½X(ï¿½ï¿½ï¿½Xï¿½gï¿½{ï¿½bï¿½Nï¿½X)
+	///	ï¿½ï¿½hWndï¿½ï¿½nï¿½ï¿½ï¿½Ä‚ï¿½é‚½ï¿½ß‚Ìƒï¿½ï¿½ï¿½ï¿½o
 	void	SetHWnd(HWND hWnd) { m_hWnd = hWnd; }
 	HWND	GetHWnd() const { return m_hWnd; }
 
 	protected:
-	mylist m_list;		//	•ÛŽ‚µ‚Ä‚¢‚éî•ñƒŠƒXƒg
+	mylist m_list;		//	ï¿½ÛŽï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ñƒŠƒXï¿½g
 	HWND   m_hWnd;
 	bool	m_bListBox; // true:listbox false:combobox
 	};
 
 	/**
-		ƒŠƒXƒgƒ{ƒbƒNƒXorƒRƒ“ƒ{ƒ{ƒbƒNƒX‚ðACListBoxInfo‚ÆŠÖ˜A‚Ã‚¯‚é
-		bListBox : true == ƒŠƒXƒgƒ{ƒbƒNƒX‚Å‚ ‚é@false == ƒRƒ“ƒ{ƒ{ƒbƒNƒX‚Å‚ ‚é
+		ï¿½ï¿½ï¿½Xï¿½gï¿½{ï¿½bï¿½Nï¿½Xorï¿½Rï¿½ï¿½ï¿½{ï¿½{ï¿½bï¿½Nï¿½Xï¿½ï¿½ï¿½ACListBoxInfoï¿½ÆŠÖ˜Aï¿½Ã‚ï¿½ï¿½ï¿½
+		bListBox : true == ï¿½ï¿½ï¿½Xï¿½gï¿½{ï¿½bï¿½Nï¿½Xï¿½Å‚ï¿½ï¿½ï¿½@false == ï¿½Rï¿½ï¿½ï¿½{ï¿½{ï¿½bï¿½Nï¿½Xï¿½Å‚ï¿½ï¿½ï¿½
 	*/
 	void	Attach(CDialogHelper::CListBoxInfo& info,int nEditControl,bool bListBox=true)
 	{
@@ -460,11 +460,11 @@ public:
 	}
 	///--------------------------------------------------------
 
-	///	---- ‚»‚Ì‚Ù‚©A—~‚µ‚©‚Á‚½‚ç’Ç‰Á‚·‚éƒfHH ----
+	///	---- ï¿½ï¿½ï¿½Ì‚Ù‚ï¿½ï¿½Aï¿½~ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç‰ï¿½ï¿½ï¿½ï¿½ï¿½fï¿½Hï¿½H ----
 
 protected:
-	IWindow* m_pWindow;	//	eWindowƒ|ƒCƒ“ƒ^‚ðÝ’è‚µ‚Ä‚¨‚­
-	CMessagePooler m_vPooler; // ƒƒbƒZ[ƒWPooler
+	IWindow* m_pWindow;	//	ï¿½eWindowï¿½|ï¿½Cï¿½ï¿½ï¿½^ï¿½ï¿½Ý’è‚µï¿½Ä‚ï¿½ï¿½ï¿½
+	CMessagePooler m_vPooler; // ï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½WPooler
 
 	void	hook(IWindow*pWin);
 	void	unhook(IWindow*pWin);
@@ -472,7 +472,7 @@ protected:
 
 class CMsgDlg {
 /**
-	ƒƒbƒZ[ƒWƒ_ƒCƒAƒƒOo—Í—p(Žå‚ÉƒfƒoƒbƒO—p)
+	ï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½_ï¿½Cï¿½Aï¿½ï¿½ï¿½Oï¿½oï¿½Í—p(ï¿½ï¿½Éƒfï¿½oï¿½bï¿½Oï¿½p)
 */
 public:
 	void	Out(const string& caption,const string& message);

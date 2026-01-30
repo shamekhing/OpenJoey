@@ -17,7 +17,7 @@ CVirtualKey::CVirtualKey(){
 CVirtualKey::~CVirtualKey() {}
 //////////////////////////////////////////////////////////////////////////////
 
-//	ÉLÅ[ÉfÉoÉCÉXÇÃìoò^
+//	?L?[?f?o?C?X??o?^
 void	CVirtualKey::ClearKeyDevice(){
 	m_alpDevice.clear();
 }
@@ -31,7 +31,7 @@ void	CVirtualKey::RemoveDevice(const smart_ptr<IKeyBase>& keybase){
 	smart_vector_ptr<IKeyBase>::iterator it = m_alpDevice.begin();
 	while (true){
 		if (it==m_alpDevice.end()){
-			return ;	//	Ç›Ç¬Ç©ÇÒÇÀÅ[
+			return ;	//	??ÔøΩ????[
 		}
 		if ((*it).get()==keybase.get()){
 			m_alpDevice.erase(it);
@@ -40,7 +40,7 @@ void	CVirtualKey::RemoveDevice(const smart_ptr<IKeyBase>& keybase){
 		it++; nDeviceNo++;
 	}
 	
-	//	Ç≥ÇÁÇ…âºëzÉLÅ[ÇÃçÌèúçÏã∆
+	//	???????z?L?[??????
 	for(int i=0;i<g_VIRTUAL_KEY_MAX;i++){
 		CVKeyList::iterator it;
 		for(it = m_VKey[i].begin();it!=m_VKey[i].end();){
@@ -72,16 +72,16 @@ LRESULT	CVirtualKey::Input(){
 	FlipKeyBuffer(m_nKeyBufNo);
 	::ZeroMemory(m_byKeyBuffer[m_nKeyBufNo],256);
 
-	//	äeÉfÉoÉCÉXÇÃì‡óeÇâºëzÉLÅ[Ç…îΩâfÇ≥ÇπÇÈ
+	//	?e?f?o?C?X????e?????z?L?[????f??????
 	for(int i=0;i<g_VIRTUAL_KEY_MAX;i++){
-		CVKeyList::iterator it;
-		it = m_VKey[i].begin();
-		while (it!=m_VKey[i].end()) {
-			if (m_alpDevice[(*it)->m_nDeviceNo]->IsKeyPress((*it)->m_nKey)) {
+		CVKeyList::iterator keyIt;
+		keyIt = m_VKey[i].begin();
+		while (keyIt!=m_VKey[i].end()) {
+			if (m_alpDevice[(*keyIt)->m_nDeviceNo]->IsKeyPress((*keyIt)->m_nKey)) {
 				m_byKeyBuffer[m_nKeyBufNo][i] = 255;
 				break;
 			}
-			it++;
+			keyIt++;
 		}
 	}
 	return lr;
@@ -89,10 +89,10 @@ LRESULT	CVirtualKey::Input(){
 
 //////////////////////////////////////////////////////////////////////////////
 
-//	âºëzÉLÅ[ÇÃí«â¡ÅEçÌèú
+//	???z?L?[?????E??
 void	CVirtualKey::ClearKeyList(){
 	for(int i=0;i<g_VIRTUAL_KEY_MAX;i++) {
-		m_VKey[i].clear();	//	auto_ptrÇ»ÇÃÇ≈ÅAÇ±ÇÍÇ≈ÉIÉbÉPÅ`
+		m_VKey[i].clear();	//	auto_ptr????A?????I?b?P?`
 	}
 }
 

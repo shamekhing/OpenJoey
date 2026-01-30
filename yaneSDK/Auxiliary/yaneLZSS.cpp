@@ -4,26 +4,26 @@
 namespace yaneuraoGameSDK3rd {
 namespace Auxiliary {
 
-const int NIL = g_LZSS_RING_BUFFER;	// –Ø‚Ì––’[
+const int NIL = g_LZSS_RING_BUFFER;	// Â–Ã˜Â‚ÃŒÂ–Â–Â’[
 
 ///////////////////////////////////////////////////////////////////////////////
-#pragma warning(disable:4701) // ’l‚ªŠ„‚è“–‚Ä‚ç‚ê‚Ä‚È‚¢•Ï”‚©‚àwarning
+#pragma warning(disable:4701) // Â’lÂ‚ÂªÂŠÂ„Â‚Ã¨Â“Â–Â‚Ã„Â‚Ã§Â‚ÃªÂ‚Ã„Â‚ÃˆÂ‚Â¢Â•ÃÂÂ”Â‚Â©Â‚Ã warning
 LRESULT CLZSS::Encode(BYTE* lpSrc,BYTE*& lpDst,DWORD  dwSize,DWORD& dwDstSize,bool bDst){
 
 	int i, c, len, r, s, lastmatchlen, codeptr;
 	UCHAR code[17], mask;
 
 	if (dwSize<=16) {
-	//	ƒTƒCƒY‚ª¬‚³‚¢‚È‚çAˆ³k‚Å‚«‚ñ‚¼‚æOOG
+	//	ÂƒTÂƒCÂƒYÂ‚ÂªÂÂ¬Â‚Â³Â‚Â¢Â‚ÃˆÂ‚Ã§ÂAÂˆÂ³ÂkÂ‚Ã…Â‚Â«Â‚Ã±Â‚Â¼Â‚Ã¦ÂOÂOÂG
 		return 1;
 	}
 
-	DWORD dwSize2 = dwSize-8; // ‚±‚ê‚ğã‰ñ‚é‚È‚ç‚Îˆ³k‚·‚é‰¿’l‚ª–³‚¢
+	DWORD dwSize2 = dwSize-8; // Â‚Â±Â‚ÃªÂ‚Ã°ÂÃ£Â‰Ã±Â‚Ã©Â‚ÃˆÂ‚Ã§Â‚ÃÂˆÂ³ÂkÂ‚Â·Â‚Ã©Â‰Â¿Â’lÂ‚ÂªÂ–Â³Â‚Â¢
 
-	init_tree();  /* –Ø‚ğ‰Šú‰» */
+	init_tree();  /* Â–Ã˜Â‚Ã°ÂÂ‰ÂŠÃºÂ‰Â» */
 	code[0] = 0;  codeptr = mask = 1;
 	s = 0;	r = g_LZSS_RING_BUFFER - g_LZSS_LONGEST_MATCH;
-	for (i = s; i < r; i++) m_szText[i] = 0;  /* ƒoƒbƒtƒ@‚ğ‰Šú‰» */
+	for (i = s; i < r; i++) m_szText[i] = 0;  /* ÂƒoÂƒbÂƒtÂƒ@Â‚Ã°ÂÂ‰ÂŠÃºÂ‰Â» */
 	for (len = 0; len < g_LZSS_LONGEST_MATCH ; len++) {
 		c = *(lpSrc++);
 		if (--dwSize <= 0) break;
@@ -34,9 +34,9 @@ LRESULT CLZSS::Encode(BYTE* lpSrc,BYTE*& lpDst,DWORD  dwSize,DWORD& dwDstSize,bo
 	insert_node(r);
 
 	dwDstSize = 0;
-	BYTE* lpDs;
+	BYTE* lpDs = NULL;
 	if (bDst) {
-		lpDst = new BYTE[dwSize2];	//	‚Æ‚è‚ ‚¦‚¸A‚±‚ê‚¾‚¯Šm•Û‚µ‚Ä‘«‚è‚ñ‚©‚Á‚½‚ç‚â‚ß:p
+		lpDst = new BYTE[dwSize2];	//	Â‚Ã†Â‚Ã¨Â‚Â Â‚Â¦Â‚Â¸ÂAÂ‚Â±Â‚ÃªÂ‚Â¾Â‚Â¯ÂŠmÂ•Ã›Â‚ÂµÂ‚Ã„Â‘Â«Â‚Ã¨Â‚Ã±Â‚Â©Â‚ÃÂ‚Â½Â‚Ã§Â‚Ã¢Â‚ÃŸ:p
 		lpDs = lpDst;
 	}
 	
@@ -51,7 +51,7 @@ LRESULT CLZSS::Encode(BYTE* lpSrc,BYTE*& lpDst,DWORD  dwSize,DWORD& dwDstSize,bo
 		}
 		if ((mask <<= 1) == 0) {
 			dwDstSize += codeptr;
-			if (dwSize2 <= dwDstSize) goto ErrorEnd;	//	“WŠJæƒoƒbƒtƒ@ˆì‚ê:p
+			if (dwSize2 <= dwDstSize) goto ErrorEnd;	//	Â“WÂŠJÂÃ¦ÂƒoÂƒbÂƒtÂƒ@ÂˆÃ¬Â‚Ãª:p
 			for (i = 0; i < codeptr; i++) {
 				if (bDst) *(lpDs++) = code[i];
 			}
@@ -75,7 +75,7 @@ LRESULT CLZSS::Encode(BYTE* lpSrc,BYTE*& lpDst,DWORD  dwSize,DWORD& dwDstSize,bo
 	} while (len > 0);
 	if (codeptr > 1) {
 		dwDstSize += codeptr;
-		//	“WŠJæƒoƒbƒtƒ@ˆì‚ê:p
+		//	Â“WÂŠJÂÃ¦ÂƒoÂƒbÂƒtÂƒ@ÂˆÃ¬Â‚Ãª:p
 		if (!(dwSize2 <= dwDstSize)) {
 			for (i = 0; i < codeptr; i++) {
 				if (bDst) *(lpDs++) = code[i];
@@ -84,7 +84,7 @@ LRESULT CLZSS::Encode(BYTE* lpSrc,BYTE*& lpDst,DWORD  dwSize,DWORD& dwDstSize,bo
 	}
 
 ErrorEnd:;
-	//	ˆ³k”ä‚ªˆ«‚¯‚ê‚Îˆ³k‚ğ•úŠü
+	//	ÂˆÂ³ÂkÂ”Ã¤Â‚ÂªÂˆÂ«Â‚Â¯Â‚ÃªÂ‚ÃÂˆÂ³ÂkÂ‚Ã°Â•ÃºÂŠÃ¼
 	if (dwSize2 <= dwDstSize){
 		if (bDst) {
 			delete []lpDst;
@@ -94,15 +94,15 @@ ErrorEnd:;
 	}
 	return 0;
 }
-#pragma warning(default:4701) // ’l‚ªŠ„‚è“–‚Ä‚ç‚ê‚Ä‚È‚¢•Ï”‚©‚àwarning
+#pragma warning(default:4701) // Â’lÂ‚ÂªÂŠÂ„Â‚Ã¨Â“Â–Â‚Ã„Â‚Ã§Â‚ÃªÂ‚Ã„Â‚ÃˆÂ‚Â¢Â•ÃÂÂ”Â‚Â©Â‚Ã warning
 
 LRESULT CLZSS::Decode(BYTE* lpSrc,BYTE*& lpDst,DWORD  dwSize,bool bDst){
 
-	if (dwSize==0) return 1;	//	‚È‚ñ‚¶‚á‚±‚è‚á:p
+	if (dwSize==0) return 1;	//	Â‚ÃˆÂ‚Ã±Â‚Â¶Â‚Ã¡Â‚Â±Â‚Ã¨Â‚Ã¡:p
 
 	BYTE* lpDs;
-	if (bDst) {	//	‚±‚¿‚ç‚ÅŠm•Û‚·‚é‚Ì‚©H‚»‚¤‚Å‚È‚¯‚ê‚Î‰Šú‰»‚³‚ê‚Ä‚¢‚é‚Æ‰¼’è‚·‚é‚¼
-		lpDst = new BYTE[dwSize];	//	“WŠJæ‚ğŠm•Û‚·‚éB
+	if (bDst) {	//	Â‚Â±Â‚Â¿Â‚Ã§Â‚Ã…ÂŠmÂ•Ã›Â‚Â·Â‚Ã©Â‚ÃŒÂ‚Â©ÂHÂ‚Â»Â‚Â¤Â‚Ã…Â‚ÃˆÂ‚Â¯Â‚ÃªÂ‚ÃÂÂ‰ÂŠÃºÂ‰Â»Â‚Â³Â‚ÃªÂ‚Ã„Â‚Â¢Â‚Ã©Â‚Ã†Â‰Â¼Â’Ã¨Â‚Â·Â‚Ã©Â‚Â¼
+		lpDst = new BYTE[dwSize];	//	Â“WÂŠJÂÃ¦Â‚Ã°ÂŠmÂ•Ã›Â‚Â·Â‚Ã©ÂB
 	}
 	lpDs  = lpDst;
 
@@ -137,7 +137,7 @@ LRESULT CLZSS::Decode(BYTE* lpSrc,BYTE*& lpDst,DWORD  dwSize,bool bDst){
 }
 ///////////////////////////////////////////////////////////////////////////////
 
-void CLZSS::init_tree(void)	 /* –Ø‚Ì‰Šú‰» */
+void CLZSS::init_tree(void)	 /* Â–Ã˜Â‚ÃŒÂÂ‰ÂŠÃºÂ‰Â» */
 {
 	int i;
 
@@ -145,7 +145,7 @@ void CLZSS::init_tree(void)	 /* –Ø‚Ì‰Šú‰» */
 	for (i = 0; i < g_LZSS_RING_BUFFER; i++) m_dad[i] = NIL;
 }
 
-void CLZSS::insert_node(int r)	/* ß r ‚ğ–Ø‚É‘}“ü */
+void CLZSS::insert_node(int r)	/* ÂÃŸ r Â‚Ã°Â–Ã˜Â‚Ã‰Â‘}Â“Ã¼ */
 {
 	int i, p, cmp;
 	BYTE* key;
@@ -171,14 +171,14 @@ void CLZSS::insert_node(int r)	/* ß r ‚ğ–Ø‚É‘}“ü */
 	m_dad[m_lson[p]] = r;  m_dad[m_rson[p]] = r;
 	if (m_rson[m_dad[p]] == p) m_rson[m_dad[p]] = r;
 	else					   m_lson[m_dad[p]] = r;
-	m_dad[p] = NIL;	 /* p ‚ğŠO‚· */
+	m_dad[p] = NIL;	 /* p Â‚Ã°ÂŠOÂ‚Â· */
 }
 
-void CLZSS::delete_node(int p)	/* ß p ‚ğ–Ø‚©‚çÁ‚· */
+void CLZSS::delete_node(int p)	/* ÂÃŸ p Â‚Ã°Â–Ã˜Â‚Â©Â‚Ã§ÂÃÂ‚Â· */
 {
 	int	 q;
 
-	if (m_dad[p]  == NIL) return;  /* Œ©‚Â‚©‚ç‚È‚¢ */
+	if (m_dad[p]  == NIL) return;  /* ÂŒÂ©Â‚Ã‚Â‚Â©Â‚Ã§Â‚ÃˆÂ‚Â¢ */
 	if (m_rson[p] == NIL) q = m_lson[p];
 	else if (m_lson[p] == NIL) q = m_rson[p];
 	else {

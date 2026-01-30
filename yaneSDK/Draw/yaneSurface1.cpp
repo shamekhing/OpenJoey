@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "yaneSurface.h"
-#include "../Draw/yaneGTL.h"			//	CFastPlane‚È‚ñ‚Æ‚©‚Ég‚¤
-#include "../Draw/yaneGraphicLoader.h"	//	Load‚Åg‚¤
-#include "../Draw/yaneSurfaceBltter.h"	//	Clear‚Åg‚¤
-#include "../Draw/yaneDIBitmap.h"		//	Load‚ÅHDCŒo—R‚Å“Ç‚İ‚Ş‚Æ‚«‚É•K—v
-#include "../Auxiliary/yaneLZSS.h"		//	YGA‚Ì•Û‘¶‚Åg‚¤
+#include "../Draw/yaneGTL.h"			//	CFastPlane???????g??
+#include "../Draw/yaneGraphicLoader.h"	//	Load??g??
+#include "../Draw/yaneSurfaceBltter.h"	//	Clear??g??
+#include "../Draw/yaneDIBitmap.h"		//	Load??HDC?o?R???????????K?v
+#include "../Auxiliary/yaneLZSS.h"		//	YGA??????g??
 
 ////////////////////////////////////////////////////////////////////
 
@@ -17,26 +17,27 @@ ISurface::ISurface():
 }
 
 /////////////////////////////////////////////////////////////////////
-//	fill colorŠÖ˜A
+//	fill color??A
 
 void		ISurface::SetFillColor(ISurfaceRGB c){
-		///	Clear‚·‚éF‚ğw’è‚·‚é(Default==RGB(0,0,0))
-	GetSurfaceInfo()->SetFillColor(c);
+		///	Clear????F???w????(Default==RGB(0,0,0))
+	CSurfaceInfo* pInfo = m_vSurfaceInfo.get();
+	if (pInfo) pInfo->SetFillColor(c);
 }
 
 ISurfaceRGB	ISurface::GetFillColor() const{
-				///	Clear‚·‚éF‚Ìæ“¾
-	ISurface* pThis = const_cast<ISurface*>(this);
-	return pThis->GetSurfaceInfo()->GetFillColor();
+				///	Clear??F?? ? use m_vSurfaceInfo directly to avoid recursion if derived GetSurfaceInfo() returns an object that dispatches back to this
+	const CSurfaceInfo* pInfo = m_vSurfaceInfo.get();
+	return pInfo ? pInfo->GetFillColor() : 0;
 }
 
 LRESULT		ISurface::Clear(LPCRECT lpRect/*=NULL*/){
-			///	‹éŒ`ƒNƒŠƒA
+			///	??`?N???A
 	return GeneralEffect(CSurfaceInfo::eSurfaceFill,lpRect);
 }
 
 /////////////////////////////////////////////////////////////////////
-///	“§‰ßƒL[ŠÖ˜A–€
+///	????L?[??A????
 
 LRESULT ISurface::SetColorKey(ISurfaceRGB rgb){
 	m_bUsePosColorKey = false;
@@ -47,7 +48,7 @@ LRESULT ISurface::SetColorKey(ISurfaceRGB rgb){
 LRESULT ISurface::SetColorKeyPos(int x,int y){
 	m_bUsePosColorKey = true;
 	m_nColorKeyX = x; m_nColorKeyY = y;
-	//	‚»‚Ìƒ|ƒCƒ“ƒg‚ÌF‚ğæ“¾‚·‚é
+	//	????|?C???g??F????????
 	return UpdateColorKey();
 }
 
@@ -63,47 +64,47 @@ void	ISurface::ResetColorKey(){
 
 LRESULT ISurface::UpdateColorKey(){
 	LRESULT lr;
-	if (m_bUsePosColorKey) {	// ˆÊ’uw’èŒ^“§‰ßƒL[
+	if (m_bUsePosColorKey) {	// ??u?w??^????L?[
 		lr =GetSurfaceInfo()->GetPixel(m_nColorKeyX,m_nColorKeyY,m_rgbColorKey);
-	} else {	// Fw’èŒ^“§‰ßƒL[
-		//	ƒJƒ‰[ƒL[‚ÍISurfaceRGB‚Å•Û‚·‚é‚±‚Æ‚É‚µ‚½‚Ì‚Å
-		//	‚±‚±‚Å“Á‚É•ÏŠ·‚ª•K—v‚É‚È‚é‚í‚¯‚Å‚Í‚È‚¢
+	} else {	// ?F?w??^????L?[
+		//	?J???[?L?[??ISurfaceRGB?????????????????
+		//	??????????????K?v??????????
 		lr = 0;
 	}
-	//	ƒT[ƒtƒF[ƒX\‘¢‘Ì‚Ì‚Ù‚¤‚ÉA‚±‚Ìî•ñ‚ğ”½‰f‚³‚¹‚é
+	//	?T?[?t?F?[?X?\?????????A????????f??????
 	GetSurfaceInfo()->SetColorKey(GetColorKey());
 	return lr;
 }
 
 /////////////////////////////////////////////////////////////////////
-//	ˆÏ÷Œnbltter
+//	????nbltter
 
 /*
 LRESULT ISurface::BltNaturalPos(const ISurface* lpSrc,int x,int y,int nMode,BYTE nFade,
 	LPCSIZE pDstSize,LPCRECT pSrcRect,LPCRECT	pDstClip,int nBasePoint)
 {
-	//	nMode == ƒx[ƒXˆÊ’u(0:‰æ‘œ’†S 1:¶ã 2:‰Eã 3:¶‰º 4:‰E‰º)
+	//	nMode == ?x?[?X??u(0:?????S 1:???? 2:?E?? 3:???? 4:?E??)
 	if (lpSrc==NULL) return -1;
 
-	//	ƒTƒCƒYæ“¾
+	//	?T?C?Y??
 	int sx,sy;
 	if (pDstSize==NULL) {
-		//	“]‘—æƒTƒCƒY‚ªw’è‚³‚ê‚Ä‚¢‚È‚¢Ë“]‘—æƒTƒCƒY‚Í“]‘—Œ³ƒT[ƒtƒF[ƒX‚Æ“¯‚¶‚¨‚¨‚«‚³
+		//	?]????T?C?Y???w???????????]????T?C?Y??]?????T?[?t?F?[?X?????????????
 		lpSrc->GetSize(sx,sy);
 	} else {
-		//	“]‘—æƒTƒCƒY‚ªw’è‚³‚ê‚Ä‚¢‚È‚¢Ë“]‘—æƒTƒCƒY‚ÍA‚»‚ê‚ğ—˜—p
+		//	?]????T?C?Y???w???????????]????T?C?Y??A??????p
 		sx = pDstSize->cx;
 		sy = pDstSize->cy;
 	}
 
-	switch (nMode){	//	ƒtƒF[ƒhƒŒƒxƒ‹
+	switch (nMode){	//	?t?F?[?h???x??
 	case 0: return BltNatural(lpSrc,x-(sx>>1),y-(sy>>1)	,nFade,pDstSize,pSrcRect,pDstClip,nBasePoint);
 	case 1: return BltNatural(lpSrc,x	,y				,nFade,pDstSize,pSrcRect,pDstClip,nBasePoint);
 	case 2: return BltNatural(lpSrc,x-sx,y				,nFade,pDstSize,pSrcRect,pDstClip,nBasePoint);
 	case 3: return BltNatural(lpSrc,x	,y-sy			,nFade,pDstSize,pSrcRect,pDstClip,nBasePoint);
 	case 4: return BltNatural(lpSrc,x-sx,y-sy			,nFade,pDstSize,pSrcRect,pDstClip,nBasePoint);
 	}
-	return -2;	//	‚È‚ñ‚âHnMode”ÍˆÍŠO
+	return -2;	//	????HnMode???O
 }
 */
 
@@ -117,7 +118,7 @@ RECT	CSurfaceInfo::GetClipRect(LPCRECT lpRect) const{
 		r = *lpRect;
 	}
 
-	// ƒNƒŠƒbƒsƒ“ƒO‚·‚é
+	// ?N???b?s???O????
 	RECT lpClip = { 0,0,m_size.cx,m_size.cy };
 
 	if (lpClip.left	 > r.left)	{ r.left   = lpClip.left;	 }
@@ -136,10 +137,10 @@ LRESULT CSurfaceInfo::Lock() const
 	throw(CRuntimeException)
 #endif
 {
-	if (!IsInit()) return -1;	//	‰Šú‰»©‘Ì‚ª‚³‚ê‚Ä‚¢‚È‚¢
+	if (!IsInit()) return -1;	//	????????????????????
 	if (IsLocked()) {
 		#ifdef USE_EXCEPTION
-			throw CRuntimeException("‚QdLock(CSurfaceInfo::Lock)");
+			throw CRuntimeException("?Q?dLock(CSurfaceInfo::Lock)");
 		#else
 			return 1;
 		#endif
@@ -153,10 +154,10 @@ LRESULT CSurfaceInfo::Unlock() const
 	throw(CRuntimeException)
 #endif
 {
-	if (!IsInit()) return -1;	//	‰Šú‰»©‘Ì‚ª‚³‚ê‚Ä‚¢‚È‚¢
+	if (!IsInit()) return -1;	//	????????????????????
 	if (!IsLocked()) {
 		#ifdef USE_EXCEPTION
-			throw CRuntimeException("‚QdUnlockCSurfaceInfo::Unlock");
+			throw CRuntimeException("?Q?dUnlockCSurfaceInfo::Unlock");
 		#else
 			return 1;
 		#endif
@@ -167,7 +168,7 @@ LRESULT CSurfaceInfo::Unlock() const
 
 /////////////////////////////////////////////////////////////////////
 
-///	ƒT[ƒtƒF[ƒX‚Ì‚PƒsƒNƒZƒ‹‚ÌƒoƒCƒg”
+///	?T?[?t?F?[?X??P?s?N?Z????o?C?g??
 int		CSurfaceInfo::GetPixelSize() const {
 	int nSize;
 	switch (GetSurfaceType()){
@@ -191,7 +192,7 @@ int		CSurfaceInfo::GetPixelSize() const {
 
 void	CSurfaceInfo::iterator::SetRGB(BYTE r,BYTE g,BYTE b,BYTE a){
 
-//	ISurfaceRGB‚ÍARGB8888
+//	ISurfaceRGB??ARGB8888
 	int n = GetSurfaceInfo()->GetSurfaceType();
 	BYTE *p = (BYTE*)GetSurfaceInfo()->GetPtr() +
 				GetSurfaceInfo()->GetPitch() * m_nY;
@@ -245,7 +246,7 @@ void	CSurfaceInfo::iterator::SetRGB(BYTE r,BYTE g,BYTE b,BYTE a){
 
 ISurfaceRGB	CSurfaceInfo::iterator::GetRGB() const{
 
-//	ISurfaceRGB‚ÍARGB8888
+//	ISurfaceRGB??ARGB8888
 	int n = GetSurfaceInfo()->GetSurfaceType();
 	int r,g,b,a;
 	BYTE *p = (BYTE*)GetSurfaceInfo()->GetPtr() +
@@ -331,9 +332,9 @@ LRESULT CSurfaceInfo::GetPixel(int x,int y,ISurfaceRGB&rgb) const{
 	CSurfaceInfo* pThis = const_cast<CSurfaceInfo*>(this);
 	if (pThis->Lock()!=0) return 0;
 	CSurfaceLockerGuard guard(pThis /* ->GetLocker()*/ );
-	//	Unlock‚Í”²‚¯‚é‚Æ‚«‚ÉŸè‚És‚È‚Á‚Ä‚­‚ê‚é
+	//	Unlock???????????????s?????????
 
-	//	”ÍˆÍŠOH
+	//	???O?H
 	if (x<0 || y<0 || x>=GetSize().cx || y>=GetSize().cy) {
 		return -1;
 	}
@@ -373,7 +374,7 @@ LRESULT CSurfaceInfo::GetPixel(int x,int y,ISurfaceRGB&rgb) const{
 	case 13: {
 		CFastPlaneABGR8888* p = (CFastPlaneABGR8888*)((BYTE*)GetPtr() + GetPitch() * y + x * sizeof(CFastPlaneARGB8888));
 		rgb = ISurface::makeRGB(p->GetR(),p->GetG(),p->GetB(),p->GetA()); break; }
-	default:	//	‚È‚ñ‚âAA•s–¾ƒT[ƒtƒF[ƒX‚©DD
+	default:	//	????A?A?s???T?[?t?F?[?X???D?D
 		rgb = 0; return -2;
 	}
 	return 0;
@@ -384,7 +385,7 @@ LRESULT CSurfaceInfo::GetMatchColor(ISurfaceRGB rgb,DWORD&dw) const {
 	int nType = GetSurfaceType();
 	switch (nType) {
 	case 2:
-		//	‚±‚ñ‚È‚ñ–³—‚È‚ñ‚â‚æ‚Ë[
+		//	??????????????[
 		break;
 	case 3: {
 		CFastPlaneRGB565 p;
@@ -430,7 +431,7 @@ LRESULT CSurfaceInfo::GetMatchColor(ISurfaceRGB rgb,DWORD&dw) const {
 		p.SetRGB((BYTE)(rgb & 0xff),(BYTE)((rgb>>8) & 0xff),(BYTE)((rgb>>16)& 0xff));
 		p.SetA((BYTE)((rgb>>24)&0xff));
 		dw = p.GetRGBA(); break; }
-	default:	//	‚È‚ñ‚âAA•s–¾ƒT[ƒtƒF[ƒX‚©DD
+	default:	//	????A?A?s???T?[?t?F?[?X???D?D
 		return -1; break;
 	}
 
@@ -439,7 +440,7 @@ LRESULT CSurfaceInfo::GetMatchColor(ISurfaceRGB rgb,DWORD&dw) const {
 
 /*
 void	ISurface::ClearMSB(){
-	//	ƒrƒfƒIƒJ[ƒh‚ÌƒoƒO‘Îô‚ÅÅãˆÊƒoƒCƒg‚ğ’×‚·
+	//	?r?f?I?J?[?h??o?O???????o?C?g????
 
 	int nType = GetSurfaceType();
 	if (nType == 7 || nType == 8){
@@ -462,52 +463,52 @@ int	ISurface::GetYGASurfaceType(int nSurfaceType) const{
 	case 6: nSurfaceType = 13; break;
 	case 7: nSurfaceType = 12; break;
 	case 8: nSurfaceType = 13; break;
-	//	ƒ¿ƒT[ƒtƒF[ƒXì¬‚·‚é‚ñ‚È‚çA‚»‚ê‚Í‚»‚ê‚Å‚¦‚¦B
+	//	???T?[?t?F?[?X?????????A?????????????B
 	}
 	return nSurfaceType;
 }
 
 LRESULT	ISurface::LoadByType(const string&strBitmapName,int nSurfaceType){
 /**
-	‚±‚Ìƒƒ\ƒbƒh‚ÍACSurfaceInfo‚É‚½‚¹‚Ä‚»‚¿‚ç‚ÉˆÏ÷‚µ‚½‚¢‚Ì‚¾‚ªA
-	‰æ‘œ‚Ì“Ç‚İ‚İ‚É‚ÍA‰æ‘œƒTƒCƒY‚ª‚í‚©‚ç‚È‚¢‚Æ‚¢‚¯‚È‚¢‚Ì‚Å
-	IGraphicLoader‚ğ¶¬‚µ‚ÄA‚±‚¢‚Â‚É‰æ‘œ‚ğ“Ç‚İ‚Ü‚¹‚Ä‚©‚ç‚Å
-	‚È‚¢‚Æ‚¢‚¯‚È‚¢B‰æ‘œ‚ğ“Ç‚İ‚Ü‚¹A‚»‚ÌƒTƒCƒY‚ÅƒT[ƒtƒF[ƒX‚ğ
-	ì¬‚µ‚½‚Ì‚¿AIGraphicLoader‚ğ“n‚µ‚ÄA‚»‚ê‚ğrendering‚·‚éƒƒ\ƒbƒh‚ğ
-	CSurfaceInfo‚ÉÀ‘•‚·‚é‚±‚Æ‚Ío—ˆ‚é‚ªA‚»‚Ì‚æ‚¤‚Èƒƒ\ƒbƒh‚ğ
-	ì‚éˆÓ–¡‚Í‚Ù‚Æ‚ñ‚Ç–³‚¢B
+	??????\?b?h??ACSurfaceInfo?????????????????????????????A
+	???????????A???T?C?Y???????????????????
+	IGraphicLoader????????A?????ï¿½????????????????
+	????????????B???????????A????T?C?Y??T?[?t?F?[?X??
+	??????????AIGraphicLoader??n????A?????rendering?????\?b?h??
+	CSurfaceInfo????????????o?????A?????????\?b?h??
+	???????????????B
 */
-	//	‚PD‰æ‘œƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ
+	//	?P?D???t?@?C?????????
 	smart_ptr<IGraphicLoader> loader(IGraphicLoader::GetGraphicFactory()->CreateInstance());
 	CFile file;
 	if (file.Read(strBitmapName)!=0) return -1;
-	//	“Ç‚İ‚İ¸”s‚µ‚Æ‚é‚Å[
+	//	????????s??????[
 
 	if (loader->LoadPicture(file)!=0) return -2;
 
 	if (loader->IsYGA()) {
 		nSurfaceType = GetYGASurfaceType(nSurfaceType);
-		//	ƒ¿ƒT[ƒtƒF[ƒXì‚ç‚È‚«‚áI
+		//	???T?[?t?F?[?X???????I
 	}
 
-	//	‚QDƒT[ƒtƒF[ƒX‚Ìì¬
+	//	?Q?D?T?[?t?F?[?X???
 	LONG sx,sy;
 	{
 		loader->GetSize(sx,sy);
 		if (CreateSurfaceByType(sx,sy,nSurfaceType)!=0) return -3;
 	}
 
-	//	‚RDƒtƒ@ƒCƒ‹‚Ì“à—e‚ğAƒT[ƒtƒF[ƒX‚É”½‰f‚³‚¹‚é
+	//	?R?D?t?@?C??????e???A?T?[?t?F?[?X????f??????
 	{
 		CSurfaceLockerGuard locker(GetSurfaceInfo());
 		GetSurfaceInfo()->Lock();
 		if (loader->Render(GetSurfaceInfo())==0) return 0;
 	}
 
-	//	‚±‚Ìrendering‚É¸”s‚µ‚½‚ç‚Ç‚È‚¢‚·‚é‚ñ‚â‚ëDD
-	//	HDCŒo—R‚Å•`‰æ‚·‚é‚©H
+	//	????rendering????s????????????????D?D
+	//	HDC?o?R??`?????H
 
-	//	CDIBitmapì‚Á‚ÄA‚»‚±Œo—R‚Å•`‰æ‚·‚é‚©DDH
+	//	CDIBitmap?????A?????o?R??`?????D?D?H
 	//	GetDC()
 
 	CDIBitmap dib;
@@ -516,20 +517,20 @@ LRESULT	ISurface::LoadByType(const string&strBitmapName,int nSurfaceType){
 	{
 		HDC hdc = dib.GetDC();
 		if (loader->Render(hdc)!=0) {
-			// ƒGƒ‰[ƒŠƒ^[ƒ“‚·‚é‚Æ‚«‚ÍƒT[ƒtƒF[ƒX‚ÌƒNƒŠƒA‚®‚ç‚¢‚µ‚½‚ê‚æ
+			// ?G???[???^?[??????????T?[?t?F?[?X??N???A???????????
 			Clear();	return -5;
 		}
 
 		//	lr = dib.GetSurfaceInfo()->ClearMSB();
-		//	DIB‚Í24bpp surface‚È‚Ì‚ÅãˆÊ‚ÉƒSƒ~‚Íæ‚èã‚°‚Ä‚±‚È‚¢
+		//	DIB??24bpp surface???????S?~???????????
 
 		#pragma warning(disable:4238)
 		lr = GetSurfaceInfo()->GeneralBlt(
 			CSurfaceInfo::eSurfaceBltFast,
 			dib.GetSurfaceInfo(),
 			&CSurfaceInfo::CBltInfo()
-			//	ªƒeƒ“ƒ|ƒ‰ƒŠƒIƒuƒWƒFƒNƒg‚Ìˆø“n‚µ‚ÍA
-			//	‚±‚Ì‚ ‚Æ‚±‚ê‚ğQÆ‚µ‚È‚¢‚È‚ç‚ÎƒZ[ƒt
+			//	???e???|?????I?u?W?F?N?g????n????A
+			//	????????????Q??????????Z?[?t
 		);
 		#pragma warning(default:4238)
 	}
@@ -539,25 +540,25 @@ LRESULT	ISurface::LoadByType(const string&strBitmapName,int nSurfaceType){
 //////////////////////////////////////////////////////////////////////////////
 
 LRESULT CSurfaceInfo::Save(const string& strBitmapFileName,LPCRECT lpRect/*=NULL*/){
-	///	‰æ‘œ‚Ìƒtƒ@ƒCƒ‹‚Ö‚Ì‘‚«o‚µ(lpRect‚Í‘‚«o‚µ—ÌˆæBNULL‚È‚ç‚Î‘Sˆæ)
+	///	????t?@?C?????????o??(lpRect??????o?????BNULL????S??)
 	RECT	rc = GetClipRect(lpRect);
 
 	int sx = rc.right-rc.left;
 	int sy = rc.bottom-rc.top;
-	if (sx<=0 || sy<=0) return -1; // •Ï‚È’l“n‚·‚È‚Á‚ÄR(`„DL)ƒm
+	if (sx<=0 || sy<=0) return -1; // ???l?n???????R(`?D?L)?m
 
-	//	ƒrƒbƒgƒ}ƒbƒvƒƒ‚ƒŠŠm•Û
+	//	?r?b?g?}?b?v???????m??
 	long lDstPitch = ((rc.right - rc.left)*3 + 3) & ~3;
 
-	// ˆêƒ‰ƒCƒ““–‚½‚è‚ÌƒoƒCƒg”
+	// ???C?????????o?C?g??
 	long size = sizeof(BITMAPFILEHEADER)+sizeof(BITMAPINFOHEADER)
 		+lDstPitch * (rc.bottom - rc.top);
-		//	‚±‚ê‚ª‰æ‘œƒtƒ@ƒCƒ‹ƒTƒCƒYi‚Ì‚Í‚¸j
+		//	???????t?@?C???T?C?Y?i?????j
 
 	smart_ptr<BYTE> bitmap;
 	bitmap.AddArray(size);
 
-	//	ƒrƒbƒgƒ}ƒbƒvƒwƒbƒ_[‚Ì’è‹`
+	//	?r?b?g?}?b?v?w?b?_?[???`
 	BITMAPFILEHEADER &BF = *(BITMAPFILEHEADER*)bitmap.get();
 	BF.bfType			= 0x4D42;
 	BF.bfSize			= size;
@@ -570,55 +571,55 @@ LRESULT CSurfaceInfo::Save(const string& strBitmapFileName,LPCRECT lpRect/*=NULL
 	BI.biWidth			= sx;	// size to be saved...
 	BI.biHeight			= sy;
 	BI.biPlanes			= 1;
-	BI.biBitCount		= 24;		//	ƒtƒ‹ƒJƒ‰[
-	BI.biCompression	= 0;		//	”ñˆ³k
-	BI.biSizeImage		= 0;		//	”ñˆ³k‚Ì‚Æ‚«‚Í0
-	BI.biXPelsPerMeter	= 3780;	//	96dpi(‚±‚ñ‚È‚Æ‚±‚ëŒ©‚Ä‚¢‚éƒ\ƒtƒg‚Í‚È‚¢‚¾‚ë‚¤‚¯‚Ç)
+	BI.biBitCount		= 24;		//	?t???J???[
+	BI.biCompression	= 0;		//	???k
+	BI.biSizeImage		= 0;		//	???k??????0
+	BI.biXPelsPerMeter	= 3780;	//	96dpi(??????????????\?t?g????????????)
 	BI.biYPelsPerMeter	= 3780;
 	BI.biClrUsed		= 0;
 	BI.biClrImportant	= 0;
 
-	//	ƒCƒ[ƒW“]‘—‚È‚è‚èI
+	//	?C???[?W?]??????I
 	BYTE* pSrcPtr	= (BYTE*)GetPtr();
 	LONG lSrcPitch	= GetPitch();
 	int nSrcSurfaceType = GetSurfaceType();
 	BYTE *pDstPtr = bitmap.get() + sizeof(BITMAPFILEHEADER)+sizeof(BITMAPINFOHEADER);
 
 	for(int y=rc.bottom-1,y0=0;y>=rc.top;y--,y0++){
-	//	ã‰º‚Í”½“]‚³‚¹‚é•K—v‚ª‚ ‚é
+	//	??????]??????K?v??????
 		void* pSrc = (void*)((BYTE*)(pSrcPtr+	y	* lSrcPitch));
 		void* pDst = (void*)((BYTE*)(pDstPtr+	y0	* lDstPitch));
 		CSurfaceBltter::Blt1Line(pSrc,nSrcSurfaceType,pDst,5,sx);
 			//	src Surface -> RGB888
-		//	‚±‚Ì‚ ‚ÆADWORD‚ÉƒAƒ‰ƒCƒ“‚µ‚½‚Æ‚«‚Éo—ˆ‚é‰E‚Ì—]”’‚ğ
-		//	‚O‚Å–„‚ß‚é•K—v‚ª‚ ‚é‚æ‚¤‚È‹C‚à‚·‚é‚ª
-		//	‚»‚±‚Ü‚Å‹C‚É‚·‚é•K—v‚Í–³‚¢DD‚©H
+		//	???????ADWORD??A???C???????????o????E??]????
+		//	?O??????K?v?????????C??????
+		//	???????C?????K?v??????D?D???H
 	}
-	return CFile().Write(strBitmapFileName,bitmap.get(),size);	//	‚»‚ñ‚¾‚¯:p
+	return CFile().Write(strBitmapFileName,bitmap.get(),size);	//	??????:p
 }
 
 LRESULT CSurfaceInfo::SaveYGA(const string& strBitmapFileName,LPCRECT lpRect/*=NULL*/,bool bCompress/*=true*/){
-	///	YGA‰æ‘œŒ`®‚Å‚Ìƒtƒ@ƒCƒ‹‘‚«o‚µ(lpRect‚Í‘‚«o‚µ—ÌˆæBNULL‚È‚ç‚Î‘Sˆæ)
-	///	bCompress==true‚È‚ç‚ÎCLZSS‚Åˆ³k‚µ‚Ä•Û‘¶BƒfƒBƒtƒHƒ‹ƒg‚Åtrue
+	///	YGA???`?????t?@?C???????o??(lpRect??????o?????BNULL????S??)
+	///	bCompress==true????CLZSS????k???????B?f?B?t?H???g??true
 
-	///	‰æ‘œ‚Ìƒtƒ@ƒCƒ‹‚Ö‚Ì‘‚«o‚µ(lpRect‚Í‘‚«o‚µ—ÌˆæBNULL‚È‚ç‚Î‘Sˆæ)
+	///	????t?@?C?????????o??(lpRect??????o?????BNULL????S??)
 	RECT	rc = GetClipRect(lpRect);
 
 	int sx = rc.right-rc.left;
 	int sy = rc.bottom-rc.top;
-	if (sx<=0 || sy<=0) return -1; // •Ï‚È’l“n‚·‚È‚Á‚Ä
+	if (sx<=0 || sy<=0) return -1; // ???l?n???????
 
 	int nSrcSurfaceType = GetSurfaceType();
-	smart_ptr<BYTE> pSrcCopyed;	//	ƒRƒs[‚³‚ê‚½ƒ\[ƒX—Ìˆæ
+	smart_ptr<BYTE> pSrcCopyed;	//	?R?s?[?????\?[?X???
 	{
-		bool	bAllScreen	//	‘S‰æ–Ê‚ğ•Û‘¶‚·‚é‚Ì‚©H
+		bool	bAllScreen	//	?S?????????????H
 			= (GetSize().cx==sx && GetSize().cy==sy);
 		if (bAllScreen && GetSurfaceType()==12){
-			//	‘S‰æ–Ê‘ÎÛ‚©‚ÂAARGB8888‚â‚ñ!?
+			//	?S???????ï¿½AARGB8888???!?
 			pSrcCopyed.Set((BYTE*)GetPtr());
 		} else {
 			pSrcCopyed.AddArray(4*sx*sy);
-			//	‚ ‚ç‚½‚ÉARGB8888ƒT[ƒtƒF[ƒXì¬
+			//	??????ARGB8888?T?[?t?F?[?X??
 
 			BYTE* pSrcPtr	= (BYTE*)GetPtr() + GetPixelSize()*rc.left;
 			LONG  lSrcPitch = GetPixelSize()*sx;
@@ -632,14 +633,14 @@ LRESULT CSurfaceInfo::SaveYGA(const string& strBitmapFileName,LPCRECT lpRect/*=N
 		}
 	}
 
-	//	ˆ³k‚ğŠ|‚¯‚ÄAƒwƒbƒ_[î•ñ‚ğ•t—^‚·‚é
+	//	???k???|????A?w?b?_?[????t?^????
 	CLZSS lzss;
 	BYTE* lpDst;
 	DWORD dwDstSize;
 	bool bDelete;
 	DWORD nSize = sx * sy * 4;
 	if (! bCompress || lzss.Encode(pSrcCopyed.get(),lpDst,nSize,dwDstSize)!=0 ) {
-		// ˆ³k‚µ‚È‚¢ or ˆ³k‚©‚©‚ç‚ñ‚í[‚¢
+		// ???k????? or ???k????????[??
 		lpDst = (BYTE*)GetPtr();
 		dwDstSize = nSize;
 		bDelete = false;
@@ -647,7 +648,7 @@ LRESULT CSurfaceInfo::SaveYGA(const string& strBitmapFileName,LPCRECT lpRect/*=N
 		bDelete = true;
 	}
 
-	//	ƒwƒbƒ_[‚Ìİ’è
+	//	?w?b?_?[????
 	CYGAHeader header;
 	header.dwSizeX = sx;
 	header.dwSizeY = sy;
@@ -666,11 +667,11 @@ LRESULT CSurfaceInfo::SaveYGA(const string& strBitmapFileName,LPCRECT lpRect/*=N
 	return CFile().Write(strBitmapFileName,writebuf.get(),nSize);
 }
 
-//	«‚Åg‚¤‚½‚ß‚Ì\‘¢‘Ì
+//	????g???????\????
 namespace {
 	struct GeneralBltTmp {
 		CSurfaceInfo::CBltInfo bltinfo;
-		//	deep copy‚·‚é‚Æ‚«‚Ì‚½‚ß‚ÌÀ‘Ì
+		//	deep copy???????????????
 		DWORD dw[2];
 		POINT	dstPoint;
 		SIZE	dstSize;
@@ -681,11 +682,11 @@ namespace {
 smart_ptr<void> CSurfaceInfo::getWrappedPtr(
 	CSurfaceInfo::EBltType type,CSurfaceInfo::CBltInfo*&pInfo,DWORD*&pAdditionalParameter)
 {
-	//	‚±‚±‚Å“n‚³‚ê‚éƒpƒ‰ƒ[ƒ^‚ÍA
-	//	callback‚·‚é‚Ü‚Åvalid‚Æ‚ÍŒÀ‚ç‚È‚¢‚Ì‚ÅƒRƒs[‚ğ—pˆÓ‚·‚é•K—v‚ª‚ ‚é
+	//	??????n?????p?????[?^??A
+	//	callback??????valid???????????R?s?[??p?????K?v??????
 	GeneralBltTmp* tmp = new GeneralBltTmp;
 	tmp->bltinfo = *pInfo;
-	//	pSrc‚ÆlpDst‚Í‚±‚ê‚ğw‚·‚æ‚¤‚ÉŒq‚¬•Ï‚¦‚é
+	//	pSrc??lpDst???????w??????q???????
 	pInfo = &tmp->bltinfo;
 
 	//	deep copy
@@ -707,7 +708,7 @@ smart_ptr<void> CSurfaceInfo::getWrappedPtr(
 	}
 
 	switch (type){
-		//	1ƒpƒ‰ƒ[ƒ^
+		//	1?p?????[?^
 	case eSurfaceBltAddColorFastFade:
 	case eSurfaceBltSubColorFastFade:
 	case eSurfaceBltAddColorFade:
@@ -718,7 +719,7 @@ smart_ptr<void> CSurfaceInfo::getWrappedPtr(
 		pAdditionalParameter = &tmp->dw[0];
 		break;
 
-		//	2ƒpƒ‰ƒ[ƒ^
+		//	2?p?????[?^
 	case eSurfaceBlendConstBltFast:
 	case eSurfaceBlendConstBlt:
 		tmp->dw[0] = pAdditionalParameter[0];
@@ -733,11 +734,11 @@ smart_ptr<void> CSurfaceInfo::getWrappedPtr(
 namespace {
 	struct GeneralMorphTmp {
 		CSurfaceInfo::CMorphInfo morphinfo;
-		//	deep copy‚·‚é‚Æ‚«‚Ì‚½‚ß‚ÌÀ‘Ì
+		//	deep copy???????????????
 		DWORD dw[2];
-		POINT srcPoint;	///	“]‘—Œ³À•W—ñ
-		POINT dstPoint;	///	“]‘—æÀ•W—ñ
-		RECT clipRect;		///	“]‘—æƒNƒŠƒbƒv‹éŒ`
+		POINT srcPoint;	///	?]???????W??
+		POINT dstPoint;	///	?]??????W??
+		RECT clipRect;		///	?]????N???b?v??`
 	};
 }
 
@@ -745,11 +746,11 @@ smart_ptr<void> CSurfaceInfo::getWrappedPtr(CSurfaceInfo::EBltType type,
 											CSurfaceInfo::CMorphInfo*& pInfo,
 											DWORD*& pAdditionalParameter)
 {
-	//	‚±‚±‚Å“n‚³‚ê‚éƒpƒ‰ƒ[ƒ^‚ÍA
-	//	callback‚·‚é‚Ü‚Åvalid‚Æ‚ÍŒÀ‚ç‚È‚¢‚Ì‚ÅƒRƒs[‚ğ—pˆÓ‚·‚é•K—v‚ª‚ ‚é
+	//	??????n?????p?????[?^??A
+	//	callback??????valid???????????R?s?[??p?????K?v??????
 	GeneralMorphTmp* tmp = new GeneralMorphTmp;
 	tmp->morphinfo = *pInfo;
-	//	pSrc‚ÆlpDst‚Í‚±‚ê‚ğw‚·‚æ‚¤‚ÉŒq‚¬•Ï‚¦‚é
+	//	pSrc??lpDst???????w??????q???????
 	pInfo = &tmp->morphinfo;
 
 	//	deep copy
@@ -767,7 +768,7 @@ smart_ptr<void> CSurfaceInfo::getWrappedPtr(CSurfaceInfo::EBltType type,
 	}
 
 	switch (type){
-		//	1ƒpƒ‰ƒ[ƒ^
+		//	1?p?????[?^
 	case eSurfaceBltAddColorFastFade:
 	case eSurfaceBltSubColorFastFade:
 	case eSurfaceBltAddColorFade:
@@ -778,7 +779,7 @@ smart_ptr<void> CSurfaceInfo::getWrappedPtr(CSurfaceInfo::EBltType type,
 		pAdditionalParameter = &tmp->dw[0];
 		break;
 
-		//	2ƒpƒ‰ƒ[ƒ^
+		//	2?p?????[?^
 	case eSurfaceBlendConstBltFast:
 	case eSurfaceBlendConstBlt:
 		tmp->dw[0] = pAdditionalParameter[0];
@@ -792,7 +793,7 @@ smart_ptr<void> CSurfaceInfo::getWrappedPtr(CSurfaceInfo::EBltType type,
 
 namespace {
 	struct GeneralEffectTmp {
-		//	deep copy‚·‚é‚Æ‚«‚Ì‚½‚ß‚ÌÀ‘Ì
+		//	deep copy???????????????
 		DWORD dw[2];	
 		RECT rect;
 	};
@@ -803,14 +804,14 @@ smart_ptr<void> CSurfaceInfo::getWrappedPtr(CSurfaceInfo::EEffectType type,
 											DWORD*& pAdditionalParameter)
 {
 	GeneralEffectTmp* tmp = new GeneralEffectTmp;
-	//	rect‚ªw’è‚³‚ê‚Ä‚¢‚ê‚ÎA‚»‚ê‚ÌƒRƒs[‚ğ—pˆÓ‚µ‚Ä‚»‚¿‚ç‚ğw‚·‚æ‚¤‚É‚·‚é
+	//	rect???w?????????A?????R?s?[??p????????????w?????????
 	if (prc!=NULL) {
 		tmp->rect = *prc;
 		prc = &tmp->rect;
 	}
 
 	switch (type){
-		//	1ƒpƒ‰ƒ[ƒ^
+		//	1?p?????[?^
 	case eSurfaceFade:
 	case eSurfaceAddColor:
 	case eSurfaceSubColor:

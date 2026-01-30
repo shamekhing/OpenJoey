@@ -124,11 +124,11 @@ LRESULT CMouse::WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam){ // Mes
     /*
         What to do when the button is held down and the mouse moves out of the screen?
         (WM_MOUSEMOVE messages don't arrive when outside the screen..)
-        ¦ Do WM_NCBUTTONUP messages arrive? ¦ Seems they don't (Tears)
+        ? Do WM_NCBUTTONUP messages arrive? ? Seems they don't (Tears)
     */
 
 /*
-    //    ¦ It seems this message does not necessarily always fly!
+    //    ? It seems this message does not necessarily always fly!
     case WM_NCHITTEST:
     {
         POINT pos;
@@ -220,6 +220,22 @@ LRESULT    CFixMouse::Flush(){
     // Get accumulated delta from CMouse and reset CMouse's delta
     m_nFixedWheelDelta = GetMouse()->GetWheelDelta();
     GetMouse()->ResetWheelDelta();
+
+    // Scale mouse from window client coords to logical backbuffer coords (640x480)
+    HWND hWnd = CAppManager::GetHWnd();
+    if (hWnd) {
+        RECT rt;
+        ::GetClientRect(hWnd, &rt);
+        int clientW = rt.right - rt.left;
+        int clientH = rt.bottom - rt.top;
+        const int logW = 800, logH = 600;
+        if (clientW > 0 && clientH > 0 && (clientW != logW || clientH != logH)) {
+            m_nX = (int)((long)m_nX * logW / clientW);
+            m_nY = (int)((long)m_nY * logH / clientH);
+            if (m_nX < 0) m_nX = 0; else if (m_nX >= logW) m_nX = logW - 1;
+            if (m_nY < 0) m_nY = 0; else if (m_nY >= logH) m_nY = logH - 1;
+        }
+    }
 #endif
 
     return 0;

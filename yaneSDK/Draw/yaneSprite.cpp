@@ -13,8 +13,8 @@ namespace Draw {
 //	CSprite
 
 void	CSimpleSprite::set(ISurface*lp){
-	//	ƒvƒŒ[ƒ“‘Sˆæ‚ğˆê‚Â‚ÌƒXƒvƒ‰ƒCƒg‚Æ‚·‚é
-	WARNING(lp==NULL,"CSimpleSprite::SetSurface‚Ålp==NULL");
+	//	ÂƒvÂƒÂŒÂ[ÂƒÂ“Â‘SÂˆÃ¦Â‚Ã°ÂˆÃªÂ‚Ã‚Â‚ÃŒÂƒXÂƒvÂƒÂ‰ÂƒCÂƒgÂ‚Ã†Â‚Â·Â‚Ã©
+	WARNING(lp==NULL,"CSimpleSprite::SetSurfaceÂ‚Ã…lp==NULL");
 
 	pSurface = lp;
 	int	sx,sy;
@@ -26,8 +26,8 @@ void	CSimpleSprite::set(ISurface*lp){
 }
 
 void	CSimpleSprite::set(ISurface*lp,const RECT &rc){
-	//	ƒvƒŒ[ƒ“‘Sˆæ‚ğˆê‚Â‚ÌƒXƒvƒ‰ƒCƒg‚Æ‚·‚é
-	WARNING(lp==NULL,"CSimpleSprite::SetSurface‚Ålp==NULL");
+	//	ÂƒvÂƒÂŒÂ[ÂƒÂ“Â‘SÂˆÃ¦Â‚Ã°ÂˆÃªÂ‚Ã‚Â‚ÃŒÂƒXÂƒvÂƒÂ‰ÂƒCÂƒgÂ‚Ã†Â‚Â·Â‚Ã©
+	WARNING(lp==NULL,"CSimpleSprite::SetSurfaceÂ‚Ã…lp==NULL");
 
 	pSurface = lp;
 	rcRect = rc;
@@ -44,9 +44,9 @@ CSprite::CSprite() {
 	m_nDirection	= 0;
 	m_nOx			= 0;
 	m_nOy			= 0;
-	m_nPriority		= 0;	//	‚±‚ê‚ªƒfƒBƒtƒHƒ‹ƒgi[‚¢ˆÓ–¡‚Í–³‚¢j
+	m_nPriority		= 0;	//	Â‚Â±Â‚ÃªÂ‚ÂªÂƒfÂƒBÂƒtÂƒHÂƒÂ‹ÂƒgÂiÂ[Â‚Â¢ÂˆÃ“Â–Â¡Â‚ÃÂ–Â³Â‚Â¢Âj
 	m_bVisible		= true;
-	m_nHeight		= 0;	//	[‚¢ˆÓ–¡‚Í‚È‚¢
+	m_nHeight		= 0;	//	Â[Â‚Â¢ÂˆÃ“Â–Â¡Â‚ÃÂ‚ÃˆÂ‚Â¢
 	m_vSprtieVector.Add(new spritevectorofvector);
 }
 
@@ -71,7 +71,7 @@ void	CSprite::incMotion(){
 }
 
 void	CSprite::setDirection(int nDirection){
-	//	•ûŒü‚Ì•ÏX‚ª–³‚¢ê‡‚ÍƒAƒjƒƒJƒEƒ“ƒ^‚ğƒŠƒZƒbƒg‚µ‚È‚¢id—lj
+	//	Â•Ã»ÂŒÃ¼Â‚ÃŒÂ•ÃÂXÂ‚ÂªÂ–Â³Â‚Â¢ÂÃªÂÂ‡Â‚ÃÂƒAÂƒjÂƒÂÂƒJÂƒEÂƒÂ“Âƒ^Â‚Ã°ÂƒÂŠÂƒZÂƒbÂƒgÂ‚ÂµÂ‚ÃˆÂ‚Â¢ÂiÂdÂ—lÂj
 	if (m_nDirection != nDirection) {
 		m_nAnimation = 0;
 	}
@@ -96,10 +96,10 @@ void	CSpriteEx::BltFix(ISurface*pSurface,LPRECT lpClip){
 }
 
 void	CSpriteEx::BltFix(ISurface*pSurface,int x,int y,LPRECT lpClip){
-	//	—LŒø‚©H
+	//	Â—LÂŒÃ¸Â‚Â©ÂH
 	if (!isEnable()) return ;
 
-	//	CDirectDraw‚Å•`‰æ‚·‚éê‡Layer–³‹
+	//	CDirectDrawÂ‚Ã…Â•`Â‰Ã¦Â‚Â·Â‚Ã©ÂÃªÂÂ‡LayerÂ–Â³ÂÂ‹
 	CSimpleSprite &s = *getSprite();
 
 	int ox,oy;
@@ -107,7 +107,7 @@ void	CSpriteEx::BltFix(ISurface*pSurface,int x,int y,LPRECT lpClip){
 	ox+=x+s.nOx;
 	oy+=y+s.nOy;
 
-	//	‚»‚Ì‚Ü‚ÜˆÏ÷‚µ‚Ä‚Ü‚¤‚Æ‚·‚Á‚©`
+	//	Â‚Â»Â‚ÃŒÂ‚ÃœÂ‚ÃœÂˆÃÂÃ·Â‚ÂµÂ‚Ã„Â‚ÃœÂ‚Â¤Â‚Ã†Â‚Â·Â‚ÃÂ‚Â©Â`
 	if (!s.bFast) {
 		pSurface->Blt(s.pSurface,ox,oy,NULL,&s.rcRect,lpClip);
 	} else {
@@ -118,7 +118,7 @@ void	CSpriteEx::BltFix(ISurface*pSurface,int x,int y,LPRECT lpClip){
 void	CSpriteEx::BltOnce(ISurface*pSurface,int x,int y,LPRECT lpClip){
 	BltFix(pSurface,x,y,lpClip);
 	
-	//	ƒPƒc‚É‚È‚Á‚Ä‚¢‚½‚çA‚»‚êˆÈã‚Í‰ÁZ‚µ‚È‚¢
+	//	ÂƒPÂƒcÂ‚Ã‰Â‚ÃˆÂ‚ÃÂ‚Ã„Â‚Â¢Â‚Â½Â‚Ã§ÂAÂ‚Â»Â‚ÃªÂˆÃˆÂÃ£Â‚ÃÂ‰ÃÂZÂ‚ÂµÂ‚ÃˆÂ‚Â¢
 	int n=getMotion();
 	incMotion();
 	if (getMotion()==0) {
@@ -127,7 +127,7 @@ void	CSpriteEx::BltOnce(ISurface*pSurface,int x,int y,LPRECT lpClip){
 }
 
 //////////////////////////////////////////////////////////////////////////////
-///	yaneSDK2nd‚©‚ç‚Ì‚Ô‚Á‚±”²‚«B‚ ‚Ü‚è‚¢‚¢À‘•‚Å‚Í‚È‚¢‚Ì‚Åƒ}ƒl‚µ‚È‚¢‚Åƒl
+///	yaneSDK2ndÂ‚Â©Â‚Ã§Â‚ÃŒÂ‚Ã”Â‚ÃÂ‚Â±Â”Â²Â‚Â«ÂBÂ‚Â Â‚ÃœÂ‚Ã¨Â‚Â¢Â‚Â¢ÂÃ€Â‘Â•Â‚Ã…Â‚ÃÂ‚ÃˆÂ‚Â¢Â‚ÃŒÂ‚Ã…Âƒ}ÂƒlÂ‚ÂµÂ‚ÃˆÂ‚Â¢Â‚Ã…Âƒl
 
 void	CSpriteChara::Release()
 {
@@ -142,9 +142,9 @@ LRESULT	CSpriteChara::Load(const string& strFileName)
 	CFile file;
 	if (file.Read(strFileName)!=0) return 1;
 
-	//	ReadLine()‚Åˆês‚¸‚Â‰ğÍ‚µ‚ÄƒXƒvƒ‰ƒCƒgİ’è‚ğs‚È‚¤
+	//	ReadLine()Â‚Ã…ÂˆÃªÂsÂ‚Â¸Â‚Ã‚Â‰Ã°ÂÃÂ‚ÂµÂ‚Ã„ÂƒXÂƒvÂƒÂ‰ÂƒCÂƒgÂÃÂ’Ã¨Â‚Ã°ÂsÂ‚ÃˆÂ‚Â¤
 
-	//	ƒXƒvƒ‰ƒCƒgƒXƒ‰ƒCƒX‚Ì—pˆÓ
+	//	ÂƒXÂƒvÂƒÂ‰ÂƒCÂƒgÂƒXÂƒÂ‰ÂƒCÂƒXÂ‚ÃŒÂ—pÂˆÃ“
 	CSimpleSprite ssprite[256];
 	ZERO(ssprite);
 
@@ -155,48 +155,48 @@ LRESULT	CSpriteChara::Load(const string& strFileName)
 
 		CLineParser		lineParser;
 		if( file.ReadLine( szBuf ) !=0 ) break;
-		lineParser.SetLine( szBuf );					//	ƒ‰ƒCƒ“ ƒp[ƒT[‚É•¶š—ñ‚ğƒZƒbƒg‚·‚é
+		lineParser.SetLine( szBuf );					//	ÂƒÂ‰ÂƒCÂƒÂ“ ÂƒpÂ[ÂƒTÂ[Â‚Ã‰Â•Â¶ÂÂšÂ—Ã±Â‚Ã°ÂƒZÂƒbÂƒgÂ‚Â·Â‚Ã©
 
 		//////////////////////////////////////////////////
-		// ŠeƒRƒ}ƒ“ƒh•Ê‚ÉÀs‚³‚¹‚é
+		// ÂŠeÂƒRÂƒ}ÂƒÂ“ÂƒhÂ•ÃŠÂ‚Ã‰ÂÃ€ÂsÂ‚Â³Â‚Â¹Â‚Ã©
 
-		// ƒXƒvƒ‰ƒCƒg’è‹`”‚Ìİ’è
+		// ÂƒXÂƒvÂƒÂ‰ÂƒCÂƒgÂ’Ã¨Â‹`ÂÂ”Â‚ÃŒÂÃÂ’Ã¨
 		if ( lineParser.IsMatch( "#SpriteMax" ) ){
 			int		n;
-			if ( lineParser.GetNum( n ) != 0 ) { Err.Out("CSpriteChara::Load‚Å#SpriteMax‚É¸”s"); return 2; }
+			if ( lineParser.GetNum( n ) != 0 ) { Err.Out("CSpriteChara::LoadÂ‚Ã…#SpriteMaxÂ‚Ã‰ÂÂ¸Â”s"); return 2; }
 //			m_lpSprite.resize(n);
 //			m_nSpriteMax = n;
 			m_vSpriteVector->resize(n);
 			continue;
 		}
-		////	Å‘åˆê’v–@ SpriteMax > SpriteF > Sprite
-		//	ƒXƒvƒ‰ƒCƒgx‚Ì‹éŒ`zŠÂ‚Ìİ’è (‚½‚¾‚µ”²‚«F‚Í–³Œø)
+		////	ÂÃ…Â‘Ã¥ÂˆÃªÂ’vÂ–@ SpriteMax > SpriteF > Sprite
+		//	ÂƒXÂƒvÂƒÂ‰ÂƒCÂƒgxÂ‚ÃŒÂ‹Ã©ÂŒ`ÂzÂŠÃ‚Â‚ÃŒÂÃÂ’Ã¨ (Â‚Â½Â‚Â¾Â‚ÂµÂ”Â²Â‚Â«ÂFÂ‚ÃÂ–Â³ÂŒÃ¸)
 		if ( lineParser.IsMatch( "#SpriteF" ) ){
-			WARNING(m_vSpriteVector->empty(),"CSpriteChara::Load‚ÅSpriteMax‚È‚µ‚É#Sprite‚ª—L‚é");
+			WARNING(m_vSpriteVector->empty(),"CSpriteChara::LoadÂ‚Ã…SpriteMaxÂ‚ÃˆÂ‚ÂµÂ‚Ã‰#SpriteÂ‚ÂªÂ—LÂ‚Ã©");
 			int		n,m;
 			lineParser.GetNum(n);
 			while (true){
 				if (lineParser.GetNum(m)) break;
 				ssprite[m].bFast=true;
 
-				//	‚‚³‚ÍA‘«Œ³
+				//	ÂÂ‚Â‚Â³Â‚ÃÂAÂ‘Â«ÂŒÂ³
 				ssprite[m].nHeight = 32;
-					//	¡‰ñ‚Í‚±‚ê‚Å“ˆê‚µ‚½‚Ù‚¤‚ª‚æ‚³‚°...
-					//	‚à‚µ•ÏX‚ª•K—v‚Èê‡‚ÍAŠeƒLƒƒƒ‰ƒNƒ‰ƒX‚Å•ÏX‚·‚é‚±‚Æ
+					//	ÂÂ¡Â‰Ã±Â‚ÃÂ‚Â±Â‚ÃªÂ‚Ã…Â“ÂÂˆÃªÂ‚ÂµÂ‚Â½Â‚Ã™Â‚Â¤Â‚ÂªÂ‚Ã¦Â‚Â³Â‚Â°...
+					//	Â‚Ã Â‚ÂµÂ•ÃÂXÂ‚ÂªÂ•KÂ—vÂ‚ÃˆÂÃªÂÂ‡Â‚ÃÂAÂŠeÂƒLÂƒÂƒÂƒÂ‰ÂƒNÂƒÂ‰ÂƒXÂ‚Ã…Â•ÃÂXÂ‚Â·Â‚Ã©Â‚Â±Â‚Ã†
 
 				(*m_vSpriteVector)[n].push_back(ssprite[m]);
 			}
 			continue;
 		}
 /*
-	Ë@ˆêŠ‡’è‹`
-	#SpritePlane 0,0,34					//	ƒXƒvƒ‰ƒCƒg0`34‚ÍAƒvƒŒ[ƒ“0‚©‚ç35ŒÂ–Ú(ƒvƒŒ[ƒ“34)‚Æ‚·‚éB
-	#SpritePlaneF 0,0,34					//	ƒXƒvƒ‰ƒCƒg0`34‚ÍAƒvƒŒ[ƒ“0‚©‚ç35ŒÂ–Ú(ƒvƒŒ[ƒ“34)‚Æ‚·‚éB‚½‚¾‚µ”²‚«F‚Í–³Œø
+	ÂÃ‹Â@ÂˆÃªÂŠÂ‡Â’Ã¨Â‹`
+	#SpritePlane 0,0,34					//	ÂƒXÂƒvÂƒÂ‰ÂƒCÂƒg0Â`34Â‚ÃÂAÂƒvÂƒÂŒÂ[ÂƒÂ“0Â‚Â©Â‚Ã§35ÂŒÃ‚Â–Ãš(ÂƒvÂƒÂŒÂ[ÂƒÂ“34)Â‚Ã†Â‚Â·Â‚Ã©ÂB
+	#SpritePlaneF 0,0,34					//	ÂƒXÂƒvÂƒÂ‰ÂƒCÂƒg0Â`34Â‚ÃÂAÂƒvÂƒÂŒÂ[ÂƒÂ“0Â‚Â©Â‚Ã§35ÂŒÃ‚Â–Ãš(ÂƒvÂƒÂŒÂ[ÂƒÂ“34)Â‚Ã†Â‚Â·Â‚Ã©ÂBÂ‚Â½Â‚Â¾Â‚ÂµÂ”Â²Â‚Â«ÂFÂ‚ÃÂ–Â³ÂŒÃ¸
 */
 
-		//	”ñzŠÂƒXƒvƒ‰ƒCƒgx‚Ìİ’è
+		//	Â”Ã±ÂzÂŠÃ‚ÂƒXÂƒvÂƒÂ‰ÂƒCÂƒgxÂ‚ÃŒÂÃÂ’Ã¨
 		if ( lineParser.IsMatch( "#SpritePlaneF" ) ){
-			WARNING(m_vSpriteVector->empty(),"CSpriteChara::Load‚ÅSpriteMax‚È‚µ‚É#Sprite‚ª—L‚é");
+			WARNING(m_vSpriteVector->empty(),"CSpriteChara::LoadÂ‚Ã…SpriteMaxÂ‚ÃˆÂ‚ÂµÂ‚Ã‰#SpriteÂ‚ÂªÂ—LÂ‚Ã©");
 			int		n,m,l;
 			lineParser.GetNum(n);
 			if (lineParser.GetNum(m)) break;
@@ -205,10 +205,10 @@ LRESULT	CSpriteChara::Load(const string& strFileName)
 			CSimpleSprite s = {0};
 			for(int i=n;i<n+l;i++){
 				ssprite[i].bFast=true;
-				//	‚‚³‚ÍA‘«Œ³
+				//	ÂÂ‚Â‚Â³Â‚ÃÂAÂ‘Â«ÂŒÂ³
 				ssprite[i].nHeight = 32;
-				//	¡‰ñ‚Í‚±‚ê‚Å“ˆê‚µ‚½‚Ù‚¤‚ª‚æ‚³‚°...
-				//	‚à‚µ•ÏX‚ª•K—v‚Èê‡‚ÍAŠeƒLƒƒƒ‰ƒNƒ‰ƒX‚Å•ÏX‚·‚é‚±‚Æ
+				//	ÂÂ¡Â‰Ã±Â‚ÃÂ‚Â±Â‚ÃªÂ‚Ã…Â“ÂÂˆÃªÂ‚ÂµÂ‚Â½Â‚Ã™Â‚Â¤Â‚ÂªÂ‚Ã¦Â‚Â³Â‚Â°...
+				//	Â‚Ã Â‚ÂµÂ•ÃÂXÂ‚ÂªÂ•KÂ—vÂ‚ÃˆÂÃªÂÂ‡Â‚ÃÂAÂŠeÂƒLÂƒÂƒÂƒÂ‰ÂƒNÂƒÂ‰ÂƒXÂ‚Ã…Â•ÃÂXÂ‚Â·Â‚Ã©Â‚Â±Â‚Ã†
 				s.pSurface = m_apSurface[m+i].get();
 				{
 					int sx,sy;
@@ -221,9 +221,9 @@ LRESULT	CSpriteChara::Load(const string& strFileName)
 			continue;
 		}
 
-		//	”ñzŠÂƒXƒvƒ‰ƒCƒgx‚Ìİ’è
+		//	Â”Ã±ÂzÂŠÃ‚ÂƒXÂƒvÂƒÂ‰ÂƒCÂƒgxÂ‚ÃŒÂÃÂ’Ã¨
 		if ( lineParser.IsMatch( "#SpritePlane" ) ){
-			WARNING(m_vSpriteVector->empty(),"CSpriteChara::Load‚ÅSpriteMax‚È‚µ‚É#Sprite‚ª—L‚é");
+			WARNING(m_vSpriteVector->empty(),"CSpriteChara::LoadÂ‚Ã…SpriteMaxÂ‚ÃˆÂ‚ÂµÂ‚Ã‰#SpriteÂ‚ÂªÂ—LÂ‚Ã©");
 			int		n,m,l;
 			lineParser.GetNum(n);
 			if (lineParser.GetNum(m)) break;
@@ -232,10 +232,10 @@ LRESULT	CSpriteChara::Load(const string& strFileName)
 			CSimpleSprite s = {0};
 			for(int i=n;i<n+l;i++){
 				ssprite[i].bFast=false;
-				//	‚‚³‚ÍA‘«Œ³
+				//	ÂÂ‚Â‚Â³Â‚ÃÂAÂ‘Â«ÂŒÂ³
 				ssprite[i].nHeight = 32;
-				//	¡‰ñ‚Í‚±‚ê‚Å“ˆê‚µ‚½‚Ù‚¤‚ª‚æ‚³‚°...
-				//	‚à‚µ•ÏX‚ª•K—v‚Èê‡‚ÍAŠeƒLƒƒƒ‰ƒNƒ‰ƒX‚Å•ÏX‚·‚é‚±‚Æ
+				//	ÂÂ¡Â‰Ã±Â‚ÃÂ‚Â±Â‚ÃªÂ‚Ã…Â“ÂÂˆÃªÂ‚ÂµÂ‚Â½Â‚Ã™Â‚Â¤Â‚ÂªÂ‚Ã¦Â‚Â³Â‚Â°...
+				//	Â‚Ã Â‚ÂµÂ•ÃÂXÂ‚ÂªÂ•KÂ—vÂ‚ÃˆÂÃªÂÂ‡Â‚ÃÂAÂŠeÂƒLÂƒÂƒÂƒÂ‰ÂƒNÂƒÂ‰ÂƒXÂ‚Ã…Â•ÃÂXÂ‚Â·Â‚Ã©Â‚Â±Â‚Ã†
 				s.pSurface = m_apSurface[m+i].get();
 				{
 					int sx,sy;
@@ -249,19 +249,19 @@ LRESULT	CSpriteChara::Load(const string& strFileName)
 		}
 
 
-		//	ƒXƒvƒ‰ƒCƒgx‚Ì‹éŒ`zŠÂ‚Ìİ’è
+		//	ÂƒXÂƒvÂƒÂ‰ÂƒCÂƒgxÂ‚ÃŒÂ‹Ã©ÂŒ`ÂzÂŠÃ‚Â‚ÃŒÂÃÂ’Ã¨
 		if ( lineParser.IsMatch( "#Sprite" ) ){
-			WARNING(m_vSpriteVector->empty(),"CSpriteChara::Load‚ÅSpriteMax‚È‚µ‚É#Sprite‚ª—L‚é");
+			WARNING(m_vSpriteVector->empty(),"CSpriteChara::LoadÂ‚Ã…SpriteMaxÂ‚ÃˆÂ‚ÂµÂ‚Ã‰#SpriteÂ‚ÂªÂ—LÂ‚Ã©");
 			int		n,m;
 			lineParser.GetNum(n);
 			while (true){
 				if (lineParser.GetNum(m)) break;
 				ssprite[m].bFast=false;
 
-				//	‚‚³‚ÍA‘«Œ³
+				//	ÂÂ‚Â‚Â³Â‚ÃÂAÂ‘Â«ÂŒÂ³
 				ssprite[m].nHeight = 32;
-					//	¡‰ñ‚Í‚±‚ê‚Å“ˆê‚µ‚½‚Ù‚¤‚ª‚æ‚³‚°...
-					//	‚à‚µ•ÏX‚ª•K—v‚Èê‡‚ÍAŠeƒLƒƒƒ‰ƒNƒ‰ƒX‚Å•ÏX‚·‚é‚±‚Æ
+					//	ÂÂ¡Â‰Ã±Â‚ÃÂ‚Â±Â‚ÃªÂ‚Ã…Â“ÂÂˆÃªÂ‚ÂµÂ‚Â½Â‚Ã™Â‚Â¤Â‚ÂªÂ‚Ã¦Â‚Â³Â‚Â°...
+					//	Â‚Ã Â‚ÂµÂ•ÃÂXÂ‚ÂªÂ•KÂ—vÂ‚ÃˆÂÃªÂÂ‡Â‚ÃÂAÂŠeÂƒLÂƒÂƒÂƒÂ‰ÂƒNÂƒÂ‰ÂƒXÂ‚Ã…Â•ÃÂXÂ‚Â·Â‚Ã©Â‚Â±Â‚Ã†
 				
 //				m_lpSprite[n].SetSpriteAdd(&ssprite[m]);
 				(*m_vSpriteVector)[n].push_back(ssprite[m]);
@@ -269,11 +269,11 @@ LRESULT	CSpriteChara::Load(const string& strFileName)
 			continue;
 		}
 
-		// w’è‚µ‚½ƒvƒŒ[ƒ“p‚ÉƒXƒvƒ‰ƒCƒgƒf[ƒ^‚ğ“Ç‚İ‚Ş
+		// ÂwÂ’Ã¨Â‚ÂµÂ‚Â½ÂƒvÂƒÂŒÂ[ÂƒÂ“pÂ‚Ã‰ÂƒXÂƒvÂƒÂ‰ÂƒCÂƒgÂƒfÂ[Âƒ^Â‚Ã°Â“Ã‡Â‚ÃÂÂÂ‚Ã
 		if ( lineParser.IsMatch( "#Plane" ) ){
 			int		n;
 			lineParser.GetNum( n );
-			//	•s‘«•ª‚ÍAnew‚·‚é
+			//	Â•sÂ‘Â«Â•ÂªÂ‚ÃÂAnewÂ‚Â·Â‚Ã©
 			while ((int)m_apSurface.size()<=n){
 				m_apSurface.insert(CPlane::GetFactory()->CreateInstance());
 			}
@@ -283,13 +283,13 @@ LRESULT	CSpriteChara::Load(const string& strFileName)
 			continue;
 		}
 
-		//	w’è‚µ‚½ƒvƒŒ[ƒ“p‚Ì”²‚«F‚ğÀ•W‚Åw’è
+		//	ÂwÂ’Ã¨Â‚ÂµÂ‚Â½ÂƒvÂƒÂŒÂ[ÂƒÂ“pÂ‚ÃŒÂ”Â²Â‚Â«ÂFÂ‚Ã°ÂÃ€Â•WÂ‚Ã…ÂwÂ’Ã¨
 		if ( lineParser.IsMatch( "#ColorKeyA" ) ){
 			int		n,m;
 			lineParser.GetNum( n );
 			lineParser.GetNum( m );
-			//	•s‘«•ª‚ÍAnew‚·‚é
-			//	(‚½‚¾‚µA‚±‚±‚Ånew‚µ‚½‚à‚Ì‚É‘Î‚µ‚ÄSetColorKey‚Í•s³‚¾‚ªDD)
+			//	Â•sÂ‘Â«Â•ÂªÂ‚ÃÂAnewÂ‚Â·Â‚Ã©
+			//	(Â‚Â½Â‚Â¾Â‚ÂµÂAÂ‚Â±Â‚Â±Â‚Ã…newÂ‚ÂµÂ‚Â½Â‚Ã Â‚ÃŒÂ‚Ã‰Â‘ÃÂ‚ÂµÂ‚Ã„SetColorKeyÂ‚ÃÂ•sÂÂ³Â‚Â¾Â‚ÂªÂDÂD)
 			while ((int)m_apSurface.size()<=m){
 				m_apSurface.insert(CPlane::GetFactory()->CreateInstance());
 			}
@@ -302,12 +302,12 @@ LRESULT	CSpriteChara::Load(const string& strFileName)
 			continue;
 		}
 
-		//	w’è‚µ‚½ƒvƒŒ[ƒ“p‚Ì”²‚«F‚ğRGB‚Åw’è
+		//	ÂwÂ’Ã¨Â‚ÂµÂ‚Â½ÂƒvÂƒÂŒÂ[ÂƒÂ“pÂ‚ÃŒÂ”Â²Â‚Â«ÂFÂ‚Ã°RGBÂ‚Ã…ÂwÂ’Ã¨
 		if ( lineParser.IsMatch( "#ColorKeyB" ) ){
 			int		n,m;
 			lineParser.GetNum( n );
 			lineParser.GetNum( m );
-			//	•s‘«•ª‚ÍAnew‚·‚é
+			//	Â•sÂ‘Â«Â•ÂªÂ‚ÃÂAnewÂ‚Â·Â‚Ã©
 			while ((int)m_apSurface.size()<=m){
 				m_apSurface.insert(CPlane::GetFactory()->CreateInstance());
 			}
@@ -321,11 +321,11 @@ LRESULT	CSpriteChara::Load(const string& strFileName)
 			continue;
 		}
 
-		//	w’è‚µ‚½ƒvƒŒ[ƒ“p‚Ì”²‚«F‚ğÀ•W‚Åw’è
+		//	ÂwÂ’Ã¨Â‚ÂµÂ‚Â½ÂƒvÂƒÂŒÂ[ÂƒÂ“pÂ‚ÃŒÂ”Â²Â‚Â«ÂFÂ‚Ã°ÂÃ€Â•WÂ‚Ã…ÂwÂ’Ã¨
 		if ( lineParser.IsMatch( "#ColorKey" ) ){
 			int		n;
 			lineParser.GetNum( n );
-			//	•s‘«•ª‚ÍAnew‚·‚é
+			//	Â•sÂ‘Â«Â•ÂªÂ‚ÃÂAnewÂ‚Â·Â‚Ã©
 			while ((int)m_apSurface.size()<=n){
 				m_apSurface.insert(CPlane::GetFactory()->CreateInstance());
 			}
@@ -336,8 +336,8 @@ LRESULT	CSpriteChara::Load(const string& strFileName)
 			continue;
 		}
 
-		//	Å‘åˆê’v–@ (RectOffset > RectA > Rect)
-		//	‹éŒ`a‚©‚çb‚Ü‚Å‚ÉA(x,y)‚ÌƒIƒtƒZƒbƒg‚ğ—^‚¦‚é
+		//	ÂÃ…Â‘Ã¥ÂˆÃªÂ’vÂ–@ (RectOffset > RectA > Rect)
+		//	Â‹Ã©ÂŒ`aÂ‚Â©Â‚Ã§bÂ‚ÃœÂ‚Ã…Â‚Ã‰ÂA(x,y)Â‚ÃŒÂƒIÂƒtÂƒZÂƒbÂƒgÂ‚Ã°Â—^Â‚Â¦Â‚Ã©
 		if ( lineParser.IsMatch( "#RectOffset" ) ){
 			int		a,b;
 			lineParser.GetNum( a );
@@ -352,7 +352,7 @@ LRESULT	CSpriteChara::Load(const string& strFileName)
 			continue;
 		}
 
-		//	‹éŒ`a‚©‚çAƒvƒŒ[ƒ“p‚É‘Î‚µ‚ÄA(x,y)‚©‚çW~H‚Å‰¡x—ñAcys‚ÌŒJ‚è‘Ö‚¦‚µ’è‹`‚ğs‚¤
+		//	Â‹Ã©ÂŒ`aÂ‚Â©Â‚Ã§ÂAÂƒvÂƒÂŒÂ[ÂƒÂ“pÂ‚Ã‰Â‘ÃÂ‚ÂµÂ‚Ã„ÂA(x,y)Â‚Â©Â‚Ã§WÂ~HÂ‚Ã…Â‰Â¡xÂ—Ã±ÂAÂcyÂsÂ‚ÃŒÂŒJÂ‚Ã¨Â‘Ã–Â‚Â¦Â‚ÂµÂ’Ã¨Â‹`Â‚Ã°ÂsÂ‚Â¤
 		if ( lineParser.IsMatch( "#RectA" ) ){
 			int		n;
 			lineParser.GetNum( n );
@@ -375,11 +375,11 @@ LRESULT	CSpriteChara::Load(const string& strFileName)
 			continue;
 		}
 
-		//	‹éŒ`a‚Æ‚µ‚ÄƒvƒŒ[ƒ“p‚Ì(x,y)‚©‚çW~H‚Ì‹éŒ`‚Æ‚·‚é
+		//	Â‹Ã©ÂŒ`aÂ‚Ã†Â‚ÂµÂ‚Ã„ÂƒvÂƒÂŒÂ[ÂƒÂ“pÂ‚ÃŒ(x,y)Â‚Â©Â‚Ã§WÂ~HÂ‚ÃŒÂ‹Ã©ÂŒ`Â‚Ã†Â‚Â·Â‚Ã©
 		if ( lineParser.IsMatch( "#Rect" ) ){
 			int		n;
 			lineParser.GetNum( n );
-			WARNING(n<0||n>255,"CSpriteChara::Load‚Ån<0||n>255");
+			WARNING(n<0||n>255,"CSpriteChara::LoadÂ‚Ã…n<0||n>255");
 			int		nPlane;
 			lineParser.GetNum( nPlane );
 			int		x,y,sx,sy;
@@ -393,7 +393,7 @@ LRESULT	CSpriteChara::Load(const string& strFileName)
 		}
 
 		/*
-		//	ƒXƒvƒ‰ƒCƒgs1‚©‚çs2‚ÍƒŒƒCƒ„[L‚Æ‚µ‚Ä’è‹`iƒfƒBƒtƒHƒ‹ƒg‚Å5j
+		//	ÂƒXÂƒvÂƒÂ‰ÂƒCÂƒgs1Â‚Â©Â‚Ã§s2Â‚ÃÂƒÂŒÂƒCÂƒÂ„Â[LÂ‚Ã†Â‚ÂµÂ‚Ã„Â’Ã¨Â‹`ÂiÂƒfÂƒBÂƒtÂƒHÂƒÂ‹ÂƒgÂ‚Ã…5Âj
 		if ( lineParser.IsMatch( "#Layer" ) ){
 			int		a,b;
 			lineParser.GetNum( a );
@@ -407,7 +407,7 @@ LRESULT	CSpriteChara::Load(const string& strFileName)
 		}
 		*/
 		if (lineParser.IsMatch("#")){
-			Err.Out("CSpriteChara::Load‚Å%s‚Ì%ds‚É•s–¾‚È–½—ß",strFileName,nLine);
+			Err.Out("CSpriteChara::LoadÂ‚Ã…%sÂ‚ÃŒ%dÂsÂ‚Ã‰Â•sÂ–Â¾Â‚ÃˆÂ–Â½Â—ÃŸ",strFileName.c_str(),nLine);
 			return 1;
 		}
 	}
@@ -418,42 +418,42 @@ LRESULT	CSpriteChara::Load(const string& strFileName)
 ///////////////////////////////////////////////////////////////////////////////////
 
 /*
-	ƒXƒvƒ‰ƒCƒg’è‹`ƒtƒ@ƒCƒ‹‚ÌƒtƒH[ƒ}ƒbƒg
-	E‘å•¶š¬•¶š‚Í‹æ•Ê‚µ‚È‚¢
-	E‚Ps‚Í‚Q‚T‚U•¶š‚Ü‚Å
-	E‹éŒ`’è‹`‚Í256‚Ü‚Å
-	EƒXƒvƒ‰ƒCƒg‚Æ‚ÍA‚ ‚éˆê˜A‚Ì“®‚«iCSimpleSpritej‚ğ’è‹`‚·‚é
-	EƒXƒvƒ‰ƒCƒg’è‹`‚ÍA‹éŒ`‚ğ‡”Ô‚Éw’è‚·‚é‚±‚Æ‚É‚æ‚Á‚Äs‚È‚¤
-	EŠesA//ˆÈ~‚ÍƒRƒƒ“ƒg‚Æ‚Å‚«‚é
-	EƒvƒŒ[ƒ“‚Í–³ŒÀ‚É—˜—p‚Å‚«‚é
-	E‹éŒ`‚Æ‚Æ‚à‚ÉA‘«‚ÌˆÊ’uiƒx[ƒXƒ‰ƒCƒ“j‚ğw’è‚·‚é‚±‚Æ‚ª‚ ‚é
-	E‹éŒ`‚Æ‚Æ‚à‚ÉAƒIƒtƒZƒbƒg‚ğw’è‚·‚é‚±‚Æ‚ª‚ ‚é
-	EƒXƒvƒ‰ƒCƒgE‹éŒ`”Ô†‚Í‚O‚©‚çn‚Ü‚é
-	#SpriteMax	4			//	ƒXƒvƒ‰ƒCƒg’è‹`”‚Í‚SB‚±‚ê‚Íæ“ª‚Åw’è‚·‚é
-	#Plane 0,"test.bmp"		//	ƒvƒŒ[ƒ“0‚Æ‚µ‚Ätest.bmp‚ğ“Ç‚İ‚Ş
-	#ColorKey 0,4,10		//	0”Ô‚ÌƒvƒŒ[ƒ“‚Ì”²‚«F‚ğˆÊ’u‚Åw’è‚µA‚»‚ê‚Í(4,10)‚Æ‚·‚é(ƒfƒBƒtƒHƒ‹ƒg‚Í(0,0))
-	#Plane 1,"test2.bmp"	//	ƒvƒŒ[ƒ“1‚Æ‚µ‚Ätest2.bmp‚ğ“Ç‚İ‚Ş
-	#Rect 0,1,48,48,64,128	//	‹éŒ`0‚Æ‚µ‚ÄƒvƒŒ[ƒ“1‚Ì(48,48)‚©‚çW64~H128‚Ì‹éŒ`‚Æ‚·‚é
-	#Rect 1,1,112,48,64,128	//	‹éŒ`1‚Æ‚µ‚ÄƒvƒŒ[ƒ“1‚Ì(112,48)‚©‚çW64~H128‚Ì‹éŒ`‚Æ‚·‚é
-	#Sprite 1,0,1,1,0		//	ƒXƒvƒ‰ƒCƒg1‚Í‹éŒ`0¨‹éŒ`1¨‹éŒ`1¨‹éŒ`0‚Æ‚¢‚¤zŠÂ‚Æ‚·‚é
-	#SpriteF 0,0,1,1,0		//	ƒXƒvƒ‰ƒCƒg0‚Í‹éŒ`0¨‹éŒ`1¨‹éŒ`1¨‹éŒ`0‚Æ‚¢‚¤zŠÂ‚Æ‚·‚éB‚½‚¾‚µ”²‚«F‚Í–³Œø
+	ÂƒXÂƒvÂƒÂ‰ÂƒCÂƒgÂ’Ã¨Â‹`ÂƒtÂƒ@ÂƒCÂƒÂ‹Â‚ÃŒÂƒtÂƒHÂ[Âƒ}ÂƒbÂƒg
+	ÂEÂ‘Ã¥Â•Â¶ÂÂšÂÂ¬Â•Â¶ÂÂšÂ‚ÃÂ‹Ã¦Â•ÃŠÂ‚ÂµÂ‚ÃˆÂ‚Â¢
+	ÂEÂ‚PÂsÂ‚ÃÂ‚QÂ‚TÂ‚UÂ•Â¶ÂÂšÂ‚ÃœÂ‚Ã…
+	ÂEÂ‹Ã©ÂŒ`Â’Ã¨Â‹`Â‚Ã256Â‚ÃœÂ‚Ã…
+	ÂEÂƒXÂƒvÂƒÂ‰ÂƒCÂƒgÂ‚Ã†Â‚ÃÂAÂ‚Â Â‚Ã©ÂˆÃªÂ˜AÂ‚ÃŒÂ“Â®Â‚Â«ÂiCSimpleSpriteÂjÂ‚Ã°Â’Ã¨Â‹`Â‚Â·Â‚Ã©
+	ÂEÂƒXÂƒvÂƒÂ‰ÂƒCÂƒgÂ’Ã¨Â‹`Â‚ÃÂAÂ‹Ã©ÂŒ`Â‚Ã°ÂÂ‡Â”Ã”Â‚Ã‰ÂwÂ’Ã¨Â‚Â·Â‚Ã©Â‚Â±Â‚Ã†Â‚Ã‰Â‚Ã¦Â‚ÃÂ‚Ã„ÂsÂ‚ÃˆÂ‚Â¤
+	ÂEÂŠeÂsÂA//ÂˆÃˆÂ~Â‚ÃÂƒRÂƒÂÂƒÂ“ÂƒgÂ‚Ã†Â‚Ã…Â‚Â«Â‚Ã©
+	ÂEÂƒvÂƒÂŒÂ[ÂƒÂ“Â‚ÃÂ–Â³ÂŒÃ€Â‚Ã‰Â—Â˜Â—pÂ‚Ã…Â‚Â«Â‚Ã©
+	ÂEÂ‹Ã©ÂŒ`Â‚Ã†Â‚Ã†Â‚Ã Â‚Ã‰ÂAÂ‘Â«Â‚ÃŒÂˆÃŠÂ’uÂiÂƒxÂ[ÂƒXÂƒÂ‰ÂƒCÂƒÂ“ÂjÂ‚Ã°ÂwÂ’Ã¨Â‚Â·Â‚Ã©Â‚Â±Â‚Ã†Â‚ÂªÂ‚Â Â‚Ã©
+	ÂEÂ‹Ã©ÂŒ`Â‚Ã†Â‚Ã†Â‚Ã Â‚Ã‰ÂAÂƒIÂƒtÂƒZÂƒbÂƒgÂ‚Ã°ÂwÂ’Ã¨Â‚Â·Â‚Ã©Â‚Â±Â‚Ã†Â‚ÂªÂ‚Â Â‚Ã©
+	ÂEÂƒXÂƒvÂƒÂ‰ÂƒCÂƒgÂEÂ‹Ã©ÂŒ`Â”Ã”ÂÂ†Â‚ÃÂ‚OÂ‚Â©Â‚Ã§ÂnÂ‚ÃœÂ‚Ã©
+	#SpriteMax	4			//	ÂƒXÂƒvÂƒÂ‰ÂƒCÂƒgÂ’Ã¨Â‹`ÂÂ”Â‚ÃÂ‚SÂBÂ‚Â±Â‚ÃªÂ‚ÃÂÃ¦Â“ÂªÂ‚Ã…ÂwÂ’Ã¨Â‚Â·Â‚Ã©
+	#Plane 0,"test.bmp"		//	ÂƒvÂƒÂŒÂ[ÂƒÂ“0Â‚Ã†Â‚ÂµÂ‚Ã„test.bmpÂ‚Ã°Â“Ã‡Â‚ÃÂÂÂ‚Ã
+	#ColorKey 0,4,10		//	0Â”Ã”Â‚ÃŒÂƒvÂƒÂŒÂ[ÂƒÂ“Â‚ÃŒÂ”Â²Â‚Â«ÂFÂ‚Ã°ÂˆÃŠÂ’uÂ‚Ã…ÂwÂ’Ã¨Â‚ÂµÂAÂ‚Â»Â‚ÃªÂ‚Ã(4,10)Â‚Ã†Â‚Â·Â‚Ã©(ÂƒfÂƒBÂƒtÂƒHÂƒÂ‹ÂƒgÂ‚Ã(0,0))
+	#Plane 1,"test2.bmp"	//	ÂƒvÂƒÂŒÂ[ÂƒÂ“1Â‚Ã†Â‚ÂµÂ‚Ã„test2.bmpÂ‚Ã°Â“Ã‡Â‚ÃÂÂÂ‚Ã
+	#Rect 0,1,48,48,64,128	//	Â‹Ã©ÂŒ`0Â‚Ã†Â‚ÂµÂ‚Ã„ÂƒvÂƒÂŒÂ[ÂƒÂ“1Â‚ÃŒ(48,48)Â‚Â©Â‚Ã§W64Â~H128Â‚ÃŒÂ‹Ã©ÂŒ`Â‚Ã†Â‚Â·Â‚Ã©
+	#Rect 1,1,112,48,64,128	//	Â‹Ã©ÂŒ`1Â‚Ã†Â‚ÂµÂ‚Ã„ÂƒvÂƒÂŒÂ[ÂƒÂ“1Â‚ÃŒ(112,48)Â‚Â©Â‚Ã§W64Â~H128Â‚ÃŒÂ‹Ã©ÂŒ`Â‚Ã†Â‚Â·Â‚Ã©
+	#Sprite 1,0,1,1,0		//	ÂƒXÂƒvÂƒÂ‰ÂƒCÂƒg1Â‚ÃÂ‹Ã©ÂŒ`0ÂÂ¨Â‹Ã©ÂŒ`1ÂÂ¨Â‹Ã©ÂŒ`1ÂÂ¨Â‹Ã©ÂŒ`0Â‚Ã†Â‚Â¢Â‚Â¤ÂzÂŠÃ‚Â‚Ã†Â‚Â·Â‚Ã©
+	#SpriteF 0,0,1,1,0		//	ÂƒXÂƒvÂƒÂ‰ÂƒCÂƒg0Â‚ÃÂ‹Ã©ÂŒ`0ÂÂ¨Â‹Ã©ÂŒ`1ÂÂ¨Â‹Ã©ÂŒ`1ÂÂ¨Â‹Ã©ÂŒ`0Â‚Ã†Â‚Â¢Â‚Â¤ÂzÂŠÃ‚Â‚Ã†Â‚Â·Â‚Ã©ÂBÂ‚Â½Â‚Â¾Â‚ÂµÂ”Â²Â‚Â«ÂFÂ‚ÃÂ–Â³ÂŒÃ¸
 
 
-	Ë@ˆêŠ‡’è‹`
-	#SpritePlane 0,0,34					//	ƒXƒvƒ‰ƒCƒg0`34‚ÍAƒvƒŒ[ƒ“0‚©‚ç35ŒÂ(ƒvƒŒ[ƒ“0‚©‚çƒvƒŒ[ƒ“34)‚Æ‚·‚éB
-	#SpritePlaneF 0,0,34				//	ƒXƒvƒ‰ƒCƒg0`34‚ÍAƒvƒŒ[ƒ“0‚©‚ç35ŒÂ(ƒvƒŒ[ƒ“0‚©‚çƒvƒŒ[ƒ“34)‚Æ‚·‚éB‚½‚¾‚µ”²‚«F‚Í–³Œø
-	#ColorKeyA 0,34,4,10				//	0`34‚ÌƒvƒŒ[ƒ“‚ÌƒJƒ‰[ƒL[‚ÍˆÊ’u‚Åw’è‚µA‚»‚ê‚Í(4,10)‚Æ‚·‚é(ƒfƒBƒtƒHƒ‹ƒg‚Í(0,0))
+	ÂÃ‹Â@ÂˆÃªÂŠÂ‡Â’Ã¨Â‹`
+	#SpritePlane 0,0,34					//	ÂƒXÂƒvÂƒÂ‰ÂƒCÂƒg0Â`34Â‚ÃÂAÂƒvÂƒÂŒÂ[ÂƒÂ“0Â‚Â©Â‚Ã§35ÂŒÃ‚(ÂƒvÂƒÂŒÂ[ÂƒÂ“0Â‚Â©Â‚Ã§ÂƒvÂƒÂŒÂ[ÂƒÂ“34)Â‚Ã†Â‚Â·Â‚Ã©ÂB
+	#SpritePlaneF 0,0,34				//	ÂƒXÂƒvÂƒÂ‰ÂƒCÂƒg0Â`34Â‚ÃÂAÂƒvÂƒÂŒÂ[ÂƒÂ“0Â‚Â©Â‚Ã§35ÂŒÃ‚(ÂƒvÂƒÂŒÂ[ÂƒÂ“0Â‚Â©Â‚Ã§ÂƒvÂƒÂŒÂ[ÂƒÂ“34)Â‚Ã†Â‚Â·Â‚Ã©ÂBÂ‚Â½Â‚Â¾Â‚ÂµÂ”Â²Â‚Â«ÂFÂ‚ÃÂ–Â³ÂŒÃ¸
+	#ColorKeyA 0,34,4,10				//	0Â`34Â‚ÃŒÂƒvÂƒÂŒÂ[ÂƒÂ“Â‚ÃŒÂƒJÂƒÂ‰Â[ÂƒLÂ[Â‚ÃÂˆÃŠÂ’uÂ‚Ã…ÂwÂ’Ã¨Â‚ÂµÂAÂ‚Â»Â‚ÃªÂ‚Ã(4,10)Â‚Ã†Â‚Â·Â‚Ã©(ÂƒfÂƒBÂƒtÂƒHÂƒÂ‹ÂƒgÂ‚Ã(0,0))
 	#ColorKeyB 0,107,0,255,0			
-	//	0-107”Ô‚ÌƒvƒŒ[ƒ“‚Ì”²‚«F‚ğRGB‚Åw’è‚µA‚»‚ê‚Í(0,255,0)‚Æ‚·‚é
+	//	0-107Â”Ã”Â‚ÃŒÂƒvÂƒÂŒÂ[ÂƒÂ“Â‚ÃŒÂ”Â²Â‚Â«ÂFÂ‚Ã°RGBÂ‚Ã…ÂwÂ’Ã¨Â‚ÂµÂAÂ‚Â»Â‚ÃªÂ‚Ã(0,255,0)Â‚Ã†Â‚Â·Â‚Ã©
 
-//	#SpriteA 0,0,34						//	ƒXƒvƒ‰ƒCƒg0`34‚ÍA‹éŒ`0‚©‚ç35ŒÂ–Ú‚Ì‹éŒ`‚Ü‚Å‚Æ‚·‚éBi–¢À‘•j
+//	#SpriteA 0,0,34						//	ÂƒXÂƒvÂƒÂ‰ÂƒCÂƒg0Â`34Â‚ÃÂAÂ‹Ã©ÂŒ`0Â‚Â©Â‚Ã§35ÂŒÃ‚Â–ÃšÂ‚ÃŒÂ‹Ã©ÂŒ`Â‚ÃœÂ‚Ã…Â‚Ã†Â‚Â·Â‚Ã©ÂBÂiÂ–Â¢ÂÃ€Â‘Â•Âj
 
-	#RectA	12,0,10,15,32,64,4,3	//	‹éŒ`12`‚ÍAƒvƒŒ[ƒ“0‚É‘Î‚·‚éAW32~H64‚ÌƒTƒCƒY‚Å‚ ‚èA
-									//	‚»‚ê‚Í(10,15)‚Én‚Ü‚èA‰¡4—ñAc3s‚Ì12‰ñ•ªŒJ‚è‘Ö‚¦‚µ
-									//	’è‹`‚³‚ê‚éB‚Â‚Ü‚è‹éŒ`12`23‚Ü‚Å‚ªˆê‹C‚É’è‹`‚³‚ê‚é
-	#RectOffset 10,16,5,6	//	‹éŒ`10‚©‚ç16‚Ü‚Å‚ÉA(5,6)‚ÌƒIƒtƒZƒbƒg‚ğ—^‚¦‚é
+	#RectA	12,0,10,15,32,64,4,3	//	Â‹Ã©ÂŒ`12Â`Â‚ÃÂAÂƒvÂƒÂŒÂ[ÂƒÂ“0Â‚Ã‰Â‘ÃÂ‚Â·Â‚Ã©ÂAW32Â~H64Â‚ÃŒÂƒTÂƒCÂƒYÂ‚Ã…Â‚Â Â‚Ã¨ÂA
+									//	Â‚Â»Â‚ÃªÂ‚Ã(10,15)Â‚Ã‰ÂnÂ‚ÃœÂ‚Ã¨ÂAÂ‰Â¡4Â—Ã±ÂAÂc3ÂsÂ‚ÃŒ12Â‰Ã±Â•ÂªÂŒJÂ‚Ã¨Â‘Ã–Â‚Â¦Â‚Âµ
+									//	Â’Ã¨Â‹`Â‚Â³Â‚ÃªÂ‚Ã©ÂBÂ‚Ã‚Â‚ÃœÂ‚Ã¨Â‹Ã©ÂŒ`12Â`23Â‚ÃœÂ‚Ã…Â‚ÂªÂˆÃªÂ‹CÂ‚Ã‰Â’Ã¨Â‹`Â‚Â³Â‚ÃªÂ‚Ã©
+	#RectOffset 10,16,5,6	//	Â‹Ã©ÂŒ`10Â‚Â©Â‚Ã§16Â‚ÃœÂ‚Ã…Â‚Ã‰ÂA(5,6)Â‚ÃŒÂƒIÂƒtÂƒZÂƒbÂƒgÂ‚Ã°Â—^Â‚Â¦Â‚Ã©
 
-//	#Layer 1,3,5			//	ƒXƒvƒ‰ƒCƒg1‚©‚ç3‚ÍLayer5‚Æ‚µ‚Ä’è‹`iƒfƒBƒtƒHƒ‹ƒg‚Å5j
+//	#Layer 1,3,5			//	ÂƒXÂƒvÂƒÂ‰ÂƒCÂƒg1Â‚Â©Â‚Ã§3Â‚ÃLayer5Â‚Ã†Â‚ÂµÂ‚Ã„Â’Ã¨Â‹`ÂiÂƒfÂƒBÂƒtÂƒHÂƒÂ‹ÂƒgÂ‚Ã…5Âj
 //
 
 */

@@ -627,10 +627,13 @@ LRESULT CFile::InnerRead(const string& filename){
 	m_strFileName = filename;
 
 	if (filename[0] == '!') {
-		//	???????C???[?W
-		if(::sscanf(filename.c_str(),"!%x,%x",&m_lpFileAdr,&m_dwFileSize)!=2) {
+		//	???????C???[?W (hex address, hex size)
+		unsigned long uAddr = 0, uSize = 0;
+		if(::sscanf(filename.c_str(),"!%lx,%lx",&uAddr,&uSize)!=2) {
 			return 6; // ?????????t?@?C?????????H
 		}
+		m_lpFileAdr = (LPVOID)(void*)(ULONG_PTR)uAddr;
+		m_dwFileSize = (DWORD)uSize;
 		m_lpFileMemPos	= (LPCSTR)m_lpFileAdr;
 		m_bMemoryImage	= true;
 		return 0;
@@ -714,8 +717,8 @@ CompressFileRetry:;
 			goto CompressFileRetry;
 		}
 		if (!strcmp(ident,"yanepack")) nFileType = 1;
-		ef (!strcmp(ident,"yanepkEx")) nFileType = 2;
-		ef (!strcmp(ident,"yanepkDx")) nFileType = 3;
+		else if (!strcmp(ident,"yanepkEx")) nFileType = 2;
+		else if (!strcmp(ident,"yanepkDx")) nFileType = 3;
 		if (nFileType==0) {
 			::CloseHandle(hFile);
 			goto CompressFileRetry;
@@ -974,18 +977,25 @@ LRESULT		CFile::ReadLine2(LPSTR Senario,DWORD dwSize){
 	smart_ptr<CHAR> lpBuf;
 	lpBuf.AddArray(dwSize);	//	???T?C?Y?m??
 
-	::lstrcpy(Senario,"");	//	???A?I???????????S?~???o?????????...
-	if (ReadLine(lpBuf.get())!=0) return 1;
+	if (lpBuf.isNull() || dwSize == 0) return 1;
+	Senario[0] = '\0';
+	if (ReadLine(lpBuf.get(), dwSize)!=0) return 1;
 	if (!::lstrcmp(lpBuf.get(),"\"END\"")) return 1; // ?I????
-	::lstrcpy(Senario,lpBuf.get()+1);	//	????"????
-
+	CHAR* pSrc = lpBuf.get() + 1;
+	if (pSrc[0]) {
+		::lstrcpyn(Senario, pSrc, (int)dwSize);
+	}
 	while (true) {
-		if (Senario[strlen(Senario)-1] == '\"') break;	//	?f???~?^:="
-		if (ReadLine(lpBuf.get())!=0) return 1;
+		size_t len = ::lstrlen(Senario);
+		if (len == 0) break;
+		if (Senario[len-1] == '\"') break;	//	?f???~?^:="
+		if (ReadLine(lpBuf.get(), dwSize)!=0) return 1;
+		if (len + 1 + ::lstrlen(lpBuf.get()) + 1 > (size_t)dwSize) return 2; // buffer over
 		::lstrcat(Senario,"\n");
 		::lstrcat(Senario,lpBuf.get());
 	}
-	Senario[::lstrlen(Senario)-1] = '\0';
+	size_t len = ::lstrlen(Senario);
+	if (len > 0) Senario[len-1] = '\0';
 	return 0;
 }
 
