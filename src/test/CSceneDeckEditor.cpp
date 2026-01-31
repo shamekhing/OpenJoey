@@ -51,6 +51,7 @@ CSceneDeckEditor::~CSceneDeckEditor() {
 
 void CSceneDeckEditor::LoadCardList() {
     m_cardList.clear();
+    m_miniFilenameByInternalId.clear();
     if (!m_bin) return;
     std::ifstream cardList("data/card/list_card.txt");
     if (!cardList.is_open()) return;
@@ -77,7 +78,10 @@ void CSceneDeckEditor::LoadCardList() {
 
         WORD intId = m_bin->GetCardInternalId(realId);
         const Card* c = m_bin->GetCard(intId);
-        if (c) m_cardList.push_back((int)intId);
+        if (c) {
+            m_cardList.push_back((int)intId);
+            m_miniFilenameByInternalId[(int)intId] = nextLine;  // store filename for mini load
+        }
     }
     cardList.close();
 }
@@ -209,12 +213,31 @@ int CSceneDeckEditor::GetQuantityInDeck(int internalId) const {
 CFastPlane* CSceneDeckEditor::GetOrLoadMini(int internalId) {
     auto it = m_miniCache.find(internalId);
     if (it != m_miniCache.end() && !it->second.isNull()) return it->second.getPointer();
-    const Card* c = m_bin ? m_bin->GetCard(internalId) : nullptr;
-    if (!c || !c->imageMiniFilename) return nullptr;
+    // Use filename from list_card.txt (matches CSceneCardList - ensures correct mini)
+    std::string filename;
+    auto fnIt = m_miniFilenameByInternalId.find(internalId);
+    if (fnIt != m_miniFilenameByInternalId.end()) {
+        filename = fnIt->second;
+    } else {
+        const Card* c = m_bin ? m_bin->GetCard(internalId) : nullptr;
+        if (!c || !c->imageMiniFilename) return nullptr;
+        filename = c->imageMiniFilename;
+    }
     char path[512];
-    sprintf_s(path, sizeof(path), "data/mini/%s", c->imageMiniFilename);
+    sprintf_s(path, sizeof(path), "data/mini/%s", filename.c_str());
     smart_ptr<CFastPlane> p(new CFastPlane());
-    if (p->Load(path) != 0) return nullptr;
+    if (p->Load(path) != 0) {
+        // Fallback: try full card image from data/card/ (show front, not back)
+        const Card* c = m_bin ? m_bin->GetCard(internalId) : nullptr;
+        if (c && c->imageFilename) {
+            sprintf_s(path, sizeof(path), "data/card/%s", c->imageFilename);
+            if (p->Load(path) == 0) {
+                m_miniCache[internalId] = p;
+                return p.getPointer();
+            }
+        }
+        return nullptr;
+    }
     m_miniCache[internalId] = p;
     return p.getPointer();
 }
@@ -488,10 +511,12 @@ void CSceneDeckEditor::OnMove(const smart_ptr<ISurface>& lp) {
                 int thumbH = (SCROLLBAR_HEIGHT * LIST_VISIBLE_LINES) / totalRows;
                 if (thumbH < 20) thumbH = 20;
                 int thumbY = SCROLLBAR_TOP + (m_listScroll * (SCROLLBAR_HEIGHT - thumbH)) / maxScroll;
+                int pageStep = LIST_VISIBLE_LINES / 2;
+                if (pageStep < 1) pageStep = 1;
                 if (my < thumbY)
-                    m_listScroll = (m_listScroll > 0) ? m_listScroll - 1 : 0;
+                    m_listScroll = (m_listScroll > pageStep) ? m_listScroll - pageStep : 0;
                 else if (my >= thumbY + thumbH)
-                    m_listScroll = (m_listScroll < maxScroll) ? m_listScroll + 1 : maxScroll;
+                    m_listScroll = (m_listScroll < maxScroll - pageStep) ? m_listScroll + pageStep : maxScroll;
                 else
                     m_scrollbarDragging = true;
                 m_scrollbarDragStartY = my;
@@ -501,10 +526,11 @@ void CSceneDeckEditor::OnMove(const smart_ptr<ISurface>& lp) {
             if (thumbH < 8) thumbH = 8;
             int trackH = DETAIL_SCROLLBAR_H - thumbH;
             int thumbY = DETAIL_SCROLLBAR_TOP + (m_detailScroll * trackH) / m_detailScrollMax;
+            int pageStep = DETAIL_LINE_HEIGHT * 3;
             if (my < thumbY)
-                m_detailScroll = (m_detailScroll > 0) ? m_detailScroll - DETAIL_LINE_HEIGHT : 0;
+                m_detailScroll = (m_detailScroll > pageStep) ? m_detailScroll - pageStep : 0;
             else if (my >= thumbY + thumbH)
-                m_detailScroll = (m_detailScroll < m_detailScrollMax) ? m_detailScroll + DETAIL_LINE_HEIGHT : m_detailScrollMax;
+                m_detailScroll = (m_detailScroll < m_detailScrollMax - pageStep) ? m_detailScroll + pageStep : m_detailScrollMax;
             else
                 m_detailScrollDragging = true;
         } else if (m_drawerOpen && mx >= LIST_LEFT + DRAWER_HANDLE_WIDTH + 4 && mx < LIST_LEFT + DRAWER_HANDLE_WIDTH + 4 + TOP_BTN_W && my >= LIST_TOP_BAR && my < LIST_TOP_BAR + TOP_BTN_H) {
@@ -602,6 +628,25 @@ void CSceneDeckEditor::OnMove(const smart_ptr<ISurface>& lp) {
         }
     }
 
+    // Mouse wheel: list scroll (when over list/scrollbar) or detail scroll (when over detail box)
+    bool listWheelArea = m_drawerOpen && (
+        (mx >= LIST_LEFT + DRAWER_HANDLE_WIDTH && mx < LIST_LEFT + LIST_WIDTH && my >= LIST_TOP && my < LIST_TOP + LIST_VISIBLE_LINES * ROW_HEIGHT) ||
+        (mx >= SCROLLBAR_LEFT && mx < SCROLLBAR_LEFT + SCROLLBAR_W && my >= SCROLLBAR_TOP && my < SCROLLBAR_TOP + SCROLLBAR_HEIGHT));
+    bool detailWheelArea = (mx >= DETAIL_BOX_LEFT && mx < DETAIL_SCROLLBAR_LEFT + DETAIL_SCROLLBAR_W && my >= DETAIL_BOX_TOP && my < DETAIL_BOX_TOP + DETAIL_BOX_H);
+    if (listWheelArea && (m_mouse.IsWheelUp() || m_mouse.IsWheelDown())) {
+        int totalRows = (int)indices.size();
+        int maxScroll = totalRows - LIST_VISIBLE_LINES;
+        if (maxScroll > 0) {
+            if (m_mouse.IsWheelUp()) m_listScroll = (m_listScroll > 2) ? m_listScroll - 3 : 0;
+            else m_listScroll = (m_listScroll < maxScroll - 2) ? m_listScroll + 3 : maxScroll;
+            m_mouse.ResetButton();
+        }
+    } else if (detailWheelArea && m_detailScrollMax > 0 && (m_mouse.IsWheelUp() || m_mouse.IsWheelDown())) {
+        if (m_mouse.IsWheelUp()) m_detailScroll = (m_detailScroll > DETAIL_LINE_HEIGHT * 2) ? m_detailScroll - DETAIL_LINE_HEIGHT * 2 : 0;
+        else m_detailScroll = (m_detailScroll < m_detailScrollMax - DETAIL_LINE_HEIGHT * 2) ? m_detailScroll + DETAIL_LINE_HEIGHT * 2 : m_detailScrollMax;
+        m_mouse.ResetButton();
+    }
+
     if (m_drawerOpen) {
         if (key.IsKeyPush(5)) {
             if (m_listScroll > 0) m_listScroll--;
@@ -678,18 +723,9 @@ void CSceneDeckEditor::DrawLeftPanel(const smart_ptr<ISurface>& lp) {
     else if (!m_previewCardPlaneUra.isNull())
         lp->BltFast(m_previewCardPlaneUra.getPointer(), PREVIEW_LEFT, PREVIEW_TOP);
 
-    // Detail box: use kaban_detail plane 0 (kabegami_l_?.bmp) as background if available
-    if (m_kabanDetailOk) {
-        CPlane detailBg = m_vDeckCKabanDetail.GetPlane(0);
-        if (detailBg.get()) {
-            int dw = 0, dh = 0;
-            detailBg.get()->GetSize(dw, dh);
-            lp->BltFast(detailBg.get(), DETAIL_BOX_LEFT, DETAIL_BOX_TOP);
-        }
-    } else {
-        lp->SetFillColor(ISurface::makeRGB(30, 28, 40, 0));
-        { RECT r = { DETAIL_BOX_LEFT, DETAIL_BOX_TOP, DETAIL_BOX_LEFT + DETAIL_BOX_W, DETAIL_BOX_TOP + DETAIL_BOX_H }; lp->Clear(&r); }
-    }
+    // Detail box: dark background for readable text (kaban_detail can make text unreadable)
+    lp->SetFillColor(ISurface::makeRGB(32, 28, 38, 0));
+    { RECT r = { DETAIL_BOX_LEFT, DETAIL_BOX_TOP, DETAIL_BOX_LEFT + DETAIL_BOX_W, DETAIL_BOX_TOP + DETAIL_BOX_H }; lp->Clear(&r); }
     if (m_detailScroll > m_detailScrollMax) m_detailScroll = m_detailScrollMax;
     if (m_detailScroll < 0) m_detailScroll = 0;
     if (m_previewCardId >= 0 && m_bin) {
@@ -701,10 +737,11 @@ void CSceneDeckEditor::DrawLeftPanel(const smart_ptr<ISurface>& lp) {
             DrawTextAt(draw, lp, PREVIEW_LEFT, PREVIEW_TOP + PREVIEW_H + 2, typeStr, RGB(200,200,255), 10, 12);
             DrawTextAt(draw, lp, PREVIEW_LEFT, PREVIEW_TOP + PREVIEW_H + 14, c->name.name, RGB(255,255,255), 10, 12);
             if (c->description) {
+                // Draw description in detail box with high-contrast white text
                 char buf[256];
                 strncpy_s(buf, c->description, 200);
                 buf[200] = '\0';
-                DrawTextAt(draw, lp, DETAIL_BOX_LEFT, DETAIL_BOX_TOP + 2 - m_detailScroll, buf, RGB(220,220,220), 9, 11);
+                DrawTextAt(draw, lp, DETAIL_BOX_LEFT + 4, DETAIL_BOX_TOP + 4 - m_detailScroll, buf, RGB(240,240,250), 10, 12);
             }
         }
     }

@@ -10,6 +10,7 @@
 #include "../system/CJoeySceneFactory.h"
 #include "../system/backport/yaneGUIButton.h"
 #include <map>
+#include <string>
 
 enum DeckZone { ZONE_MAIN = 0, ZONE_SIDE = 1, ZONE_FUSION = 2 };
 enum ListFilter { LIST_FILTER_ALL = 0, LIST_FILTER_MONSTER, LIST_FILTER_SPELL, LIST_FILTER_TRAP };
@@ -79,6 +80,7 @@ private:
     std::vector<int> m_fusionDeck;
 
     std::vector<int> m_cardList;   // internal IDs from list_card.txt
+    std::map<int, std::string> m_miniFilenameByInternalId;  // filename from list for mini load
     int m_listScroll = 0;
     int m_selectedZone = 0;        // 0=main, 1=side, 2=fusion
     int m_highlightListIndex = -1;
