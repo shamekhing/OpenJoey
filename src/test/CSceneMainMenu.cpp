@@ -109,6 +109,7 @@ void CSceneMainMenu::OnMove(const smart_ptr<ISurface>& lp) {
         // Check for button clicks
         if (m_nButton == 0 && m_vButtons[i].IsLClick()) {
             m_nButton = i + 1; // Selected button (0=none, 1=yes, 2=no) .......................
+            { char buf[64]; sprintf_s(buf, "[OpenJoey] MainMenu: button %d clicked (index %d)\n", m_nButton, i); OutputDebugStringA(buf); }
 
 			//p->SetType(32);
 			//p->SetImageOffset(2);
@@ -127,13 +128,17 @@ void CSceneMainMenu::OnMove(const smart_ptr<ISurface>& lp) {
 		}
     }
 
+	// Button order depends on title art: index 0 = first row, 1 = second, etc.
+	// Case 2 opens Deck Editor so the second menu item (Deck construction) goes to deck editor.
 	switch(m_nButton) {
 		case 1:
-			app->OnPreClose(); // TODO: placeholder
+			OutputDebugStringA("[OpenJoey] MainMenu: case 1 -> OnPreClose (exit)\n");
+			app->OnPreClose(); // first menu item: quit/placeholder
 			ButtonClicked = true;
 			break;
 		case 2:
-			app->OnPreClose(); // TODO: placeholder
+			OutputDebugStringA("[OpenJoey] MainMenu: case 2 -> CallSceneFast(DECKEDITOR)\n");
+			GetSceneControl()->CallSceneFast(SCENE_DECKEDITOR);
 			ButtonClicked = true;
 			break;
 		case 3:

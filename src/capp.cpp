@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "capp.h"
+#include "DebugLog.h"
 
 static bool FileExists(const char* path) {
     DWORD attrs = GetFileAttributesA(path);
@@ -217,15 +218,21 @@ void CApp::MainThread() {
 
 			// Check for exit request
 			if (m_bWindowClosing) {
+				OutputDebugStringA("[OpenJoey] MainLoop: m_bWindowClosing -> CallSceneFast(ISEND)\n");
 				if (m_sceneControl->GetSceneNo() != SCENE_ISEND) {
 					m_sceneControl->CallSceneFast(SCENE_ISEND);
 				}
 				m_bWindowClosing = false;
 			}
 
+			// #region agent log
+			{ int surfNull = surface.isNull() ? 1 : 0; DebugLogLine("H3", "capp.cpp:MainThread", "before OnMove", "surfaceIsNull", surfNull); }
+			// #endregion
+			if (!surface.isNull()) {
 			// Update and draw current scene
 			m_sceneControl->OnMove(surface);
 			m_sceneControl->OnDraw(surface);
+			}
             break;
                 }
         case 99: {
@@ -313,10 +320,13 @@ void CApp::MainThread() {
         key.Input();
         if (key.IsKeyPush(0)) {  // ESC key
             // In a sub-scene (Settings, CardList, etc.): go back. On main menu: exit.
-            if (!m_sceneControl->IsEnd() && m_sceneControl->GetSceneNo() != SCENE_MAINMENU && m_sceneControl->GetSceneNo() != SCENE_SPLASH)
+            if (!m_sceneControl->IsEnd() && m_sceneControl->GetSceneNo() != SCENE_MAINMENU && m_sceneControl->GetSceneNo() != SCENE_SPLASH) {
+                OutputDebugStringA("[OpenJoey] MainLoop: ESC -> ReturnScene\n");
                 m_sceneControl->ReturnScene();
-            else
+            } else {
+                OutputDebugStringA("[OpenJoey] MainLoop: ESC on main/splash -> break (exit)\n");
                 break;  // Exit when on splash or main menu
+            }
         }
         if (key.IsKeyPush(5)) {  // Press SPACE key to increment phase
             //nPhase++;

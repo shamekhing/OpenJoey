@@ -159,6 +159,7 @@
     <ClCompile Include="system\effects\yanePlaneEffectBlt.cpp" />
     <ClCompile Include="test\CScene1.cpp" />
     <ClCompile Include="test\CSceneCardList.cpp" />
+    <ClCompile Include="test\CSceneDeckEditor.cpp" />
     <ClCompile Include="test\CSceneMainMenu.cpp" />
     <ClCompile Include="test\CSceneSettings.cpp" />
     <ClCompile Include="test\CSceneSplash.cpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="system\effects\yanePlaneEffectBlt.h" />
     <ClInclude Include="test\CScene1.h" />
     <ClInclude Include="test\CSceneCardList.h" />
+    <ClInclude Include="test\CSceneDeckEditor.h" />
     <ClInclude Include="test\CSceneMainMenu.h" />
     <ClInclude Include="test\CSceneSettings.h" />
     <ClInclude Include="test\CSceneSplash.h" />
